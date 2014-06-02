@@ -1,0 +1,22 @@
+LANGUAGE DIFFERENCES
+=====================
+Below are language differences from a version to next version.
+
+Version 1.1
+----------------
+admin.php
+----------
+define("_AM_XNEWSLETTER_IMPORT_INFO","Add all users of a group to a newsletter");
+define("_AM_XNEWSLETTER_IMPORT_CSV","One column ( email ) or four columns ( email | sex | firstname | lastname)<br />see sample1col.csv and sample4col.csv in /plugins");
+
+Version 1.2
+----------------
+admin.php
+----------
+define("_AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN","Error: required file 'plugins/%p.php' not found!");
+define("_AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION","Error: required function 'xnewsletter_plugin_getdata_%f' doesn't exist!");
+
+modinfo.php
+-----------
+define("_MI_XNEWSLETTER_SUBSCRINFO_BLOCK","Info Newsletter");
+define("_MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK","If you want to be informed in time, then subscribe to our newsletter");

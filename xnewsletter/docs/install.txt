@@ -1,0 +1,3 @@
+Read Me First
+=============
+Install this module usually in /modules
