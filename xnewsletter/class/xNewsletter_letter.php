@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_letter
+ */
 class xnewsletter_letter extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -50,6 +57,12 @@ class xnewsletter_letter extends XoopsObject
         $this->initVar('att_to_add', XOBJ_DTYPE_ARRAY, array() );
     }
 
+    /**
+     * @param bool $action
+     * @param bool $admin_aerea
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false, $admin_aerea = false)
     {
         global $xoopsDB, $xoopsModule, $xoopsUser, $pathImageIcon;
@@ -63,7 +76,7 @@ class xnewsletter_letter extends XoopsObject
         if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH.'/modules/xNewsletter/language/english/templates/';
         $exempted = "index.html";
         $arr_templates = array();
-        $template_dir = @opendir($template_path) or die(str_replace("%p",$template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
+        $template_dir = @opendir($template_path) || die(str_replace("%p",$template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
         while ($filename = readdir($template_dir)) {
             if (($filename!=".") and ($filename!="..") and ($filename!=$exempted )) {
                 $info = pathinfo($filename);
@@ -135,10 +148,10 @@ class xnewsletter_letter extends XoopsObject
             $remove_att_tray[$att]->addElement(new XoopsFormButton("", "delete_attachment_" . $i, _DELETE, "submit"));
             $remove_att_tray[$att]->addElement(new XoopsFormHidden("attachment_" . $i, $att));
             $att_tray->addElement($remove_att_tray[$att]);
-            $i++;
+            ++$i;
         }
         //$add_att_tray = array();
-        for ($j = $i ;$j < 6; $j++) {
+        for ($j = $i ;$j < 6; ++$j) {
             $att_tray->addElement(new XoopsFormFile("", "letter_attachment_" . $j, $this->xnewsletter->getConfig('xn_maxsize')));
         }
         $form->addElement($att_tray);
@@ -208,6 +221,9 @@ class xnewsletter_letter extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_letterHandler
+ */
 class xNewsletterxnewsletter_letterHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -221,7 +237,7 @@ class xNewsletterxnewsletter_letterHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_letter", "xnewsletter_letter", "letter_id", "letter_title");
+        parent::__construct($db, "xnewsletter_letter", "xnewsletter_letter", "letter_id", "letter_title");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

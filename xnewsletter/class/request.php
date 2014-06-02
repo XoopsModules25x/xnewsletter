@@ -244,11 +244,25 @@ class xNewsletterRequest
         return (string) xNewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
     }
 
+    /**
+     * @param        $name
+     * @param array  $default
+     * @param string $hash
+     *
+     * @return mixed
+     */
     static function getArray($name, $default = array(), $hash = 'default')
     {
         return xNewsletterRequest::getVar($name, $default, $hash, 'array');
     }
 
+    /**
+     * @param        $name
+     * @param string $default
+     * @param string $hash
+     *
+     * @return string
+     */
     static function getText($name, $default = '', $hash = 'default')
     {
         return (string) xNewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
@@ -735,7 +749,7 @@ class xNewsletterFilterInput
         // Iteration provides nested tag protection
         while ($source != $this->_cleanTags($source)) {
             $source = $this->_cleanTags($source);
-            $loopCounter++;
+            ++$loopCounter;
         }
 
         return $source;
@@ -861,7 +875,7 @@ class xNewsletterFilterInput
                     // Open or Single tag
                     $attrSet = $this->_cleanAttributes($attrSet);
                     $preTag .= '<' . $tagName;
-                    for ($i = 0; $i < count($attrSet); $i++) {
+                    for ($i = 0; $i < count($attrSet); ++$i) {
                         $preTag .= ' ' . $attrSet[$i];
                     }
                     // Reformat single tags to XHTML
@@ -901,7 +915,7 @@ class xNewsletterFilterInput
         // Initialize variables
         $newSet = array();
         // Iterate through attribute pairs
-        for ($i = 0; $i < count($attrSet); $i++) {
+        for ($i = 0; $i < count($attrSet); ++$i) {
             // Skip blank spaces
             if (!$attrSet[$i]) {
                 continue;

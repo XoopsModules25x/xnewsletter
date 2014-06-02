@@ -58,7 +58,7 @@ if (!xNewsletter_checkModuleAdmin()) {
     exit();
 }
 
-//$pathIcon = XOOPS_URL . "/modules/" . $dirname . "/images/icons";
+//$pathIcon = XOOPS_URL . "/modules/" . $dirname . "/assets/images/icons";
 $indexAdmin = new ModuleAdmin();
 
 $myts = MyTextSanitizer::getInstance();

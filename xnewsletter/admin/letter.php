@@ -169,7 +169,7 @@ switch ($op) {
                 $j = 0;
                 $cat_arr = explode("|" , $letter_arr[$i]->getVar("letter_cats"));
                 foreach ($cat_arr as $cat) {
-                    $j++;
+                    ++$j;
                     $cat_obj = $xnewsletter->getHandler('xNewsletter_cat')->get($cat);
                     if (count($cat_arr)>1) $letter_cats .= "($j) ";
                     if (is_object($cat_obj)) {
@@ -325,7 +325,7 @@ switch ($op) {
                 copy($indexFile, $uploaddir . "index.html");
             }
 
-            for ($upl = 0 ;$upl < 5; $upl++) {
+            for ($upl = 0 ;$upl < 5; ++$upl) {
                 $uploader = new XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
                 if ($uploader->fetchMedia(@$_POST['xoops_upload_file'][$upl])) {
                     //$uploader->setPrefix("xn_") ; keep original name
@@ -423,8 +423,8 @@ switch ($op) {
 
             if ($xnewsletter->getHandler('xNewsletter_letter')->delete($letterObj)) {
                 //delete protocol
-                $sql = "DELETE FROM `".$xoopsDB->prefix("mod_xnewsletter_protocol")."` WHERE `protocol_letter_id`=".$letter_id;
-                $result = $xoopsDB->query($sql) or die("MySQL-Error: " . mysql_error());
+                $sql = "DELETE FROM `".$xoopsDB->prefix("xnewsletter_protocol")."` WHERE `protocol_letter_id`=".$letter_id;
+                $result = $xoopsDB->query($sql) || die("MySQL-Error: " . mysql_error());
 
                 //delete attachments
                 $crit_att = new CriteriaCompo();

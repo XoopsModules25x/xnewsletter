@@ -25,9 +25,16 @@
  *  Version : 1 Thu 2012/12/06 12:57:01 :  Exp $
  * ****************************************************************************
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(__FILE__) . '/common.php';
 
+/**
+ * @param $type
+ * @param $subscr_id
+ * @param $mailinglist_id
+ *
+ * @return bool|null
+ */
 function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     global $xoopsUser, $xoopsConfig;
     $xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -123,4 +130,5 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
             return $protocolObj->getHtmlErrors();
         }
     }
+    return null;
 }

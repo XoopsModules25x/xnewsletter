@@ -22,11 +22,11 @@
  *  @package    xNewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: xoops_version.php 12491 2014-04-25 13:21:55Z beckmi $
+ *  Version : $Id: xoops_version.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 xoops_load('XoopsLists');
 
@@ -48,17 +48,17 @@ $modversion['license']     = 'GNU GPL 2.0 see Licence';
 $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
 
 //About
+$modversion['module_status']       = "Alpha 1";
+$modversion['release_date']        = "2014/06/02";
+//$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = "";
 $modversion['demo_site_name']      = "";
 $modversion['forum_site_url']      = "";
 $modversion['forum_site_name']     = "";
 $modversion['module_website_url']  = "wedega.com";
 $modversion['module_website_name'] = "Webdesign Gabor";
-$modversion['release']             = "1.3";
-$modversion['module_status']       = "Alpha";
 $modversion['release_info']        = "";
 $modversion['release_file']        = XOOPS_URL . "/modules/" . $modversion['dirname'] . "/docs/changelog.txt";
-$modversion['release_date']        = "2014/05/27";
 
 $modversion['manual']      = "xNewsletter.txt";
 $modversion['manual_file'] = XOOPS_URL . "/modules/{$modversion['dirname']}/docs/";
@@ -93,17 +93,17 @@ $modversion['adminmenu']            = "admin/menu.php";
 $modversion['sqlfile']['mysql'] = "sql/mysql.sql";
 
 // Tables
-$modversion['tables'][1] = "mod_xnewsletter_accounts";
-$modversion['tables'][2] = "mod_xnewsletter_cat";
-$modversion['tables'][3] = "mod_xnewsletter_subscr";
-$modversion['tables'][4] = "mod_xnewsletter_catsubscr";
-$modversion['tables'][5] = "mod_xnewsletter_letter";
-$modversion['tables'][6] = "mod_xnewsletter_protocol";
-$modversion['tables'][7] = "mod_xnewsletter_attachment";
-$modversion['tables'][8] = "mod_xnewsletter_mailinglist";
-$modversion['tables'][9] = "mod_xnewsletter_bmh";
-$modversion['tables'][10] = "mod_xnewsletter_import";
-$modversion['tables'][11] = "mod_xnewsletter_task";
+$modversion['tables'][1] = "xnewsletter_accounts";
+$modversion['tables'][2] = "xnewsletter_cat";
+$modversion['tables'][3] = "xnewsletter_subscr";
+$modversion['tables'][4] = "xnewsletter_catsubscr";
+$modversion['tables'][5] = "xnewsletter_letter";
+$modversion['tables'][6] = "xnewsletter_protocol";
+$modversion['tables'][7] = "xnewsletter_attachment";
+$modversion['tables'][8] = "xnewsletter_mailinglist";
+$modversion['tables'][9] = "xnewsletter_bmh";
+$modversion['tables'][10] = "xnewsletter_import";
+$modversion['tables'][11] = "xnewsletter_task";
 
 // Scripts to run upon installation or update
 $modversion['onInstall'] = "include/install.php";

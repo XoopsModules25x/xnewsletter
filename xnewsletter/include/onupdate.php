@@ -37,10 +37,35 @@ function xoops_module_update_xNewsletter(&$module, $oldversion = null) {
     if ($oldversion < 104) {
         xoops_module_update_xNewsletter_104();
     }
+    if ($oldversion < 140) {
+        xoops_module_update_xNewsletter_140();
+    }
 
-    return TRUE;
+    return true;
 }
 
+/**
+ * @return bool
+ */
+function xoops_module_update_xNewsletter_140() {
+    //reverse 'mod_' prefix on tables
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_accounts");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_attachment");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_bmh");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_cat");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_catsubscr");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_import");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_letter");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_mailinglist");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_protocol");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_subscr");
+    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_task");
+    return true;
+}
+
+/**
+ * @return bool
+ */
 function xoops_module_update_xNewsletter_104() {
     global $xoopsDB;
 
@@ -70,6 +95,9 @@ function xoops_module_update_xNewsletter_104() {
     return true;
 }
 
+/**
+ * @return bool
+ */
 function xoops_module_update_xNewsletter_103() {
     global $xoopsDB;
 
@@ -112,6 +140,9 @@ function xoops_module_update_xNewsletter_103() {
     return true;
 }
 
+/**
+ * @return bool
+ */
 function xoops_module_update_xNewsletter_101() {
     global $xoopsDB;
 
@@ -129,6 +160,11 @@ function xoops_module_update_xNewsletter_101() {
     return true;
 }
 
+/**
+ * @param $tablename
+ *
+ * @return bool
+ */
 function xoops_module_update_xNewsletter_rename_table($tablename) {
     global $xoopsDB;
 
@@ -137,13 +173,38 @@ function xoops_module_update_xNewsletter_rename_table($tablename) {
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
             echo "<br />" . _MI_XNEWSLETTER_UPGRADEFAILED . ": RENAME table '" . $tablename . "'";
-            $errors++;
+//            ++$errors;
         }
     }
 
     return true;
 }
 
+/**
+ * @param $tablename
+ *
+ * @return bool
+ */
+function xoops_module_update_xNewsletter_rename_mod_table($tablename) {
+    global $xoopsDB;
+
+    if (tableExists($xoopsDB->prefix('mod_' . $tablename))) {
+        $sql = sprintf('ALTER TABLE ' . $xoopsDB->prefix('mod_' . $tablename) . ' RENAME ' . $xoopsDB->prefix($tablename));
+        $result = $xoopsDB->queryF($sql);
+        if (!$result) {
+            echo "<br />" . _MI_XNEWSLETTER_UPGRADEFAILED . ": RENAME table '" . $tablename . "'";
+//            ++$errors;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * @param $tablename
+ *
+ * @return bool
+ */
 function tableExists($tablename) {
     global $xoopsDB;
     $result=$xoopsDB->queryF("SHOW TABLES LIKE '{$tablename}'");

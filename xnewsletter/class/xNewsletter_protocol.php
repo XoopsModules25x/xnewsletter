@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_protocol
+ */
 class xnewsletter_protocol extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -46,6 +53,11 @@ class xnewsletter_protocol extends XoopsObject
         $this->initVar("protocol_created", XOBJ_DTYPE_INT, null, false, 10);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false)
     {
         global $xoopsDB;
@@ -89,6 +101,9 @@ class xnewsletter_protocol extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_protocolHandler
+ */
 class xNewsletterxnewsletter_protocolHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -102,7 +117,7 @@ class xNewsletterxnewsletter_protocolHandler extends XoopsPersistableObjectHandl
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_protocol", "xnewsletter_protocol", "protocol_id", "protocol_letter_id");
+        parent::__construct($db, "xnewsletter_protocol", "xnewsletter_protocol", "protocol_id", "protocol_letter_id");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

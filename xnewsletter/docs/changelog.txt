@@ -1,5 +1,5 @@
-Version 1.3
---------------
+Version 1.3     NOT RELEASED
+-------------------------------
  - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
  - templatize user side (luciorota)
  - standardize code (luciorota)
@@ -9,6 +9,9 @@ Version 1.3
  - fixed: when there is an apostrophe in the title, a backslash is obtained on reading the email (luciorota)
  - moved /css and /images to /assets (mamba)
  - renamed template extensions from .html to .tpl (mamba)
+ - reversed "mod_" prefix on tables (mamba)
+ - normalized prefixes for language constants to XNEWSLETTER (mamba)
+ - replaced $i++ with ++$i (mamba)
 
 Version 1.2
 --------------
@@ -41,13 +44,13 @@ Version 1.1
 --------------
  - Add option to send newsletters in packages by using a cronjob (goffy)
  - Rebuilt importtool based on temporary table (goffy)
- - Changed table names to new xoops table scheme(table name starts with mod_) (goffy) 
+ - Changed table names to new xoops table scheme(table name starts with mod_) (goffy)
  - Add Importtool for rmbulletin, xoopsuser, csv, weblinks, smartpartner (goffy)
  - Fix images from xoops (goffy)
  - Fix errors in languages(alfred)
  - fix error none subscriber for send newsletter (goffy)
  - fix error in blocks (goffy)
- 
+
 Version 1.0
 --------------
  - Original release xNewsletter (goffy,alfred)

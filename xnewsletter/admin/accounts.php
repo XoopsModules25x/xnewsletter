@@ -56,11 +56,11 @@ switch ($op) {
         $mailhost = $accountObj->getVar("accounts_server_in");
         $port = $accountObj->getVar("accounts_port_in");
         switch ($accountObj->getVar("accounts_type")) {
-            case _AM_ACCOUNTS_TYPE_VAL_POP3:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3:
                 $service = "pop3";
                 break;
-            case _AM_ACCOUNTS_TYPE_VAL_SMTP:
-            case _AM_ACCOUNTS_TYPE_VAL_GMAIL:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL:
                 $service = "imap";
                 break;
             case "default":
@@ -75,42 +75,42 @@ switch ($op) {
         $accounts_hardbox = $accountObj->getVar("accounts_hardbox"); $accounts_hardbox_ok = 0;
         $accounts_softbox = $accountObj->getVar("accounts_softbox"); $accounts_softbox_ok = 0;
 
-        $command = $mailhost . ":" . $port;
+        $command = $mailhost.":".$port;
         if ($service !='') $command .= '/' . $service;
         if ($service_option !='') $command .= '/' . $service_option;
 
         echo "<table class='outer width100' cellspacing='1'>
                 <tr>
                     <th class='center width5'></th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO . "</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK."</th>
+                        <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO."</th>
                 </tr>";
 
         $mbox = @imap_open("{" . $command . "}", $accounts_username, $accounts_password); // or die ("can't connect: " . imap_last_error());
         if ($mbox === false) {
             echo "<tr>";
-            echo "<td class='center width5'>" . $img_failed . "</td>";
-            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . "</td>";
-            echo "<td class='left'>" . imap_last_error() . "</td>";
+            echo "<td class='center width5'>".$img_failed."</td>";
+            echo "<td class='left'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED."</td>";
+            echo "<td class='left'>".imap_last_error()."</td>";
             echo "</tr>";
         } else {
             echo "<tr>";
-            echo "<td class='center width5'>" . $img_ok . "</td>";
-            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . "</td>";
+            echo "<td class='center width5'>".$img_ok."</td>";
+            echo "<td class='left'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK."</td>";
             echo "<td class='left'></td>";
             echo "</tr>";
 
             $folders = imap_listmailbox($mbox, "{".$command."}", "*");
             if ($folders == false) {
                 echo "<tr>";
-                echo "<td class='center width5'>" . $img_failed . "</td>";
-                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . "</td>";
-                echo "<td class='left'>" . imap_last_error() . "</td>";
+                echo "<td class='center width5'>".$img_failed."</td>";
+                echo "<td class='left'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED."</td>";
+                echo "<td class='left'>".imap_last_error()."</td>";
                 echo "</tr>";
             } else {
                 echo "<tr>";
-                echo "<td class='center width5'>" . $img_ok . "</td>";
-                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . "</td>";
+                echo "<td class='center width5'>".$img_ok."</td>";
+                echo "<td class='left'>"._AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK."</td>";
                 echo "<td class='left'>";
                 if (is_array($folders)) {
                     reset ($folders);
@@ -118,15 +118,15 @@ switch ($op) {
                     $foldercreated = 0;
                     while (list( $key, $val) = each ($folders)) {
                         echo "($key) ";
-                        echo imap_utf7_decode (str_replace("{" . $command . "}", "", $val)) . "<br>\n";
-                        if ("{" . $command . "}" . $accounts_inbox == $val) $accounts_inbox_ok = 1;
-                        if ("{" . $command . "}" . $accounts_hardbox == $val) {
+                        echo imap_utf7_decode (str_replace("{".$command."}","",$val)) . "<br>\n";
+                        if ("{".$command."}".$accounts_inbox == $val) $accounts_inbox_ok = 1;
+                        if ("{".$command."}".$accounts_hardbox == $val) {
                             $accounts_hardbox_ok = 1;
                         } else {
-                            @imap_createmailbox($mbox, imap_utf7_encode('{'  .$command . '}' . $accounts_hardbox));
+                            @imap_createmailbox($mbox, imap_utf7_encode('{'.$command.'}' . $accounts_hardbox));
                             $foldercreated = 1;
                         }
-                        if ("{" . $command . "}" . $accounts_softbox == $val) {
+                        if ("{".$command."}".$accounts_softbox == $val) {
                             $accounts_softbox_ok = 1;
                         } else {
                             @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_softbox));
@@ -136,8 +136,8 @@ switch ($op) {
                     if ($foldercreated == 1) {
                         $folders_recheck = imap_listmailbox($mbox, "{" . $command . "}", "*");
                         while (list( $key, $val) = each ($folders_recheck)) {
-                            if ("{" . $command . "}" . $accounts_hardbox == $val) $accounts_hardbox_ok = 1;
-                            if ("{" . $command . "}" . $accounts_softbox == $val) $accounts_softbox_ok = 1;
+                            if ("{".$command."}".$accounts_hardbox == $val) $accounts_hardbox_ok = 1;
+                            if ("{".$command."}".$accounts_softbox == $val) $accounts_softbox_ok = 1;
                         }
                     }
                 }
@@ -160,7 +160,7 @@ switch ($op) {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . $img_failed;
                     }
                     echo "<br />";
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_HARDBOX . " ";
+                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_HARDBOX." ";
                     if ($accounts_hardbox_ok == 1) {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . $img_ok;
                     } else {
@@ -214,39 +214,39 @@ switch ($op) {
         if ($numrows > 0) {
             echo "<table class='outer width100' cellspacing='1'>
                 <tr>
-                    <th class='center width2'>" ._AM_XNEWSLETTER_ACCOUNTS_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_TYPE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_NAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_YOURNAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_YOURMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_DEFAULT . "</th>
-                    <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+                    <th class='center width2'>"._AM_XNEWSLETTER_ACCOUNTS_ID."</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_TYPE."</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_NAME."</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_YOURNAME."</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_YOURMAIL."</th>
+                    <th class='center'>"._AM_XNEWSLETTER_ACCOUNTS_DEFAULT."</th>
+                    <th class='center width10'>"._AM_XNEWSLETTER_FORMACTION."</th>
                 </tr>";
 
             $class = "odd";
 
             foreach (array_keys($accounts_arr) as $i) {
-                echo "<tr class='" . $class . "'>";
+                echo "<tr class='".$class."'>";
                 $class = ($class == "even") ? "odd" : "even";
-                echo "<td class='center'>" . $i . "</td>";
+                echo "<td class='center'>".$i."</td>";
                 $arr_accounts_type=array(
-                _AM_ACCOUNTS_TYPE_VAL_PHP_MAIL=>_AM_ACCOUNTS_TYPE_PHPMAIL,
-                _AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL=>_AM_ACCOUNTS_TYPE_PHPSENDMAIL,
-                _AM_ACCOUNTS_TYPE_VAL_POP3=>_AM_ACCOUNTS_TYPE_POP3,
-                _AM_ACCOUNTS_TYPE_VAL_SMTP=>_AM_ACCOUNTS_TYPE_SMTP,
-                _AM_ACCOUNTS_TYPE_VAL_GMAIL=>_AM_ACCOUNTS_TYPE_GMAIL);
-                echo "<td class='center'>" . $arr_accounts_type[$accounts_arr[$i]->getVar("accounts_type")] . "</td>";
-                echo "<td class='center'>" . $accounts_arr[$i]->getVar("accounts_name") . "</td>";
-                echo "<td class='center'>" . $accounts_arr[$i]->getVar("accounts_yourname") . "</td>";
-                echo "<td class='center'>" . $accounts_arr[$i]->getVar("accounts_yourmail") . "</td>";
-                $verif_accounts_default = ($accounts_arr[$i]->getVar("accounts_default") == 1) ? _YES : _NO;
-                echo "<td class='center'>" . $verif_accounts_default . "</td>";
+                _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL=>_AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
+                _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL=>_AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL,
+                _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3=>_AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3,
+                _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP=>_AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP,
+                _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL=>_AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL);
+                echo "<td class='center'>". $arr_accounts_type[$accounts_arr[$i]->getVar("accounts_type")]."</td>";
+                echo "<td class='center'>".$accounts_arr[$i]->getVar("accounts_name")."</td>";
+                echo "<td class='center'>".$accounts_arr[$i]->getVar("accounts_yourname")."</td>";
+                echo "<td class='center'>".$accounts_arr[$i]->getVar("accounts_yourmail")."</td>";
+                $verif_accounts_default = ( $accounts_arr[$i]->getVar("accounts_default") == 1 ) ? _YES : _NO;
+                echo "<td class='center'>".$verif_accounts_default."</td>";
 
                 echo "<td class='center width5'>";
-                echo "	<a href='accounts.php?op=edit_account&accounts_id=" . $i . "'><img src=".XNEWSLETTER_ICONS_URL."/xn_edit.png alt='"._EDIT."' title='"._EDIT."' /></a>";
-                echo "	<a href='accounts.php?op=delete_account&accounts_id=" . $i . "'><img src=".XNEWSLETTER_ICONS_URL."/xn_delete.png alt='"._DELETE."' title='"._DELETE."' /></a>";
-                if ($accounts_arr[$i]->getVar("accounts_type") != _AM_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accounts_arr[$i]->getVar("accounts_type") != _AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
-                    echo "	<a href='accounts.php?op=check_account&accounts_id=" . $i . "'><img src=".XNEWSLETTER_ICONS_URL."/xn_check.png alt='"._AM_ACCOUNTS_TYPE_CHECK."' title='"._AM_ACCOUNTS_TYPE_CHECK."' /></a>";
+                echo "	<a href='accounts.php?op=edit_account&accounts_id=".$i."'><img src=".XNEWSLETTER_ICONS_URL."/xn_edit.png alt='"._EDIT."' title='"._EDIT."' /></a>";
+                echo "	<a href='accounts.php?op=delete_account&accounts_id=".$i."'><img src=".XNEWSLETTER_ICONS_URL."/xn_delete.png alt='"._DELETE."' title='"._DELETE."' /></a>";
+                if ($accounts_arr[$i]->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accounts_arr[$i]->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
+                    echo "	<a href='accounts.php?op=check_account&accounts_id=".$i."'><img src=".XNEWSLETTER_ICONS_URL."/xn_check.png alt='"._AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK."' title='"._AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK."' /></a>";
                 }
                 echo "</td>";
                 echo "</tr>";
@@ -304,8 +304,8 @@ switch ($op) {
                 global $xoopsDB;
                 $verif_accounts_default = "1";
                 //reset old accounts_default
-                $sql = "UPDATE `{$xoopsDB->prefix("mod_xnewsletter_accounts")}` SET `accounts_default` = '0'";
-                $result= $xoopsDB->query($sql) or die ("MySQL-Error: " . mysql_error());
+                $sql = "UPDATE `{$xoopsDB->prefix("xnewsletter_accounts")}` SET `accounts_default` = '0'";
+                $result= $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
             } else {
                 $verif_accounts_default = "0";
             }
@@ -313,7 +313,7 @@ switch ($op) {
             $verif_accounts_default = "1";
         }
         $accountObj->setVar("accounts_default", $verif_accounts_default);
-        if ($accountObj->getVar("accounts_yourmail") != "" && $accountObj->getVar("accounts_yourmail") != _AM_ACCOUNTS_TYPE_YOUREMAIL ) {
+        if ($accountObj->getVar("accounts_yourmail") != "" && $accountObj->getVar("accounts_yourmail") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
             if ($xnewsletter->getHandler('xNewsletter_accounts')->insert($accountObj)) {
                 if ($save_and_check == 'none') {
                     redirect_header("accounts.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);

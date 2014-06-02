@@ -25,9 +25,12 @@
  *  Version : $Id $
  * ****************************************************************************
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
+/**
+ * @return array
+ */
 function xnewsletter_plugin_getinfo_csv() {
     global $xoopsDB;
 
@@ -42,11 +45,22 @@ function xnewsletter_plugin_getinfo_csv() {
     return $pluginInfo;
 }
 
+/**
+ * @param $cat_id
+ * @param $action_after_read
+ * @param $limitCheck
+ * @param $skipCatsubscrExist
+ * @param $file
+ * @param $delimiter
+ * @param $header
+ *
+ * @return int
+ */
 function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist, $file, $delimiter, $header) {
     global $xoopsDB;
     $xnewsletter = xNewsletterxNewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('mod_xnewsletter_import');
+    $table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;
@@ -84,12 +98,12 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
                     }
 //                    $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
 //                    $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//                    $result_insert = $xoopsDB->query($sql) or die ("MySQL-Error: " . mysql_error());
-                    $j++;
+//                    $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+                    ++$j;
                 }
             }
         }
-        $i++;
+        ++$i;
         if ($j == 100000) break; //maximum number of processing to avoid cache overflow
         if ($limitCheck > 0 && $j == $limitCheck) $import_status = 0;
         }
@@ -99,6 +113,15 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
     return $j;
 }
 
+/**
+ * @param      $cat_id
+ * @param      $action_after_read
+ * @param      $limitCheck
+ * @param      $skipCatsubscrExist
+ * @param bool $action
+ *
+ * @return XoopsThemeForm
+ */
 function xnewsletter_plugin_getform_csv( $cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist, $action = false) {
     if ($action === false) {
         $action = $_SERVER["REQUEST_URI"];

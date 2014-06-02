@@ -22,7 +22,7 @@
  *  @package    xNewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: subscription.php 12491 2014-04-25 13:21:55Z beckmi $
+ *  Version : $Id: subscription.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
@@ -626,7 +626,7 @@ switch ($op) {
                     $subscrObj = $xnewsletter->getHandler('xNewsletter_subscr')->get($subscr_id);
 /*
                     $sql = "SELECT subscr_id";
-                    $sql.= " FROM {$xoopsDB->prefix("mod_xnewsletter_subscr")}";
+                    $sql.= " FROM {$xoopsDB->prefix("xnewsletter_subscr")}";
                     $sql.= " WHERE (subscr_email='{$subscr_email}' AND subscr_id={$subscr_id}";
                     if ($activationKey)
                         $sql .= " AND subscr_actkey='{$code}'";

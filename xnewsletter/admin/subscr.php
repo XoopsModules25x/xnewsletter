@@ -305,7 +305,7 @@ $filter_subscr_email = xNewsletter_CleanVars($_REQUEST, 'filter_subscr_email', '
             }
             if ($xnewsletter->getHandler('xNewsletter_subscr')->delete($obj)) {
                 // Newsletterlist delete
-                $sql = "DELETE FROM `".$xoopsDB->prefix('mod_xnewsletter_catsubscr')."` WHERE catsubscr_subscrid=" . $subscr_id;
+                $sql = "DELETE FROM `".$xoopsDB->prefix('xnewsletter_catsubscr')."` WHERE catsubscr_subscrid=" . $subscr_id;
                 $result = $xoopsDB->queryF($sql);
                 redirect_header("subscr.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {

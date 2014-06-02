@@ -16,7 +16,7 @@
  * @author      lucio <lucio.rota@gmail.com>
  * @package     xNewsletter
  * @since       1.3
- * @version     $Id: breadcrumb.php 12491 2014-04-25 13:21:55Z beckmi $
+ * @version     $Id: breadcrumb.php 12559 2014-06-02 08:10:39Z beckmi $
  *
  * Example:
  * $breadcrumb = new xNewsletterBreadcrumb();
@@ -25,13 +25,16 @@
  * $breadcrumb->addLink( 'bread 3', 'index3.php' );
  * echo $breadcrumb->render();
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 class xNewsletterBreadcrumb
 {
     var $dirname;
     var $_bread = array();
 
+    /**
+     *
+     */
     function __construct()
     {
         $this->dirname =  basename(dirname(dirname(__FILE__)));

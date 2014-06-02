@@ -26,9 +26,17 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(__FILE__) . '/common.php';
 
+/**
+ * @param $op
+ * @param $letter_id
+ * @param $xn_send_in_packages
+ * @param $xn_send_in_packages_time
+ *
+ * @return bool
+ */
 function xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time) {
     global $xoopsUser, $xoopsDB;
     $xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -66,12 +74,12 @@ function xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
     } else {
         //read all subscribers
         $sql = "SELECT subscr_id, subscr_actkey ";
-        $sql .= " FROM {$xoopsDB->prefix('mod_xnewsletter_subscr')} INNER JOIN {$xoopsDB->prefix('mod_xnewsletter_catsubscr')} ON subscr_id = catsubscr_subscrid ";
+        $sql .= " FROM {$xoopsDB->prefix('xnewsletter_subscr')} INNER JOIN {$xoopsDB->prefix('xnewsletter_catsubscr')} ON subscr_id = catsubscr_subscrid ";
         $sql .= " WHERE subscr_activated=1 AND (((catsubscr_catid) In (";
         $sql .= str_replace('|', ',', $letter_cats);
         $sql .= "))) GROUP BY subscr_id;";
 
-        $subscribers = $xoopsDB->query($sql) or die();
+        $subscribers = $xoopsDB->query($sql) || die();
 
         while ($subscriber = $xoopsDB->fetchArray($subscribers)) {
             $subscr_id = $subscriber["subscr_id"];
@@ -111,9 +119,9 @@ function xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
                     $counter = 0;
                 }
             }
-            $counter++;
+            ++$counter;
             // create task list item
-            $sql = "INSERT INTO `{$xoopsDB->prefix('mod_xnewsletter_task')}`";
+            $sql = "INSERT INTO `{$xoopsDB->prefix('xnewsletter_task')}`";
             $sql .= " (`task_letter_id`, `task_subscr_id`,  `task_starttime`, `task_submitter`, `task_created` )";
             $sql .= " VALUES ({$letter_id}, {$subscriber_id}, {$task_starttime}, {$submitter}, " . time() . ")";
             if (!$xoopsDB->queryF($sql)) {
@@ -136,6 +144,12 @@ function xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
 return true;
 }
 
+/**
+ * @param     $xn_send_in_packages
+ * @param int $letter_id
+ *
+ * @return mixed|string
+ */
 function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
     require_once XOOPS_ROOT_PATH . "/modules/xNewsletter/include/functions.php";
     require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php";
@@ -157,7 +171,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
     }
 
     //get letters ready to send groups by letter_id
-    $sql = "SELECT `task_letter_id` FROM {$xoopsDB->prefix('mod_xnewsletter_task')}";
+    $sql = "SELECT `task_letter_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
     if ($letter_id > 0) {
         $sql .= " WHERE (`task_letter_id`={$letter_id})";
     }
@@ -208,7 +222,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
         // get emails of subscribers
         $recipients = array();
-        $sql_tasklist = "SELECT `task_id`, `task_subscr_id` FROM {$xoopsDB->prefix('mod_xnewsletter_task')}";
+        $sql_tasklist = "SELECT `task_id`, `task_subscr_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
         $sql_tasklist .= " WHERE ((`task_letter_id`= {$letter_id}) AND (`task_starttime` < " . time() . "))";
         if (!$task_letters = $xoopsDB->query($sql_tasklist)) {
             return $task_letters->getErrors();
@@ -229,7 +243,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                     'subscriber_actkey' => 'Test'
                     );
             } else {
-                $sql_subscr = "SELECT * FROM {$xoopsDB->prefix('mod_xnewsletter_subscr')}";
+                $sql_subscr = "SELECT * FROM {$xoopsDB->prefix('xnewsletter_subscr')}";
                 $sql_subscr .= " WHERE `subscr_id`= {$subscr_id}";
                 if (!$task_subscrs = $xoopsDB->query($sql_subscr)) {
                     return $task_subscrs->getErrors();
@@ -280,7 +294,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         $count_err = 0;
 
         try {
-            if ($account_type == _AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
+            if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
                 $pop = new POP3();
                 $pop->Authorise($account_server_out, $account_port_out, 30, $account_username, $account_password, 1);
             }
@@ -289,20 +303,20 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
             $mail->CharSet = _CHARSET; //use xoops default character set
 
-            if ($account_type == _AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
+            if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
                 //$mail->IsSendmail();	Fix Error
             }
 
             $mail->Username = $account_username; // SMTP account username
             $mail->Password = $account_password; // SMTP account password
 
-            if ($account_type == _AM_ACCOUNTS_TYPE_VAL_POP3) {
+            if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
                 $mail->IsSMTP();
                 //$mail->SMTPDebug = 2;
                 $mail->Host = $account_server_out;
             }
 
-            if ($account_type == _AM_ACCOUNTS_TYPE_VAL_SMTP || $account_type == _AM_ACCOUNTS_TYPE_VAL_GMAIL) {
+            if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP || $account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
                 $mail->Port = $account_port_out; // set the SMTP port
                 $mail->Host = $account_server_out; //sometimes necessary to repeat
             }
@@ -343,7 +357,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                         echo "<br>att not exist:" . $attachment;
                     }
                 }
-                $count_total ++;
+                ++$count_total;
                 if ( $mail->Send()) {
                     if ($subscriber_id == 0) {
                         $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS_TEST . " (" . $recipient["address"] . ")";
@@ -354,7 +368,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 } else {
                     $protocol_status = _AM_XNEWSLETTER_FAILED . "-> " . $mail->ErrorInfo;
                     $protocol_success = "0";
-                    $count_err ++;
+                    ++$count_err;
                 }
                 //create item in protocol for this email
                 $text_clean = array("<strong>", "</strong>", "<br/>", "<br />");
@@ -363,7 +377,7 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $mail->ClearAddresses();
 
                 //delete item in table task
-                $sql_delete = "DELETE FROM {$xoopsDB->prefix('mod_xnewsletter_task')}";
+                $sql_delete = "DELETE FROM {$xoopsDB->prefix('xnewsletter_task')}";
                 $sql_delete .= " WHERE `task_id`= {$recipient["task_id"]}";
                 $result = $xoopsDB->queryF($sql_delete);
 
@@ -386,11 +400,11 @@ function xNewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
         } catch (phpmailerException $e) {
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->errorMessage(); //error messages from PHPMailer
-            $count_err ++;
+            ++$count_err;
             $protocol_success = "0";
         } catch (Exception $e) {
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->getMessage(); //error messages from anything else!
-            $count_err ++;
+            ++$count_err;
             $protocol_success = "0";
         }
     }

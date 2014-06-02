@@ -17,16 +17,23 @@
  * @package         xNewsletter
  * @since           2.5.x
  * @author          XOOPS Development Team ( name@site.com ) - ( http://xoops.org )
- * @version         $Id: xNewsletter_task.php 12491 2014-04-25 13:21:55Z beckmi $
+ * @version         $Id: xNewsletter_task.php 12559 2014-06-02 08:10:39Z beckmi $
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_task
+ */
 class xnewsletter_task extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -40,6 +47,11 @@ class xnewsletter_task extends XoopsObject
         $this->initVar("task_created", XOBJ_DTYPE_INT, null, false, 8);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     function getForm($action = false)
     {
         global $xoopsDB;
@@ -82,6 +94,9 @@ class xnewsletter_task extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_taskHandler
+ */
 class xNewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -95,7 +110,7 @@ class xNewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_task", "xnewsletter_task", "task_id", "task_letter_id");
+        parent::__construct($db, "xnewsletter_task", "xnewsletter_task", "task_id", "task_letter_id");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

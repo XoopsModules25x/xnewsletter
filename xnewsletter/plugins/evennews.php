@@ -25,9 +25,12 @@
  *  Version : $Id $
  * ****************************************************************************
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
+/**
+ * @return array
+ */
 function xnewsletter_plugin_getinfo_evennews() {
     global $xoopsDB;
 
@@ -42,11 +45,19 @@ function xnewsletter_plugin_getinfo_evennews() {
     return $pluginInfo;
 }
 
+/**
+ * @param $cat_id
+ * @param $action_after_read
+ * @param $limitcheck
+ * @param $skipcatsubscrexist
+ *
+ * @return int
+ */
 function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist) {
     global $xoopsDB;
     $xnewsletter = xNewsletterxNewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('mod_xnewsletter_import');
+    $table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;
@@ -54,9 +65,9 @@ function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limit
     $sql = "SELECT `user_email`, `user_name`, `user_nick`";
     $sql .= " FROM {$xoopsDB->prefix("evennews_members")}";
     $sql .= " WHERE (`user_email` is not null and not(`user_email`=''))";
-    $result_users = $xoopsDB->query($sql) or die ("MySQL-Error: " . mysql_error());
+    $result_users = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
     while ($lineArray = mysql_fetch_array($result_users)) {
-        $i++;
+        ++$i;
         $email     = $lineArray[0];
         $sex       = "";
         $firstname = $lineArray[1];
@@ -84,10 +95,10 @@ function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limit
             }
 //            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
 //            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $xoopsDB->query($sql) or die ("MySQL-Error: " . mysql_error());
-            $j++;
+//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+            ++$j;
         }
-    $i++;
+    ++$i;
     if ($j == 100000) break; //maximum number of processing to avoid cache overflow
     if ($limitcheck > 0 && $j == $limitcheck) $import_status = 0;
     }
