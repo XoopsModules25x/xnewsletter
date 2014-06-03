@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -49,9 +50,9 @@ class xnewsletter_import extends XoopsObject
         $this->initVar("import_firstname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("import_lastname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("import_sex", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_cat_id",  XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("import_subscr_id",  XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("import_catsubscr_id",  XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("import_cat_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("import_subscr_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("import_catsubscr_id", XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar("import_status", XOBJ_DTYPE_INT, null, false, 1);
     }
 
@@ -86,8 +87,8 @@ class xnewsletter_import extends XoopsObject
 
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
         $opt_import_type->setextra('onclick="document.forms.form_select_import.submit()"');
-        $aFiles = XoopsLists::getFileListAsArray( XNEWSLETTER_ROOT_PATH . "/plugins/");
-        $arrPlugin = array();
+        $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . "/plugins/");
+        $arrPlugin         = array();
         $currpluginhasform = 0;
         foreach ($aFiles as $file) {
             if (substr($file, strlen($file) - 4, 4) == '.php') {
@@ -95,18 +96,21 @@ class xnewsletter_import extends XoopsObject
                 $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/" . $pluginName . '.php';
                 if (file_exists($pluginFile)) {
                     require_once($pluginFile);
-                    $function = 'xnewsletter_plugin_getinfo_' . $pluginName;
-                    $arrPlugin = $function();
+                    $function    = 'xnewsletter_plugin_getinfo_' . $pluginName;
+                    $arrPlugin   = $function();
                     $show_plugin = $this->tableExists($arrPlugin['tables'][0]);
                     if ($show_plugin === true && @is_array($arrPlugin['tables'][1])) {
                         $show_plugin = $this->tableExists($arrPlugin['tables'][1]);
                     }
 
                     if ($show_plugin === true) {
-                        $label = "<img src='" . $arrPlugin['icon'] . "' title='" . $arrPlugin['descr'] . "' alt='" . $arrPlugin['descr'] . "' style='height:32px;margin-bottom:5px;margin-right:5px' />" . $arrPlugin['descr'];
+                        $label = "<img src='" . $arrPlugin['icon'] . "' title='" . $arrPlugin['descr'] . "' alt='" . $arrPlugin['descr'] . "' style='height:32px;margin-bottom:5px;margin-right:5px' />"
+                            . $arrPlugin['descr'];
                         $opt_import_type->addOption($arrPlugin['name'], $label);
                         $form->addElement(new XoopsFormHidden("hasform_" . $pluginName, $arrPlugin['hasform']));
-                        if ($plugin == $pluginName && $arrPlugin['hasform']==1) $currpluginhasform = 1;
+                        if ($plugin == $pluginName && $arrPlugin['hasform'] == 1) {
+                            $currpluginhasform = 1;
+                        }
                     }
                 }
             }
@@ -123,9 +127,13 @@ class xnewsletter_import extends XoopsObject
         //limit for import
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT, "100000"), false);
         if ($action_after_read == 0) {
-            if ($limitcheck < 500 && $limitcheck > 0) $limitcheck = 500;
+            if ($limitcheck < 500 && $limitcheck > 0) {
+                $limitcheck = 500;
+            }
         } else {
-            if ($limitcheck > 200) $limitcheck = 200;
+            if ($limitcheck > 200) {
+                $limitcheck = 200;
+            }
         }
         $sel_limitcheck = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT_PACKAGE, "limitcheck", $limitcheck);
         if ($action_after_read == 0) {
@@ -145,13 +153,15 @@ class xnewsletter_import extends XoopsObject
         }
         $form->addElement($sel_limitcheck, false);
 
-        $skip = $action_after_read == 1 ? 0 : 1;
+        $skip               = $action_after_read == 1 ? 0 : 1;
         $skipcatsubscrexist = new XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_SKIP_EXISTING, "skipcatsubscrexist", $skip);
-        if ($action_after_read == 0) $skipcatsubscrexist->setextra('disabled="disabled"');
+        if ($action_after_read == 0) {
+            $skipcatsubscrexist->setextra('disabled="disabled"');
+        }
         $form->addElement($skipcatsubscrexist, false);
 
         $form->addElement(new XoopsFormHidden("op", "default"));
-        $button_tray = new XoopsFormElementTray('','');
+        $button_tray = new XoopsFormElementTray('', '');
         if ($currpluginhasform == 1) {
             //show form for additional options
             $button1 = new XoopsFormButton("", "form_additional", _AM_XNEWSLETTER_IMPORT_CONTINUE, "submit1");
@@ -174,11 +184,13 @@ class xnewsletter_import extends XoopsObject
      */
     private function tableExists($tablename)
     {
-        if ($tablename=="") return true;
+        if ($tablename == "") {
+            return true;
+        }
         global $xoopsDB;
-        $result=$xoopsDB->queryF("SHOW TABLES LIKE '$tablename'");
+        $result = $xoopsDB->queryF("SHOW TABLES LIKE '$tablename'");
 
-        return($xoopsDB->getRowsNum($result) > 0);
+        return ($xoopsDB->getRowsNum($result) > 0);
     }
 }
 

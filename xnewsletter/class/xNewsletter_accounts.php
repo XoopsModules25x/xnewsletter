@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -92,33 +93,33 @@ class xnewsletter_accounts extends XoopsObject
         switch ($default) {
             case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL:
             default:
-                $dis_accounts_userpass      = "1";
-                $dis_accounts_server_in     = "1";
-                $dis_accounts_server_out    = "1";
-                $dis_accounts_use_bmh       = "1";
-                $dis_accounts_button_check  = "1";
+                $dis_accounts_userpass     = "1";
+                $dis_accounts_server_in    = "1";
+                $dis_accounts_server_out   = "1";
+                $dis_accounts_use_bmh      = "1";
+                $dis_accounts_button_check = "1";
                 break;
             case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL:
-                $dis_accounts_userpass      = "0";
-                $dis_accounts_server_in     = "1";
-                $dis_accounts_server_out    = "0";
-                $dis_accounts_use_bmh       = "1";
-                $dis_accounts_button_check  = "1";
+                $dis_accounts_userpass     = "0";
+                $dis_accounts_server_in    = "1";
+                $dis_accounts_server_out   = "0";
+                $dis_accounts_use_bmh      = "1";
+                $dis_accounts_button_check = "1";
                 break;
             case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3:
-                $dis_accounts_userpass      = "0";
-                $dis_accounts_server_in     = "0";
-                $dis_accounts_server_out    = "0";
-                $dis_accounts_use_bmh       = "1";
-                $dis_accounts_button_check  = "0";
+                $dis_accounts_userpass     = "0";
+                $dis_accounts_server_in    = "0";
+                $dis_accounts_server_out   = "0";
+                $dis_accounts_use_bmh      = "1";
+                $dis_accounts_button_check = "0";
                 break;
             case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP:
             case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL:
-                $dis_accounts_userpass      = "0";
-                $dis_accounts_server_in     = "0";
-                $dis_accounts_server_out    = "0";
-                $dis_accounts_use_bmh       = "0";
-                $dis_accounts_button_check  = "0";
+                $dis_accounts_userpass     = "0";
+                $dis_accounts_server_in    = "0";
+                $dis_accounts_server_out   = "0";
+                $dis_accounts_use_bmh      = "0";
+                $dis_accounts_button_check = "0";
                 break;
         }
 
@@ -138,12 +139,12 @@ class xnewsletter_accounts extends XoopsObject
         $form->addElement(new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_DEFAULT, "accounts_default", $this->getVar("accounts_default"), _YES, _NO), false);
 
         if ($dis_accounts_userpass == "0") {
-            $form->addElement( new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_USERNAME, "accounts_username", 50, 255, $this->getVar("accounts_username")),true );
-            $form->addElement( new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_PASSWORD, "accounts_password", 50, 255, $this->getVar("accounts_password")),true );
+            $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_USERNAME, "accounts_username", 50, 255, $this->getVar("accounts_username")), true);
+            $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_PASSWORD, "accounts_password", 50, 255, $this->getVar("accounts_password")), true);
         }
 
         if ($dis_accounts_server_in == "0") {
-            $incomming_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_ACCOUNTS_INCOMING,'');
+            $incomming_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_ACCOUNTS_INCOMING, '');
             $incomming_tray->addElement(new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_SERVER_IN, "accounts_server_in", 50, 255, $this->getVar("accounts_server_in")));
             $incomming_tray->addElement(new XoopsFormText("<br />" . _AM_XNEWSLETTER_ACCOUNTS_PORT_IN, "accounts_port_in", 50, 255, $this->getVar("accounts_port_in")));
             $formfield_securetype_in = new XoopsFormSelect("<br />" . _AM_XNEWSLETTER_ACCOUNTS_SECURETYPE_IN, "accounts_securetype_in", $this->getVar("accounts_securetype_in"));
@@ -160,16 +161,16 @@ class xnewsletter_accounts extends XoopsObject
             $outcomming_tray->addElement(new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_SERVER_OUT, "accounts_server_out", 50, 255, $this->getVar("accounts_server_out")));
             $outcomming_tray->addElement(new XoopsFormText("<br />" . _AM_XNEWSLETTER_ACCOUNTS_PORT_OUT, "accounts_port_out", 50, 255, $this->getVar("accounts_port_out")));
             $formfield_securetype_out = new XoopsFormSelect("<br />" . _AM_XNEWSLETTER_ACCOUNTS_SECURETYPE_OUT, "accounts_securetype_out", $this->getVar("accounts_securetype_out"));
-            $formfield_securetype_out->addOption("" ,"") ;
-            $formfield_securetype_out->addOption("notls" ,"NOTLS / STARTTLS");
-            $formfield_securetype_out->addOption("ssl" ,"SSL");
-            $formfield_securetype_out->addOption("tls" ,"TLS");
+            $formfield_securetype_out->addOption("", "");
+            $formfield_securetype_out->addOption("notls", "NOTLS / STARTTLS");
+            $formfield_securetype_out->addOption("ssl", "SSL");
+            $formfield_securetype_out->addOption("tls", "TLS");
             $outcomming_tray->addElement($formfield_securetype_out);
             $form->addElement($outcomming_tray);
         }
 
         if ($dis_accounts_use_bmh == "0") {
-            $form->addElement(new XoopsFormLabel("",_AM_XNEWSLETTER_ACCOUNTS_BOUNCE_INFO));
+            $form->addElement(new XoopsFormLabel("", _AM_XNEWSLETTER_ACCOUNTS_BOUNCE_INFO));
 
             $formfield_use_bmh = new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_USE_BMH, "accounts_use_bmh", $this->getVar("accounts_use_bmh"), _YES, _NO);
             $form->addElement($formfield_use_bmh, false);
@@ -178,7 +179,7 @@ class xnewsletter_accounts extends XoopsObject
             $form->addElement($formfield_inbox, false);
 
             //Hardbox
-            $hard_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE." "._AM_XNEWSLETTER_BOUNCETYPE_HARD,'<br>');
+            $hard_tray          = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . " " . _AM_XNEWSLETTER_BOUNCETYPE_HARD, '<br>');
             $formfield_movehard = new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_MOVEHARD, "accounts_movehard", $this->getVar("accounts_movehard"), _YES, _NO);
             $hard_tray->addElement($formfield_movehard, false);
             $formfield_hardbox = new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_HARDBOX, "accounts_hardbox", 50, 255, $this->getVar("accounts_hardbox"));
@@ -187,7 +188,7 @@ class xnewsletter_accounts extends XoopsObject
             $form->addElement($hard_tray, false);
 
             //Softbox
-            $soft_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE." "._AM_XNEWSLETTER_BOUNCETYPE_SOFT,'<br>');
+            $soft_tray          = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . " " . _AM_XNEWSLETTER_BOUNCETYPE_SOFT, '<br>');
             $formfield_movesoft = new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_MOVESOFT, "accounts_movesoft", $this->getVar("accounts_movesoft"), _YES, _NO);
             $soft_tray->addElement($formfield_movesoft, false);
             $formfield_softbox = new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_SOFTBOX, "accounts_softbox", 50, 255, $this->getVar("accounts_softbox"));
@@ -202,7 +203,7 @@ class xnewsletter_accounts extends XoopsObject
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
 
-        $button_tray = new XoopsFormElementTray(" ",'&nbsp;&nbsp;');
+        $button_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
         $button_tray->addElement(new XoopsFormHidden("op", "save_accounts"));
         $button_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
         if ($dis_accounts_button_check == "0") {
