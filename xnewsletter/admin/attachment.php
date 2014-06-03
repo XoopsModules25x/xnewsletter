@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GNU General Public License 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -31,8 +31,8 @@ xoops_cp_header();
 //global $pathIcon, $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$attachment_id 	= xNewsletter_CleanVars($_REQUEST, 'attachment_id', 0, 'int');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$attachment_id 	= xnewsletter_CleanVars($_REQUEST, 'attachment_id', 0, 'int');
 
 switch ($op) {
     case "list" :
@@ -44,11 +44,11 @@ switch ($op) {
         $criteria = new CriteriaCompo();
         $criteria->setSort("attachment_letter_id DESC, attachment_id");
         $criteria->setOrder("DESC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_attachment')->getCount();
-        $start = xNewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $numrows = $xnewsletter->getHandler('xnewsletter_attachment')->getCount();
+        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
         $criteria->setStart($start);
         $criteria->setLimit($limit);
-        $attachment_arr = $xnewsletter->getHandler('xNewsletter_attachment')->getall($criteria);
+        $attachment_arr = $xnewsletter->getHandler('xnewsletter_attachment')->getall($criteria);
         if ($numrows > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
@@ -79,7 +79,7 @@ switch ($op) {
                 $class = ($class == "even") ? "odd" : "even";
                 echo "<td class='center'>".$i."</td>";
 
-                $letter =& $xnewsletter->getHandler('xNewsletter_letter')->get($attachment_arr[$i]->getVar("attachment_letter_id"));
+                $letter =& $xnewsletter->getHandler('xnewsletter_letter')->get($attachment_arr[$i]->getVar("attachment_letter_id"));
                 $title_letter = $letter->getVar("letter_title");
                 echo "<td class='center'>" . $title_letter . "</td>";
                 echo "<td class='center'>" . $attachment_arr[$i]->getVar("attachment_name") . "</td>";
@@ -119,7 +119,7 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, 'attachment.php?op=list', 'list');
         echo $indexAdmin->renderButton();
 
-        $obj =& $xnewsletter->getHandler('xNewsletter_attachment')->create();
+        $obj =& $xnewsletter->getHandler('xnewsletter_attachment')->create();
         $form = $obj->getForm();
         $form->display();
         break;
@@ -129,19 +129,19 @@ switch ($op) {
            redirect_header("attachment.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
-        $obj =& $xnewsletter->getHandler('xNewsletter_attachment')->get($attachment_id);
+        $obj =& $xnewsletter->getHandler('xnewsletter_attachment')->get($attachment_id);
         //Form attachment_letter_id
-        $obj->setVar("attachment_letter_id",    xNewsletter_CleanVars($_REQUEST, "attachment_letter_id", 0, "int"));
+        $obj->setVar("attachment_letter_id",    xnewsletter_CleanVars($_REQUEST, "attachment_letter_id", 0, "int"));
         //Form attachment_name
-        $obj->setVar("attachment_name",         xNewsletter_CleanVars($_REQUEST, "attachment_name", "", "string"));
+        $obj->setVar("attachment_name",         xnewsletter_CleanVars($_REQUEST, "attachment_name", "", "string"));
         //Form attachment_type
-        $obj->setVar("attachment_type",         xNewsletter_CleanVars($_REQUEST, "attachment_type", 0, "int"));
+        $obj->setVar("attachment_type",         xnewsletter_CleanVars($_REQUEST, "attachment_type", 0, "int"));
         //Form attachment_submitter
-        $obj->setVar("attachment_submitter",    xNewsletter_CleanVars($_REQUEST, "attachment_submitter", 0, "int"));
+        $obj->setVar("attachment_submitter",    xnewsletter_CleanVars($_REQUEST, "attachment_submitter", 0, "int"));
         //Form attachment_created
-        $obj->setVar("attachment_created",      xNewsletter_CleanVars($_REQUEST, "attachment_created", time(), "int"));
+        $obj->setVar("attachment_created",      xnewsletter_CleanVars($_REQUEST, "attachment_created", time(), "int"));
 
-        if ($xnewsletter->getHandler('xNewsletter_attachment')->insert($obj)) {
+        if ($xnewsletter->getHandler('xnewsletter_attachment')->insert($obj)) {
             redirect_header("attachment.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
         }
 
@@ -155,18 +155,18 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWATTACHMENT, 'attachment.php?op=new_attachment', 'add');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, 'attachment.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $obj = $xnewsletter->getHandler('xNewsletter_attachment')->get($attachment_id);
+        $obj = $xnewsletter->getHandler('xnewsletter_attachment')->get($attachment_id);
         $form = $obj->getForm();
         $form->display();
         break;
 
     case "delete_attachment" :
-        $obj =& $xnewsletter->getHandler('xNewsletter_attachment')->get($attachment_id);
+        $obj =& $xnewsletter->getHandler('xnewsletter_attachment')->get($attachment_id);
         if (isset($_POST["ok"]) && $_POST["ok"] == 1) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header("attachment.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xNewsletter_attachment')->delete($obj)) {
+            if ($xnewsletter->getHandler('xnewsletter_attachment')->delete($obj)) {
                 redirect_header("attachment.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $obj->getHtmlErrors();

@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -31,10 +31,10 @@ xoops_cp_header();
 //global $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$save_and_check = xNewsletter_CleanVars($_REQUEST, 'save_and_check', 'none', 'string');
-$accounts_id = xNewsletter_CleanVars($_REQUEST, 'accounts_id', 0, 'int');
-$post = xNewsletter_CleanVars($_REQUEST, 'post', '', 'string');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$save_and_check = xnewsletter_CleanVars($_REQUEST, 'save_and_check', 'none', 'string');
+$accounts_id = xnewsletter_CleanVars($_REQUEST, 'accounts_id', 0, 'int');
+$post = xnewsletter_CleanVars($_REQUEST, 'post', '', 'string');
 
 if ($post == "" &&  $op == "save_accounts" && $save_and_check =="none" ) $op = "edit_account";
 
@@ -50,7 +50,7 @@ switch ($op) {
         if ($accounts_id == 0) {
             redirect_header("accounts.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
         } else {
-            $accountObj =& $xnewsletter->getHandler('xNewsletter_accounts')->get($accounts_id);
+            $accountObj =& $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
         }
 
         $mailhost = $accountObj->getVar("accounts_server_in");
@@ -197,11 +197,11 @@ switch ($op) {
         $criteria = new CriteriaCompo();
         $criteria->setSort("accounts_id ASC, accounts_type");
         $criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_accounts')->getCount();
-        $start = xNewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $numrows = $xnewsletter->getHandler('xnewsletter_accounts')->getCount();
+        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
         $criteria->setStart($start);
         $criteria->setLimit($limit);
-        $accounts_arr = $xnewsletter->getHandler('xNewsletter_accounts')->getall($criteria);
+        $accounts_arr = $xnewsletter->getHandler('xnewsletter_accounts')->getall($criteria);
         if ($numrows > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
@@ -281,8 +281,8 @@ switch ($op) {
         echo $indexAdmin->addNavigation("accounts.php");
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, 'accounts.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $accountObj = $xnewsletter->getHandler('xNewsletter_accounts')->create();
-        $accountObj = xNewsletter_setPost($accountObj, $_POST);
+        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->create();
+        $accountObj = xnewsletter_setPost($accountObj, $_POST);
         $form = $accountObj->getForm();
         $form->display();
         break;
@@ -292,13 +292,13 @@ switch ($op) {
             redirect_header("accounts.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
-        $accountObj =& $xnewsletter->getHandler('xNewsletter_accounts')->get($accounts_id);
+        $accountObj =& $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
         $_POST['accounts_id'] = $accounts_id;
-        $accountObj = xNewsletter_setPost($accountObj, $_POST);
+        $accountObj = xnewsletter_setPost($accountObj, $_POST);
 
         $criteria = new CriteriaCompo();
         $criteria->add(new Criteria("accounts_default", 1));
-        $count_accounts_default = $xnewsletter->getHandler('xNewsletter_accounts')->getCount($criteria);
+        $count_accounts_default = $xnewsletter->getHandler('xnewsletter_accounts')->getCount($criteria);
         if ($count_accounts_default > 0) {
             if ($accountObj->getVar("accounts_default") == 1) {
                 global $xoopsDB;
@@ -314,7 +314,7 @@ switch ($op) {
         }
         $accountObj->setVar("accounts_default", $verif_accounts_default);
         if ($accountObj->getVar("accounts_yourmail") != "" && $accountObj->getVar("accounts_yourmail") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
-            if ($xnewsletter->getHandler('xNewsletter_accounts')->insert($accountObj)) {
+            if ($xnewsletter->getHandler('xnewsletter_accounts')->insert($accountObj)) {
                 if ($save_and_check == 'none') {
                     redirect_header("accounts.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
                 } else {
@@ -335,21 +335,21 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, 'accounts.php?op=new_account', 'add');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, 'accounts.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $accountObj = $xnewsletter->getHandler('xNewsletter_accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
         if (!empty($_POST)) {
-            xNewsletter_setPost($accountObj, $_POST);
+            xnewsletter_setPost($accountObj, $_POST);
         }
         $form = $accountObj->getForm();
         $form->display();
     break;
 
     case "delete_account":
-        $accountObj = $xnewsletter->getHandler('xNewsletter_accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header("accounts.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xNewsletter_accounts')->delete($accountObj)) {
+            if ($xnewsletter->getHandler('xnewsletter_accounts')->delete($accountObj)) {
                 redirect_header("accounts.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $accountObj->getHtmlErrors();

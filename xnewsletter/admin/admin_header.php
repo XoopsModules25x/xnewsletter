@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -51,7 +51,7 @@ xoops_loadLanguage('admin', $xnewsletter->getModule()->dirname());
 xoops_loadLanguage('modinfo', $xnewsletter->getModule()->dirname());
 xoops_loadLanguage('main', $xnewsletter->getModule()->dirname());
 
-if (!xNewsletter_checkModuleAdmin()) {
+if (!xnewsletter_checkModuleAdmin()) {
     xoops_cp_header();
     echo xoops_error(_AM_XNEWSLETTER_NOFRAMEWORKS);
     xoops_cp_footer();

@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -27,7 +27,7 @@
  */
 
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
-$xnewsletter = xNewsletterxNewsletter::getInstance();
+$xnewsletter = xnewsletterxnewsletter::getInstance();
 $pathImageAdmin = 'assets/images/icons';
 
 $adminmenu = array();

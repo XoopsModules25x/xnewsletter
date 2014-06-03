@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -31,12 +31,12 @@ include_once "header.php";
 
 echo "<br/>start cron job<br/>";
 
-require_once XOOPS_ROOT_PATH . "/modules/xNewsletter/include/task.inc.php";
-$result_exec = xNewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_packages'), 0);
+require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
+$result_exec = xnewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_packages'), 0);
 
 if ($result_exec != '') {
     //you can enable the block for creating protocol for cron
-    $protocolObj = $xnewsletter->getHandler('xNewsletter_protocol')->create();
+    $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
     $protocolObj->setVar("protocol_letter_id", "0");
     $protocolObj->setVar("protocol_subscriber_id", "0");
     $protocolObj->setVar("protocol_status", "Cron: ".$result_exec);
@@ -44,7 +44,7 @@ if ($result_exec != '') {
     $protocolObj->setVar("protocol_submitter", "0");
     $protocolObj->setVar("protocol_created", time());
 
-    if ($xnewsletter->getHandler('xNewsletter_protocol')->insert($protocolObj)) {
+    if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
         //create protocol is ok
     } else {
         echo $protocolObj->getHtmlErrors();

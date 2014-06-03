@@ -1,4 +1,4 @@
-<{include file="db:xNewsletter_header.tpl"}>
+<{include file="db:xnewsletter_header.tpl"}>
 <div style='clear:both;'></div>
 <div class="outer">
     <h2><{$letter.letter_title}></h2>
@@ -8,4 +8,4 @@
     <input action="action" type="button" value="<{$smarty.const._BACK}>" onclick="history.go(-1);" />
 </div>
 <div style='clear:both;'></div>
-<{include file="db:xNewsletter_footer.tpl"}>
+<{include file="db:xnewsletter_footer.tpl"}>

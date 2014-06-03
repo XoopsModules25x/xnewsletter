@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -27,10 +27,10 @@
  */
 
 include "admin_header.php";
-include XOOPS_ROOT_PATH . "/modules/xNewsletter/include/task.inc.php";
+include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$letter_id = xNewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
 
 $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
 
@@ -40,9 +40,9 @@ if ($xn_send_in_packages > 0 && $op != "send_test") {
     $xn_send_in_packages_time = 0;
 }
 
-$result = xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
+$result = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
 
-$result_exec = xNewsletter_executeTasks($xn_send_in_packages, $letter_id);
+$result_exec = xnewsletter_executeTasks($xn_send_in_packages, $letter_id);
 
 redirect_header("letter.php", 3, $result_exec);
 

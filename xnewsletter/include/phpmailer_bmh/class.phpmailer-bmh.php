@@ -45,7 +45,7 @@ Last updated: January 21 2009 13:49 EST */
  */
 
 include_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/mainfile.php';
-require_once(XOOPS_ROOT_PATH . '/modules/xNewsletter/include/phpmailer_bmh/phpmailer-bmh_rules.php');
+require_once(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/phpmailer-bmh_rules.php');
 
 define('VERBOSE_QUIET',  0); // means no output at all
 define('VERBOSE_SIMPLE', 1); // means only output simple report

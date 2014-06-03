@@ -9,11 +9,11 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- *  xNewsletterSession class
+ *  xnewsletterSession class
  *
  * @copyright       The XUUPS Project http://sourceforge.net/projects/xuups/
  * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
- * @package         xNewsletter
+ * @package         xnewsletter
  * @since           1.3
  * @author          trabis <lusopoemas@gmail.com>
  * @author          Harry Fuecks (PHP Anthology Volume II)
@@ -24,9 +24,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xNewsletterSession
+ * Class xnewsletterSession
  */
-class xNewsletterSession
+class xnewsletterSession
 {
     /**
      * Session constructor<br />
@@ -96,13 +96,13 @@ class xNewsletterSession
     }
 
     /**
-     * @return xNewsletterSession
+     * @return xnewsletterSession
      */
     public static function &getInstance()
     {
         static $_sess;
         if (!isset($_sess)) {
-            $_sess = new xNewsletterSession();
+            $_sess = new xnewsletterSession();
         }
 
         return $_sess;

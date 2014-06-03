@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id: xoops_version.php 12559 2014-06-02 08:10:39Z beckmi $
@@ -37,7 +37,7 @@ $modversion['author']              = "Goffy, Alfred";
 $modversion['credits']             = "";
 $modversion['license']             = "GPL 2.0";
 $modversion['help']                = 'page=help';
-$modversion['image']               = "assets/images/xNewsletter.png";
+$modversion['image']               = "assets/images/xnewsletter.png";
 $modversion['official']            = false;
 $modversion['author_mail']         = "webmaster@wedega.com";
 $modversion['author_website_url']  = "wedega.com";
@@ -60,7 +60,7 @@ $modversion['module_website_name'] = "Webdesign Gabor";
 $modversion['release_info']        = "";
 $modversion['release_file']        = XOOPS_URL . "/modules/" . $modversion['dirname'] . "/docs/changelog.txt";
 
-$modversion['manual']      = "xNewsletter.txt";
+$modversion['manual']      = "xnewsletter.txt";
 $modversion['manual_file'] = XOOPS_URL . "/modules/{$modversion['dirname']}/docs/";
 $modversion['min_php']     = '5.3.7';
 $modversion['min_xoops']   = '2.5.7';
@@ -132,13 +132,13 @@ $showList = true;
 if (is_object($xoopsUser) && isset($xoopsUser)) {
     $gperm_handler = xoops_gethandler('groupperm');
     $module_handler = xoops_gethandler('module');
-    $xoopsModule = $module_handler->getByDirname('xNewsletter');
+    $xoopsModule = $module_handler->getByDirname('xnewsletter');
     if (is_object($xoopsModule)) {
         $mid = $xoopsModule->mid();
         $member_handler = xoops_gethandler('member');
         $my_group_ids = $member_handler->getGroupsByUser($xoopsUser->uid());
 
-        $catHandler = xoops_getModuleHandler('xNewsletter_cat', 'xNewsletter');
+        $catHandler = xoops_getModuleHandler('xnewsletter_cat', 'xnewsletter');
         $cat_criteria = new CriteriaCompo();
         $cat_criteria->setSort('cat_id');
         $cat_criteria->setOrder('ASC');
@@ -280,7 +280,7 @@ $modversion["config"][$i]["title"] = "_MI_XNEWSLETTER_ATTACHMENT_PATH";
 $modversion["config"][$i]["description"] = "_MI_XNEWSLETTER_ATTACHMENT_PATH_DESC";
 $modversion["config"][$i]["formtype"] = "textbox";
 $modversion["config"][$i]["valuetype"] = "text";
-$modversion["config"][$i]["default"] = "/xNewsletter/attachments/";
+$modversion["config"][$i]["default"] = "/xnewsletter/attachments/";
 ++$i;
 $modversion['config'][$i]['name'] = "adminperpage";
 $modversion['config'][$i]['title'] = "_MI_XNEWSLETTER_ADMINPERPAGE";

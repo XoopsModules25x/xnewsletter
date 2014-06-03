@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -32,20 +32,20 @@ xoops_cp_header();
 //global $indexAdmin;
 
 //count "total"
-$count_cat = $xnewsletter->getHandler('xNewsletter_cat')->getCount();
-$count_accounts = $xnewsletter->getHandler('xNewsletter_accounts')->getCount();
+$count_cat = $xnewsletter->getHandler('xnewsletter_cat')->getCount();
+$count_accounts = $xnewsletter->getHandler('xnewsletter_accounts')->getCount();
 
-$count_subscr = $xnewsletter->getHandler('xNewsletter_subscr')->getCount();
-$count_catsubscr = $xnewsletter->getHandler('xNewsletter_catsubscr')->getCount();
-$count_letter = $xnewsletter->getHandler('xNewsletter_letter')->getCount();
-$count_protocol = $xnewsletter->getHandler('xNewsletter_protocol')->getCount();
-$count_attachment = $xnewsletter->getHandler('xNewsletter_attachment')->getCount();
+$count_subscr = $xnewsletter->getHandler('xnewsletter_subscr')->getCount();
+$count_catsubscr = $xnewsletter->getHandler('xnewsletter_catsubscr')->getCount();
+$count_letter = $xnewsletter->getHandler('xnewsletter_letter')->getCount();
+$count_protocol = $xnewsletter->getHandler('xnewsletter_protocol')->getCount();
+$count_attachment = $xnewsletter->getHandler('xnewsletter_attachment')->getCount();
 if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
-    $count_mailinglist = $xnewsletter->getHandler('xNewsletter_mailinglist')->getCount();
+    $count_mailinglist = $xnewsletter->getHandler('xnewsletter_mailinglist')->getCount();
 }
-$count_bmh = $xnewsletter->getHandler('xNewsletter_bmh')->getCount();
+$count_bmh = $xnewsletter->getHandler('xnewsletter_bmh')->getCount();
 if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    $count_task = $xnewsletter->getHandler('xNewsletter_task')->getCount();
+    $count_task = $xnewsletter->getHandler('xnewsletter_task')->getCount();
 }
 
 define('_RED', '#FF0000'); // red color

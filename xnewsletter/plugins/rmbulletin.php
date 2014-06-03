@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -55,7 +55,7 @@ function xnewsletter_plugin_getinfo_rmbulletin() {
  */
 function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist) {
     global $xoopsDB;
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
@@ -72,14 +72,14 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
         $firstname = "";
         $lastname  = "";
 
-        $subscr_id = xNewsletter_pluginCheckEmail($email);
-        $catsubscr_id = xNewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
+        $subscr_id = xnewsletter_pluginCheckEmail($email);
+        $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
 
         if ($skipcatsubscrexist == 1 && $catsubscr_id > 0) {
             //skip existing subscriptions
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
-            $importObj = $xnewsletter->getHandler('xNewsletter_import')->create();
+            $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
             $importObj->setVar('import_email', $email);
             $importObj->setVar('import_sex', $sex);
             $importObj->setVar('import_firstname', $firstname);
@@ -88,7 +88,7 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
             $importObj->setVar('import_status', $import_status);
-            if (!$xnewsletter->getHandler('xNewsletter_import')->insert($importObj)) {
+            if (!$xnewsletter->getHandler('xnewsletter_import')->insert($importObj)) {
                 echo $importObj->getHtmlErrors();
                 exit();
             }

@@ -1,4 +1,4 @@
-<{include file="db:xNewsletter_header.tpl"}>
+<{include file="db:xnewsletter_header.tpl"}>
 <div class="outer">
     <p align="center" style="margin-top: 20px; margin-bottom: 20px; font-weight:bold">
         <{$subscription_result}>
@@ -17,4 +17,4 @@
     </p>
 <{/foreach}>
 </div>
-<{include file="db:xNewsletter_footer.tpl"}>
+<{include file="db:xnewsletter_footer.tpl"}>

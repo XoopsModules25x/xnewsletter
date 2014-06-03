@@ -1,4 +1,4 @@
-<{include file="db:xNewsletter_header.tpl"}>
+<{include file="db:xnewsletter_header.tpl"}>
 <div class="outer">
     <table class='outer width100' cellspacing='1'>
         <tr>
@@ -95,4 +95,4 @@
     <div class='center'><{$pagenav}></div>
     <br />
 </div>
-<{include file="db:xNewsletter_footer.tpl"}>
+<{include file="db:xnewsletter_footer.tpl"}>

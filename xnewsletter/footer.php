@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- * xNewsletter module
+ * xnewsletter module
  *
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -23,7 +23,7 @@ $moduleInfo = $xnewsletter->getModule()->getInfo();
 //$xoopsTpl->assign('xnewsletterModuleInfo', $moduleInfo); // huge array but useful?
 $xoopsTpl->assign('xnewsletterModuleInfoSub', $moduleInfo['sub']);
 // Module admin
-$xoopsTpl->assign('isAdmin', xNewsletter_userIsAdmin());
+$xoopsTpl->assign('isAdmin', xnewsletter_userIsAdmin());
 // Extra info
 // copyright
 $xoopsTpl->assign('copyright', $moduleCopyrightHtml); // this definition is not removed for backward compatibility issues

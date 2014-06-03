@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -31,8 +31,8 @@ xoops_cp_header();
 //global $pathIcon, $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
-$op     = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$cat_id = xNewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
+$op     = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
 
 switch ($op) {
     case "list" :
@@ -44,11 +44,11 @@ switch ($op) {
         $criteria = new CriteriaCompo();
         $criteria->setSort("cat_id ASC, cat_name");
         $criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_cat')->getCount();
-        $start = xNewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $numrows = $xnewsletter->getHandler('xnewsletter_cat')->getCount();
+        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
         $criteria->setStart($start);
         $criteria->setLimit($limit);
-        $cat_arr = $xnewsletter->getHandler('xNewsletter_cat')->getall($criteria);
+        $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->getall($criteria);
         if ($numrows > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
@@ -166,7 +166,7 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, 'cat.php?op=list', 'list');
         echo $indexAdmin->renderButton();
 
-        $obj =& $xnewsletter->getHandler('xNewsletter_cat')->create();
+        $obj =& $xnewsletter->getHandler('xnewsletter_cat')->create();
         $form = $obj->getForm();
         $form->display();
         break;
@@ -176,7 +176,7 @@ switch ($op) {
             redirect_header("cat.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
-        $obj =& $xnewsletter->getHandler('xNewsletter_cat')->get($cat_id);
+        $obj =& $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
 
         // Form cat_name
         $obj->setVar("cat_name", $_POST["cat_name"] );
@@ -197,7 +197,7 @@ switch ($op) {
         // Form cat_created
         $obj->setVar("cat_created", time());
 
-        if ($xnewsletter->getHandler('xNewsletter_cat')->insert($obj)) {
+        if ($xnewsletter->getHandler('xnewsletter_cat')->insert($obj)) {
             $cat_id = $obj->getVar("cat_id");
 
             //Form cat_gperms_admin
@@ -313,18 +313,18 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, 'cat.php?op=new_cat', 'add');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, 'cat.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $obj = $xnewsletter->getHandler('xNewsletter_cat')->get($cat_id);
+        $obj = $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
         $form = $obj->getForm();
         $form->display();
         break;
 
     case "delete_cat" :
-        $obj =& $xnewsletter->getHandler('xNewsletter_cat')->get($_REQUEST["cat_id"]);
+        $obj =& $xnewsletter->getHandler('xnewsletter_cat')->get($_REQUEST["cat_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header("cat.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xNewsletter_cat')->delete($obj)) {
+            if ($xnewsletter->getHandler('xnewsletter_cat')->delete($obj)) {
                 redirect_header("cat.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $obj->getHtmlErrors();

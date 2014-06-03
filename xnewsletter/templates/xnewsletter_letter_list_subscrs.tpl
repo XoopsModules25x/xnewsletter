@@ -1,4 +1,4 @@
-<{include file="db:xNewsletter_header.tpl"}>
+<{include file="db:xnewsletter_header.tpl"}>
 <div class="outer">
     <{$searchSubscriberForm}>
     <br />
@@ -68,4 +68,4 @@
     <br />
 <{/if}>
 </div>
-<{include file="db:xNewsletter_footer.tpl"}>
+<{include file="db:xnewsletter_footer.tpl"}>

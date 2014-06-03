@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
@@ -38,7 +38,7 @@ function b_xnewsletter_letter($options) {
     $myts = MyTextSanitizer::getInstance();
     $gperm_handler = xoops_gethandler('groupperm');
     $member_handler = xoops_gethandler('member');
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $letter = array();
     $type_block = $options[0];
@@ -77,7 +77,7 @@ function b_xnewsletter_letter($options) {
     }
 
     $criteria->setLimit($nb_letter);
-    $letter_arr = $xnewsletter->getHandler('xNewsletter_letter')->getall($criteria);
+    $letter_arr = $xnewsletter->getHandler('xnewsletter_letter')->getall($criteria);
     foreach (array_keys($letter_arr) as $i) {
         $letter_cat_arr = array();
         $letter_cat_arr = explode('|', $letter_arr[$i]->getVar('letter_cats'));

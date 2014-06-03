@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Wed 2012/11/28 22:18:22 :  Exp $
@@ -37,25 +37,25 @@ $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // k
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
 // Breadcrumb
-$breadcrumb = new xNewsletterBreadcrumb();
+$breadcrumb = new xnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-include XOOPS_ROOT_PATH . "/modules/xNewsletter/include/task.inc.php";
+include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
 if (!$xoopsUser) {
     //Guest no Access !!!
     redirect_header(XOOPS_URL . "/modules/" . $xoopsModule->dirname() . "/index.php", 3, _NOPERM);
 }
 
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$letter_id = xNewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
 
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
 }
 
-$sendletter_perm = xNewsletter_getUserPermissionsByLetter($letter_id);
+$sendletter_perm = xnewsletter_getUserPermissionsByLetter($letter_id);
 
 if (!$sendletter_perm["send"]) {
     redirect_header(XOOPS_URL . "/modules/" . $xoopsModule->dirname() . "/index.php", 3, _NOPERM);
@@ -66,7 +66,7 @@ $criteria_protocol = new CriteriaCompo();
 $criteria_protocol->add(new Criteria('protocol_letter_id', $letter_id));
 $criteria_protocol->add(new Criteria('protocol_subscriber_id', 0, '>'));
 $criteria_protocol->setLimit(1);
-$protocolCount = $xnewsletter->getHandler('xNewsletter_protocol')->getCount($criteria_protocol);
+$protocolCount = $xnewsletter->getHandler('xnewsletter_protocol')->getCount($criteria_protocol);
 if ($protocolCount > 0) {
     if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == true) {
         $start_sending = true;
@@ -84,8 +84,8 @@ if ($start_sending == true) {
     } else {
         $xn_send_in_packages_time = 0;
     }
-    $result_create = xNewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
-    $result_exec = xNewsletter_executeTasks($xn_send_in_packages, $letter_id);
+    $result_create = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
+    $result_exec = xnewsletter_executeTasks($xn_send_in_packages, $letter_id);
     redirect_header('letter.php', 3, $result_exec);
 }
 

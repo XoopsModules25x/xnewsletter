@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -34,14 +34,14 @@ global $xoopsUser, $xoopsDB;
 $basic_limit_import_checked = 100;
 $basic_limit_import_at_once = 10;
 
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'default', 'string');
-$plugin = xNewsletter_CleanVars($_REQUEST, 'plugin', 'csv', 'string');
-$cat_id = xNewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
-$action_after_read = xNewsletter_CleanVars($_REQUEST, 'action_after_read', 1, 'int');
-$start = xNewsletter_CleanVars($_REQUEST, 'start', 0, 'int' );
-$limitcheck = xNewsletter_CleanVars($_REQUEST, 'limitcheck', $basic_limit_import_checked, 'int' );
-$skipcatsubscrexist = xNewsletter_CleanVars($_REQUEST, 'skipcatsubscrexist', 1, 'int' );
-$check_import = xNewsletter_CleanVars($_REQUEST, 'check_import', 0, 'int');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'default', 'string');
+$plugin = xnewsletter_CleanVars($_REQUEST, 'plugin', 'csv', 'string');
+$cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
+$action_after_read = xnewsletter_CleanVars($_REQUEST, 'action_after_read', 1, 'int');
+$start = xnewsletter_CleanVars($_REQUEST, 'start', 0, 'int' );
+$limitcheck = xnewsletter_CleanVars($_REQUEST, 'limitcheck', $basic_limit_import_checked, 'int' );
+$skipcatsubscrexist = xnewsletter_CleanVars($_REQUEST, 'skipcatsubscrexist', 1, 'int' );
+$check_import = xnewsletter_CleanVars($_REQUEST, 'check_import', 0, 'int');
 
 echo $indexAdmin->addNavigation($currentFile);
 
@@ -53,11 +53,11 @@ switch ($op) {
         $import_criteria = new CriteriaCompo();
         $import_criteria->setSort("import_id");
         $import_criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_import')->getCount($import_criteria);
+        $numrows = $xnewsletter->getHandler('xnewsletter_import')->getCount($import_criteria);
 
         $import_criteria->setStart($start);
         $import_criteria->setLimit($limitcheck);
-        $import_arr = $xnewsletter->getHandler('xNewsletter_import')->getall($import_criteria);
+        $import_arr = $xnewsletter->getHandler('xnewsletter_import')->getall($import_criteria);
 
         if ($numrows > 0) {
             include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
@@ -101,7 +101,7 @@ switch ($op) {
             $criteria = new CriteriaCompo();
             $criteria->setSort('cat_id ASC, cat_name');
             $criteria->setOrder('ASC');
-            $cat_arr=$xnewsletter->getHandler('xNewsletter_cat')->getall($criteria);
+            $cat_arr=$xnewsletter->getHandler('xnewsletter_cat')->getall($criteria);
 
             foreach (array_keys($import_arr) as $i) {
                 ++$counter;
@@ -195,14 +195,14 @@ switch ($op) {
 
     case "apply_import_form":
         //update xnewsletter with settings form_import
-        $counter = xNewsletter_CleanVars($_REQUEST, 'counter', 0, 'int');
+        $counter = xnewsletter_CleanVars($_REQUEST, 'counter', 0, 'int');
 
         for ($i=1; $i < ($counter + 1); ++$i) {
-            $import_id = xNewsletter_CleanVars($_REQUEST, 'import_id_'.$i, 'default', 'string');
-            $subscr_firstname = xNewsletter_CleanVars($_REQUEST, 'firstname_'.$i, '', 'string');
-            $subscr_lastname = xNewsletter_CleanVars($_REQUEST, 'lastname_'.$i, '', 'string');
-            $subscr_sex = xNewsletter_CleanVars($_REQUEST, 'sex_'.$i, '', 'string');
-            $cat_id = xNewsletter_CleanVars($_REQUEST, 'cat_id_'.$i, 0, 'int');
+            $import_id = xnewsletter_CleanVars($_REQUEST, 'import_id_'.$i, 'default', 'string');
+            $subscr_firstname = xnewsletter_CleanVars($_REQUEST, 'firstname_'.$i, '', 'string');
+            $subscr_lastname = xnewsletter_CleanVars($_REQUEST, 'lastname_'.$i, '', 'string');
+            $subscr_sex = xnewsletter_CleanVars($_REQUEST, 'sex_'.$i, '', 'string');
+            $cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id_'.$i, 0, 'int');
 
             if ($cat_id > 0) {
                 if ($subscr_id == 0) {
@@ -234,8 +234,8 @@ switch ($op) {
 
         $import_criteria = new CriteriaCompo();
         $import_criteria->add(new Criteria('import_status', '1'));
-        $numrows_total 	= $xnewsletter->getHandler('xNewsletter_import')->getCount();
-        $numrows_act 	= $xnewsletter->getHandler('xNewsletter_import')->getCount($import_criteria);
+        $numrows_total 	= $xnewsletter->getHandler('xnewsletter_import')->getCount();
+        $numrows_act 	= $xnewsletter->getHandler('xnewsletter_import')->getCount($import_criteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";
@@ -309,7 +309,7 @@ switch ($op) {
                             unset($cat_mls);
 
                             if ($cat_mailinglist > 0) {
-                                require_once(XOOPS_ROOT_PATH . "/modules/xNewsletter/include/mailinglist.php");
+                                require_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
                                 subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                             }
                         } else {
@@ -333,7 +333,7 @@ switch ($op) {
             echo $img_ok.$resulttext;
             echo "</div>";
 
-            $numrows_pend = $xnewsletter->getHandler('xNewsletter_import')->getCount();
+            $numrows_pend = $xnewsletter->getHandler('xnewsletter_import')->getCount();
             if ($numrows_pend > 0) {
                 $form_continue = "<form id='form_continue' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_continue'>";
                 $form_continue .= "<input id='submit' class='formButton' type='submit' title='"._AM_XNEWSLETTER_IMPORT_CONTINUE."' value='"._AM_XNEWSLETTER_IMPORT_CONTINUE."' name='submit'>";
@@ -386,8 +386,8 @@ switch ($op) {
         //import data into xnewsletter_import with plugin
         if ($plugin == 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
-            $csv_header = xNewsletter_CleanVars($_REQUEST, 'csv_header', 0, 'int');
-            $csv_delimiter = xNewsletter_CleanVars($_REQUEST, 'csv_delimiter', ',', 'string');
+            $csv_header = xnewsletter_CleanVars($_REQUEST, 'csv_header', 0, 'int');
+            $csv_delimiter = xnewsletter_CleanVars($_REQUEST, 'csv_delimiter', ',', 'string');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
         } else if ($plugin == 'xoopsuser') {
@@ -437,7 +437,7 @@ switch ($op) {
     case "default":
     default:
         //show basic search form
-        $importObj = $xnewsletter->getHandler('xNewsletter_import')->create();
+        $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
         $form = $importObj->getSearchForm($plugin, $action_after_read, $limitcheck);
         $form->display();
         break;
