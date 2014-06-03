@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
@@ -34,11 +34,11 @@ include_once dirname(dirname(__FILE__)) . '/include/common.php';
  * @return array
  */
 function b_xnewsletter_subscrinfo($options) {
-    xoops_loadLanguage('modinfo', 'xNewsletter');
+    xoops_loadLanguage('modinfo', 'xnewsletter');
     $unique_id = uniqid(mt_rand());
     $subscrinfo = array();
     $subscrinfo['formname'] = "formsubscrinfo_{$unique_id}";
-    $subscrinfo['formaction'] = XOOPS_URL . '/modules/xNewsletter/subscription.php';
+    $subscrinfo['formaction'] = XOOPS_URL . '/modules/xnewsletter/subscription.php';
     $subscrinfo['infotext'] = _MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK;
     $subscrinfo['buttontext'] = _MI_XNEWSLETTER_SUBSCRIBE;
 

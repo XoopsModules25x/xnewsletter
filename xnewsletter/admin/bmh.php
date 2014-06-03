@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GNU General Public License 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -31,10 +31,10 @@ xoops_cp_header();
 //global $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$bmh_id 		= xNewsletter_CleanVars($_REQUEST, 'bmh_id', 0, 'int');
-$bmh_measure 	= xNewsletter_CleanVars($_REQUEST, 'bmh_measure', 0, 'int');
-$filter 		= xNewsletter_CleanVars($_REQUEST, 'bmh_measure_filter', _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL, 'int');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$bmh_id 		= xnewsletter_CleanVars($_REQUEST, 'bmh_id', 0, 'int');
+$bmh_measure 	= xnewsletter_CleanVars($_REQUEST, 'bmh_measure', 0, 'int');
+$filter 		= xnewsletter_CleanVars($_REQUEST, 'bmh_measure_filter', _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL, 'int');
 
 switch ($op)
 {
@@ -43,7 +43,7 @@ case "bmh_delsubscr":
         if ( (isset($_POST["ok"]) && $_POST["ok"] == 1) ) {
       $count_err = 0;
 
-      $obj_bmh =& $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
+      $obj_bmh =& $xnewsletter->getHandler('xnewsletter_bmh')->get($bmh_id);
       $bmh_email = $obj_bmh->getVar("bmh_email");
 
       $sql = "SELECT subscr_id FROM " . $xoopsDB->prefix("xnewsletter_subscr") . " WHERE (";
@@ -60,10 +60,10 @@ case "bmh_delsubscr":
         $xoopsDB->query($sql_upd_measure);
         redirect_header("bmh.php?op=list", 5, _AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID);
       }
-      $obj_subscr =& $xnewsletter->getHandler('xNewsletter_subscr')->get($subscr_id);
+      $obj_subscr =& $xnewsletter->getHandler('xnewsletter_subscr')->get($subscr_id);
 
       // delete subscriber
-      if (!$xnewsletter->getHandler('xNewsletter_subscr')->delete($obj_subscr,true)) {
+      if (!$xnewsletter->getHandler('xnewsletter_subscr')->delete($obj_subscr,true)) {
         $actionprot_err = $obj_subscr->getHtmlErrors()."<br/><br/><br/>";
         ++$count_err;
       }
@@ -71,18 +71,18 @@ case "bmh_delsubscr":
       //delete subscription
       $crit_catsubscr = new CriteriaCompo();
       $crit_catsubscr->add(new Criteria('catsubscr_subscrid', $subscr_id));
-      $numrows_catsubscr = $xnewsletter->getHandler('xNewsletter_catsubscr')->getCount($crit_catsubscr);
+      $numrows_catsubscr = $xnewsletter->getHandler('xnewsletter_catsubscr')->getCount($crit_catsubscr);
       if ($numrows_catsubscr > 0) {
-        $catsubscr_arr = $xnewsletter->getHandler('xNewsletter_catsubscr')->getall($crit_catsubscr);
+        $catsubscr_arr = $xnewsletter->getHandler('xnewsletter_catsubscr')->getall($crit_catsubscr);
         foreach (array_keys($catsubscr_arr) as $cat) {
-          $obj_catsubscr =& $xnewsletter->getHandler('xNewsletter_catsubscr')->get($catsubscr_arr[$cat]->getVar("catsubscr_id"));
-          $obj_cat =& $xnewsletter->getHandler('xNewsletter_cat')->get($catsubscr_arr[$cat]->getVar("catsubscr_catid"));
+          $obj_catsubscr =& $xnewsletter->getHandler('xnewsletter_catsubscr')->get($catsubscr_arr[$cat]->getVar("catsubscr_id"));
+          $obj_cat =& $xnewsletter->getHandler('xnewsletter_cat')->get($catsubscr_arr[$cat]->getVar("catsubscr_catid"));
           $cat_mailinglist = $obj_cat->getVar("cat_mailinglist");
 
-          if ($xnewsletter->getHandler('xNewsletter_catsubscr')->delete($obj_catsubscr, true)) {
+          if ($xnewsletter->getHandler('xnewsletter_catsubscr')->delete($obj_catsubscr, true)) {
             //handle mailinglists
             if ($cat_mailinglist > 0) {
-              require_once( XOOPS_ROOT_PATH."/modules/xNewsletter/include/mailinglist.php" );
+              require_once( XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php" );
               subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
             }
           } else {
@@ -106,7 +106,7 @@ case "bmh_delsubscr":
         if ($bmh_id == 0) redirect_header("bmh.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
         if ($bmh_measure == 0) redirect_header("bmh.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
 
-        $obj_bmh =& $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
+        $obj_bmh =& $xnewsletter->getHandler('xnewsletter_bmh')->get($bmh_id);
 
     if ($obj_bmh->getVar("bmh_measure") == _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE ) {
       redirect_header("bmh.php?op=list&filter=".$filter."'", 3, _AM_XNEWSLETTER_BMH_MEASURE_ALREADY_DELETED);
@@ -137,15 +137,15 @@ case "bmh_delsubscr":
     case "run_bmh":
 
         require_once('bmh_callback_database.php');
-        require_once(XOOPS_ROOT_PATH . '/modules/xNewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php');
+        require_once(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php');
 
         $accounts_crit = new CriteriaCompo();
         $accounts_crit->add(new Criteria("accounts_use_bmh", "1"));
-        $numrows_acc = $xnewsletter->getHandler('xNewsletter_accounts')->getCount($accounts_crit);
+        $numrows_acc = $xnewsletter->getHandler('xnewsletter_accounts')->getCount($accounts_crit);
 
         if ($numrows_acc > 0)
         {
-            $accounts_arr = $xnewsletter->getHandler('xNewsletter_accounts')->getall($accounts_crit);
+            $accounts_arr = $xnewsletter->getHandler('xnewsletter_accounts')->getall($accounts_crit);
             $result_bmh = _AM_XNEWSLETTER_BMH_SUCCESSFUL."<br/>";
 
             foreach (array_keys($accounts_arr) as $acc)
@@ -225,11 +225,11 @@ case "bmh_delsubscr":
         if ($filter > -1) $criteria->add(new Criteria("bmh_measure", $filter));
         $criteria->setSort("bmh_id");
         $criteria->setOrder("DESC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_bmh')->getCount($criteria);
-        $start = xNewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $numrows = $xnewsletter->getHandler('xnewsletter_bmh')->getCount($criteria);
+        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
         $criteria->setStart($start);
         $criteria->setLimit($limit);
-        $bmh_arr = $xnewsletter->getHandler('xNewsletter_bmh')->getall($criteria);
+        $bmh_arr = $xnewsletter->getHandler('xnewsletter_bmh')->getall($criteria);
         if ($numrows > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
@@ -341,28 +341,28 @@ case "bmh_delsubscr":
             redirect_header("bmh.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
-        $obj =& $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
+        $obj =& $xnewsletter->getHandler('xnewsletter_bmh')->get($bmh_id);
 
         //Form bmh_rule_no
-        $obj->setVar("bmh_rule_no", 	xNewsletter_CleanVars( $_REQUEST, "bmh_rule_no", "", "string") );
+        $obj->setVar("bmh_rule_no", 	xnewsletter_CleanVars( $_REQUEST, "bmh_rule_no", "", "string") );
         //Form bmh_rule_cat
-        $obj->setVar("bmh_rule_cat", 	xNewsletter_CleanVars( $_REQUEST, "bmh_rule_cat", "", "string") );
+        $obj->setVar("bmh_rule_cat", 	xnewsletter_CleanVars( $_REQUEST, "bmh_rule_cat", "", "string") );
         //Form bmh_bouncetype
-        $obj->setVar("bmh_bouncetype", 	xNewsletter_CleanVars( $_REQUEST, "bmh_bouncetype", "", "string") );
+        $obj->setVar("bmh_bouncetype", 	xnewsletter_CleanVars( $_REQUEST, "bmh_bouncetype", "", "string") );
         //Form bmh_remove
-        $obj->setVar("bmh_remove", 		xNewsletter_CleanVars( $_REQUEST, "bmh_remove", "", "string") );
+        $obj->setVar("bmh_remove", 		xnewsletter_CleanVars( $_REQUEST, "bmh_remove", "", "string") );
         //Form bmh_email
-        $obj->setVar("bmh_email", 		xNewsletter_CleanVars( $_REQUEST, "bmh_email", "", "email") );
+        $obj->setVar("bmh_email", 		xnewsletter_CleanVars( $_REQUEST, "bmh_email", "", "email") );
         //Form bmh_subject
-        $obj->setVar("bmh_subject", 	xNewsletter_CleanVars( $_REQUEST, "bmh_subject", "", "string") );
+        $obj->setVar("bmh_subject", 	xnewsletter_CleanVars( $_REQUEST, "bmh_subject", "", "string") );
         //Form bmh_measure
-        $obj->setVar("bmh_measure", 	xNewsletter_CleanVars( $_REQUEST, "bmh_measure", 0, "int") );
+        $obj->setVar("bmh_measure", 	xnewsletter_CleanVars( $_REQUEST, "bmh_measure", 0, "int") );
         //Form bmh_submitter
-        $obj->setVar("bmh_submitter", 	xNewsletter_CleanVars( $_REQUEST, "bmh_submitter", 0, "int") );
+        $obj->setVar("bmh_submitter", 	xnewsletter_CleanVars( $_REQUEST, "bmh_submitter", 0, "int") );
         //Form bmh_created
-        $obj->setVar("bmh_created", 	xNewsletter_CleanVars( $_REQUEST, "bmh_created", 0, "int") );
+        $obj->setVar("bmh_created", 	xnewsletter_CleanVars( $_REQUEST, "bmh_created", 0, "int") );
 
-        if ($xnewsletter->getHandler('xNewsletter_bmh')->insert($obj)) {
+        if ($xnewsletter->getHandler('xnewsletter_bmh')->insert($obj)) {
             redirect_header("bmh.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
         }
         echo $obj->getHtmlErrors();
@@ -374,18 +374,18 @@ case "bmh_delsubscr":
         echo $indexAdmin->addNavigation("bmh.php");
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_BMHLIST, 'bmh.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $obj = $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
+        $obj = $xnewsletter->getHandler('xnewsletter_bmh')->get($bmh_id);
         $form = $obj->getForm();
         $form->display();
     break;
 
     case "delete_bmh":
-        $obj =& $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
+        $obj =& $xnewsletter->getHandler('xnewsletter_bmh')->get($bmh_id);
         if (isset($_POST["ok"]) && $_POST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header("bmh.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xNewsletter_bmh')->delete($obj)) {
+            if ($xnewsletter->getHandler('xnewsletter_bmh')->delete($obj)) {
                 redirect_header("bmh.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $obj->getHtmlErrors();

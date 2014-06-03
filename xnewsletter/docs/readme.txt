@@ -7,7 +7,7 @@ Read Me First
  A copy of the license in provided in this package in the file
  named LICENSE.txt
 
-2. What is xNewsletter?
+2. What is xnewsletter?
  _____________________________________________________________________
  
  newsletter module for xoops
@@ -24,7 +24,7 @@ Read Me First
  
  Simply upload these module folder to a directory of your xoops modules folder,
  and install it via xoops modules administration panel. You can configure 
- it through xNewsletter module control panel.
+ it through xnewsletter module control panel.
  Detailed instructions on installing modules are available in the 
  XOOPS Operations Manual (http://goo.gl/adT2i)
  

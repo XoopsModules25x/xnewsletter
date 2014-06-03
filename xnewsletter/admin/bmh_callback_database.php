@@ -35,10 +35,10 @@ require_once "admin_header.php";
  */
 function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no = false, $rule_cat = false, $totalFetched = 0) {
     global $xoopsUser;
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     if ($rule_no != "0000") {
-        $bmhObj = $xnewsletter->getHandler('xNewsletter_bmh')->create();
+        $bmhObj = $xnewsletter->getHandler('xnewsletter_bmh')->create();
         //Form bmh_rule_no
         $bmhObj->setVar("bmh_rule_no", $rule_no);
         //Form bmh_rule_cat
@@ -59,7 +59,7 @@ function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $rem
         //Form bmh_created
         $bmhObj->setVar("bmh_created", time());
 
-        if (!$xnewsletter->getHandler('xNewsletter_bmh')->insert($bmhObj)) {
+        if (!$xnewsletter->getHandler('xnewsletter_bmh')->insert($bmhObj)) {
             echo $bmhObj->getHtmlErrors();
 
             return false;

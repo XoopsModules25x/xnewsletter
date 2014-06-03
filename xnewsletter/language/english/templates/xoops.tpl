@@ -1,6 +1,6 @@
 <div class="xn_letter" style="width:100%">
-    <div class="letter_header" style="background-image: url(<{$xoops_url}>/modules/xNewsletter/assets/images/letter_template/xoops-bg.png); background-repeat: repeat-x; height: 80px; width:100%">
-        <div style="background-image: url(<{$xoops_url}>/modules/xNewsletter/assets/images/letter_template/xoops-logo.png); background-repeat: no-repeat; height: 80px;" >&nbsp;</div>
+    <div class="letter_header" style="background-image: url(<{$xoops_url}>/modules/xnewsletter/assets/images/letter_template/xoops-bg.png); background-repeat: repeat-x; height: 80px; width:100%">
+        <div style="background-image: url(<{$xoops_url}>/modules/xnewsletter/assets/images/letter_template/xoops-logo.png); background-repeat: no-repeat; height: 80px;" >&nbsp;</div>
     </div>
     <div class="letter-body" style="width: 100%;font-family: Arial,Helvetica,sans-serif; font-size: 11px; margin-top: 30px;">
         Dear <{$sex}> <{$firstname}> <{$lastname}><br>

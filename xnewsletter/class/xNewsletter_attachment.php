@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GNU General Public License 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -42,7 +42,7 @@ class xnewsletter_attachment extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar("attachment_id", XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar("attachment_letter_id", XOBJ_DTYPE_INT, null, false, 8);
@@ -75,7 +75,7 @@ class xnewsletter_attachment extends XoopsObject
         $criteria->setSort('letter_id');
         $criteria->setOrder('DESC');
         $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "attachment_letter_id", $this->getVar("attachment_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_letter')->getList($criteria));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_letter')->getList($criteria));
         $form->addElement($letter_select, true);
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_NAME, "attachment_name", 50, 255, $this->getVar("attachment_name")), true);
@@ -100,12 +100,12 @@ class xnewsletter_attachment extends XoopsObject
 }
 
 /**
- * Class xNewsletterxnewsletter_attachmentHandler
+ * Class xnewsletterxnewsletter_attachmentHandler
  */
-class xNewsletterxnewsletter_attachmentHandler extends XoopsPersistableObjectHandler
+class xnewsletterxnewsletter_attachmentHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xNewsletterxNewsletter
+     * @var xnewsletterxnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -116,6 +116,6 @@ class xNewsletterxnewsletter_attachmentHandler extends XoopsPersistableObjectHan
     public function __construct(&$db)
     {
         parent::__construct($db, "xnewsletter_attachment", "xnewsletter_attachment", "attachment_id", "attachment_letter_id");
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

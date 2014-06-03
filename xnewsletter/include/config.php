@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id: config.php 12559 2014-06-02 08:10:39Z beckmi $
@@ -29,5 +29,5 @@
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // module information
-$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/xNewsletter.png";
+$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/xnewsletter.png";
 $moduleCopyrightHtml = ""; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";

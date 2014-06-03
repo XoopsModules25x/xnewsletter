@@ -19,26 +19,26 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
 
-function xoops_module_update_xNewsletter(&$module, $oldversion = null) {
+function xoops_module_update_xnewsletter(&$module, $oldversion = null) {
     $oldversion = $module->getVar('version');
     if ($oldversion == 100) {
-        xoops_module_update_xNewsletter_101();
+        xoops_module_update_xnewsletter_101();
     }
     if ($oldversion < 103) {
-        xoops_module_update_xNewsletter_103();
+        xoops_module_update_xnewsletter_103();
     }
     if ($oldversion < 104) {
-        xoops_module_update_xNewsletter_104();
+        xoops_module_update_xnewsletter_104();
     }
     if ($oldversion < 140) {
-        xoops_module_update_xNewsletter_140();
+        xoops_module_update_xnewsletter_140();
     }
 
     return true;
@@ -47,26 +47,26 @@ function xoops_module_update_xNewsletter(&$module, $oldversion = null) {
 /**
  * @return bool
  */
-function xoops_module_update_xNewsletter_140() {
+function xoops_module_update_xnewsletter_140() {
     //reverse 'mod_' prefix on tables
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_accounts");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_attachment");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_bmh");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_cat");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_catsubscr");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_import");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_letter");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_mailinglist");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_protocol");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_subscr");
-    xoops_module_update_xNewsletter_rename_mod_table("xnewsletter_task");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_accounts");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_attachment");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_bmh");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_cat");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_catsubscr");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_import");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_letter");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_mailinglist");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_protocol");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_subscr");
+    xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_task");
     return true;
 }
 
 /**
  * @return bool
  */
-function xoops_module_update_xNewsletter_104() {
+function xoops_module_update_xnewsletter_104() {
     global $xoopsDB;
 
     $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('mod_xnewsletter_task') . "`");
@@ -90,7 +90,7 @@ function xoops_module_update_xNewsletter_104() {
     if (!$result)
         echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": CREATE TABLE 'mod_xnewsletter_task'";
 
-    unlink(XOOPS_ROOT_PATH . "/modules/xNewsletter/include/sendletter.php");
+    unlink(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/sendletter.php");
 
     return true;
 }
@@ -98,7 +98,7 @@ function xoops_module_update_xNewsletter_104() {
 /**
  * @return bool
  */
-function xoops_module_update_xNewsletter_103() {
+function xoops_module_update_xnewsletter_103() {
     global $xoopsDB;
 
     $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('mod_xnewsletter_import') . "`");
@@ -143,19 +143,19 @@ function xoops_module_update_xNewsletter_103() {
 /**
  * @return bool
  */
-function xoops_module_update_xNewsletter_101() {
+function xoops_module_update_xnewsletter_101() {
     global $xoopsDB;
 
     //rename tables to new xoops naming scheme
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_accounts");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_cat");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_subscr");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_catsubscr");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_letter");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_protocol");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_attachment");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_mailinglist");
-    xoops_module_update_xNewsletter_rename_table("xnewsletter_bmh");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_accounts");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_cat");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_subscr");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_catsubscr");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_letter");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_protocol");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_attachment");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_mailinglist");
+    xoops_module_update_xnewsletter_rename_table("xnewsletter_bmh");
 
     return true;
 }
@@ -165,7 +165,7 @@ function xoops_module_update_xNewsletter_101() {
  *
  * @return bool
  */
-function xoops_module_update_xNewsletter_rename_table($tablename) {
+function xoops_module_update_xnewsletter_rename_table($tablename) {
     global $xoopsDB;
 
     if (tableExists($xoopsDB->prefix($tablename))) {
@@ -185,7 +185,7 @@ function xoops_module_update_xNewsletter_rename_table($tablename) {
  *
  * @return bool
  */
-function xoops_module_update_xNewsletter_rename_mod_table($tablename) {
+function xoops_module_update_xnewsletter_rename_mod_table($tablename) {
     global $xoopsDB;
 
     if (tableExists($xoopsDB->prefix('mod_' . $tablename))) {

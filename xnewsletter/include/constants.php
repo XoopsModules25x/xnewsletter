@@ -9,11 +9,11 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- * xNewsletter module
+ * xnewsletter module
  *
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
- * @package         xNewsletter
+ * @package         xnewsletter
  * @since           1.3
  * @author          Xoops Development Team
  * @version         svn:$id$

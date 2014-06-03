@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GNU General Public License 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -42,7 +42,7 @@ class xnewsletter_mailinglist extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar("mailinglist_id", XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar("mailinglist_name", XOBJ_DTYPE_TXTBOX, null, false, 100);
@@ -106,12 +106,12 @@ class xnewsletter_mailinglist extends XoopsObject
 }
 
 /**
- * Class xNewsletterxnewsletter_mailinglistHandler
+ * Class xnewsletterxnewsletter_mailinglistHandler
  */
-class xNewsletterxnewsletter_mailinglistHandler extends XoopsPersistableObjectHandler
+class xnewsletterxnewsletter_mailinglistHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xNewsletterxNewsletter
+     * @var xnewsletterxnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -122,6 +122,6 @@ class xNewsletterxnewsletter_mailinglistHandler extends XoopsPersistableObjectHa
     public function __construct(&$db)
     {
         parent::__construct($db, "xnewsletter_mailinglist", "xnewsletter_mailinglist", "mailinglist_id", "mailinglist_email");
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

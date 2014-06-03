@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  goffy (  )
  *  @license    gpl 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     goffy (  )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
@@ -28,7 +28,7 @@
 
 <div id="help-template" class="outer">
     <h1 class="head">Help:
-        <a class="ui-corner-all tooltip" href="<{$xoops_url}>/modules/xNewsletter/admin/index.php"
+        <a class="ui-corner-all tooltip" href="<{$xoops_url}>/modules/xnewsletter/admin/index.php"
            title="Back to the administration of xNewsletter"> xNewsletter <img src="<{xoAdminIcons home.png}>"
                                                                          alt="Back to the Administration of xNewsletter"/>
         </a></h1>
@@ -53,7 +53,7 @@
     </p>
     <h4 class="odd">Install/uninstall</h4>
     <p class="even">
-    No special measures necessary, follow the standard installation process - extract the /xNewsletter  folder into the
+    No special measures necessary, follow the standard installation process - extract the /xnewsletter  folder into the
     ../modules directory. Install the module through Admin -> Modules. If you need detailed
     instructions on how to install a module, please see the <a href="http://goo.gl/adT2i">XOOPS Operations
     Manual</a>.<br /><br /></p>
@@ -113,7 +113,7 @@
     <br />
     You can send all emails immediately or limit emails send in one package.<br />
     The number of emails and the minutes until next sending can be defined in module preferences (e.g. 200 emails all 60 minutes).<br />
-    The first package will be sent immediately. To start the next sending procedure you need an external cronjob, which is calling "../modules/xNewsletter/cron.php". Xoops cannot do this with current version (2.5.5).<br />
+    The first package will be sent immediately. To start the next sending procedure you need an external cronjob, which is calling "../modules/xnewsletter/cron.php". Xoops cannot do this with current version (2.5.5).<br />
     <br />
     Pay attention: functions like testing account, sending emails, start Bounced email handler,... work not with local server (you get white page).<br />
     <br /><br /></p>
@@ -188,7 +188,7 @@
     -- to which newsletter you want to make the subscription<br />
     If an email is already registered, import of this email should be skipped (default action, do not touch existing registrations).
     <br />
-    Sample files (sample1col.csv, sample4col.csv) for csv-import you can find in ../xNewsletter/plugins/
+    Sample files (sample1col.csv, sample4col.csv) for csv-import you can find in ../xnewsletter/plugins/
     <br /><br />
     <b>Attention:</b>In case of registrations/subscription with this import tool there will not be sent an email notification to the email owner.<br />
     <br /><br />

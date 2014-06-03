@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -42,7 +42,7 @@ class xnewsletter_import extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar("import_id", XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar("import_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
@@ -81,7 +81,7 @@ class xnewsletter_import extends XoopsObject
         $criteria->setSort('cat_id ASC, cat_name');
         $criteria->setOrder('ASC');
         $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", "1");
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_cat')->getList());
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_cat')->getList());
         $form->addElement($cat_select, false);
 
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
@@ -183,12 +183,12 @@ class xnewsletter_import extends XoopsObject
 }
 
 /**
- * Class xNewsletterxnewsletter_importHandler
+ * Class xnewsletterxnewsletter_importHandler
  */
-class xNewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
+class xnewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xNewsletterxNewsletter
+     * @var xnewsletterxnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -199,6 +199,6 @@ class xNewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, "xnewsletter_import", "xnewsletter_import", "import_id", "import_email");
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

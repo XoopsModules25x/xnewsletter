@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Wed 2012/11/28 22:18:22 :  Exp $
@@ -37,7 +37,7 @@ $xoopsLogger->activated = false;
 $GLOBALS['xoopsTpl']->assign('xoops_pagetitle', _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW);
 
 // get letter_id
-$letter_id = xNewsletter_CleanVars($_REQUEST, 'letter_id', 'list', 'string');
+$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 'list', 'string');
 // check letter_id
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
@@ -50,7 +50,7 @@ if (!is_dir($letterTemplatePath)) {
 }
 
 $content = '';
-$letterObj = $xnewsletter->getHandler('xNewsletter_letter')->get($letter_id);
+$letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
 if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $letterTemplate = "{$letterTemplatePath}{$letterObj->getVar('letter_template')}.tpl";
 
@@ -59,7 +59,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $xoopsTpl->assign('lastname', _AM_XNEWSLETTER_SUBSCR_LASTNAME);
     $xoopsTpl->assign('title', $letterObj->getVar('letter_title', 'n')); // new from v1.3
     $xoopsTpl->assign('content', $letterObj->getVar('letter_content', 'n'));
-    $xoopsTpl->assign('unsubscribe_url', XOOPS_URL . '/modules/xNewsletter/');
+    $xoopsTpl->assign('unsubscribe_url', XOOPS_URL . '/modules/xnewsletter/');
     //$tpl->assign('catsubscr_id', '0');
     $xoopsTpl->assign('subscr_email', '');
 
@@ -86,7 +86,7 @@ $xoopsTpl->assign('xoopsConfig', $xoopsConfig);
 $xoopsTpl->assign('xoops_meta_keywords', $xoops_meta_keywords);
 $xoopsTpl->assign('xoops_meta_description', $xoops_meta_description);
 
-xNewsletter_printPage($content);
+xnewsletter_printPage($content);
 
 //******************************************************************
 //*********************** Printfunktion ****************************
@@ -94,7 +94,7 @@ xNewsletter_printPage($content);
 /**
  * @param $content
  */
-function xNewsletter_printPage($content) {
+function xnewsletter_printPage($content) {
     global $xoopsConfig, $xoopsModule, $xoops_meta_keywords, $xoops_meta_description;
     $myts =& MyTextSanitizer::getInstance();
 ?>

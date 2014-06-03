@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -42,7 +42,7 @@ class xnewsletter_catsubscr extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar("catsubscr_id", XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar("catsubscr_catid", XOBJ_DTYPE_INT, null, false, 8);
@@ -75,14 +75,14 @@ class xnewsletter_catsubscr extends XoopsObject
         $criteria->setSort('cat_id ASC, cat_name');
         $criteria->setOrder('ASC');
         $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_CATID, "catsubscr_catid", $this->getVar("catsubscr_catid"));
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_cat')->getList());
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_cat')->getList());
         $form->addElement($cat_select, true);
 
         $criteria = new CriteriaCompo();
         $criteria->setSort('subscr_email ');
         $criteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID, "catsubscr_subscrid", $this->getVar("catsubscr_subscrid"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_subscr')->getList());
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_subscr')->getList());
         $form->addElement($subscr_select, true);
 
         $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, "&nbsp;");
@@ -113,12 +113,12 @@ class xnewsletter_catsubscr extends XoopsObject
 }
 
 /**
- * Class xNewsletterxnewsletter_catsubscrHandler
+ * Class xnewsletterxnewsletter_catsubscrHandler
  */
-class xNewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHandler
+class xnewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xNewsletterxNewsletter
+     * @var xnewsletterxnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -129,6 +129,6 @@ class xNewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHand
     public function __construct(&$db)
     {
         parent::__construct($db, "xnewsletter_catsubscr", "xnewsletter_catsubscr", "catsubscr_id", "catsubscr_catid");
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

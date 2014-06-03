@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -45,14 +45,14 @@ xoops_load('XoopsUserUtility');
 $myts = & MyTextSanitizer::getInstance();
 
 // Get the module instances
-$xnewsletter->getHandler('xNewsletter_accounts')    = xoops_getModuleHandler('xNewsletter_accounts', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_cat')         = xoops_getModuleHandler('xNewsletter_cat', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_subscr')      = xoops_getModuleHandler('xNewsletter_subscr', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_catsubscr')   = xoops_getModuleHandler('xNewsletter_catsubscr', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_letter')      = xoops_getModuleHandler('xNewsletter_letter', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_attachment')  = xoops_getModuleHandler('xNewsletter_attachment', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_protocol')    = xoops_getModuleHandler('xNewsletter_protocol', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xNewsletter_mailinglist') = xoops_getModuleHandler('xNewsletter_mailinglist', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_accounts')    = xoops_getModuleHandler('xnewsletter_accounts', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_cat')         = xoops_getModuleHandler('xnewsletter_cat', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_subscr')      = xoops_getModuleHandler('xnewsletter_subscr', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_catsubscr')   = xoops_getModuleHandler('xnewsletter_catsubscr', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_letter')      = xoops_getModuleHandler('xnewsletter_letter', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_attachment')  = xoops_getModuleHandler('xnewsletter_attachment', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_protocol')    = xoops_getModuleHandler('xnewsletter_protocol', XNEWSLETTER_DIRNAME);
+$xnewsletter->getHandler('xnewsletter_mailinglist') = xoops_getModuleHandler('xnewsletter_mailinglist', XNEWSLETTER_DIRNAME);
 */
 
 //Load languages

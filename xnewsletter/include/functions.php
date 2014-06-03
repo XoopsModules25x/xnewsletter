@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
@@ -33,7 +33,7 @@ include_once dirname(__FILE__) . '/common.php';
  *
  * @return string
  */
-function xNewsletter_block_addCatSelect($cats) {
+function xnewsletter_block_addCatSelect($cats) {
     if (is_array($cats)) {
         $cat_sql = "(" . current($cats);
         array_shift($cats);
@@ -49,7 +49,7 @@ function xNewsletter_block_addCatSelect($cats) {
 /**
  * @return bool
  */
-function xNewsletter_checkModuleAdmin() {
+function xnewsletter_checkModuleAdmin() {
     if ( file_exists($GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php'))) {
         include_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
 
@@ -66,10 +66,10 @@ function xNewsletter_checkModuleAdmin() {
  *
  * @return boolean
  */
-function xNewsletter_userIsAdmin()
+function xnewsletter_userIsAdmin()
 {
     global $xoopsUser;
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     static $xnewsletter_isAdmin;
 
@@ -92,7 +92,7 @@ function xNewsletter_userIsAdmin()
  *
  * @return bool|mixed
  */
-function xNewsletter_checkEmail($email, $antispam = false) {
+function xnewsletter_checkEmail($email, $antispam = false) {
     include_once XOOPS_ROOT_PATH . '/include/functions.php';
 
     return checkEmail($email, $antispam);
@@ -104,7 +104,7 @@ function xNewsletter_checkEmail($email, $antispam = false) {
  * @return the
  * @throws Html2TextException
  */
-function xNewsletter_html2text($html) {
+function xnewsletter_html2text($html) {
     include_once XNEWSLETTER_ROOT_PATH . '/include/html2text/html2text.php';
 
     return convert_html_to_text($html);
@@ -119,7 +119,7 @@ function xNewsletter_html2text($html) {
  *
  * @return bool|int|mixed|string
  */
-function xNewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $notset=false) {
+function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $notset=false) {
     include_once XOOPS_ROOT_PATH . '/include/functions.php';
     switch ($type) {
         case 'string':
@@ -156,7 +156,7 @@ function xNewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $no
 /**
  * @param $content
  */
-function xNewsletter_meta_keywords($content) {
+function xnewsletter_meta_keywords($content) {
     global $xoopsTpl, $xoTheme;
     $myts = MyTextSanitizer::getInstance();
     $content = $myts->undoHtmlSpecialChars($myts->displayTbox($content));
@@ -171,7 +171,7 @@ function xNewsletter_meta_keywords($content) {
 /**
  * @param $content
  */
-function xNewsletter_meta_description($content) {
+function xnewsletter_meta_description($content) {
     global $xoopsTpl, $xoTheme;
     $myts =& MyTextSanitizer::getInstance();
     $content= $myts->undoHtmlSpecialChars($myts->displayTarea($content));
@@ -189,16 +189,16 @@ function xNewsletter_meta_description($content) {
  *
  * @return mixed
  */
-function xNewsletter_setPost($content, $sets) {
+function xnewsletter_setPost($content, $sets) {
     if (!is_object($content)) return false;
     if (isset($sets)) {
-        $content->setVar("accounts_id",             xNewsletter_CleanVars($sets, "accounts_id", 0, 'int'));
-        $content->setVar("accounts_type",           xNewsletter_CleanVars($sets, "accounts_type", 1, 'int'));
-        $content->setVar("accounts_name",           xNewsletter_CleanVars($sets, "accounts_name", _AM_XNEWSLETTER_ACCOUNTS_TYPE_NAME, 'string', true));
-        $content->setVar("accounts_yourname",       xNewsletter_CleanVars($sets, "accounts_yourname", _AM_XNEWSLETTER_ACCOUNTS_YOURNAME, 'string', true));
-        $content->setVar("accounts_yourmail",       xNewsletter_CleanVars($sets, "accounts_yourmail", _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL, 'email', true));
-        $content->setVar("accounts_username",       xNewsletter_CleanVars($sets, "accounts_username", _AM_XNEWSLETTER_ACCOUNTS_USERNAME, 'string', true));
-        $content->setVar("accounts_password",       xNewsletter_CleanVars($sets, "accounts_password", _AM_XNEWSLETTER_ACCOUNTS_PASSWORD, 'string', true));
+        $content->setVar("accounts_id",             xnewsletter_CleanVars($sets, "accounts_id", 0, 'int'));
+        $content->setVar("accounts_type",           xnewsletter_CleanVars($sets, "accounts_type", 1, 'int'));
+        $content->setVar("accounts_name",           xnewsletter_CleanVars($sets, "accounts_name", _AM_XNEWSLETTER_ACCOUNTS_TYPE_NAME, 'string', true));
+        $content->setVar("accounts_yourname",       xnewsletter_CleanVars($sets, "accounts_yourname", _AM_XNEWSLETTER_ACCOUNTS_YOURNAME, 'string', true));
+        $content->setVar("accounts_yourmail",       xnewsletter_CleanVars($sets, "accounts_yourmail", _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL, 'email', true));
+        $content->setVar("accounts_username",       xnewsletter_CleanVars($sets, "accounts_username", _AM_XNEWSLETTER_ACCOUNTS_USERNAME, 'string', true));
+        $content->setVar("accounts_password",       xnewsletter_CleanVars($sets, "accounts_password", _AM_XNEWSLETTER_ACCOUNTS_PASSWORD, 'string', true));
 
         if ($content->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP) {
             if ($content->isNew()) {
@@ -207,12 +207,12 @@ function xNewsletter_setPost($content, $sets) {
                 if (@$set['accounts_server_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_OUT) $sets['accounts_server_out'] = null;
                 if (@$set['accounts_port_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_OUT) $sets['accounts_port_out'] = null;
             }
-            $content->setVar("accounts_server_in",      xNewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_IN, 'string', true));
-            $content->setVar("accounts_port_in",        xNewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_IN, 'string', true));
-            $content->setVar("accounts_server_out",     xNewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_OUT, 'string', true));
-            $content->setVar("accounts_port_out",       xNewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_OUT, 'string', true));
-            $content->setVar("accounts_securetype_in",  xNewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
-            $content->setVar("accounts_securetype_out", xNewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
+            $content->setVar("accounts_server_in",      xnewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_IN, 'string', true));
+            $content->setVar("accounts_port_in",        xnewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_IN, 'string', true));
+            $content->setVar("accounts_server_out",     xnewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_OUT, 'string', true));
+            $content->setVar("accounts_port_out",       xnewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_OUT, 'string', true));
+            $content->setVar("accounts_securetype_in",  xnewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
+            $content->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
 
         } elseif ($content->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
             if ($content->isNew()) {
@@ -221,12 +221,12 @@ function xNewsletter_setPost($content, $sets) {
                 if (@$set['accounts_server_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_OUT) $sets['accounts_server_out'] = null;
                 if (@$set['accounts_port_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_OUT ) $sets['accounts_port_out'] = null;
             }
-            $content->setVar("accounts_server_in",      xNewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_IN, 'string', true));
-            $content->setVar("accounts_port_in",        xNewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_IN, 'string', true));
-            $content->setVar("accounts_server_out",     xNewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_OUT, 'string', true));
-            $content->setVar("accounts_port_out",       xNewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_OUT, 'string', true));
-            $content->setVar("accounts_securetype_in",  xNewsletter_CleanVars( $sets, "accounts_securetype_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SECURETYPE_IN, 'string'));
-            $content->setVar("accounts_securetype_out", xNewsletter_CleanVars( $sets, "accounts_securetype_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SECURETYPE_OUT, 'string'));
+            $content->setVar("accounts_server_in",      xnewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_IN, 'string', true));
+            $content->setVar("accounts_port_in",        xnewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_IN, 'string', true));
+            $content->setVar("accounts_server_out",     xnewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_OUT, 'string', true));
+            $content->setVar("accounts_port_out",       xnewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_OUT, 'string', true));
+            $content->setVar("accounts_securetype_in",  xnewsletter_CleanVars( $sets, "accounts_securetype_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SECURETYPE_IN, 'string'));
+            $content->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SECURETYPE_OUT, 'string'));
         } else {
             if ($content->isNew()) {
                 if (@$set['accounts_server_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_IN) $sets['accounts_server_in'] = null;
@@ -234,21 +234,21 @@ function xNewsletter_setPost($content, $sets) {
                 if (@$set['accounts_server_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_OUT) $sets['accounts_server_out'] = null;
                 if (@$set['accounts_port_out'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_PORT_OUT) $sets['accounts_port_out'] = null;
             }
-            $content->setVar("accounts_server_in",      xNewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_IN, 'string', true));
-            $content->setVar("accounts_port_in",        xNewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_PORT_IN, 'string', true));
-            $content->setVar("accounts_server_out",     xNewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_OUT, 'string', true));
-            $content->setVar("accounts_port_out",       xNewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_PORT_OUT, 'string', true));
-            $content->setVar("accounts_securetype_in",  xNewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
-            $content->setVar("accounts_securetype_out", xNewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
+            $content->setVar("accounts_server_in",      xnewsletter_CleanVars( $sets, "accounts_server_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_IN, 'string', true));
+            $content->setVar("accounts_port_in",        xnewsletter_CleanVars( $sets, "accounts_port_in", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_PORT_IN, 'string', true));
+            $content->setVar("accounts_server_out",     xnewsletter_CleanVars( $sets, "accounts_server_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_SERVER_OUT, 'string', true));
+            $content->setVar("accounts_port_out",       xnewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3_PORT_OUT, 'string', true));
+            $content->setVar("accounts_securetype_in",  xnewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
+            $content->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
         }
-        $content->setVar("accounts_use_bmh",        xNewsletter_CleanVars( $sets, "accounts_use_bmh", 0, 'int'));
-        $content->setVar("accounts_inbox",          xNewsletter_CleanVars( $sets, "accounts_inbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_INBOX, 'string', true));
-        $content->setVar("accounts_hardbox",        xNewsletter_CleanVars( $sets, "accounts_hardbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_HARDBOX, 'string'));
-        $content->setVar("accounts_movehard",       xNewsletter_CleanVars( $sets, "accounts_movehard", 0, 'int'));
-        $content->setVar("accounts_softbox",        xNewsletter_CleanVars( $sets, "accounts_softbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SOFTBOX, 'string'));
-        $content->setVar("accounts_movesoft",       xNewsletter_CleanVars( $sets, "accounts_movesoft", 0, 'int'));
-        $content->setVar("accounts_default",        xNewsletter_CleanVars( $sets, "accounts_default", 0, 'int'));
-        $content->setVar("accounts_submitter",      xNewsletter_CleanVars( $sets, "accounts_submitter", 0, 'int'));
+        $content->setVar("accounts_use_bmh",        xnewsletter_CleanVars( $sets, "accounts_use_bmh", 0, 'int'));
+        $content->setVar("accounts_inbox",          xnewsletter_CleanVars( $sets, "accounts_inbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_INBOX, 'string', true));
+        $content->setVar("accounts_hardbox",        xnewsletter_CleanVars( $sets, "accounts_hardbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_HARDBOX, 'string'));
+        $content->setVar("accounts_movehard",       xnewsletter_CleanVars( $sets, "accounts_movehard", 0, 'int'));
+        $content->setVar("accounts_softbox",        xnewsletter_CleanVars( $sets, "accounts_softbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SOFTBOX, 'string'));
+        $content->setVar("accounts_movesoft",       xnewsletter_CleanVars( $sets, "accounts_movesoft", 0, 'int'));
+        $content->setVar("accounts_default",        xnewsletter_CleanVars( $sets, "accounts_default", 0, 'int'));
+        $content->setVar("accounts_submitter",      xnewsletter_CleanVars( $sets, "accounts_submitter", 0, 'int'));
         $content->setVar("accounts_created",        time());
     }
 
@@ -262,7 +262,7 @@ function xNewsletter_setPost($content, $sets) {
  *
  * @return int|mixed
  */
-function xNewsletter_convertDate($date) {
+function xnewsletter_convertDate($date) {
     $GLOBALS['xoopsLogger']->addDeprecated(__FUNCTION__ . ' is deprecated');
 
     return ($date);
@@ -279,13 +279,13 @@ function xNewsletter_convertDate($date) {
  *
  * @return array
  */
-function xNewsletter_getUserPermissionsByLetter($letter_id = 0) {
+function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
     //check the rights of current user for this letter
     // returns the permission as array
     global $xoopsUser;
     $gperm_handler = xoops_gethandler('groupperm');
     $member_handler = xoops_gethandler('member');
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $perm = array(
         "read" => false,
@@ -305,7 +305,7 @@ function xNewsletter_getUserPermissionsByLetter($letter_id = 0) {
         $perm["create"] = true;
         $perm["send"] = true;
     } else {
-        $obj_letter = $xnewsletter->getHandler('xNewsletter_letter')->get($letter_id);
+        $obj_letter = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
         $letter_cats = explode("|", $obj_letter->getVar("letter_cats"));
         $submitter = $obj_letter->getVar("letter_submitter");
         $my_group_ids = $member_handler->getGroupsByUser( $currentuid ) ;
@@ -344,14 +344,14 @@ function xNewsletter_getUserPermissionsByLetter($letter_id = 0) {
  *
  * @return bool
  */
-function xNewsletter_userAllowedCreateCat($cat_id = 0) {
+function xnewsletter_userAllowedCreateCat($cat_id = 0) {
     //check the rights of current user
     //if a cat is defined, than only check for this cat, otherwise check whether there is minimum one cat with right create
 
     global $xoopsUser;
     $gperm_handler =& xoops_gethandler('groupperm');
     $member_handler =& xoops_gethandler('member');
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $allowedit = 0;
     $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
@@ -360,11 +360,11 @@ function xNewsletter_userAllowedCreateCat($cat_id = 0) {
     $my_group_ids = $member_handler->getGroupsByUser($currentuid);
 
     if ($cat_id > 0) {
-        $cat_arr = $xnewsletter->getHandler('xNewsletter_cat')->get($cat_id);
+        $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
         $allowedit = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
     } else {
         $crit_cat = new CriteriaCompo();
-        $cat_arr = $xnewsletter->getHandler('xNewsletter_cat')->getall($crit_cat);
+        $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->getall($crit_cat);
         foreach (array_keys($cat_arr) as $i) {
             $cat_id = $cat_arr[$i]->getVar('cat_id');
             $allowedit += $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
@@ -379,7 +379,7 @@ function xNewsletter_userAllowedCreateCat($cat_id = 0) {
  *
  * @return bool
  */
-function xNewsletter_pluginCheckEmail($email = '') {
+function xnewsletter_pluginCheckEmail($email = '') {
     global $xoopsDB;
 
     if ($email == '') {
@@ -387,7 +387,7 @@ function xNewsletter_pluginCheckEmail($email = '') {
     }
     $sql = "SELECT `subscr_id` FROM {$xoopsDB->prefix("xnewsletter_subscr")}";
     $sql .= " WHERE ((subscr_email)='{$email}')";
-    $subscriber = mysql_query($sql) || die ("MySQL-Error in xNewsletter_pluginCheckEmail: " . mysql_error());
+    $subscriber = mysql_query($sql) || die ("MySQL-Error in xnewsletter_pluginCheckEmail: " . mysql_error());
     $row_result = mysql_fetch_assoc($subscriber);
     $ret = $row_result['subscr_id'] > 0 ? $row_result['subscr_id'] : false;
     unset($row_result);
@@ -402,14 +402,14 @@ function xNewsletter_pluginCheckEmail($email = '') {
  *
  * @return bool
  */
-function xNewsletter_pluginCheckCatSubscr($subscr_id, $cat_id) {
+function xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id) {
     global $xoopsDB;
 
     if ($subscr_id == 0 || $cat_id == 0) return false;
     $sql = "SELECT `catsubscr_id`";
     $sql .= " FROM {$xoopsDB->prefix("xnewsletter_catsubscr")}";
     $sql .= " WHERE ((catsubscr_subscrid)={$subscr_id} AND (catsubscr_catid)={$cat_id})";
-    $subscriber = mysql_query($sql) || die ("MySQL-Error in xNewsletter_pluginCheckCatSubscr: " . mysql_error());
+    $subscriber = mysql_query($sql) || die ("MySQL-Error in xnewsletter_pluginCheckCatSubscr: " . mysql_error());
     $row_result = mysql_fetch_assoc($subscriber);
     $ret = $row_result['catsubscr_id'] > 0 ? $row_result['catsubscr_id'] : false;
     unset($row_result);

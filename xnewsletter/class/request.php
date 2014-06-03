@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- *  xNewsletterRequest class
+ *  xnewsletterRequest class
  *
  * @copyright       Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
  * @license         GNU/GPL, see LICENSE.php
@@ -18,7 +18,7 @@
  *                  is derivative of works licensed under the GNU General Public License or
  *                  other free or open source software licenses.
  *                  See COPYRIGHT.php for copyright notices and details.
- * @package         xNewsletter
+ * @package         xnewsletter
  * @since           1.3
  * @author          trabis <lusopoemas@gmail.com>
  * @version         svn:$id$
@@ -32,12 +32,12 @@ define('XNEWSLETTER_REQUEST_ALLOWRAW', 2);
 define('XNEWSLETTER_REQUEST_ALLOWHTML', 4);
 
 /**
- * xNewsletterRequest Class
+ * xnewsletterRequest Class
  * This class serves to provide a common interface to access
  * request variables.  This includes $_POST, $_GET, and naturally $_REQUEST.  Variables
  * can be passed through an input filter to avoid injection or returned raw.
  */
-class xNewsletterRequest
+class xnewsletterRequest
 {
 
     /**
@@ -113,14 +113,14 @@ class xNewsletterRequest
         }
         if (isset($input[$name]) && $input[$name] !== null) {
             // Get the variable from the input hash and clean it
-            $var = xNewsletterRequest::_cleanVar($input[$name], $mask, $type);
+            $var = xnewsletterRequest::_cleanVar($input[$name], $mask, $type);
             // Handle magic quotes compatability
             if (get_magic_quotes_gpc() && ($var != $default) && ($hash != 'FILES')) {
-                $var = xNewsletterRequest::_stripSlashesRecursive($var);
+                $var = xnewsletterRequest::_stripSlashesRecursive($var);
             }
         } elseif ($default !== null) {
             // Clean the default value
-            $var = xNewsletterRequest::_cleanVar($default, $mask, $type);
+            $var = xnewsletterRequest::_cleanVar($default, $mask, $type);
         } else {
             $var = $default;
         }
@@ -144,7 +144,7 @@ class xNewsletterRequest
      */
     static function getInt($name, $default = 0, $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'int');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'int');
     }
 
     /**
@@ -163,7 +163,7 @@ class xNewsletterRequest
      */
     static function getFloat($name, $default = 0.0, $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'float');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'float');
     }
 
     /**
@@ -182,7 +182,7 @@ class xNewsletterRequest
      */
     static function getBool($name, $default = false, $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'bool');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'bool');
     }
 
     /**
@@ -201,7 +201,7 @@ class xNewsletterRequest
      */
     static function getWord($name, $default = '', $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'word');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'word');
     }
 
     /**
@@ -220,7 +220,7 @@ class xNewsletterRequest
      */
     static function getCmd($name, $default = '', $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'cmd');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'cmd');
     }
 
     /**
@@ -241,7 +241,7 @@ class xNewsletterRequest
     static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case JREQUEST_ALLOWRAW was specified for mask
-        return (string) xNewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
+        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
     }
 
     /**
@@ -253,7 +253,7 @@ class xNewsletterRequest
      */
     static function getArray($name, $default = array(), $hash = 'default')
     {
-        return xNewsletterRequest::getVar($name, $default, $hash, 'array');
+        return xnewsletterRequest::getVar($name, $default, $hash, 'array');
     }
 
     /**
@@ -265,7 +265,7 @@ class xNewsletterRequest
      */
     static function getText($name, $default = '', $hash = 'default')
     {
-        return (string) xNewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
+        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
     }
 
     /**
@@ -370,10 +370,10 @@ class xNewsletterRequest
                 $input = $_REQUEST;
                 break;
         }
-        $result = xNewsletterRequest::_cleanVar($input, $mask);
+        $result = xnewsletterRequest::_cleanVar($input, $mask);
         // Handle magic quotes compatability
         if (get_magic_quotes_gpc() && ($hash != 'FILES')) {
-            $result = xNewsletterRequest::_stripSlashesRecursive($result);
+            $result = xnewsletterRequest::_stripSlashesRecursive($result);
         }
 
         return $result;
@@ -389,7 +389,7 @@ class xNewsletterRequest
     static function set($array, $hash = 'default', $overwrite = true)
     {
         foreach ($array as $key => $value) {
-            xNewsletterRequest::setVar($key, $value, $hash, $overwrite);
+            xnewsletterRequest::setVar($key, $value, $hash, $overwrite);
         }
     }
 
@@ -401,14 +401,14 @@ class xNewsletterRequest
      */
     static function clean()
     {
-        xNewsletterRequest::_cleanArray($_FILES);
-        xNewsletterRequest::_cleanArray($_ENV);
-        xNewsletterRequest::_cleanArray($_GET);
-        xNewsletterRequest::_cleanArray($_POST);
-        xNewsletterRequest::_cleanArray($_COOKIE);
-        xNewsletterRequest::_cleanArray($_SERVER);
+        xnewsletterRequest::_cleanArray($_FILES);
+        xnewsletterRequest::_cleanArray($_ENV);
+        xnewsletterRequest::_cleanArray($_GET);
+        xnewsletterRequest::_cleanArray($_POST);
+        xnewsletterRequest::_cleanArray($_COOKIE);
+        xnewsletterRequest::_cleanArray($_SERVER);
         if (isset($_SESSION)) {
-            xNewsletterRequest::_cleanArray($_SESSION);
+            xnewsletterRequest::_cleanArray($_SESSION);
         }
         $REQUEST = $_REQUEST;
         $GET     = $_GET;
@@ -491,13 +491,13 @@ class xNewsletterRequest
         } elseif ($mask & 4) {
             // If the allow html flag is set, apply a safe html filter to the variable
             if (is_null($safeHtmlFilter)) {
-                $safeHtmlFilter = xNewsletterFilterInput::getInstance(null, null, 1, 1);
+                $safeHtmlFilter = xnewsletterFilterInput::getInstance(null, null, 1, 1);
             }
             $var = $safeHtmlFilter->clean($var, $type);
         } else {
             // Since no allow flags were set, we will apply the most strict filter to the variable
             if (is_null($noHtmlFilter)) {
-                $noHtmlFilter = xNewsletterFilterInput::getInstance( /* $tags, $attr, $tag_method, $attr_method, $xss_auto */);
+                $noHtmlFilter = xnewsletterFilterInput::getInstance( /* $tags, $attr, $tag_method, $attr_method, $xss_auto */);
             }
             $var = $noHtmlFilter->clean($var, $type);
         }
@@ -516,20 +516,20 @@ class xNewsletterRequest
      */
     protected function _stripSlashesRecursive($value)
     {
-        $value = is_array($value) ? array_map(array('xNewsletterRequest', '_stripSlashesRecursive'), $value) : stripslashes($value);
+        $value = is_array($value) ? array_map(array('xnewsletterRequest', '_stripSlashesRecursive'), $value) : stripslashes($value);
 
         return $value;
     }
 }
 
 /**
- * xNewsletterInput is a class for filtering input from any data source
+ * xnewsletterInput is a class for filtering input from any data source
  * Forked from the php input filter library by: Daniel Morris <dan@rootcube.com>
  * Original Contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
  *
  * @author      Louis Landry <louis.landry@joomla.org>
  */
-class xNewsletterFilterInput
+class xnewsletterFilterInput
 {
     var $tagsArray; // default = empty array
     var $attrArray; // default = empty array
@@ -589,7 +589,7 @@ class xNewsletterFilterInput
     /**
      * Returns a reference to an input filter object, only creating it if it doesn't already exist.
      * This method must be invoked as:
-     *      <pre>  $filter = & xNewsletterFilterInput::getInstance();</pre>
+     *      <pre>  $filter = & xnewsletterFilterInput::getInstance();</pre>
      *
      * @static
      *
@@ -599,7 +599,7 @@ class xNewsletterFilterInput
      * @param int   $attrMethod WhiteList method = 0, BlackList method = 1
      * @param int   $xssAuto    Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
      *
-     * @return object The xNewsletterFilterInput object.
+     * @return object The xnewsletterFilterInput object.
      * @since   1.5
      */
     public static function & getInstance($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
@@ -610,7 +610,7 @@ class xNewsletterFilterInput
             $instances = array();
         }
         if (empty ($instances[$sig])) {
-            $instances[$sig] = new xNewsletterFilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
+            $instances[$sig] = new xnewsletterFilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
         }
 
         return $instances[$sig];
@@ -663,10 +663,10 @@ class xNewsletterFilterInput
                 break;
             case 'STRING' :
                 // Check for static usage and assign $filter the proper variable
-                if (isset($this) && is_a($this, 'xNewsletterFilterInput')) {
+                if (isset($this) && is_a($this, 'xnewsletterFilterInput')) {
                     $filter =& $this;
                 } else {
-                    $filter = xNewsletterFilterInput::getInstance();
+                    $filter = xnewsletterFilterInput::getInstance();
                 }
                 $result = (string) $filter->_remove($filter->_decode((string) $source));
                 break;
@@ -683,10 +683,10 @@ class xNewsletterFilterInput
                 break;
             default :
                 // Check for static usage and assign $filter the proper variable
-                if (is_object($this) && get_class($this) == 'xNewsletterFilterInput') {
+                if (is_object($this) && get_class($this) == 'xnewsletterFilterInput') {
                     $filter =& $this;
                 } else {
-                    $filter = xNewsletterFilterInput::getInstance();
+                    $filter = xnewsletterFilterInput::getInstance();
                 }
                 // Are we dealing with an array?
                 if (is_array($source)) {
@@ -950,7 +950,7 @@ class xNewsletterFilterInput
                 $attrSubSet[1] = stripslashes($attrSubSet[1]);
             }
             // Autostrip script tags
-            if (xNewsletterFilterInput::checkAttribute($attrSubSet)) {
+            if (xnewsletterFilterInput::checkAttribute($attrSubSet)) {
                 continue;
             }
             // Is our attribute in the user input array?

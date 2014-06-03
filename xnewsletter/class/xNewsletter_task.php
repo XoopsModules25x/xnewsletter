@@ -9,15 +9,15 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 /**
- * xNewsletter module for xoops
+ * xnewsletter module for xoops
  *
  * @copyright       The TXMod XOOPS Project http://sourceforge.net/projects/thmod/
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GPL 2.0 or later
- * @package         xNewsletter
+ * @package         xnewsletter
  * @since           2.5.x
  * @author          XOOPS Development Team ( name@site.com ) - ( http://xoops.org )
- * @version         $Id: xNewsletter_task.php 12559 2014-06-02 08:10:39Z beckmi $
+ * @version         $Id: xnewsletter_task.php 12559 2014-06-02 08:10:39Z beckmi $
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
@@ -36,7 +36,7 @@ class xnewsletter_task extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->XoopsObject();
         $this->initVar("task_id", XOBJ_DTYPE_INT, null, false, 8);
@@ -71,14 +71,14 @@ class xnewsletter_task extends XoopsObject
         $criteria->setSort('letter_id');
         $criteria->setOrder('DESC');
         $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, "task_letter_id", $this->getVar("task_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_letter')->getList($criteria));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_letter')->getList($criteria));
         $form->addElement($letter_select, true);
 
         $criteria = new CriteriaCompo();
         $criteria->setSort('subscr_id');
         $criteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, "task_subscr_id", $this->getVar("task_subscr_id"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xNewsletter_subscr')->getList($criteria));
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_subscr')->getList($criteria));
         $form->addElement($subscr_select, true);
 
         $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, "task_starttime", "", $this->getVar("task_starttime")));
@@ -95,12 +95,12 @@ class xnewsletter_task extends XoopsObject
 }
 
 /**
- * Class xNewsletterxnewsletter_taskHandler
+ * Class xnewsletterxnewsletter_taskHandler
  */
-class xNewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
+class xnewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xNewsletterxNewsletter
+     * @var xnewsletterxnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -111,6 +111,6 @@ class xNewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, "xnewsletter_task", "xnewsletter_task", "task_id", "task_letter_id");
-        $this->xnewsletter = xNewsletterxNewsletter::getInstance();
+        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

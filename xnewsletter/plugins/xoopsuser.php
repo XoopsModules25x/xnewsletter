@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *  @copyright  Goffy ( wedega.com )
  *  @license    GPL 2.0
- *  @package    xNewsletter
+ *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
@@ -57,7 +57,7 @@ function xnewsletter_plugin_getinfo_xoopsuser() {
  */
 function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limitcheck, $skipCatsubscrExist, $arr_groups) {
     global $xoopsDB;
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
@@ -77,14 +77,14 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
         $firstname = "";
         $lastname  = ($lineArray[1]=='') ? $lineArray[2] : $lineArray[1];
 
-        $subscr_id = xNewsletter_pluginCheckEmail($email);
-        $catsubscr_id = xNewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
+        $subscr_id = xnewsletter_pluginCheckEmail($email);
+        $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
 
         if ($skipCatsubscrExist == 1 && $catsubscr_id > 0) {
             //skip existing subscriptions
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
-            $importObj = $xnewsletter->getHandler('xNewsletter_import')->create();
+            $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
             $importObj->setVar('import_email', $email);
             $importObj->setVar('import_sex', $sex);
             $importObj->setVar('import_firstname', $firstname);
@@ -93,7 +93,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
             $importObj->setVar('import_status', $import_status);
-            if (!$xnewsletter->getHandler('xNewsletter_import')->insert($importObj)) {
+            if (!$xnewsletter->getHandler('xnewsletter_import')->insert($importObj)) {
                 echo $importObj->getHtmlErrors();
                 exit();
             }
@@ -120,7 +120,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
  */
 function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist) {
     global $xoopsDB;
-    $xnewsletter = xNewsletterxNewsletter::getInstance();
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
     $member_handler = xoops_gethandler('member');
 
     $userGroups = $member_handler->getGroupList();
@@ -137,7 +137,7 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
     $criteria->setSort('cat_id ASC, cat_name');
     $criteria->setOrder('ASC');
     $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", $cat_id);
-    $cat_select->addOptionArray($xnewsletter->getHandler('xNewsletter_cat')->getList());
+    $cat_select->addOptionArray($xnewsletter->getHandler('xnewsletter_cat')->getList());
     $form->addElement($cat_select, false);
 
     // checkboxes other groups

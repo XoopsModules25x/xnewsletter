@@ -1,4 +1,4 @@
-<{include file="db:xNewsletter_header.tpl"}>
+<{include file="db:xnewsletter_header.tpl"}>
 <div class="outer">
     <table cellpadding="0" cellspacing="0" class="item" width="100%">
         <tr class="itemHead">
@@ -37,4 +37,4 @@
     <{/foreach}>
     </table>
 </div>
-<{include file="db:xNewsletter_footer.tpl"}>
+<{include file="db:xnewsletter_footer.tpl"}>

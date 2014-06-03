@@ -9,12 +9,12 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 /**
- * xNewsletter module for xoops
+ * xnewsletter module for xoops
  *
  * @copyright       The TXMod XOOPS Project http://sourceforge.net/projects/thmod/
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GPL 2.0 or later
- * @package         xNewsletter
+ * @package         xnewsletter
  * @since           2.5.x
  * @author          XOOPS Development Team ( name@site.com ) - ( http://xoops.org )
  * @version         $Id: task.php 12491 2014-04-25 13:21:55Z beckmi $
@@ -24,7 +24,7 @@ include_once "admin_header.php";
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = xNewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
 switch ($op) {
     case "list":
     default:
@@ -33,8 +33,8 @@ switch ($op) {
         $criteria = new CriteriaCompo();
         $criteria->setSort("task_id");
         $criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xNewsletter_task')->getCount();
-        $task_arr = $xnewsletter->getHandler('xNewsletter_task')->getall($criteria);
+        $numrows = $xnewsletter->getHandler('xnewsletter_task')->getCount();
+        $task_arr = $xnewsletter->getHandler('xnewsletter_task')->getall($criteria);
 
         //Affichage du tableau
         echo "
@@ -54,14 +54,14 @@ switch ($op) {
                     echo "<tr class='" . $class . "'>";
                     $class = ($class == "even") ? "odd" : "even";
 
-                    $obj_letter =& $xnewsletter->getHandler('xNewsletter_letter')->get($task_arr[$i]->getVar("task_letter_id"));
+                    $obj_letter =& $xnewsletter->getHandler('xnewsletter_letter')->get($task_arr[$i]->getVar("task_letter_id"));
                     $title_letter = $obj_letter->getVar("letter_title");
                     echo "<td align=\"center\">" . $title_letter . "</td>";
                     if ($task_arr[$i]->getVar("task_subscr_id") == 0) {
                         //send_test
                         $title_subscr = $obj_letter->getVar("letter_email_test") . "<br/>(send_test)";
                     } else {
-                        $subscr =& $xnewsletter->getHandler('xNewsletter_subscr')->get($task_arr[$i]->getVar("task_subscr_id"));
+                        $subscr =& $xnewsletter->getHandler('xnewsletter_subscr')->get($task_arr[$i]->getVar("task_subscr_id"));
                         if (is_object($subscr)) {
                             $title_subscr = $subscr->getVar("subscr_email");
                         } else {
@@ -86,12 +86,12 @@ switch ($op) {
         break;
 
     case "delete_task":
-        $obj =& $xnewsletter->getHandler('xNewsletter_task')->get($_REQUEST["task_id"]);
+        $obj =& $xnewsletter->getHandler('xnewsletter_task')->get($_REQUEST["task_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header("task.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xNewsletter_task')->delete($obj)) {
+            if ($xnewsletter->getHandler('xnewsletter_task')->delete($obj)) {
                 redirect_header("task.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $obj->getHtmlErrors();
