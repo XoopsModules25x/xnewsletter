@@ -37,7 +37,7 @@ $modversion['author']              = "Goffy, Alfred";
 $modversion['credits']             = "";
 $modversion['license']             = "GPL 2.0";
 $modversion['help']                = 'page=help';
-$modversion['image']               = "assets/images/xnewsletter.png";
+$modversion['image']               = "assets/images/logo.png";
 $modversion['official']            = false;
 $modversion['author_mail']         = "webmaster@wedega.com";
 $modversion['author_website_url']  = "wedega.com";
