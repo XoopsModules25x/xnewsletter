@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -48,14 +49,14 @@ class xnewsletter_subscr extends XoopsObject
         $this->initVar("subscr_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("subscr_firstname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("subscr_lastname", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("subscr_uid", XOBJ_DTYPE_INT, null, false,  10);
-        $this->initVar("subscr_sex", XOBJ_DTYPE_TXTBOX, null, false,  100);
+        $this->initVar("subscr_uid", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("subscr_sex", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("subscr_submitter", XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar("subscr_created", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("subscr_actkey", XOBJ_DTYPE_TXTBOX, null, false,  255);
-        $this->initVar("subscr_ip", XOBJ_DTYPE_TXTBOX, null, false,  32);
-        $this->initVar("subscr_activated", XOBJ_DTYPE_TXTBOX, null, false,  8);
-    $this->initVar("subscr_actoptions", XOBJ_DTYPE_TXTBOX, null, false,  500);
+        $this->initVar("subscr_actkey", XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar("subscr_ip", XOBJ_DTYPE_TXTBOX, null, false, 32);
+        $this->initVar("subscr_activated", XOBJ_DTYPE_TXTBOX, null, false, 8);
+        $this->initVar("subscr_actoptions", XOBJ_DTYPE_TXTBOX, null, false, 500);
     }
 
     /**
@@ -75,13 +76,13 @@ class xnewsletter_subscr extends XoopsObject
         $form = new XoopsThemeForm(_MA_XNEWSLETTER_SUBSCRIPTION_SEARCH, "formsearch", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $email_tray = new XoopsFormElementTray(_MA_XNEWSLETTER_SUBSCRIPTION_SEARCH_EMAIL,'&nbsp;&nbsp;');
+        $email_tray  = new XoopsFormElementTray(_MA_XNEWSLETTER_SUBSCRIPTION_SEARCH_EMAIL, '&nbsp;&nbsp;');
         $email_field = new XoopsFormText("", "subscr_email", 50, 255, $this->getVar("subscr_email"));
-        if ( $this->getVar("subscr_email") != "" ) {
+        if ($this->getVar("subscr_email") != "") {
             $email_field->setExtra('disabled="disabled"');
         }
         $email_tray->addElement($email_field, false);
-        if ( $this->getVar("subscr_email") == "" ) {
+        if ($this->getVar("subscr_email") == "") {
             $email_tray->addElement(new XoopsFormCaptcha('<br /><br />'), true);
             $email_tray->addElement(new XoopsFormButton("<br /><br />", "submit", _AM_XNEWSLETTER_SUBSCRIPTION_SEARCH_ADD, "submit"));
         }
@@ -124,11 +125,11 @@ class xnewsletter_subscr extends XoopsObject
         }
         if ($this->xnewsletter->getConfig('xn_use_salutation') == 1) {
             $select_subscr_sex = new XoopsFormSelect(_AM_XNEWSLETTER_SUBSCR_SEX, "subscr_sex", $this->getVar("subscr_sex"));
-            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY,_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
-            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE,_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
-            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE,_AM_XNEWSLETTER_SUBSCR_SEX_MALE);
-            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP,_AM_XNEWSLETTER_SUBSCR_SEX_COMP);
-            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY,_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY, _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE, _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
             $form->addElement($select_subscr_sex);
         }
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_SUBSCR_FIRSTNAME, "subscr_firstname", 50, 255, $this->getVar("subscr_firstname")), false);
@@ -137,35 +138,37 @@ class xnewsletter_subscr extends XoopsObject
 
         $form->addElement(new XoopsFormLabel("<br/><br/>", ""));
 
-        $opt_cat=array();
+        $opt_cat  = array();
         $opt_tray = new XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . "</span>", "<br />");
 
         //get newsletters available for current user
-        $gperm_handler =& xoops_gethandler('groupperm');
+        $gperm_handler  =& xoops_gethandler('groupperm');
         $member_handler =& xoops_gethandler('member');
-        $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid(): 0;
+        $currentuid     = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         if ($currentuid == 0) {
             $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);
         } else {
-            $my_group_ids = $member_handler->getGroupsByUser( $currentuid ) ;
+            $my_group_ids = $member_handler->getGroupsByUser($currentuid);
         }
 
         $crit_cat = new CriteriaCompo();
         $crit_cat->setSort('cat_id');
         $crit_cat->setOrder('ASC');
-        $cat_arr = $this->xnewsletter->getHandler('xnewsletter_cat')->getall($crit_cat);
+        $cat_arr          = $this->xnewsletter->getHandler('xnewsletter_cat')->getall($crit_cat);
         $count_cats_avail = 0;
         foreach (array_keys($cat_arr) as $i) {
             $cat_id = $cat_arr[$i]->getVar("cat_id");
             //first check group anonymous
             $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $xoopsModule->mid());
-            if ( $show == 0 ) $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $my_group_ids, $xoopsModule->mid());
-            if ($show==1) {
+            if ($show == 0) {
+                $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $my_group_ids, $xoopsModule->mid());
+            }
+            if ($show == 1) {
                 ++$count_cats_avail;
                 $cat_name = $cat_arr[$i]->getVar("cat_name");
                 //get subscription of current cat and current user
-                $catsubscr = 0;
-                $catsubscr_id = 0;
+                $catsubscr        = 0;
+                $catsubscr_id     = 0;
                 $catsubscr_quited = 0;
 
                 $crit_catsubscr = new CriteriaCompo();
@@ -173,7 +176,7 @@ class xnewsletter_subscr extends XoopsObject
                 $crit_catsubscr->add(new Criteria('catsubscr_subscrid', $subscr_id));
                 $catsubscr_arr = $this->xnewsletter->getHandler('xnewsletter_catsubscr')->getall($crit_catsubscr);
                 foreach (array_keys($catsubscr_arr) as $catsubscr) {
-                    $catsubscr_id = $catsubscr;
+                    $catsubscr_id     = $catsubscr;
                     $catsubscr_quited = $catsubscr_arr[$catsubscr]->getVar("catsubscr_quited");
                 }
 
@@ -248,13 +251,18 @@ class xnewsletter_subscr extends XoopsObject
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_SUBSCR_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_SUBSCR_SUBMITTER, "subscr_submitter", false, $this->getVar("subscr_submitter"), 1, false), true);
 
-        if ( $this->getVar("subscr_id") > 0 ) {
-            $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_SUBSCR_CREATED, formatTimestamp($this->getVar("subscr_created"), $this->xnewsletter->getConfig('dateformat')) . " [" . $this->getVar("subscr_ip") . "]"));
+        if ($this->getVar("subscr_id") > 0) {
+            $form->addElement(
+                new XoopsFormLabel(
+                    _AM_XNEWSLETTER_SUBSCR_CREATED,
+                    formatTimestamp($this->getVar("subscr_created"), $this->xnewsletter->getConfig('dateformat')) . " [" . $this->getVar("subscr_ip") . "]"
+                )
+            );
             $form->addElement(new XoopsFormHidden('subscr_created', $this->getVar("subscr_created")));
             $form->addElement(new XoopsFormHidden('subscr_ip', $this->getVar("subscr_ip")));
         } else {
             $time = time();
-            $ip = xoops_getenv("REMOTE_ADDR");
+            $ip   = xoops_getenv("REMOTE_ADDR");
             $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_SUBSCR_CREATED, formatTimestamp($time, 's') . " [" . $ip . "]"));
             $form->addElement(new XoopsFormHidden('subscr_created', $time));
             $form->addElement(new XoopsFormHidden('subscr_ip', $ip));

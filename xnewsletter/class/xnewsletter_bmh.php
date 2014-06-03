@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GNU General Public License 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GNU General Public License 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -45,11 +46,11 @@ class xnewsletter_bmh extends XoopsObject
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar("bmh_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("bmh_rule_no", XOBJ_DTYPE_TXTBOX, null, false,  10);
-        $this->initVar("bmh_rule_cat", XOBJ_DTYPE_TXTBOX, null, false,  50);
-        $this->initVar("bmh_bouncetype", XOBJ_DTYPE_TXTBOX, null, false,  50);
-        $this->initVar("bmh_remove", XOBJ_DTYPE_TXTBOX, null, false,  50);
-        $this->initVar("bmh_email", XOBJ_DTYPE_TXTBOX, null, false,  100);
+        $this->initVar("bmh_rule_no", XOBJ_DTYPE_TXTBOX, null, false, 10);
+        $this->initVar("bmh_rule_cat", XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar("bmh_bouncetype", XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar("bmh_remove", XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar("bmh_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("bmh_subject", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("bmh_measure", XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar("bmh_submitter", XOBJ_DTYPE_INT, null, false, 10);
@@ -75,8 +76,8 @@ class xnewsletter_bmh extends XoopsObject
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $account_default =  $this->getVar("bmh_accounts_id");
-        $crit_accounts = new CriteriaCompo();
+        $account_default = $this->getVar("bmh_accounts_id");
+        $crit_accounts   = new CriteriaCompo();
         $crit_accounts->setSort("accounts_id");
         $crit_accounts->setOrder("ASC");
         $opt_accounts = new XoopsFormSelect(_AM_XNEWSLETTER_BMH_ACCOUNTS_ID, "bmh_accounts_id", $account_default);
@@ -90,9 +91,9 @@ class xnewsletter_bmh extends XoopsObject
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_SUBJECT, "bmh_subject", 50, 255, $this->getVar("bmh_subject")), false);
 
         $measure_select = new XoopsFormSelect(_AM_XNEWSLETTER_BMH_MEASURE, "bmh_measure", $this->getVar("bmh_measure"));
-        $measure_select->addOption( _AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING , _AM_XNEWSLETTER_BMH_MEASURE_PENDING ) ;
-        $measure_select->addOption( _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING , _AM_XNEWSLETTER_BMH_MEASURE_NOTHING ) ;
-        $measure_select->addOption( _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT , _AM_XNEWSLETTER_BMH_MEASURE_QUIT ) ;
+        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING, _AM_XNEWSLETTER_BMH_MEASURE_PENDING);
+        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING, _AM_XNEWSLETTER_BMH_MEASURE_NOTHING);
+        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT, _AM_XNEWSLETTER_BMH_MEASURE_QUIT);
         $form->addElement($measure_select, true);
 
         $time = ($this->isNew()) ? time() : $this->getVar("bmh_created");

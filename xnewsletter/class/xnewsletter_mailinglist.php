@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GNU General Public License 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GNU General Public License 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -83,10 +84,28 @@ class xnewsletter_mailinglist extends XoopsObject
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_LISTNAME, "mailinglist_listname", 50, 255, $mailinglist_listname), true);
 
         $mailinglist_subscribe = $this->isNew() ? "subscribe nameofmylist {email}" : $this->getVar("mailinglist_subscribe");
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "<br/><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . "</span>", "mailinglist_subscribe", 50, 255, $mailinglist_subscribe), true);
+        $form->addElement(
+            new XoopsFormText(
+                _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "<br/><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . "</span>",
+                "mailinglist_subscribe",
+                50,
+                255,
+                $mailinglist_subscribe
+            ),
+            true
+        );
 
         $mailinglist_unsubscribe = $this->isNew() ? "unsubscribe nameofmylist {email}" : $this->getVar("mailinglist_unsubscribe");
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "<br/><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . "</span>", "mailinglist_unsubscribe", 50, 255, $mailinglist_unsubscribe), true);
+        $form->addElement(
+            new XoopsFormText(
+                _AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "<br/><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . "</span>",
+                "mailinglist_unsubscribe",
+                50,
+                255,
+                $mailinglist_unsubscribe
+            ),
+            true
+        );
 
         $time = ($this->isNew()) ? time() : $this->getVar("mailinglist_created");
         $form->addElement(new XoopsFormHidden("mailinglist_submitter", $GLOBALS['xoopsUser']->uid()));
