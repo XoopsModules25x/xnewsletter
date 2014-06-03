@@ -134,7 +134,7 @@ break;
                 foreach ($cat_ids as $cat_id) {
                     $catObj = $xnewsletter->getHandler('xNewsletter_cat')->get($cat_id);
                     if ($gperm_handler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
-                        $catsAvailableCount++;
+                        ++$catsAvailableCount;
                         unset($letter_array['letter_cats']);
                         $letter_array['letter_cats'][] = $catObj->toArray();
                     }

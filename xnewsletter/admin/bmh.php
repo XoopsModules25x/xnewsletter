@@ -46,7 +46,7 @@ case "bmh_delsubscr":
       $obj_bmh =& $xnewsletter->getHandler('xNewsletter_bmh')->get($bmh_id);
       $bmh_email = $obj_bmh->getVar("bmh_email");
 
-      $sql = "SELECT subscr_id FROM " . $xoopsDB->prefix("mod_xnewsletter_subscr") . " WHERE (";
+      $sql = "SELECT subscr_id FROM " . $xoopsDB->prefix("xnewsletter_subscr") . " WHERE (";
       $sql .= "subscr_email='" . $bmh_email . "'";
       $sql .= ") LIMIT 1;";
       if ( $user = $xoopsDB->query($sql) ) {
@@ -55,8 +55,8 @@ case "bmh_delsubscr":
       }
       if ($subscr_id == 0) {
         //set bmh_measure for all entries in bmh with this email
-        $sql_upd_measure = "UPDATE ".$xoopsDB->prefix("mod_xnewsletter_bmh")." SET `bmh_measure` = '"._AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING."'";
-        $sql_upd_measure .=" WHERE ((`".$xoopsDB->prefix("mod_xnewsletter_bmh")."`.`bmh_email` ='".$bmh_email."') AND (`".$xoopsDB->prefix("mod_xnewsletter_bmh")."`.`bmh_measure` ='0'))";
+        $sql_upd_measure = "UPDATE ".$xoopsDB->prefix("xnewsletter_bmh")." SET `bmh_measure` = '"._AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING."'";
+        $sql_upd_measure .=" WHERE ((`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_email` ='".$bmh_email."') AND (`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_measure` ='0'))";
         $xoopsDB->query($sql_upd_measure);
         redirect_header("bmh.php?op=list", 5, _AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID);
       }
@@ -65,7 +65,7 @@ case "bmh_delsubscr":
       // delete subscriber
       if (!$xnewsletter->getHandler('xNewsletter_subscr')->delete($obj_subscr,true)) {
         $actionprot_err = $obj_subscr->getHtmlErrors()."<br/><br/><br/>";
-        $count_err++;
+        ++$count_err;
       }
 
       //delete subscription
@@ -87,7 +87,7 @@ case "bmh_delsubscr":
             }
           } else {
             $actionprot_err .= $obj_catsubscr->getHtmlErrors();
-            $count_err++;
+            ++$count_err;
           }
         }
       }
@@ -115,19 +115,19 @@ case "bmh_delsubscr":
     $bmh_email = $obj_bmh->getVar("bmh_email");
 
         if ($bmh_measure == _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT) {
-            $sql = "UPDATE `".$xoopsDB->prefix("mod_xnewsletter_subscr")."` INNER JOIN `";
-            $sql .= $xoopsDB->prefix("mod_xnewsletter_catsubscr")."` ON `subscr_id` = `catsubscr_subscrid` ";
+            $sql = "UPDATE `".$xoopsDB->prefix("xnewsletter_subscr")."` INNER JOIN `";
+            $sql .= $xoopsDB->prefix("xnewsletter_catsubscr")."` ON `subscr_id` = `catsubscr_subscrid` ";
             $sql .= "SET `catsubscr_quited` = ".time()." WHERE (((`subscr_email`)='";
             $sql .= $bmh_email. "'))";
-            $result= $xoopsDB->queryF($sql) or die ("MySQL-Error: " . mysql_error());
+            $result= $xoopsDB->queryF($sql) || die ("MySQL-Error: " . mysql_error());
         }
     //set bmh_measure for all entries in bmh with this email
-    $sql_upd = "UPDATE ".$xoopsDB->prefix("mod_xnewsletter_bmh")." SET ";
+    $sql_upd = "UPDATE ".$xoopsDB->prefix("xnewsletter_bmh")." SET ";
     $sql_upd .="`bmh_measure` = '".$bmh_measure."'";
     $sql_upd .=", `bmh_submitter` = '".$xoopsUser->uid()."'";
     $sql_upd .=", `bmh_created` = '".time()."'";
-    $sql_upd .=" WHERE ((`".$xoopsDB->prefix("mod_xnewsletter_bmh")."`.`bmh_email` ='".$bmh_email."') AND (`".$xoopsDB->prefix("mod_xnewsletter_bmh")."`.`bmh_measure` ='0'))";
-    $result= $xoopsDB->queryF($sql_upd) or die ("MySQL-Error: " . mysql_error());
+    $sql_upd .=" WHERE ((`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_email` ='".$bmh_email."') AND (`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_measure` ='0'))";
+    $result= $xoopsDB->queryF($sql_upd) || die ("MySQL-Error: " . mysql_error());
 
     redirect_header("bmh.php?op=list&filter=".$filter, 3, _AM_XNEWSLETTER_FORMOK);
 
@@ -172,7 +172,7 @@ case "bmh_delsubscr":
                 $bmh->mailbox_username  = $accounts_arr[$acc]->getVar("accounts_username"); // your mailbox username
                 $bmh->mailbox_password  = $accounts_arr[$acc]->getVar("accounts_password"); // your mailbox password
                 $bmh->port              = $accounts_arr[$acc]->getVar("accounts_port_in"); // the port to access your mailbox, default is 143
-                if ($accounts_arr[$acc]->getVar("accounts_type") == _AM_ACCOUNTS_TYPE_VAL_POP3) {
+                if ($accounts_arr[$acc]->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
                     $bmh->service           = 'pop3'; // the service to use (imap or pop3), default is 'imap'
                 } else {
                     $bmh->service           = 'imap'; // the service to use (imap or pop3), default is 'imap'
@@ -397,6 +397,9 @@ case "bmh_delsubscr":
 }
 include "admin_footer.php";
 
+/**
+ * @return float
+ */
 function microtime_float() {
     list($usec, $sec) = explode(" ", microtime());
 

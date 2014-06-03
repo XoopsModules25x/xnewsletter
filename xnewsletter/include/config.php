@@ -22,12 +22,12 @@
  *  @package    xNewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: config.php 12491 2014-04-25 13:21:55Z beckmi $
+ *  Version : $Id: config.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // module information
-$moduleImageUrl = XNEWSLETTER_URL . "/images/xNewsletter.png";
+$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/xNewsletter.png";
 $moduleCopyrightHtml = ""; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";

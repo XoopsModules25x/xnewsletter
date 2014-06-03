@@ -153,13 +153,13 @@ switch ($op) {
 
     case 'del_import':
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
-            $sql = "TRUNCATE TABLE `{$xoopsDB->prefix('mod_xnewsletter_import')}`";
+            $sql = "TRUNCATE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "REPAIR TABLE `{$xoopsDB->prefix('mod_xnewsletter_import')}`";
+            $sql = "REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "OPTIMIZE TABLE `{$xoopsDB->prefix('mod_xnewsletter_import')}`";
+            $sql = "OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "ALTER TABLE `{$xoopsDB->prefix('mod_xnewsletter_import')}` AUTO_INCREMENT =1";
+            $sql = "ALTER TABLE `{$xoopsDB->prefix('xnewsletter_import')}` AUTO_INCREMENT =1";
             $result = $xoopsDB->queryF($sql);
 
             $obj =& $xnewsletter->getHandler('xNewsletter_protocol')->create();
@@ -201,16 +201,16 @@ switch ($op) {
             $delusers = $xnewsletter->getHandler('xNewsletter_subscr')->getall($criteria, array('subscr_id'), false, false);
             foreach ($delusers as $id => $user) {
                 $obj =& $xnewsletter->getHandler('xNewsletter_subscr')->get(intval($user['subscr_id']));
-                $sql = "DELETE FROM `{$xoopsDB->prefix('mod_xnewsletter_subscr')}` WHERE subscr_id={$user['subscr_id']}";
+                $sql = "DELETE FROM `{$xoopsDB->prefix('xnewsletter_subscr')}` WHERE subscr_id={$user['subscr_id']}";
                 $result = $xoopsDB->queryF($sql);
                 if ($result) {
                     // Newsletterlist delete
-                    $sql = "DELETE FROM `{$xoopsDB->prefix('mod_xnewsletter_catsubscr')}` WHERE catsubscr_subscrid={$user['subscr_id']}";
+                    $sql = "DELETE FROM `{$xoopsDB->prefix('xnewsletter_catsubscr')}` WHERE catsubscr_subscrid={$user['subscr_id']}";
                     $result = $xoopsDB->queryF($sql);
                     if (!$result) {
                         $error[] = "Error CAT-Subscr-ID: " . $user['subscr_id'] . " / " . $result->getHtmlErrors();
                     }
-                    $delete++;
+                    ++$delete;
                 } else {
                     $error[] = "Error Subscr-ID: " . $user['subscr_id'] . " / " . $result->getHtmlErrors();
                 }
@@ -253,13 +253,13 @@ switch ($op) {
 
     case 'del_oldprotocol':
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
-            $sql = "TRUNCATE TABLE `".$xoopsDB->prefix('mod_xnewsletter_protocol')."`";
+            $sql = "TRUNCATE TABLE `".$xoopsDB->prefix('xnewsletter_protocol')."`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "REPAIR TABLE `".$xoopsDB->prefix('mod_xnewsletter_protocol')."`";
+            $sql = "REPAIR TABLE `".$xoopsDB->prefix('xnewsletter_protocol')."`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "OPTIMIZE TABLE `".$xoopsDB->prefix('mod_xnewsletter_protocol')."`";
+            $sql = "OPTIMIZE TABLE `".$xoopsDB->prefix('xnewsletter_protocol')."`";
             $result = $xoopsDB->queryF($sql);
-            $sql = "ALTER TABLE `".$xoopsDB->prefix('mod_xnewsletter_protocol')."` AUTO_INCREMENT =1";
+            $sql = "ALTER TABLE `".$xoopsDB->prefix('xnewsletter_protocol')."` AUTO_INCREMENT =1";
             $result = $xoopsDB->queryF($sql);
 
             $obj =& $xnewsletter->getHandler('xNewsletter_protocol')->create();
@@ -290,16 +290,16 @@ switch ($op) {
             $number_ids = 0;
             $delete = 0;
             $error = array();
-            $sql = "SELECT Count(`catsubscr_id`) AS `nb_ids` FROM `".$xoopsDB->prefix("mod_xnewsletter_catsubscr")."` LEFT JOIN `".$xoopsDB->prefix("mod_xnewsletter_subscr")."` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
+            $sql = "SELECT Count(`catsubscr_id`) AS `nb_ids` FROM `".$xoopsDB->prefix("xnewsletter_catsubscr")."` LEFT JOIN `".$xoopsDB->prefix("xnewsletter_subscr")."` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
             if ( $result = $xoopsDB->query($sql) ) {
                 $row_result = $xoopsDB->fetchRow($result);
                 $number_ids = $row_result[0];
             }
             if ($number_ids > 0) {
-                $sql = "DELETE `".$xoopsDB->prefix("mod_xnewsletter_catsubscr")."` FROM `".$xoopsDB->prefix("mod_xnewsletter_catsubscr")."` LEFT JOIN `".$xoopsDB->prefix("mod_xnewsletter_subscr")."` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
+                $sql = "DELETE `".$xoopsDB->prefix("xnewsletter_catsubscr")."` FROM `".$xoopsDB->prefix("xnewsletter_catsubscr")."` LEFT JOIN `".$xoopsDB->prefix("xnewsletter_subscr")."` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
                 $result = $xoopsDB->query($sql);
                 if ($result = $xoopsDB->query($sql)) {
-                    $delete++;
+                    ++$delete;
                 } else {
                     $error[] = "Error delete catsubscr: " . $result->getHtmlErrors();
                 }
@@ -346,30 +346,30 @@ switch ($op) {
             $error = array();
             if ($use_mailinglist == 0 || $use_mailinglist == '0') {
                 //set cat_mailinglist = 0, if use mailinglist = false (if someone changed module preferences later)
-                $sql = "SELECT Count(`cat_id`) AS `nb_ids` FROM `".$xoopsDB->prefix("mod_xnewsletter_cat")."` WHERE (`cat_mailinglist` > 0)";
+                $sql = "SELECT Count(`cat_id`) AS `nb_ids` FROM `".$xoopsDB->prefix("xnewsletter_cat")."` WHERE (`cat_mailinglist` > 0)";
                 if ( $result = $xoopsDB->query($sql) ) {
                     $row_result = $xoopsDB->fetchRow($result);
                     $number_ids = $row_result[0];
                 }
                 if ($number_ids > 0) {
-                    $sql = "UPDATE `".$xoopsDB->prefix("mod_xnewsletter_cat")."` SET `cat_mailinglist` = 0";
+                    $sql = "UPDATE `".$xoopsDB->prefix("xnewsletter_cat")."` SET `cat_mailinglist` = 0";
                     if ($result = $xoopsDB->query($sql)) {
-                        $update++;
+                        ++$update;
                     } else {
                         $error[] = "Error update cat_mailinglist: " . $result->getHtmlErrors();
                     }
                 }
             } else {
                 //set cat_mailinglist = 0, if mailinglist_id is no more existing in table mailinglist
-                $sql = "SELECT Count(`cat_mailinglist`) AS `nb_ids` FROM `".$xoopsDB->prefix("mod_xnewsletter_cat")."` LEFT JOIN `".$xoopsDB->prefix("mod_xnewsletter_mailinglist")."` ON `cat_mailinglist` = `mailinglist_id` WHERE (((`mailinglist_id`) Is Null) AND ((`cat_mailinglist`)>0)) HAVING (((Count(`cat_mailinglist`))>0));";
+                $sql = "SELECT Count(`cat_mailinglist`) AS `nb_ids` FROM `".$xoopsDB->prefix("xnewsletter_cat")."` LEFT JOIN `".$xoopsDB->prefix("xnewsletter_mailinglist")."` ON `cat_mailinglist` = `mailinglist_id` WHERE (((`mailinglist_id`) Is Null) AND ((`cat_mailinglist`)>0)) HAVING (((Count(`cat_mailinglist`))>0));";
                 if ( $result = $xoopsDB->query($sql) ) {
                     $row_result = $xoopsDB->fetchRow($result);
                     $number_ids = $row_result[0];
                 }
                 if ($number_ids > 0) {
-                    $sql = "UPDATE `".$xoopsDB->prefix("mod_xnewsletter_cat")."` LEFT JOIN `".$xoopsDB->prefix("mod_xnewsletter_mailinglist")."` ON `cat_mailinglist` = `mailinglist_id` SET `cat_mailinglist` = 0 WHERE (((`cat_mailinglist`)>0) AND ((`mailinglist_id`) Is Null));";
+                    $sql = "UPDATE `".$xoopsDB->prefix("xnewsletter_cat")."` LEFT JOIN `".$xoopsDB->prefix("xnewsletter_mailinglist")."` ON `cat_mailinglist` = `mailinglist_id` SET `cat_mailinglist` = 0 WHERE (((`cat_mailinglist`)>0) AND ((`mailinglist_id`) Is Null));";
                     if ($result = $xoopsDB->query($sql)) {
-                        $update++;
+                        ++$update;
                     } else {
                         $error[] = "Error update cat_mailinglist: " . $result->getHtmlErrors();
                     }
@@ -438,7 +438,7 @@ switch ($op) {
                     $obj_letter = $xnewsletter->getHandler('xNewsletter_letter')->get($letter_id);
                     $obj_letter->setVar("letter_cats", $letter_cats_new);
                     if ($xnewsletter->getHandler('xNewsletter_letter')->insert($obj_letter)) {
-                        $update++;
+                        ++$update;
                     } else {
                         $error[] = "Error update cat: " . $result->getHtmlErrors();
                     }

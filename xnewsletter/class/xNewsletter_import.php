@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_import
+ */
 class xnewsletter_import extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -48,6 +55,14 @@ class xnewsletter_import extends XoopsObject
         $this->initVar("import_status", XOBJ_DTYPE_INT, null, false, 1);
     }
 
+    /**
+     * @param      $plugin
+     * @param int  $action_after_read
+     * @param int  $limitcheck
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getSearchForm($plugin, $action_after_read = 1, $limitcheck = 0, $action = false)
     {
         global $xoopsDB;
@@ -152,6 +167,11 @@ class xnewsletter_import extends XoopsObject
         return $form;
     }
 
+    /**
+     * @param $tablename
+     *
+     * @return bool
+     */
     private function tableExists($tablename)
     {
         if ($tablename=="") return true;
@@ -162,6 +182,9 @@ class xnewsletter_import extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_importHandler
+ */
 class xNewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -175,7 +198,7 @@ class xNewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_import", "xnewsletter_import", "import_id", "import_email");
+        parent::__construct($db, "xnewsletter_import", "xnewsletter_import", "import_id", "import_email");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

@@ -87,7 +87,7 @@ switch ($op)
             $protocol_created = "";
             $p = 0;
             foreach ($protocol_arr as $protocol) {
-                $p++;
+                ++$p;
                 if (count($protocol_arr)>1) $protocol_status .="($p) ";
                 $protocol_status .= $protocol->getVar("protocol_status")."<br/>";
                 $protocol_created .= formatTimeStamp($protocol->getVar("protocol_created"),"M")."<br/>";
@@ -123,7 +123,7 @@ switch ($op)
 
           $p = 0;
           foreach ($protocol_arr as $protocol) {
-            $p++;
+            ++$p;
             if (count($protocol_arr)>1) $protocol_status .="($p) ";
             $protocol_status .= $protocol->getVar("protocol_status")."<br/>";
             $protocol_created .= formatTimeStamp($protocol->getVar("protocol_created"),"M")."<br/>";
@@ -315,7 +315,7 @@ switch ($op)
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
           redirect_header("protocol.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
-        $sql = "DELETE FROM `".$xoopsDB->prefix("mod_xnewsletter_protocol")."` WHERE `protocol_letter_id`=$letter_id;";
+        $sql = "DELETE FROM `".$xoopsDB->prefix("xnewsletter_protocol")."` WHERE `protocol_letter_id`=$letter_id;";
         $result = $xoopsDB->query($sql);
         if ($result) {
           redirect_header("protocol.php", 3, _AM_XNEWSLETTER_FORMDELOK);

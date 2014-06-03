@@ -20,7 +20,10 @@
  *   <li>Information in the &lt;head&gt; is lost
  * </ul>
  *
- * @param html the input HTML
+ * @param the $html
+ *
+ * @throws Html2TextException
+ * @internal param \the $html input HTML
  * @return the HTML converted, as best as possible, to text
  */
 function convert_html_to_text($html) {
@@ -58,6 +61,11 @@ function fix_newlines($text) {
     return $text;
 }
 
+/**
+ * @param $node
+ *
+ * @return null|string
+ */
 function next_child_name($node) {
     // get the next child
     $nextNode = $node->nextSibling;
@@ -74,6 +82,12 @@ function next_child_name($node) {
 
     return $nextName;
 }
+
+/**
+ * @param $node
+ *
+ * @return null|string
+ */
 function prev_child_name($node) {
     // get the previous child
     $nextNode = $node->previousSibling;
@@ -91,6 +105,11 @@ function prev_child_name($node) {
     return $nextName;
 }
 
+/**
+ * @param $node
+ *
+ * @return string
+ */
 function iterate_over_node($node) {
     if ($node instanceof DOMText) {
         return preg_replace("/\\s+/im", " ", $node->wholeText);
@@ -143,7 +162,7 @@ function iterate_over_node($node) {
     // debug
     //$output .= "[$name,$nextName]";
 
-    for ($i = 0; $i < $node->childNodes->length; $i++) {
+    for ($i = 0; $i < $node->childNodes->length; ++$i) {
         $n = $node->childNodes->item($i);
 
         $text = iterate_over_node($n);
@@ -215,9 +234,16 @@ function iterate_over_node($node) {
     return $output;
 }
 
+/**
+ * Class Html2TextException
+ */
 class Html2TextException extends Exception {
     var $more_info;
 
+    /**
+     * @param string $message
+     * @param string $more_info
+     */
     public function __construct($message = "", $more_info = "") {
         parent::__construct($message);
         $this->more_info = $more_info;

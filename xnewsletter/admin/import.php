@@ -104,7 +104,7 @@ switch ($op) {
             $cat_arr=$xnewsletter->getHandler('xNewsletter_cat')->getall($criteria);
 
             foreach (array_keys($import_arr) as $i) {
-                $counter++;
+                ++$counter;
                 $form .= "<tr class=\"" . $class . "\">";
                 $class = ($class == "even") ? "odd" : "even";
                 $form .=  "<td align=\"center\">".$counter;
@@ -194,10 +194,10 @@ switch ($op) {
         break;
 
     case "apply_import_form":
-        //update mod_xnewsletter with settings form_import
+        //update xnewsletter with settings form_import
         $counter = xNewsletter_CleanVars($_REQUEST, 'counter', 0, 'int');
 
-        for ($i=1; $i < ($counter + 1); $i++) {
+        for ($i=1; $i < ($counter + 1); ++$i) {
             $import_id = xNewsletter_CleanVars($_REQUEST, 'import_id_'.$i, 'default', 'string');
             $subscr_firstname = xNewsletter_CleanVars($_REQUEST, 'firstname_'.$i, '', 'string');
             $subscr_lastname = xNewsletter_CleanVars($_REQUEST, 'lastname_'.$i, '', 'string');
@@ -207,14 +207,14 @@ switch ($op) {
             if ($cat_id > 0) {
                 if ($subscr_id == 0) {
                     //update sex, firstname, lastname
-                    $sql = "UPDATE {$xoopsDB->prefix('mod_xnewsletter_import')}";
+                    $sql = "UPDATE {$xoopsDB->prefix('xnewsletter_import')}";
                     $sql .= " SET `import_sex`='{$subscr_sex}', `import_firstname`='{$subscr_firstname}', `import_lastname`='{$subscr_lastname}'";
                     $sql .= " WHERE `import_id`={$import_id}";
                     $result=$xoopsDB->queryF($sql);
                 }
             }
             //update cat_id and import_status
-            $sql = "UPDATE {$xoopsDB->prefix('mod_xnewsletter_import')}";
+            $sql = "UPDATE {$xoopsDB->prefix('xnewsletter_import')}";
             $sql .= " SET `import_cat_id`='{$cat_id}', `import_status`=1";
             $sql.= " WHERE `import_id`={$import_id}";
             $result=$xoopsDB->queryF($sql);
@@ -224,8 +224,8 @@ switch ($op) {
         break;
 
     case "exec_import_final":
-        //execute final import of all data from mod_xnewsletter_import, where import_status = 1
-        //delete data from mod_xnewsletter_import, when imported (successful or not)
+        //execute final import of all data from xnewsletter_import, where import_status = 1
+        //delete data from xnewsletter_import, when imported (successful or not)
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         echo $indexAdmin->renderButton();
 
@@ -238,11 +238,11 @@ switch ($op) {
         $numrows_act 	= $xnewsletter->getHandler('xNewsletter_import')->getCount($import_criteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
-            $sql .= " FROM {$xoopsDB->prefix("mod_xnewsletter_import")}";
+            $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";
             $sql .= " WHERE ((import_status)=1)";
             $sql .= " ORDER BY `import_id` ASC";
             $counter = 0;
-            $users_import = $xoopsDB->queryF($sql) or die ("MySQL-Error: " . mysql_error());
+            $users_import = $xoopsDB->queryF($sql) || die ("MySQL-Error: " . mysql_error());
             while ($user_import = mysql_fetch_assoc($users_import)) {
                 $import_id = $user_import["import_id"];
                 $subscr_email = $user_import["import_email"];
@@ -271,7 +271,7 @@ switch ($op) {
                         unset($user);
 
                         $sql = "INSERT";
-                        $sql .= " INTO `{$xoopsDB->prefix('mod_xnewsletter_subscr')}`";
+                        $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_subscr')}`";
                         $sql .= " (`subscr_email`, `subscr_firstname`, `subscr_lastname`, `subscr_uid`, `subscr_sex`, `subscr_submitter`, `subscr_created`, `subscr_ip`, `subscr_activated`, `subscr_actoptions`)";
                         $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . intval($subscr_uid) . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', '1', '')";
                         if (!$xoopsDB->queryF($sql)) {
@@ -291,7 +291,7 @@ switch ($op) {
                         if ($catsubscr_id==0) {
                         //add subscription of this email
                         $sql = "INSERT";
-                        $sql .= " INTO `{$xoopsDB->prefix('mod_xnewsletter_catsubscr')}`";
+                        $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_catsubscr')}`";
                         $sql .= " (`catsubscr_catid`, `catsubscr_subscrid`, `catsubscr_submitter`, `catsubscr_created`)";
                         $sql .= " VALUES ({$cat_id}, {$subscr_id}, {$submitter}," . time() . ")";
                         if ($xoopsDB->queryF($sql)) {
@@ -299,7 +299,7 @@ switch ($op) {
                             //handle mailinglists
                             $cat_mailinglist = 0;
                             $sql = "SELECT `cat_mailinglist`";
-                            $sql .= " FROM {$xoopsDB->prefix("mod_xnewsletter_cat")}";
+                            $sql .= " FROM {$xoopsDB->prefix("xnewsletter_cat")}";
                             $sql .= " WHERE (`cat_id`={$cat_id}) LIMIT 1";
                             if ($cat_mls = $xoopsDB->queryF($sql)) {
                                 $cat_ml = mysql_fetch_array($cat_mls);
@@ -321,7 +321,7 @@ switch ($op) {
                     }
                 }
                 $sql_del = "DELETE";
-                $sql_del .= " FROM {$xoopsDB->prefix('mod_xnewsletter_import')}";
+                $sql_del .= " FROM {$xoopsDB->prefix('xnewsletter_import')}";
                 $sql_del .= " WHERE `import_id`={$import_id}";
                 $result = $xoopsDB->queryF($sql_del);
             }
@@ -343,7 +343,7 @@ switch ($op) {
                     $form_continue .= '<input id="op" type="hidden" value="show_formcheck" name="op">';
                 } else {
                     // set import_status = 1 for next package
-                    $sql_update = "UPDATE ".$xoopsDB->prefix("mod_xnewsletter_import")." SET `import_status`=1 ORDER BY import_id LIMIT ".$limitcheck;
+                    $sql_update = "UPDATE ".$xoopsDB->prefix("xnewsletter_import")." SET `import_status`=1 ORDER BY import_id LIMIT ".$limitcheck;
                     $xoopsDB->queryF($sql_update);
                     //execute import for the next package
                     $form_continue .= '<input id="op" type="hidden" value="exec_import_final" name="op">';
@@ -361,7 +361,7 @@ switch ($op) {
         break;
 
     case "searchdata":
-        //delete all existing data, import data into mod_xnewsletter_import with plugin
+        //delete all existing data, import data into xnewsletter_import with plugin
         //set cat_id as preselected, update information about existing registration/subscriptions
         //if ($action_after_read==1) execute import else show form for check before executing import
 
@@ -380,10 +380,10 @@ switch ($op) {
         }
 
         //delete all existing data
-        $sql = "TRUNCATE TABLE ".$xoopsDB->prefix('mod_xnewsletter_import');
+        $sql = "TRUNCATE TABLE ".$xoopsDB->prefix('xnewsletter_import');
         $result= $xoopsDB->queryF($sql);
 
-        //import data into mod_xnewsletter_import with plugin
+        //import data into xnewsletter_import with plugin
         if ($plugin == 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
             $csv_header = xNewsletter_CleanVars($_REQUEST, 'csv_header', 0, 'int');
@@ -444,10 +444,15 @@ switch ($op) {
 }
 include "admin_footer.php";
 
+/**
+ * @param $prot_text
+ * @param $success
+ * @param $submitter
+ */
 function createProtocol($prot_text, $success, $submitter) {
     global $xoopsDB;
-    $sql = "INSERT INTO `{$xoopsDB->prefix('mod_xnewsletter_protocol')}`";
+    $sql = "INSERT INTO `{$xoopsDB->prefix('xnewsletter_protocol')}`";
     $sql .= " (`protocol_letter_id`, `protocol_subscriber_id`, `protocol_status`, `protocol_success`, `protocol_submitter`, `protocol_created`)";
     $sql .= " VALUES (0,0,'{$prot_text}', {$success}, {$submitter}, " . time() . ")";
-    $xoopsDB->queryF($sql) or die ("MySQL-Error: " . mysql_error());
+    $xoopsDB->queryF($sql) || die ("MySQL-Error: " . mysql_error());
 }

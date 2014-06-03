@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_subscr
+ */
 class xnewsletter_subscr extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -51,6 +58,11 @@ class xnewsletter_subscr extends XoopsObject
     $this->initVar("subscr_actoptions", XOBJ_DTYPE_TXTBOX, null, false,  500);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getSearchForm($action = false)
     {
         global $xoopsDB;
@@ -83,6 +95,11 @@ class xnewsletter_subscr extends XoopsObject
     //**********************************************************************************************
     //    form for user area    *******************************************************************
     //**********************************************************************************************
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false)
     {
         global $xoopsDB, $xoopsModule, $xoopsUser;
@@ -144,7 +161,7 @@ class xnewsletter_subscr extends XoopsObject
             $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $xoopsModule->mid());
             if ( $show == 0 ) $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $my_group_ids, $xoopsModule->mid());
             if ($show==1) {
-                $count_cats_avail ++;
+                ++$count_cats_avail;
                 $cat_name = $cat_arr[$i]->getVar("cat_name");
                 //get subscription of current cat and current user
                 $catsubscr = 0;
@@ -162,7 +179,7 @@ class xnewsletter_subscr extends XoopsObject
 
                 if ($catsubscr_quited > 0) {
                     $dat_catsubscr_quited = formatTimeStamp($catsubscr_quited, "M");
-                    $cat_name .= "<div style='padding-left:20px;padding-top:0px;padding-bottom:0px'>";
+                    $cat_name .= "<div style='padding-left:20px;padding-top:0;padding-bottom:0'>";
                     $cat_name .= str_replace("%q", $dat_catsubscr_quited, _MA_XNEWSLETTER_SUBSCRIPTION_QUITED_DETAIL);
                     $cat_name .= "</div>";
                 } else {
@@ -195,6 +212,11 @@ class xnewsletter_subscr extends XoopsObject
     //**********************************************************************************************
     //   form for admin aerea    *******************************************************************
     //**********************************************************************************************
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getFormAdmin($action = false)
     {
         global $xoopsDB;
@@ -246,6 +268,9 @@ class xnewsletter_subscr extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_subscrHandler
+ */
 class xNewsletterxnewsletter_subscrHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -259,7 +284,7 @@ class xNewsletterxnewsletter_subscrHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_subscr", "xnewsletter_subscr", "subscr_id", "subscr_email");
+        parent::__construct($db, "xnewsletter_subscr", "xnewsletter_subscr", "subscr_id", "subscr_email");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

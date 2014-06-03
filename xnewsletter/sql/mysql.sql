@@ -1,7 +1,7 @@
 #
-# Table structure for table `mod_xnewsletter_accounts` 19
+# Table structure for table `xnewsletter_accounts` 19
 #
-CREATE TABLE  `mod_xnewsletter_accounts` (
+CREATE TABLE  `xnewsletter_accounts` (
     `accounts_id` int (8)   NOT NULL  auto_increment,
     `accounts_type` int (8)   NOT NULL default '0',
     `accounts_name` varchar (100)   NOT NULL default ' ',
@@ -30,9 +30,9 @@ CREATE TABLE  `mod_xnewsletter_accounts` (
 
 
 #
-# Table structure for table `mod_xnewsletter_cat` 7
+# Table structure for table `xnewsletter_cat` 7
 #
-CREATE TABLE  `mod_xnewsletter_cat` (
+CREATE TABLE  `xnewsletter_cat` (
     `cat_id` int (8)   NOT NULL  auto_increment,
     `cat_name` varchar (100)   NOT NULL default ' ',
     `cat_info` text,
@@ -45,9 +45,9 @@ CREATE TABLE  `mod_xnewsletter_cat` (
 
 
 #
-# Table structure for table `mod_xnewsletter_subscr` 10
+# Table structure for table `xnewsletter_subscr` 10
 #
-CREATE TABLE  `mod_xnewsletter_subscr` (
+CREATE TABLE  `xnewsletter_subscr` (
     `subscr_id` int (8)   NOT NULL  auto_increment,
     `subscr_email` varchar (100)   NOT NULL default ' ',
     `subscr_firstname` varchar (100)   NOT NULL default ' ',
@@ -67,9 +67,9 @@ CREATE TABLE  `mod_xnewsletter_subscr` (
 
 
 #
-# Table structure for table `mod_xnewsletter_catsubscr` 6
+# Table structure for table `xnewsletter_catsubscr` 6
 #
-CREATE TABLE  `mod_xnewsletter_catsubscr` (
+CREATE TABLE  `xnewsletter_catsubscr` (
     `catsubscr_id` int (8)   NOT NULL  auto_increment,
     `catsubscr_catid` int (8)   NOT NULL default '0',
     `catsubscr_subscrid` int (8)   NOT NULL default '0',
@@ -84,9 +84,9 @@ CREATE TABLE  `mod_xnewsletter_catsubscr` (
 
 
 #
-# Table structure for table `mod_xnewsletter_letter` 9
+# Table structure for table `xnewsletter_letter` 9
 #
-CREATE TABLE  `mod_xnewsletter_letter` (
+CREATE TABLE  `xnewsletter_letter` (
     `letter_id` int (8)   NOT NULL  auto_increment,
     `letter_title` varchar (100)   NOT NULL default ' ',
     `letter_content` text   NOT NULL ,
@@ -102,9 +102,9 @@ CREATE TABLE  `mod_xnewsletter_letter` (
 
 
 #
-# Table structure for table `mod_xnewsletter_protocol` 7
+# Table structure for table `xnewsletter_protocol` 7
 #
-CREATE TABLE  `mod_xnewsletter_protocol` (
+CREATE TABLE  `xnewsletter_protocol` (
     `protocol_id` int (8)   NOT NULL  auto_increment,
     `protocol_letter_id` int (8)   NOT NULL default '0',
     `protocol_subscriber_id` int (8)   NOT NULL default '0',
@@ -119,9 +119,9 @@ CREATE TABLE  `mod_xnewsletter_protocol` (
 
 
 #
-# Table structure for table `mod_xnewsletter_attachment` 6
+# Table structure for table `xnewsletter_attachment` 6
 #
-CREATE TABLE  `mod_xnewsletter_attachment` (
+CREATE TABLE  `xnewsletter_attachment` (
     `attachment_id` int (8)   NOT NULL  auto_increment,
     `attachment_letter_id` int (8)   NOT NULL default '0',
     `attachment_name` varchar (200)   NULL default ' ',
@@ -135,9 +135,9 @@ CREATE TABLE  `mod_xnewsletter_attachment` (
 
 
 #
-# Table structure for table `mod_xnewsletter_mailinglist` 8
+# Table structure for table `xnewsletter_mailinglist` 8
 #
-CREATE TABLE  `mod_xnewsletter_mailinglist` (
+CREATE TABLE  `xnewsletter_mailinglist` (
     `mailinglist_id` int (8)   NOT NULL  auto_increment,
     `mailinglist_name` varchar (100)   NOT NULL default ' ',
     `mailinglist_email` varchar (100)   NOT NULL default ' ',
@@ -152,9 +152,9 @@ CREATE TABLE  `mod_xnewsletter_mailinglist` (
 
 
 #
-# Table structure for table `mod_xnewsletter_bmh` 12
+# Table structure for table `xnewsletter_bmh` 12
 #
-CREATE TABLE  `mod_xnewsletter_bmh` (
+CREATE TABLE  `xnewsletter_bmh` (
     `bmh_id` int (8)   NOT NULL  auto_increment,
     `bmh_accounts_id` int (8)   NOT NULL default '0',
     `bmh_rule_no` varchar ( 10)   NOT NULL default ' ',
@@ -172,9 +172,9 @@ CREATE TABLE  `mod_xnewsletter_bmh` (
 
 
 #
-# Table structure for table `mod_xnewsletter_import` 8
+# Table structure for table `xnewsletter_import` 8
 #
-CREATE TABLE `mod_xnewsletter_import` (
+CREATE TABLE `xnewsletter_import` (
     `import_id` int (8)   NOT NULL  auto_increment,
     `import_email` varchar (100)   NOT NULL default ' ',
     `import_firstname` varchar (100)   NULL default ' ',
@@ -192,9 +192,9 @@ CREATE TABLE `mod_xnewsletter_import` (
 
 
 #
-# Table structure for table `mod_xnewsletter_task` 6
+# Table structure for table `xnewsletter_task` 6
 #
-CREATE TABLE `mod_xnewsletter_task` (
+CREATE TABLE `xnewsletter_task` (
     `task_id` int(8) NOT NULL AUTO_INCREMENT,
     `task_letter_id` int(8) NOT NULL DEFAULT '0',
     `task_subscr_id` int(8) NOT NULL DEFAULT '0',

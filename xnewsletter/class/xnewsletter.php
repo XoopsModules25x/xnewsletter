@@ -18,7 +18,7 @@
  * @author          Xoops Development Team
  * @version         svn:$id$
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 class xNewsletterxNewsletter
 {
@@ -29,12 +29,20 @@ class xNewsletterxNewsletter
     var $debug;
     var $debugArray = array();
 
+    /**
+     * @param $debug
+     */
     protected function __construct($debug)
     {
         $this->debug = $debug;
         $this->dirname =  basename(dirname(dirname(__FILE__)));
     }
 
+    /**
+     * @param bool $debug
+     *
+     * @return xNewsletterxNewsletter
+     */
     static function &getInstance($debug = false)
     {
         static $instance = false;
@@ -56,6 +64,11 @@ class xNewsletterxNewsletter
         return $this->module;
     }
 
+    /**
+     * @param null $name
+     *
+     * @return null
+     */
     function getConfig($name = null)
     {
         if ($this->config == null) {
@@ -76,6 +89,12 @@ class xNewsletterxNewsletter
         return $this->config[$name];
     }
 
+    /**
+     * @param null $name
+     * @param null $value
+     *
+     * @return mixed
+     */
     function setConfig($name = null, $value = null)
     {
         if ($this->config == null) {
@@ -87,6 +106,11 @@ class xNewsletterxNewsletter
         return $this->config[$name];
     }
 
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
     function &getHandler($name)
     {
         if (!isset($this->handler[$name . '_handler'])) {
@@ -116,12 +140,18 @@ class xNewsletterxNewsletter
         $this->config = $hModConfig->getConfigsByCat(0, $this->getModule()->getVar('mid'));
     }
 
+    /**
+     * @param $name
+     */
     function initHandler($name)
     {
         $this->addLog('INIT ' . $name . ' HANDLER');
         $this->handler[$name . '_handler'] = xoops_getModuleHandler($name, $this->dirname);
     }
 
+    /**
+     * @param $log
+     */
     function addLog($log)
     {
         if ($this->debug) {

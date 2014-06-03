@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_catsubscr
+ */
 class xnewsletter_catsubscr extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -45,6 +52,11 @@ class xnewsletter_catsubscr extends XoopsObject
         $this->initVar("catsubscr_created", XOBJ_DTYPE_INT, null, false, 10);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false)
     {
         global $xoopsDB;
@@ -100,6 +112,9 @@ class xnewsletter_catsubscr extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_catsubscrHandler
+ */
 class xNewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -113,7 +128,7 @@ class xNewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHand
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_catsubscr", "xnewsletter_catsubscr", "catsubscr_id", "catsubscr_catid");
+        parent::__construct($db, "xnewsletter_catsubscr", "xnewsletter_catsubscr", "catsubscr_id", "catsubscr_catid");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

@@ -52,6 +52,9 @@ define('VERBOSE_SIMPLE', 1); // means only output simple report
 define('VERBOSE_REPORT', 2); // means output a detail report
 define('VERBOSE_DEBUG',  3); // means output detail report as well as debug info.
 
+/**
+ * Class BounceMailHandler
+ */
 class BounceMailHandler {
 
   /////////////////////////////////////////////////
@@ -252,11 +255,12 @@ class BounceMailHandler {
   // METHODS
   /////////////////////////////////////////////////
 
-  /**
-   * Output additional msg for debug
-   * @param string $msg,  if not given, output the last error msg
-   * @param string $verbose_level,  the output level of this message
-   */
+    /**
+     * Output additional msg for debug
+     *
+     * @param bool|string $msg           ,  if not given, output the last error msg
+     * @param int|string  $verbose_level ,  the output level of this message
+     */
   function output($msg=false,$verbose_level=VERBOSE_SIMPLE) {
     if ($this->verbose >= $verbose_level) {
       if (empty($msg)) {
@@ -327,11 +331,11 @@ class BounceMailHandler {
     }
   }
 
-  /**
-   * Process the messages in a mailbox
-   * @param string $max       (maximum limit messages processed in one batch, if not given uses the property $max_messages
-   * @return boolean
-   */
+    /**
+     * Process the messages in a mailbox
+     * @param bool|string $max (maximum limit messages processed in one batch, if not given uses the property $max_messages
+     * @return boolean
+     */
   function processMailbox($max=false) {
     if ( empty($this->action_function) || !function_exists($this->action_function) ) {
       $this->error_msg = 'Action function not found!';
@@ -375,7 +379,7 @@ class BounceMailHandler {
         $this->output( 'Processed messages will be deleted from mailbox<br />' );
       }
     }
-    for ($x=1; $x <= $c_fetched; $x++) {
+    for ($x=1; $x <= $c_fetched; ++$x) {
       /*
       $this->output( $x . ":",VERBOSE_REPORT);
       if ($x % 10 == 0) {
@@ -420,34 +424,34 @@ class BounceMailHandler {
       $deleteFlag[$x] = false;
       $moveFlag[$x]   = false;
       if ($processed) {
-        $c_processed++;
+        ++$c_processed;
         if ( ($this->testmode === false) && ($this->disable_delete === false) ) {
           // delete the bounce if not in test mode and not in disable_delete mode
           @imap_delete($this->_mailbox_link,$x);
           $deleteFlag[$x] = true;
-          $c_deleted++;
+          ++$c_deleted;
         } elseif ($this->moveHard && $this->moveHardFlag) {
           // check if the move directory exists, if not create it
           $this->mailbox_exist($this->hardMailbox);
           // move the message
           @imap_mail_move($this->_mailbox_link, $x, $this->hardMailbox);
           $moveFlag[$x] = true;
-          $c_moved++;
+          ++$c_moved;
         } elseif ($this->moveSoft && $this->moveSoftFlag) {
           // check if the move directory exists, if not create it
           $this->mailbox_exist($this->softMailbox);
           // move the message
           @imap_mail_move($this->_mailbox_link, $x, $this->softMailbox);
           $moveFlag[$x] = true;
-          $c_moved++;
+          ++$c_moved;
         }
       } else { // not processed
-        $c_unprocessed++;
+        ++$c_unprocessed;
         if (!$this->testmode && !$this->disable_delete && $this->purge_unprocessed) {
           // delete this bounce if not in test mode, not in disable_delete mode, and the flag BOUNCE_PURGE_UNPROCESSED is set
           @imap_delete($this->_mailbox_link,$x);
           $deleteFlag[$x] = true;
-          $c_deleted++;
+          ++$c_deleted;
         }
       }
       flush();
@@ -585,6 +589,7 @@ class BounceMailHandler {
         return call_user_func_array($this->action_function,$params);
       }
     }
+    return null;
   }
 
   /**
@@ -632,12 +637,12 @@ class BounceMailHandler {
     }
   }
 
-  /**
-   * Function to delete messages in a mailbox, based on date
-   * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
-   * @param string  $mailbox        (the mailbox name)
-   * @return boolean
-   */
+    /**
+     * Function to delete messages in a mailbox, based on date
+     * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
+     * @internal param string $mailbox (the mailbox name)
+     * @return boolean
+     */
   function globalDelete() {
     $dateArr = explode('-', $this->deleteMsgDate); // date format is yyyy-mm-dd
     $delDate = mktime(0, 0, 0, $dateArr[1], $dateArr[2], $dateArr[0]);
@@ -663,7 +668,7 @@ class BounceMailHandler {
             if ($header->udate < $delDate) {
               imap_delete($mboxd, $message);
             }
-            $i++;
+            ++$i;
           }
           imap_expunge($mboxd);
           imap_close($mboxd);

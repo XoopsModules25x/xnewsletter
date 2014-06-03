@@ -25,9 +25,14 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
+/**
+ * @param $options
+ *
+ * @return array
+ */
 function b_xnewsletter_subscrinfo($options) {
     xoops_loadLanguage('modinfo', 'xNewsletter');
     $unique_id = uniqid(mt_rand());

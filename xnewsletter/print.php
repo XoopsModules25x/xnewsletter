@@ -91,6 +91,9 @@ xNewsletter_printPage($content);
 //******************************************************************
 //*********************** Printfunktion ****************************
 //******************************************************************
+/**
+ * @param $content
+ */
 function xNewsletter_printPage($content) {
     global $xoopsConfig, $xoopsModule, $xoops_meta_keywords, $xoops_meta_description;
     $myts =& MyTextSanitizer::getInstance();
@@ -261,6 +264,6 @@ function xNewsletter_printPage($content) {
 <?php
     echo $content;
     echo '</div>\n';
-    echo '</body>\n'
+    echo '</body>\n';
     echo '</html>\n';
 }

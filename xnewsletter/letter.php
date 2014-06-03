@@ -22,7 +22,7 @@
  *  @package    xNewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: letter.php 12491 2014-04-25 13:21:55Z beckmi $
+ *  Version : $Id: letter.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
@@ -124,11 +124,11 @@ switch ($op) {
             if ($permissionShowCats[$cat_id] == true) {
                 $counter = 1;
                 $sql ="SELECT `subscr_sex`, `subscr_lastname`, `subscr_firstname`, `subscr_email`, `subscr_id`";
-                $sql.= " FROM {$xoopsDB->prefix("mod_xnewsletter_subscr")} INNER JOIN {$xoopsDB->prefix("mod_xnewsletter_catsubscr")} ON `subscr_id` = `catsubscr_subscrid`";
+                $sql.= " FROM {$xoopsDB->prefix("xnewsletter_subscr")} INNER JOIN {$xoopsDB->prefix("xnewsletter_catsubscr")} ON `subscr_id` = `catsubscr_subscrid`";
                 $sql.= " WHERE (((`catsubscr_catid`)={$cat_id}) AND ((`catsubscr_quited`)=0)) ORDER BY `subscr_lastname`, `subscr_email`;";
-                $subscrs = $xoopsDB->query($sql) or die ("MySQL-Error: " . mysql_error());
+                $subscrs = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
                 while ($subscr_array = mysql_fetch_assoc($subscrs)) {
-                    $subscr_array['counter'] = $counter++;
+                    $subscr_array['counter'] = ++$counter;
                     $xoopsTpl->append('subscrs', $subscr_array);
                 }
             }
@@ -299,7 +299,7 @@ break;
                     foreach ($cat_ids as $cat_id) {
                         $catObj = $xnewsletter->getHandler('xNewsletter_cat')->get($cat_id);
                         if ($gperm_handler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
-                            $catsAvailableCount++;
+                            ++$catsAvailableCount;
                             $letter_array['letter_cats'][] = $catObj->toArray();
                         }
                         unset($catObj);
@@ -465,7 +465,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
                 copy($indexFile, $uploaddir . "index.html");
             }
             $uploader = new XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
-            for ($upl = 0 ;$upl < 5; $upl++) {
+            for ($upl = 0 ;$upl < 5; ++$upl) {
                 if ($uploader->fetchMedia($_POST['xoops_upload_file'][$upl])) {
                     //$uploader->setPrefix("xn_") ; keep original name
                     $uploader->fetchMedia($_POST['xoops_upload_file'][$upl]);
@@ -576,9 +576,9 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
 
             if ($xnewsletter->getHandler('xNewsletter_letter')->delete($obj_letter)) {
                 // delete protocol
-                $sql = "DELETE FROM `{$xoopsDB->prefix("mod_xnewsletter_protocol")}`";
+                $sql = "DELETE FROM `{$xoopsDB->prefix("xnewsletter_protocol")}`";
                 $sql.= " WHERE `protocol_letter_id`={$letter_id}";
-                $result = $xoopsDB->query($sql) or die("MySQL-Error: " . mysql_error());
+                $result = $xoopsDB->query($sql) || die("MySQL-Error: " . mysql_error());
 
                 // delete attachments
                 $crit_att = new CriteriaCompo();

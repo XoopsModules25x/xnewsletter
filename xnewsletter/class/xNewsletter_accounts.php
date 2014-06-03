@@ -26,13 +26,20 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_accounts
+ */
 class xnewsletter_accounts extends XoopsObject
 {
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -61,6 +68,11 @@ class xnewsletter_accounts extends XoopsObject
         $this->initVar("accounts_created", XOBJ_DTYPE_INT, null, false, 10);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false)
     {
         global $xoopsDB, $xoopsModule;
@@ -78,7 +90,7 @@ class xnewsletter_accounts extends XoopsObject
         $default = $this->getVar("accounts_type");
 
         switch ($default) {
-            case _AM_ACCOUNTS_TYPE_VAL_PHP_MAIL:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL:
             default:
                 $dis_accounts_userpass      = "1";
                 $dis_accounts_server_in     = "1";
@@ -86,22 +98,22 @@ class xnewsletter_accounts extends XoopsObject
                 $dis_accounts_use_bmh       = "1";
                 $dis_accounts_button_check  = "1";
                 break;
-            case _AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL:
                 $dis_accounts_userpass      = "0";
                 $dis_accounts_server_in     = "1";
                 $dis_accounts_server_out    = "0";
                 $dis_accounts_use_bmh       = "1";
                 $dis_accounts_button_check  = "1";
                 break;
-            case _AM_ACCOUNTS_TYPE_VAL_POP3:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3:
                 $dis_accounts_userpass      = "0";
                 $dis_accounts_server_in     = "0";
                 $dis_accounts_server_out    = "0";
                 $dis_accounts_use_bmh       = "1";
                 $dis_accounts_button_check  = "0";
                 break;
-            case _AM_ACCOUNTS_TYPE_VAL_SMTP:
-            case _AM_ACCOUNTS_TYPE_VAL_GMAIL:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP:
+            case _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL:
                 $dis_accounts_userpass      = "0";
                 $dis_accounts_server_in     = "0";
                 $dis_accounts_server_out    = "0";
@@ -112,11 +124,11 @@ class xnewsletter_accounts extends XoopsObject
 
         $accstd_select = new XoopsFormSelect(_AM_XNEWSLETTER_ACCOUNTS_TYPE, "accounts_type", $this->getVar("accounts_type"));
         $accstd_select->setextra('onchange="document.forms.' . $xoopsModule->getVar('dirname') . '_form.submit()"');
-        $accstd_select->addOption(_AM_ACCOUNTS_TYPE_VAL_PHP_MAIL, _AM_ACCOUNTS_TYPE_PHPMAIL);
-        $accstd_select->addOption(_AM_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL, _AM_ACCOUNTS_TYPE_PHPSENDMAIL);
-        $accstd_select->addOption(_AM_ACCOUNTS_TYPE_VAL_POP3, _AM_ACCOUNTS_TYPE_POP3);
-        $accstd_select->addOption(_AM_ACCOUNTS_TYPE_VAL_SMTP, _AM_ACCOUNTS_TYPE_SMTP);
-        $accstd_select->addOption(_AM_ACCOUNTS_TYPE_VAL_GMAIL, _AM_ACCOUNTS_TYPE_GMAIL);
+        $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL);
+        $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL);
+        $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3, _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3);
+        $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP, _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP);
+        $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL);
         $form->addElement($accstd_select, true);
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_NAME, "accounts_name", 50, 255, $this->getVar("accounts_name")), true);
@@ -203,6 +215,9 @@ class xnewsletter_accounts extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_accountsHandler
+ */
 class xNewsletterxnewsletter_accountsHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -216,7 +231,7 @@ class xNewsletterxnewsletter_accountsHandler extends XoopsPersistableObjectHandl
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_accounts", "xnewsletter_accounts", "accounts_id", "accounts_name");
+        parent::__construct($db, "xnewsletter_accounts", "xnewsletter_accounts", "accounts_id", "accounts_name");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

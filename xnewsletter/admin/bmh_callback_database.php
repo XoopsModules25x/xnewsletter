@@ -20,6 +20,19 @@
 
 require_once "admin_header.php";
 
+/**
+ * @param      $msgnum
+ * @param      $bounce_type
+ * @param      $email
+ * @param      $subject
+ * @param      $xheader
+ * @param      $remove
+ * @param bool $rule_no
+ * @param bool $rule_cat
+ * @param int  $totalFetched
+ *
+ * @return bool
+ */
 function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no = false, $rule_cat = false, $totalFetched = 0) {
     global $xoopsUser;
     $xnewsletter = xNewsletterxNewsletter::getInstance();

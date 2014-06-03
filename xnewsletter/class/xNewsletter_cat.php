@@ -26,8 +26,12 @@
  * ****************************************************************************
  */
 
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+/**
+ * Class xnewsletter_cat
+ */
 class xnewsletter_cat extends XoopsObject
 {
     /**
@@ -37,6 +41,9 @@ class xnewsletter_cat extends XoopsObject
     public $xnewsletter = null;
 
     //Constructor
+    /**
+     *
+     */
     public function __construct()
     {
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
@@ -49,6 +56,11 @@ class xnewsletter_cat extends XoopsObject
         $this->initVar("cat_created", XOBJ_DTYPE_INT, null, false, 10);
     }
 
+    /**
+     * @param bool $action
+     *
+     * @return XoopsThemeForm
+     */
     public function getForm($action = false)
     {
         global $xoopsDB, $xoopsModule;
@@ -177,6 +189,9 @@ class xnewsletter_cat extends XoopsObject
     }
 }
 
+/**
+ * Class xNewsletterxnewsletter_catHandler
+ */
 class xNewsletterxnewsletter_catHandler extends XoopsPersistableObjectHandler
 {
     /**
@@ -190,7 +205,7 @@ class xNewsletterxnewsletter_catHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "mod_xnewsletter_cat", "xnewsletter_cat", "cat_id", "cat_name");
+        parent::__construct($db, "xnewsletter_cat", "xnewsletter_cat", "cat_id", "cat_name");
         $this->xnewsletter = xNewsletterxNewsletter::getInstance();
     }
 }

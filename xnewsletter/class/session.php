@@ -19,10 +19,13 @@
  * @author          Harry Fuecks (PHP Anthology Volume II)
  * @version         svn:$id$
  */
-defined("XOOPS_ROOT_PATH") or die("XOOPS root path not defined");
+// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
+/**
+ * Class xNewsletterSession
+ */
 class xNewsletterSession
 {
     /**
@@ -92,6 +95,9 @@ class xNewsletterSession
         session_destroy();
     }
 
+    /**
+     * @return xNewsletterSession
+     */
     public static function &getInstance()
     {
         static $_sess;
