@@ -17,10 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
@@ -77,15 +78,18 @@ class xnewsletter_cat extends XoopsObject
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_CAT_NAME, "cat_name", 50, 255, $this->getVar("cat_name",'e')), true);
-        $form->addElement(new XoopsFormDhtmlTextArea(_AM_XNEWSLETTER_CAT_INFO, "cat_info", $this->getVar("cat_info",'e')), false);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_CAT_NAME, "cat_name", 50, 255, $this->getVar("cat_name", 'e')), true);
+        $form->addElement(new XoopsFormDhtmlTextArea(_AM_XNEWSLETTER_CAT_INFO, "cat_info", $this->getVar("cat_info", 'e')), false);
 
-        $member_handler = &xoops_gethandler('member');
-        $userGroups = $member_handler->getGroupList();
+        $member_handler = & xoops_gethandler('member');
+        $userGroups     = $member_handler->getGroupList();
 
         // create admin checkbox
         foreach ($userGroups as $group_id => $group_name) {
-            if ($group_id == XOOPS_GROUP_ADMIN) {$group_id_admin = $group_id; $group_name_admin = $group_name;}
+            if ($group_id == XOOPS_GROUP_ADMIN) {
+                $group_id_admin   = $group_id;
+                $group_name_admin = $group_name;
+            }
         }
         $select_perm_admin = new XoopsFormCheckBox("", "admin", XOOPS_GROUP_ADMIN);
         $select_perm_admin->addOption($group_id_admin, $group_name_admin);
@@ -93,16 +97,18 @@ class xnewsletter_cat extends XoopsObject
 
         // ********************************************************
         // permission read cat
-        $cat_gperms_read = & $gperm_handler->getGroupIds('newsletter_read_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_read     = & $gperm_handler->getGroupIds('newsletter_read_cat', $this->getVar("cat_id"), $xoopsModule->mid());
         $arr_cat_gperms_read = $this->isNew() ? "0" : $cat_gperms_read;
 
-        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ,'');
+        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
         $select_perm = new XoopsFormCheckBox("", "cat_gperms_read", $arr_cat_gperms_read);
         foreach ($userGroups as $group_id => $group_name) {
-            if ($group_id != XOOPS_GROUP_ADMIN) $select_perm->addOption($group_id, $group_name);
+            if ($group_id != XOOPS_GROUP_ADMIN) {
+                $select_perm->addOption($group_id, $group_name);
+            }
         }
         $perms_tray->addElement($select_perm, false);
         $form->addElement($perms_tray, false);
@@ -111,16 +117,18 @@ class xnewsletter_cat extends XoopsObject
 
         // ********************************************************
         // permission create cat
-        $cat_gperms_create =& $gperm_handler->getGroupIds('newsletter_create_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_create     =& $gperm_handler->getGroupIds('newsletter_create_cat', $this->getVar("cat_id"), $xoopsModule->mid());
         $arr_cat_gperms_create = $this->isNew() ? "0" : $cat_gperms_create;
 
-        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE._AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC,'');
+        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE . _AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
         $select_perm = new XoopsFormCheckBox("", "cat_gperms_create", $arr_cat_gperms_create);
         foreach ($userGroups as $group_id => $group_name) {
-            if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) $select_perm->addOption($group_id, $group_name);
+            if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) {
+                $select_perm->addOption($group_id, $group_name);
+            }
         }
         $perms_tray->addElement($select_perm, false);
         $form->addElement($perms_tray, false);
@@ -129,17 +137,19 @@ class xnewsletter_cat extends XoopsObject
 
         // ********************************************************
         // permission admin cat
-        $cat_gperms_admin =& $gperm_handler->getGroupIds('newsletter_admin_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_admin     =& $gperm_handler->getGroupIds('newsletter_admin_cat', $this->getVar("cat_id"), $xoopsModule->mid());
         $arr_cat_gperms_admin = $this->isNew() ? "0" : $cat_gperms_admin;
 
-        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN._AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC,'');
+        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
         $select_perm = new XoopsFormCheckBox("", "cat_gperms_admin", $arr_cat_gperms_admin);
-            foreach ($userGroups as $group_id => $group_name) {
-                if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) $select_perm->addOption($group_id, $group_name);
+        foreach ($userGroups as $group_id => $group_name) {
+            if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) {
+                $select_perm->addOption($group_id, $group_name);
             }
+        }
         $perms_tray->addElement($select_perm, false);
         $form->addElement($perms_tray, false);
         unset($perms_tray);
@@ -147,23 +157,25 @@ class xnewsletter_cat extends XoopsObject
 
         // ********************************************************
         // permission list subscriber of this cat
-        $cat_gperms_list =& $gperm_handler->getGroupIds('newsletter_list_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_list      =& $gperm_handler->getGroupIds('newsletter_list_cat', $this->getVar("cat_id"), $xoopsModule->mid());
         $arr_cat_gperms_admin = $this->isNew() ? "0" : $cat_gperms_list;
 
-        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST,'');
+        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
         $select_perm = new XoopsFormCheckBox("", "cat_gperms_list", $arr_cat_gperms_admin);
         foreach ($userGroups as $group_id => $group_name) {
-            if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) $select_perm->addOption($group_id, $group_name);
+            if ($group_id != XOOPS_GROUP_ADMIN && $group_id != XOOPS_GROUP_ANONYMOUS) {
+                $select_perm->addOption($group_id, $group_name);
+            }
         }
         $perms_tray->addElement($select_perm, false);
         $form->addElement($perms_tray, false);
         unset($perms_tray);
         unset($select_perm);
 
-        $cat_mailinglist = $this->isNew() ? "0" : $this->getVar("cat_mailinglist");
+        $cat_mailinglist  = $this->isNew() ? "0" : $this->getVar("cat_mailinglist");
         $crit_mailinglist = new CriteriaCompo();
         $crit_mailinglist->setSort("mailinglist_id");
         $crit_mailinglist->setOrder("ASC");
