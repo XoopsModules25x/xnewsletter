@@ -1,0 +1,58 @@
+Version 1.3     NOT RELEASED
+-------------------------------
+ - added possibility to store/use letter templates to/from database (luciorota)
+ - standardize code (mamba,luciorota)
+ - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
+ - templatize user side (luciorota)
+ - standardize code (luciorota)
+ - added html2txt function for non-HTML mail clients (luciorota)
+ - added: breadcrumb class (luciorota)
+ - added: updating to XOOPS 2.5.7 Multi-page help (luciorota)
+ - fixed: when there is an apostrophe in the title, a backslash is obtained on reading the email (luciorota)
+ - moved /css and /images to /assets (mamba)
+ - renamed template extensions from .html to .tpl (mamba)
+ - reversed "mod_" prefix on tables (mamba)
+ - normalized prefixes for language constants to XNEWSLETTER (mamba)
+ - replaced $i++ with ++$i (mamba)
+
+Version 1.2
+--------------
+ - standardize code (luciorota)
+ - added newsletter info field is html compatible (luciorota)
+ - added new tag <{$title}> in letter templates (luciorota)
+ - added new block for general info (feichtl/goffy)
+ - removed xoops captcha when unsubscribe by link (feichtl/goffy)
+ - transfered error text to language file (feichtl/goffy)
+ - fixed bug when filter subscribers in admin/subscr.php (feichtl/goffy)
+ - french translation (pierredelu)
+ - corrected english language files (cesag)
+ - added plugin for import from module 'subscribers' (cesag/goffy)
+ - changed english language file from ansi to utf8 without bom, corrected translation errors (cesag/goffy)
+ - changed redirect_header from subscription.php to index.php after successful deleting a subscription (cesag/goffy)
+ - added plugin for module 'evennews' (tatane/goffy)
+ - added the possibility to show a list of subscriptions for each subscriber in admin/tab subscriber (goffy)
+ - added the possibility to clone a newsletter (luciorota)
+ - updated help file concerning import tool (goffy)
+ - changed query to queryF to solve problems while running imports (goffy)
+ - Fix error $xnewsletter->getHandler('xnewsletter_protocol') (alfred)
+ - added the possibility to search for subscriptions concerning an email, if the current user have the right to see/edit subscriptions of other persons (goffy)
+ - resize images to xoops standard 16x16 (mamba/goffy)
+ - fixed bug in showing tasklist, if email is deleted between creation of task and execution (goffy)
+ - fix sql-injection (alfred)
+ - Update Adminindex (alfred)
+ - fix userinput (alfred)
+
+Version 1.1
+--------------
+ - Add option to send newsletters in packages by using a cronjob (goffy)
+ - Rebuilt importtool based on temporary table (goffy)
+ - Changed table names to new xoops table scheme(table name starts with mod_) (goffy)
+ - Add Importtool for rmbulletin, xoopsuser, csv, weblinks, smartpartner (goffy)
+ - Fix images from xoops (goffy)
+ - Fix errors in languages(alfred)
+ - fix error none subscriber for send newsletter (goffy)
+ - fix error in blocks (goffy)
+
+Version 1.0
+--------------
+ - Original release xnewsletter (goffy,alfred)
