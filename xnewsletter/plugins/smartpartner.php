@@ -70,7 +70,7 @@ function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $l
     $sql = "SELECT `contact_email`, `contact_name`";
     $sql .= " FROM " . $xoopsDB->prefix("smartpartner_partner");
     $sql .= " WHERE (`contact_email` is not null and not(`contact_email`=''))";
-    $result_users = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
     while ($lineArray = mysql_fetch_array($result_users)) {
         ++$i;
         $email     = $lineArray[0];

@@ -37,8 +37,8 @@ function xoops_module_update_xnewsletter(&$module, $oldversion = null) {
     if ($oldversion < 104) {
         xoops_module_update_xnewsletter_104();
     }
-    if ($oldversion < 140) {
-        xoops_module_update_xnewsletter_140();
+    if ($oldversion < 130) {
+        xoops_module_update_xnewsletter_130();
     }
 
     return true;
@@ -47,7 +47,7 @@ function xoops_module_update_xnewsletter(&$module, $oldversion = null) {
 /**
  * @return bool
  */
-function xoops_module_update_xnewsletter_140() {
+function xoops_module_update_xnewsletter_130() {
     //reverse 'mod_' prefix on tables
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_accounts");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_attachment");
@@ -60,6 +60,29 @@ function xoops_module_update_xnewsletter_140() {
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_protocol");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_subscr");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_task");
+    return true;
+
+    //create 'xnewsletter_template' table
+    global $xoopsDB;
+    $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('xnewsletter_template') . "`");
+    $result = $xoopsDB->queryF($sql);
+    if (!$result)
+        echo '<br />' . _AM_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'xnewsletter_template'";
+
+    $sql = sprintf(
+        "CREATE TABLE `" . $xoopsDB->prefix('xnewsletter_template') . "` (
+        `template_id` int (8)   NOT NULL  auto_increment,
+        `template_title` varchar (100)   NOT NULL default '',
+        `template_description` text   NOT NULL default '',
+        `template_content` text   NOT NULL default '',
+        `template_submitter` int (8)   NOT NULL default '0',
+        `template_created` int (8)   NOT NULL default '0',
+        PRIMARY KEY (`template_id`)
+        ) ENGINE=MyISAM;"
+        );
+    $result = $xoopsDB->queryF($sql);
+    if (!$result)
+        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": CREATE TABLE 'xnewsletter_template'";
     return true;
 }
 

@@ -372,3 +372,50 @@ define('_AM_XNEWSLETTER_SUBSCR_NO_CATSUBSCR',"For this email address, no subscri
 //version 1.2
 define('_AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN',"Error: required file 'plugins/%p.php' not found!");
 define('_AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION',"Error: required function 'xnewsletter_plugin_getdata_%f' doesn't exist!");
+//version 1.3
+//General
+define('_AM_XNEWSLETTER_LETTER_CONTENT_DESC','Html format');
+//
+define('_AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW','Mr.');
+define('_AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW','John');
+define('_AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW','Doe');
+define('_AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW','username@example.com');
+//
+define('_AM_XNEWSLETTER_TEMPLATE_ADD',"Add a template");
+define('_AM_XNEWSLETTER_TEMPLATE_EDIT',"Edit a template");
+define('_AM_XNEWSLETTER_TEMPLATE_DELETE',"Delete a template");
+define('_AM_XNEWSLETTER_TEMPLATE_ID',"Id");
+define('_AM_XNEWSLETTER_TEMPLATE_TITLE',"Title");
+define('_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION',"Description");
+define('_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC','');
+define('_AM_XNEWSLETTER_TEMPLATE_CONTENT',"Content");
+define('_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC','
+    Html format
+    <br />
+    This module uses the Xoops <a href="http://www.smarty.net/">Smarty template engine</a> to render the email letter.
+    <br /><br />
+    Available smarty-vars are:
+    <ul>
+    <li>&lt;{$salutation}&gt; or &lt;{$sex}&gt;: the subscriber Salutation field</li>
+    <li>&lt;{$firstname}&gt;: the subscriber First name field</li>
+    <li>&lt;{$lastname}&gt;: the subscriber Last name field</li>
+    <li>&lt;{$email}&gt; or &lt;{$subscr_email}&gt;: the subscriber Email field</li>
+    </ul>
+    <ul>
+    <li>&lt;{$title}&gt;: the newsletter Title field</li>
+    <li>&lt;{$content}&gt;: the newsletter Content field</li>
+    </ul>
+    <ul>
+    <li>&lt;{$date}&gt;: the sending date as timestamp integer <br /><span style="font-size:0.9em">(e.g.: &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as 2001/01/04)</span></li>
+    <li>&lt;{$unsubscribe_url}&gt;: the unsubscribe url</li>
+    </ul>
+    <ul>
+    <li>&lt;{$xoops_url}&gt;: the site main url (e.g. http://localhost/)</li>
+    <li>&lt;{$xoops_langcode}&gt;: the site langcode (e.g. en)</li>
+    <li>&lt;{$xoops_charset}&gt;: the site cherset (e.g. UTF-8)</li>
+    </ul>');
+define('_AM_XNEWSLETTER_TEMPLATE_SUBMITTER',"Submitter");
+define('_AM_XNEWSLETTER_TEMPLATE_CREATED',"Created");
+//Buttons
+define('_AM_XNEWSLETTER_NEWTEMPLATE',"Add New Template");
+define('_AM_XNEWSLETTER_TEMPLATELIST',"List Template");

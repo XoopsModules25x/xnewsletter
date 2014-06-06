@@ -204,3 +204,18 @@ CREATE TABLE `xnewsletter_task` (
     PRIMARY KEY (`task_id`),
     KEY `idx_task_starttime` (`task_starttime`)
 ) ENGINE=MyISAM;
+
+
+
+#
+# Table structure for table `xnewsletter_template` 5
+#
+CREATE TABLE  `xnewsletter_template` (
+    `template_id` int (8)   NOT NULL  auto_increment,
+    `template_title` varchar (100)   NOT NULL default '',
+    `template_description` text   NOT NULL default '',
+    `template_content` text   NOT NULL default '',
+    `template_submitter` int (8)   NOT NULL default '0',
+    `template_created` int (8)   NOT NULL default '0',
+    PRIMARY KEY (`template_id`)
+    ) ENGINE=MyISAM;

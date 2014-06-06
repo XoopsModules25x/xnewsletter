@@ -93,3 +93,8 @@ define('_MI_XNEWSLETTER_WELCOME_MESSAGE_DESC',"Html format");
 define('_MI_XNEWSLETTER_WELCOME',"<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.");
 define('_MI_XNEWSLETTER_DATEFORMAT', "Timestamp");
 define('_MI_XNEWSLETTER_DATEFORMATDSC', "Default Timestamp for module front end. <br />More info here: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
+//
+define('_MI_XNEWSLETTER_ADMENU_TEMPLATES',"Templates");
+define('_MI_XNEWSLETTER_EDITOR_DESC',"");
+define('_MI_XNEWSLETTER_TEMPLATE_EDITOR',"Templates editor");
+define('_MI_XNEWSLETTER_TEMPLATE_EDITOR_DESC',"");

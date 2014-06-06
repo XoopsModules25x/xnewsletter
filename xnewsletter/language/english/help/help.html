@@ -98,8 +98,35 @@
     <h5 class="odd">Newsletter templates</h5>
     <p class="even">
     The newsletters are template based.<br />
-    The templates you can find in language/{yourlanguage}/templates.<br />
-    To create a new template you have only to make a new html-file in this folder and to put in the smarty-vars.<br />
+    The templates are stored as files in language/{yourlanguage}/templates or stored in database.<br />
+    To create a new template you can:
+    <ol>
+    <li>make a new template html-file in in language/{yourlanguage}/templates folder and to put in the smarty-vars;</li>
+    <li>from admin side create a new template item and to put in the smarty-vars.</li>
+    </ol>
+    <br />
+    This module uses the Xoops <a href="http://www.smarty.net/">Smarty template engine</a> to render the email letter.<br /><br />
+    Available smarty-vars are:
+    <ul>
+    <li>&lt;{$salutation}&gt; or &lt;{$sex}&gt;: the subscriber Salutation field</li>
+    <li>&lt;{$firstname}&gt;: the subscriber First name field</li>
+    <li>&lt;{$lastname}&gt;: the subscriber Last name field</li>
+    <li>&lt;{$email}&gt; or &lt;{$subscr_email}&gt;: the subscriber Email field</li>
+    </ul>
+    <ul>
+    <li>&lt;{$title}&gt;: the newsletter Title field</li>
+    <li>&lt;{$content}&gt;: the newsletter Content field</li>
+    </ul>
+    <ul>
+    <li>&lt;{$date}&gt;: the sending date as timestamp integer <br /><span style="font-size:0.9em">(e.g.: &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as 2001/01/04)</span></li>
+    <li>&lt;{$unsubscribe_url}&gt;: the unsubscribe url</li>
+    </ul>
+    <ul>
+    <ul>
+    <li>&lt;{$xoops_url}&gt;: the site main url (e.g. http://localhost/)</li>
+    <li>&lt;{$xoops_langcode}&gt;: the site langcode (e.g. en)</li>
+    <li>&lt;{$xoops_charset}&gt;: the site cherset (e.g. UTF-8)</li>
+    </ul>
     <br /><br /></p>
 
     <h5 class="odd">Sending newsletter</h5>
