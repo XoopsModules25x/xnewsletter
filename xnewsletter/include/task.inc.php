@@ -79,7 +79,8 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
         $sql .= str_replace('|', ',', $letter_cats);
         $sql .= "))) GROUP BY subscr_id;";
 
-        $subscribers = $xoopsDB->query($sql) || die();
+        //if(!$subscribers = $xoopsDB->query($sql)) die();
+        $subscribers = $xoopsDB->query($sql) or die();
 
         while ($subscriber = $xoopsDB->fetchArray($subscribers)) {
             $subscr_id = $subscriber["subscr_id"];
@@ -213,12 +214,12 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         $letter_title 	= $letterObj->getVar('letter_title');
         $letter_content = $letterObj->getVar('letter_content', 'n');
 
-        $tpl = new XoopsTpl();
-        $tpl->assign('content', $letter_content);
-        $tpl->assign('title', $letter_title); // new from v1.3
-
-        // read template
-        $letter_template = $letterObj->getVar('letter_template');
+        $letterTpl = new XoopsTpl();
+        // letter data
+        $letterTpl->assign('content', $letter_content);
+        $letterTpl->assign('title', $letter_title); // new from v1.3
+        // extra data
+        $letterTpl->assign('date', time()); // new from v1.3
 
         // get emails of subscribers
         $recipients = array();
@@ -235,9 +236,9 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $recipients[] = array(
                     'task_id'           => $task_id,
                     'address'           => $letterObj->getVar('letter_email_test'),
-                    'firstname'         => 'John',
-                    'lastname'          => 'Doe',
-                    'subscr_sex'        => 'Mr.',
+                    'firstname'         => _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW,
+                    'lastname'          => _AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW,
+                    'subscr_sex'        => _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW,
                     'subscriber_id'     => '0',
                     'catsubscr_id'      => '0',
                     'subscriber_actkey' => 'Test'
@@ -332,17 +333,28 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
             foreach ($recipients as $recipient) {
                 $subscriber_id = $recipient['subscriber_id'];
-
-                $tpl->assign('sex', $recipient['subscr_sex']);
-                $tpl->assign('firstname', $recipient['firstname']);
-                $tpl->assign('lastname', $recipient['lastname']);
-                $tpl->assign('subscr_email', $recipient['address']);
+                // subscr data
+                $letterTpl->assign('sex', $recipient['subscr_sex']);
+                $letterTpl->assign('salutation', $recipient['subscr_sex']); // new from v1.3
+                $letterTpl->assign('firstname', $recipient['firstname']);
+                $letterTpl->assign('lastname', $recipient['lastname']);
+                $letterTpl->assign('subscr_email', $recipient['address']);
+                $letterTpl->assign('email', $recipient['address']); // new from v1.3
+                // extra data
                 $activationKey = base64_encode(XOOPS_URL . "||{$subscriber_id}||{$recipient['subscriber_actkey']}||{$recipient['address']}");
-                $tpl->assign('unsubscribe_link', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=unsub&email={$recipient['address']}&actkey={$activationKey}");
+                $letterTpl->assign('unsubscribe_link', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=unsub&email={$recipient['address']}&actkey={$activationKey}");
 
-                $htmlBody = $tpl->fetch($template_path . $letter_template . '.tpl');
-                //$textBody = _AM_XNEWSLETTER_LETTER_EMAIL_ALTBODY;
-                //$textBody = strip_tags($htmlBody . "\n" . $link);
+                preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+                if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('xnewsletter_template')->get((int)$matches[1]))) {
+                    // get template from database
+                    $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+                } else {
+                    // get template from filesystem
+                    $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+                    if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+                    $template = $template_path . $letterObj->getVar("letter_template") . ".tpl";
+                    $htmlBody = $letterTpl->fetch($template);
+                }
                 $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
 
                 $mail->AddAddress($recipient['address'], $recipient['firstname'] . " " . $recipient['lastname']);

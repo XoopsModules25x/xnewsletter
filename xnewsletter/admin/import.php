@@ -242,7 +242,7 @@ switch ($op) {
             $sql .= " WHERE ((import_status)=1)";
             $sql .= " ORDER BY `import_id` ASC";
             $counter = 0;
-            $users_import = $xoopsDB->queryF($sql) || die ("MySQL-Error: " . mysql_error());
+            if(!$users_import = $xoopsDB->queryF($sql)) die ("MySQL-Error: " . mysql_error());
             while ($user_import = mysql_fetch_assoc($users_import)) {
                 $import_id = $user_import["import_id"];
                 $subscr_email = $user_import["import_email"];
@@ -454,5 +454,5 @@ function createProtocol($prot_text, $success, $submitter) {
     $sql = "INSERT INTO `{$xoopsDB->prefix('xnewsletter_protocol')}`";
     $sql .= " (`protocol_letter_id`, `protocol_subscriber_id`, `protocol_status`, `protocol_success`, `protocol_submitter`, `protocol_created`)";
     $sql .= " VALUES (0,0,'{$prot_text}', {$success}, {$submitter}, " . time() . ")";
-    $xoopsDB->queryF($sql) || die ("MySQL-Error: " . mysql_error());
+    if(!$xoopsDB->queryF($sql)) die ("MySQL-Error: " . mysql_error());
 }

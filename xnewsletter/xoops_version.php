@@ -49,7 +49,7 @@ $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
 
 //About
 $modversion['module_status']       = "Alpha 1";
-$modversion['release_date']        = "2014/06/02";
+$modversion['release_date']        = "2014/06/06";
 //$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = "";
 $modversion['demo_site_name']      = "";
@@ -104,6 +104,7 @@ $modversion['tables'][8] = "xnewsletter_mailinglist";
 $modversion['tables'][9] = "xnewsletter_bmh";
 $modversion['tables'][10] = "xnewsletter_import";
 $modversion['tables'][11] = "xnewsletter_task";
+$modversion['tables'][12] = "xnewsletter_template";
 
 // Scripts to run upon installation or update
 $modversion['onInstall'] = "include/install.php";
@@ -219,7 +220,14 @@ $modversion['config'][$i]['formtype']       = "select";
 $modversion['config'][$i]['valuetype']      = "text";
 $modversion['config'][$i]['default']        = "dhtmltextarea";
 $modversion['config'][$i]['options']        = XoopsLists::getEditorList();
-$modversion['config'][$i]['category']       = "global";
+++$i;
+$modversion['config'][$i]['name']           = "template_editor";
+$modversion['config'][$i]['title']          = "_MI_XNEWSLETTER_TEMPLATE_EDITOR";
+$modversion['config'][$i]['description']    = "_MI_XNEWSLETTER_TEMPLATE_EDITOR_DESC";
+$modversion['config'][$i]['formtype']       = "select";
+$modversion['config'][$i]['valuetype']      = "text";
+$modversion['config'][$i]['default']        = "dhtmltextarea";
+$modversion['config'][$i]['options']        = XoopsLists::getEditorList();
 ++$i;
 $modversion['config'][$i]['name']           = "keywords";
 $modversion['config'][$i]['title']          = "_MI_XNEWSLETTER_KEYWORDS";

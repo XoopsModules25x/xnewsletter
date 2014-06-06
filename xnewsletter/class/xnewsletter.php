@@ -49,9 +49,6 @@ class xnewsletterxnewsletter
         if (!$instance) {
             $instance = new self($debug);
         }
-//error_log("istance: [" . print_r($istance,true) . "]");
-//phpinfo();
-//debug_print_backtrace ();
         return $instance;
     }
 

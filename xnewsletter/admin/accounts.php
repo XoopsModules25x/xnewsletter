@@ -305,7 +305,7 @@ switch ($op) {
                 $verif_accounts_default = "1";
                 //reset old accounts_default
                 $sql = "UPDATE `{$xoopsDB->prefix("xnewsletter_accounts")}` SET `accounts_default` = '0'";
-                $result= $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+                if(!$result = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
             } else {
                 $verif_accounts_default = "0";
             }

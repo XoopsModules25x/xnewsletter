@@ -43,25 +43,24 @@ if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
 }
 
-// get letter templates path
-$letterTemplatePath = XNEWSLETTER_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
-if (!is_dir($letterTemplatePath)) {
-    $letterTemplatePath = XNEWSLETTER_ROOT_PATH . '/language/english/templates/';
-}
-
 $content = '';
 $letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
 if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $letterTemplate = "{$letterTemplatePath}{$letterObj->getVar('letter_template')}.tpl";
-
-    $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
-    $xoopsTpl->assign('firstname', _AM_XNEWSLETTER_SUBSCR_FIRSTNAME);
-    $xoopsTpl->assign('lastname', _AM_XNEWSLETTER_SUBSCR_LASTNAME);
+    // subscr data
+    $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
+    $xoopsTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
+    $xoopsTpl->assign('firstname', _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW);
+    $xoopsTpl->assign('lastname', _AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW);
+    $xoopsTpl->assign('subscr_email', _AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW);
+    $xoopsTpl->assign('email', _AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW); // new from v1.3
+    // letter data
     $xoopsTpl->assign('title', $letterObj->getVar('letter_title', 'n')); // new from v1.3
     $xoopsTpl->assign('content', $letterObj->getVar('letter_content', 'n'));
+    // extra
+    $xoopsTpl->assign('date', time()); // new from v1.3
     $xoopsTpl->assign('unsubscribe_url', XOOPS_URL . '/modules/xnewsletter/');
-    //$tpl->assign('catsubscr_id', '0');
-    $xoopsTpl->assign('subscr_email', '');
+    $xoopsTpl->assign('catsubscr_id', '0'); // ???
 
     $letter_array = $letterObj->toArray();
     $letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
@@ -75,7 +74,20 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
 
     $content .= "<h2>{$letterObj->getVar('letter_title')}</h2>";
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
-    $content .= $xoopsTpl->fetch($letterTemplate);
+
+    preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+    if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('xnewsletter_template')->get((int)$matches[1]))) {
+        // get template from database
+        $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+    } else {
+        // get template from filesystem
+        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+        if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+        $template = $template_path . $letterObj->getVar("letter_template") . ".tpl";
+        $htmlBody = $xoopsTpl->fetch($template);
+    }
+    $content .= $htmlBody;
+    $content .=  '</div></div>\n';
 }
 
 if ($content == '') {
@@ -263,7 +275,8 @@ function xnewsletter_printPage($content) {
     <body bgcolor="#ffffff" text="#000000" onload="window.print()">
 <?php
     echo $content;
-    echo '</div>\n';
-    echo '</body>\n';
-    echo '</html>\n';
+?>
+    </body>
+    </html>
+<?php
 }

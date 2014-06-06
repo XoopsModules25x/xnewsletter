@@ -72,22 +72,6 @@ class xnewsletter_letter extends XoopsObject
             $action = $_SERVER["REQUEST_URI"];
         }
 
-        //read available templates
-        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
-        if (!is_dir($template_path)) {
-            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
-        }
-        $exempted      = "index.html";
-        $arr_templates = array();
-        $template_dir  = @opendir($template_path) || die(str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
-        while ($filename = readdir($template_dir)) {
-            if (($filename != ".") and ($filename != "..") and ($filename != $exempted)) {
-                $info            = pathinfo($filename);
-                $arr_templates[] = basename($filename, '.' . $info['extension']);
-            }
-        }
-        closedir($template_dir);
-
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_LETTER_ADD) : sprintf(_AM_XNEWSLETTER_LETTER_EDIT);
 
         include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
@@ -104,15 +88,41 @@ class xnewsletter_letter extends XoopsObject
         $editor_configs["width"]  = "100%";
         $editor_configs["height"] = "400px";
         $editor_configs["editor"] = $this->xnewsletter->getConfig('xnewsletter_editor');
-        $form->addElement(new XoopsFormEditor(_AM_XNEWSLETTER_LETTER_CONTENT, "letter_content", $editor_configs), true);
+        $letter_content_editor = new XoopsFormEditor(_AM_XNEWSLETTER_LETTER_CONTENT, "letter_content", $editor_configs);
+        $letter_content_editor->setDescription(_AM_XNEWSLETTER_LETTER_CONTENT_DESC);
+        $form->addElement($letter_content_editor, true);
 
         $letter_template = $this->getVar("letter_template") == "" ? "basic" : $this->getVar("letter_template");
 
         $template_select = new XoopsFormSelect(_AM_XNEWSLETTER_LETTER_TEMPLATE, "letter_template", $letter_template);
-        foreach ($arr_templates as $template) {
-            $template_select->addOption($template, $template);
+        // get template files in /modules/xnewsletter/language/{language}/templates/ directory
+        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+        if (!is_dir($template_path)) {
+            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
         }
-
+        $templateFiles = array();
+        if (!$dirHandler = @opendir($template_path)) die(str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
+        while ($filename = readdir($dirHandler)) {
+            if (($filename != ".") and ($filename != "..") and ($filename != "index.html")) {
+                $info            = pathinfo($filename);
+                $templateFiles[] = basename($filename, '.' . $info['extension']);
+            }
+        }
+        closedir($dirHandler);
+        foreach ($templateFiles as $templateFile) {
+            $template_select->addOption($templateFile, "file:" . $templateFile);
+        }
+        // get template objects from database
+        $criteria = new CriteriaCompo();
+        $criteria->setSort("template_title DESC, template_id");
+        $criteria->setOrder("DESC");
+        $templateCount = $this->xnewsletter->getHandler('xnewsletter_template')->getCount();
+        if($templateCount>0) {
+            $templateObjs = $this->xnewsletter->getHandler('xnewsletter_template')->getall($criteria);
+            foreach($templateObjs as $templateObj) {
+                $template_select->addOption("db:" . $templateObj->getVar('template_id'), "db:" . $templateObj->getVar('template_title'));
+            }
+        }
         $form->addElement($template_select, false);
 
         $gperm_handler  =& xoops_gethandler('groupperm');
