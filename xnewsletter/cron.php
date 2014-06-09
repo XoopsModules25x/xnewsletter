@@ -36,7 +36,7 @@ $result_exec = xnewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_pack
 
 if ($result_exec != '') {
     //you can enable the block for creating protocol for cron
-    $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+    $protocolObj = $xnewsletter->getHandler('protocol')->create();
     $protocolObj->setVar("protocol_letter_id", "0");
     $protocolObj->setVar("protocol_subscriber_id", "0");
     $protocolObj->setVar("protocol_status", "Cron: ".$result_exec);
@@ -44,7 +44,7 @@ if ($result_exec != '') {
     $protocolObj->setVar("protocol_submitter", "0");
     $protocolObj->setVar("protocol_created", time());
 
-    if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
+    if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
         //create protocol is ok
     } else {
         echo $protocolObj->getHtmlErrors();

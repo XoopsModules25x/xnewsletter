@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_catsubscr
+ * Class XnewsletterCatsubscr
  */
-class xnewsletter_catsubscr extends XoopsObject
+class XnewsletterCatsubscr extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -76,14 +76,14 @@ class xnewsletter_catsubscr extends XoopsObject
         $criteria->setSort('cat_id ASC, cat_name');
         $criteria->setOrder('ASC');
         $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_CATID, "catsubscr_catid", $this->getVar("catsubscr_catid"));
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_cat')->getList());
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
         $form->addElement($cat_select, true);
 
         $criteria = new CriteriaCompo();
         $criteria->setSort('subscr_email ');
         $criteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID, "catsubscr_subscrid", $this->getVar("catsubscr_subscrid"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_subscr')->getList());
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList());
         $form->addElement($subscr_select, true);
 
         $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, "&nbsp;");
@@ -114,9 +114,9 @@ class xnewsletter_catsubscr extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_catsubscrHandler
+ * Class XnewsletterCatsubscrHandler
  */
-class xnewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHandler
+class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -129,7 +129,7 @@ class xnewsletterxnewsletter_catsubscrHandler extends XoopsPersistableObjectHand
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_catsubscr", "xnewsletter_catsubscr", "catsubscr_id", "catsubscr_catid");
+        parent::__construct($db, "xnewsletter_catsubscr", "XnewsletterCatsubscr", "catsubscr_id", "catsubscr_catid");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

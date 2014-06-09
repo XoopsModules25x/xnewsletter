@@ -49,7 +49,7 @@ $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
 
 //About
 $modversion['module_status']       = "Alpha 1";
-$modversion['release_date']        = "2014/06/06";
+$modversion['release_date']        = "2014/06/09";
 //$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = "";
 $modversion['demo_site_name']      = "";
@@ -139,7 +139,7 @@ if (is_object($xoopsUser) && isset($xoopsUser)) {
         $member_handler = xoops_gethandler('member');
         $my_group_ids = $member_handler->getGroupsByUser($xoopsUser->uid());
 
-        $catHandler = xoops_getModuleHandler('xnewsletter_cat', 'xnewsletter');
+        $catHandler = xoops_getModuleHandler('cat', 'xnewsletter');
         $cat_criteria = new CriteriaCompo();
         $cat_criteria->setSort('cat_id');
         $cat_criteria->setOrder('ASC');

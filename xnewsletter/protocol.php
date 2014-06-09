@@ -42,21 +42,21 @@ $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL)
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
 $letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
-$letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+$letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 
 $criteria = new CriteriaCompo();
 $criteria->add(new Criteria('protocol_letter_id', $letter_id));
 $criteria->setSort('protocol_id');
 $criteria->setOrder('DESC');
-$protocolCount = $xnewsletter->getHandler('xnewsletter_protocol')->getCount($criteria);
+$protocolCount = $xnewsletter->getHandler('protocol')->getCount($criteria);
 
 // protocol table
 if ($protocolCount > 0) {
-    $protocolObjs = $xnewsletter->getHandler('xnewsletter_protocol')->getAll($criteria);
+    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($criteria);
     foreach ($protocolObjs as $protocol_id => $protocolObj) {
         $protocol_array = $protocolObj->toArray();
-        $subscrObj = $xnewsletter->getHandler('xnewsletter_subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
+        $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
         if (is_object($subscrObj)) {
             $subscr_array = $subscrObj->toArray();
             $protocol_array['subscr'] = $subscr_array;

@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_accounts
+ * Class XnewsletterAccounts
  */
-class xnewsletter_accounts extends XoopsObject
+class XnewsletterAccounts extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -217,9 +217,9 @@ class xnewsletter_accounts extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_accountsHandler
+ * Class XnewsletterAccountsHandler
  */
-class xnewsletterxnewsletter_accountsHandler extends XoopsPersistableObjectHandler
+class XnewsletterAccountsHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -232,7 +232,7 @@ class xnewsletterxnewsletter_accountsHandler extends XoopsPersistableObjectHandl
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_accounts", "xnewsletter_accounts", "accounts_id", "accounts_name");
+        parent::__construct($db, "xnewsletter_accounts", "XnewsletterAccounts", "accounts_id", "accounts_name");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

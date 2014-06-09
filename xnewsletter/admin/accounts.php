@@ -50,7 +50,7 @@ switch ($op) {
         if ($accounts_id == 0) {
             redirect_header("accounts.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
         } else {
-            $accountObj =& $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
+            $accountObj =& $xnewsletter->getHandler('accounts')->get($accounts_id);
         }
 
         $mailhost = $accountObj->getVar("accounts_server_in");
@@ -197,11 +197,11 @@ switch ($op) {
         $criteria = new CriteriaCompo();
         $criteria->setSort("accounts_id ASC, accounts_type");
         $criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xnewsletter_accounts')->getCount();
+        $numrows = $xnewsletter->getHandler('accounts')->getCount();
         $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
         $criteria->setStart($start);
         $criteria->setLimit($limit);
-        $accounts_arr = $xnewsletter->getHandler('xnewsletter_accounts')->getall($criteria);
+        $accounts_arr = $xnewsletter->getHandler('accounts')->getall($criteria);
         if ($numrows > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
@@ -281,7 +281,7 @@ switch ($op) {
         echo $indexAdmin->addNavigation("accounts.php");
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, 'accounts.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->create();
+        $accountObj = $xnewsletter->getHandler('accounts')->create();
         $accountObj = xnewsletter_setPost($accountObj, $_POST);
         $form = $accountObj->getForm();
         $form->display();
@@ -292,13 +292,13 @@ switch ($op) {
             redirect_header("accounts.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
-        $accountObj =& $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
         $_POST['accounts_id'] = $accounts_id;
         $accountObj = xnewsletter_setPost($accountObj, $_POST);
 
         $criteria = new CriteriaCompo();
         $criteria->add(new Criteria("accounts_default", 1));
-        $count_accounts_default = $xnewsletter->getHandler('xnewsletter_accounts')->getCount($criteria);
+        $count_accounts_default = $xnewsletter->getHandler('accounts')->getCount($criteria);
         if ($count_accounts_default > 0) {
             if ($accountObj->getVar("accounts_default") == 1) {
                 global $xoopsDB;
@@ -314,7 +314,7 @@ switch ($op) {
         }
         $accountObj->setVar("accounts_default", $verif_accounts_default);
         if ($accountObj->getVar("accounts_yourmail") != "" && $accountObj->getVar("accounts_yourmail") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
-            if ($xnewsletter->getHandler('xnewsletter_accounts')->insert($accountObj)) {
+            if ($xnewsletter->getHandler('accounts')->insert($accountObj)) {
                 if ($save_and_check == 'none') {
                     redirect_header("accounts.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
                 } else {
@@ -335,7 +335,7 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, 'accounts.php?op=new_account', 'add');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, 'accounts.php?op=list', 'list');
         echo $indexAdmin->renderButton();
-        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
         if (!empty($_POST)) {
             xnewsletter_setPost($accountObj, $_POST);
         }
@@ -344,12 +344,12 @@ switch ($op) {
     break;
 
     case "delete_account":
-        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header("accounts.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xnewsletter_accounts')->delete($accountObj)) {
+            if ($xnewsletter->getHandler('accounts')->delete($accountObj)) {
                 redirect_header("accounts.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $accountObj->getHtmlErrors();

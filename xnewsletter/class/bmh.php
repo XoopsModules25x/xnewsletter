@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_bmh
+ * Class XnewsletterBmh
  */
-class xnewsletter_bmh extends XoopsObject
+class XnewsletterBmh extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -81,7 +81,7 @@ class xnewsletter_bmh extends XoopsObject
         $crit_accounts->setSort("accounts_id");
         $crit_accounts->setOrder("ASC");
         $opt_accounts = new XoopsFormSelect(_AM_XNEWSLETTER_BMH_ACCOUNTS_ID, "bmh_accounts_id", $account_default);
-        $opt_accounts->addOptionArray($this->xnewsletter->getHandler('xnewsletter_accounts')->getList($crit_accounts));
+        $opt_accounts->addOptionArray($this->xnewsletter->getHandler('accounts')->getList($crit_accounts));
         $form->addElement($opt_accounts, false);
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_NO, "bmh_rule_no", 50, 255, $this->getVar("bmh_rule_no")), true);
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_CAT, "bmh_rule_cat", 50, 255, $this->getVar("bmh_rule_cat")), true);
@@ -114,9 +114,9 @@ class xnewsletter_bmh extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_bmhHandler
+ * Class XnewsletterBmh
  */
-class xnewsletterxnewsletter_bmhHandler extends XoopsPersistableObjectHandler
+class XnewsletterBmhHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -129,7 +129,7 @@ class xnewsletterxnewsletter_bmhHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_bmh", "xnewsletter_bmh", "bmh_id", "bmh_rule_no");
+        parent::__construct($db, "xnewsletter_bmh", "XnewsletterBmh", "bmh_id", "bmh_rule_no");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

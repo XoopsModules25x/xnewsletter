@@ -69,7 +69,7 @@ switch ($op) {
         // get letter_id
         $letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
         // get letter object
-        $letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data
         $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
         $xoopsTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
@@ -88,7 +88,7 @@ switch ($op) {
         $letter_array = $letterObj->toArray();
 
         preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
-        if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('xnewsletter_template')->get((int)$matches[1]))) {
+        if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
             // get template from database
             $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', "n"));
         } else {
@@ -131,9 +131,9 @@ break;
         $criteria = new CriteriaCompo();
         $criteria->setSort("letter_id");
         $criteria->setOrder("DESC");
-        $letterObjs = $xnewsletter->getHandler('xnewsletter_letter')->getAll($criteria);
+        $letterObjs = $xnewsletter->getHandler('letter')->getAll($criteria);
 
-        if ($xnewsletter->getHandler('xnewsletter_letter')->getCount() > 0) {
+        if ($xnewsletter->getHandler('letter')->getCount() > 0) {
             // get newsletters available for current user
             $gperm_handler =& xoops_gethandler('groupperm');
             $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
@@ -147,7 +147,7 @@ break;
                 $cats_string = '';
                 $cat_ids = explode('|' , $letterObj->getVar('letter_cats'));
                 foreach ($cat_ids as $cat_id) {
-                    $catObj = $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
+                    $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
                     if ($gperm_handler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
                         ++$catsAvailableCount;
                         unset($letter_array['letter_cats']);

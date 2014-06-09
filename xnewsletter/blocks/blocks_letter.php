@@ -77,7 +77,7 @@ function b_xnewsletter_letter($options) {
     }
 
     $criteria->setLimit($nb_letter);
-    $letter_arr = $xnewsletter->getHandler('xnewsletter_letter')->getall($criteria);
+    $letter_arr = $xnewsletter->getHandler('letter')->getall($criteria);
     foreach (array_keys($letter_arr) as $i) {
         $letter_cat_arr = array();
         $letter_cat_arr = explode('|', $letter_arr[$i]->getVar('letter_cats'));

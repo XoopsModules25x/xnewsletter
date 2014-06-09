@@ -64,18 +64,18 @@ function b_xnewsletter_catsubscr($options) {
     }
 
     $criteria->setLimit($nb_catsubscr);
-    $catsubscr_arr = $xnewsletter->getHandler('xnewsletter_catsubscr')->getall($criteria);
+    $catsubscr_arr = $xnewsletter->getHandler('catsubscr')->getall($criteria);
     foreach (array_keys($catsubscr_arr) as $i) {
         $cat_id = $catsubscr_arr[$i]->getVar("catsubscr_catid");
         if (in_array($cat_id, $options) || $options[0] == '0') {
             $subscr_id = $catsubscr_arr[$i]->getVar("catsubscr_subscrid");
-            $subscr_arr = $xnewsletter->getHandler('xnewsletter_subscr')->get($subscr_id);
+            $subscr_arr = $xnewsletter->getHandler('subscr')->get($subscr_id);
             $email = $subscr_arr->getVar("subscr_email");
             if ($length_title > 0 && strlen($email) > $length_title)
                 $email = substr($email, 0, $length_title) . "...";
             $catsubscr[$i]["catsubscr_email"] = $email;
 
-            $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
+            $cat_arr = $xnewsletter->getHandler('cat')->get($cat_id);
             $cat_name = $cat_arr->getVar("cat_name");
             if ($length_title > 0 && strlen($cat_name) > $length_title)
                 $cat_name = substr($cat_name, 0, $length_title) . "...";
@@ -109,7 +109,7 @@ function b_xnewsletter_catsubscr_edit($options) {
     $cat_criteria = new CriteriaCompo();
     $cat_criteria->setSort("cat_id");
     $cat_criteria->setOrder("ASC");
-    $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->getall($cat_criteria);
+    $cat_arr = $xnewsletter->getHandler('cat')->getall($cat_criteria);
     foreach (array_keys($cat_arr) as $i) {
         $form .= "<option value=\"" . $i . "\" " . (array_search($i, $options) === false ? "" : "selected=\"selected\"") . ">" . $cat_arr[$i]->getVar("cat_name") . "</option>";
     }

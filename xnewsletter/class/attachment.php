@@ -19,7 +19,7 @@
  *  ---------------------------------------------------------------------------
  *
  * @copyright  Goffy ( wedega.com )
- * @license    GPL 2.0
+ * @license    GNU General Public License 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_protocol
+ * Class XnewsletterAttachment
  */
-class xnewsletter_protocol extends XoopsObject
+class XnewsletterAttachment extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -45,13 +45,12 @@ class xnewsletter_protocol extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("protocol_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("protocol_letter_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_subscriber_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_status", XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar("protocol_success", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("attachment_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("attachment_letter_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("attachment_name", XOBJ_DTYPE_TXTBOX, null, false, 200);
+        $this->initVar("attachment_type", XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar("attachment_submitter", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("attachment_created", XOBJ_DTYPE_INT, null, false, 10);
     }
 
     /**
@@ -67,7 +66,7 @@ class xnewsletter_protocol extends XoopsObject
             $action = $_SERVER["REQUEST_URI"];
         }
 
-        $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_PROTOCOL_ADD) : sprintf(_AM_XNEWSLETTER_PROTOCOL_EDIT);
+        $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ATTACHMENT_ADD) : sprintf(_AM_XNEWSLETTER_ATTACHMENT_EDIT);
 
         include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
@@ -76,26 +75,25 @@ class xnewsletter_protocol extends XoopsObject
         $criteria = new CriteriaCompo();
         $criteria->setSort('letter_id');
         $criteria->setOrder('DESC');
-        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "protocol_letter_id", $this->getVar("protocol_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_letter')->getList($criteria));
+        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "attachment_letter_id", $this->getVar("attachment_letter_id"));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($criteria));
         $form->addElement($letter_select, true);
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('subscr_id');
-        $criteria->setOrder('ASC');
-        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID, "protocol_subscriber_id", $this->getVar("protocol_subscriber_id"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_subscr')->getList($criteria));
-        $form->addElement($subscr_select, true);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_NAME, "attachment_name", 50, 255, $this->getVar("attachment_name")), true);
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, "protocol_status", 50, 255, $this->getVar("protocol_status")), false);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_TYPE, "attachment_type", 50, 255, $this->getVar("attachment_type")), false);
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_SUCCESS, "protocol_success", 50, 255, $this->getVar("protocol_success")), false);
+        $time = ($this->isNew()) ? time() : $this->getVar("attachment_created");
+        $form->addElement(new XoopsFormHidden("attachment_submitter", $GLOBALS['xoopsUser']->uid()));
+        $form->addElement(new XoopsFormHidden("attachment_created", $time));
 
-        $form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_PROTOCOL_SUBMITTER, "protocol_submitter", false, $this->getVar("protocol_submitter"), 1, false), true);
+        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_CREATED, formatTimestamp($time, 's')));
 
-        $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_PROTOCOL_CREATED, "protocol_created", "", $this->getVar("protocol_created")));
+        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, "attachment_submitter", false, $this->getVar("attachment_submitter"), 1, false), true);
+        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_ATTACHMENT_CREATED, "attachment_created", "", $this->getVar("attachment_created")));
 
-        $form->addElement(new XoopsFormHidden("op", "save_protocol"));
+        $form->addElement(new XoopsFormHidden("op", "save_attachment"));
         $form->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
 
         return $form;
@@ -103,9 +101,9 @@ class xnewsletter_protocol extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_protocolHandler
+ * Class XnewsletterAttachmentHandler
  */
-class xnewsletterxnewsletter_protocolHandler extends XoopsPersistableObjectHandler
+class XnewsletterAttachmentHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -118,7 +116,7 @@ class xnewsletterxnewsletter_protocolHandler extends XoopsPersistableObjectHandl
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_protocol", "xnewsletter_protocol", "protocol_id", "protocol_letter_id");
+        parent::__construct($db, "xnewsletter_attachment", "XnewsletterAttachment", "attachment_id", "attachment_letter_id");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

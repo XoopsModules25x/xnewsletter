@@ -33,27 +33,6 @@ include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
 include_once XOOPS_ROOT_PATH . '/include/functions.php';
 
 global $xoopsConfig;
-/*
-
-// Get Xoops instances
-$gperm_handler = xoops_gethandler('groupperm');
-$member_handler = xoops_gethandler('member');
-$config_handler = xoops_gethandler("config");
-
-xoops_load('XoopsUserUtility');
-
-$myts = & MyTextSanitizer::getInstance();
-
-// Get the module instances
-$xnewsletter->getHandler('xnewsletter_accounts')    = xoops_getModuleHandler('xnewsletter_accounts', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_cat')         = xoops_getModuleHandler('xnewsletter_cat', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_subscr')      = xoops_getModuleHandler('xnewsletter_subscr', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_catsubscr')   = xoops_getModuleHandler('xnewsletter_catsubscr', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_letter')      = xoops_getModuleHandler('xnewsletter_letter', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_attachment')  = xoops_getModuleHandler('xnewsletter_attachment', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_protocol')    = xoops_getModuleHandler('xnewsletter_protocol', XNEWSLETTER_DIRNAME);
-$xnewsletter->getHandler('xnewsletter_mailinglist') = xoops_getModuleHandler('xnewsletter_mailinglist', XNEWSLETTER_DIRNAME);
-*/
 
 //Load languages
 xoops_loadLanguage('admin', $xnewsletter->getModule()->dirname());

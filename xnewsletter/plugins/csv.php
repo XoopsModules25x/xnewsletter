@@ -56,7 +56,7 @@ function xnewsletter_plugin_getinfo_csv() {
  *
  * @return int
  */
-function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist, $file, $delimiter, $header) {
+function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist = true, $file, $delimiter, $header = true) {
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
@@ -67,8 +67,9 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
 
     if (($handle = fopen($file, "r")) !== false) {
         while (($lineArray = fgetcsv($handle, 4000, $delimiter)) !== false) {
-        if ($header == 1 and $i == 0) {
+        if ($header == true || $i == 0) {
             // remove header line
+            // NOP
         } else {
             $email     = $lineArray[0];
             $sex       = isset($lineArray[1]) ? $lineArray[1] : "";
@@ -79,25 +80,26 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
                 $subscr_id = xnewsletter_pluginCheckEmail($email);
                 $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
 
-                if ($skipCatsubscrExist == 1 && $catsubscr_id > 0) {
+                if ($skipCatsubscrExist == true && $catsubscr_id > 0) {
                     //skip existing subscriptions
+                    // NOP
                 } else {
-                    $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
-                    $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
+                    $current_cat_id = $catsubscr_id > 0 ? 0 : $cat_id;
+                    $importObj = $xnewsletter->getHandler('import')->create();
                     $importObj->setVar('import_email', $email);
                     $importObj->setVar('import_sex', $sex);
                     $importObj->setVar('import_firstname', $firstname);
                     $importObj->setVar('import_lastname', $lastname);
-                    $importObj->setVar('import_cat_id', $currcatid);
+                    $importObj->setVar('import_cat_id', $current_cat_id);
                     $importObj->setVar('import_subscr_id', $subscr_id);
                     $importObj->setVar('import_catsubscr_id', $catsubscr_id);
                     $importObj->setVar('import_status', $import_status);
-                    if (!$xnewsletter->getHandler('xnewsletter_import')->insert($importObj)) {
+                    if (!$xnewsletter->getHandler('import')->insert($importObj)) {
                         echo $importObj->getHtmlErrors();
                         exit();
                     }
 //                    $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
-//                    $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
+//                    $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $current_cat_id, $subscr_id, $catsubscr_id, $import_status)";
 //                    $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
                     ++$j;
                 }

@@ -84,7 +84,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
             //skip existing subscriptions
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
-            $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
+            $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
             $importObj->setVar('import_sex', $sex);
             $importObj->setVar('import_firstname', $firstname);
@@ -93,7 +93,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
             $importObj->setVar('import_status', $import_status);
-            if (!$xnewsletter->getHandler('xnewsletter_import')->insert($importObj)) {
+            if (!$xnewsletter->getHandler('import')->insert($importObj)) {
                 echo $importObj->getHtmlErrors();
                 exit();
             }
@@ -137,7 +137,7 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
     $criteria->setSort('cat_id ASC, cat_name');
     $criteria->setOrder('ASC');
     $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", $cat_id);
-    $cat_select->addOptionArray($xnewsletter->getHandler('xnewsletter_cat')->getList());
+    $cat_select->addOptionArray($xnewsletter->getHandler('cat')->getList());
     $form->addElement($cat_select, false);
 
     // checkboxes other groups

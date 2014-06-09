@@ -79,7 +79,7 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
             //skip existing subscriptions
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
-            $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
+            $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
             $importObj->setVar('import_sex', $sex);
             $importObj->setVar('import_firstname', $firstname);
@@ -88,7 +88,7 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
             $importObj->setVar('import_status', $import_status);
-            if (!$xnewsletter->getHandler('xnewsletter_import')->insert($importObj)) {
+            if (!$xnewsletter->getHandler('import')->insert($importObj)) {
                 echo $importObj->getHtmlErrors();
                 exit();
             }
