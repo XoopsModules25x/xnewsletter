@@ -190,7 +190,7 @@ switch ($op) {
                 $result_bmh = str_replace("%m", $bmh->result_moved, $result_bmh);
                 $result_bmh = str_replace("%d", $bmh->result_deleted, $result_bmh);
             }
-            redirect_header(, 5, $result_bmh);
+            redirect_header($currentFile, 5, $result_bmh);
         } else {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE);
         }
