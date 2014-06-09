@@ -38,7 +38,7 @@ function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $rem
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     if ($rule_no != "0000") {
-        $bmhObj = $xnewsletter->getHandler('xnewsletter_bmh')->create();
+        $bmhObj = $xnewsletter->getHandler('bmh')->create();
         //Form bmh_rule_no
         $bmhObj->setVar("bmh_rule_no", $rule_no);
         //Form bmh_rule_cat
@@ -59,7 +59,7 @@ function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $rem
         //Form bmh_created
         $bmhObj->setVar("bmh_created", time());
 
-        if (!$xnewsletter->getHandler('xnewsletter_bmh')->insert($bmhObj)) {
+        if (!$xnewsletter->getHandler('bmh')->insert($bmhObj)) {
             echo $bmhObj->getHtmlErrors();
 
             return false;

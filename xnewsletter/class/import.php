@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_import
+ * Class XnewsletterImport
  */
-class xnewsletter_import extends XoopsObject
+class XnewsletterImport extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -82,7 +82,7 @@ class xnewsletter_import extends XoopsObject
         $criteria->setSort('cat_id ASC, cat_name');
         $criteria->setOrder('ASC');
         $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", "1");
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_cat')->getList());
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
         $form->addElement($cat_select, false);
 
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
@@ -195,9 +195,9 @@ class xnewsletter_import extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_importHandler
+ * Class XnewsletterImportHandler
  */
-class xnewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
+class XnewsletterImportHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -210,7 +210,7 @@ class xnewsletterxnewsletter_importHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_import", "xnewsletter_import", "import_id", "import_email");
+        parent::__construct($db, "xnewsletter_import", "XnewsletterImport", "import_id", "import_email");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

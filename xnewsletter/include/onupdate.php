@@ -60,7 +60,6 @@ function xoops_module_update_xnewsletter_130() {
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_protocol");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_subscr");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_task");
-    return true;
 
     //create 'xnewsletter_template' table
     global $xoopsDB;

@@ -155,36 +155,6 @@ function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $no
 
 /**
  * @param $content
- */
-function xnewsletter_meta_keywords($content) {
-    global $xoopsTpl, $xoTheme;
-    $myts = MyTextSanitizer::getInstance();
-    $content = $myts->undoHtmlSpecialChars($myts->displayTbox($content));
-    if (isset($xoTheme) && is_object($xoTheme)) {
-        $xoTheme->addMeta( 'meta', 'keywords', strip_tags($content));
-    } else {
-        // Compatibility for old Xoops versions
-        $xoopsTpl->assign('xoops_meta_keywords', strip_tags($content));
-    }
-}
-
-/**
- * @param $content
- */
-function xnewsletter_meta_description($content) {
-    global $xoopsTpl, $xoTheme;
-    $myts =& MyTextSanitizer::getInstance();
-    $content= $myts->undoHtmlSpecialChars($myts->displayTarea($content));
-    if (isset($xoTheme) && is_object($xoTheme)) {
-        $xoTheme->addMeta( 'meta', 'description', strip_tags($content));
-    } else {
-        // Compatibility for old Xoops versions
-        $xoopsTpl->assign('xoops_meta_description', strip_tags($content));
-    }
-}
-
-/**
- * @param $content
  * @param $sets
  *
  * @return mixed
@@ -256,25 +226,6 @@ function xnewsletter_setPost($content, $sets) {
 }
 
 /**
- * Convert StringToTime Date
- *
- * @param mixed $date
- *
- * @return int|mixed
- */
-function xnewsletter_convertDate($date) {
-    $GLOBALS['xoopsLogger']->addDeprecated(__FUNCTION__ . ' is deprecated');
-
-    return ($date);
-
-    if (strpos(_SHORTDATESTRING, "/")) {
-       $date=str_replace("/", "-", $date);
-    }
-
-    return strtotime($date);
-}
-
-/**
  * @param int $letter_id
  *
  * @return array
@@ -305,7 +256,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
         $perm["create"] = true;
         $perm["send"] = true;
     } else {
-        $obj_letter = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+        $obj_letter = $xnewsletter->getHandler('letter')->get($letter_id);
         $letter_cats = explode("|", $obj_letter->getVar("letter_cats"));
         $submitter = $obj_letter->getVar("letter_submitter");
         $my_group_ids = $member_handler->getGroupsByUser( $currentuid ) ;
@@ -360,11 +311,11 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0) {
     $my_group_ids = $member_handler->getGroupsByUser($currentuid);
 
     if ($cat_id > 0) {
-        $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->get($cat_id);
+        $cat_arr = $xnewsletter->getHandler('cat')->get($cat_id);
         $allowedit = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
     } else {
         $crit_cat = new CriteriaCompo();
-        $cat_arr = $xnewsletter->getHandler('xnewsletter_cat')->getall($crit_cat);
+        $cat_arr = $xnewsletter->getHandler('cat')->getall($crit_cat);
         foreach (array_keys($cat_arr) as $i) {
             $cat_id = $cat_arr[$i]->getVar('cat_id');
             $allowedit += $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());

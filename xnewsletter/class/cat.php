@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_cat
+ * Class XnewsletterCat
  */
-class xnewsletter_cat extends XoopsObject
+class XnewsletterCat extends XoopsObject
 {
     /**
      * @var WfdownloadsWfdownloads
@@ -179,11 +179,11 @@ class xnewsletter_cat extends XoopsObject
         $crit_mailinglist = new CriteriaCompo();
         $crit_mailinglist->setSort("mailinglist_id");
         $crit_mailinglist->setOrder("ASC");
-        $numrows_mailinglist = $this->xnewsletter->getHandler('xnewsletter_mailinglist')->getCount();
+        $numrows_mailinglist = $this->xnewsletter->getHandler('mailinglist')->getCount();
         if ($numrows_mailinglist > 0) {
             $opt_mailinglist = new XoopsFormRadio(_AM_XNEWSLETTER_LETTER_MAILINGLIST, "cat_mailinglist", $cat_mailinglist);
             $opt_mailinglist->addOption("0", _AM_XNEWSLETTER_LETTER_MAILINGLIST_NO);
-            $mailinglist_arr = $this->xnewsletter->getHandler('xnewsletter_mailinglist')->getall($crit_mailinglist);
+            $mailinglist_arr = $this->xnewsletter->getHandler('mailinglist')->getall($crit_mailinglist);
             foreach (array_keys($mailinglist_arr) as $i) {
                 $opt_mailinglist->addOption($i, $mailinglist_arr[$i]->getVar("mailinglist_name"));
             }
@@ -202,9 +202,9 @@ class xnewsletter_cat extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_catHandler
+ * Class XnewsletterCatHandler
  */
-class xnewsletterxnewsletter_catHandler extends XoopsPersistableObjectHandler
+class XnewsletterCatHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -217,7 +217,7 @@ class xnewsletterxnewsletter_catHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_cat", "xnewsletter_cat", "cat_id", "cat_name");
+        parent::__construct($db, "xnewsletter_cat", "XnewsletterCat", "cat_id", "cat_name");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

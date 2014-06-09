@@ -39,10 +39,10 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     global $xoopsUser, $xoopsConfig;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $subscrObj = $xnewsletter->getHandler('xnewsletter_subscr')->get($subscr_id);
+    $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
     $subscr_email = $subscrObj->getVar("subscr_email");
 
-    $mailinglistObj = $xnewsletter->getHandler('xnewsletter_mailinglist')->get($mailinglist_id);
+    $mailinglistObj = $xnewsletter->getHandler('mailinglist')->get($mailinglist_id);
     $mailinglist_email = $mailinglistObj->getVar("mailinglist_email");
     if ($type == 1) {
         $action_code = $mailinglistObj->getVar("mailinglist_subscribe");
@@ -104,7 +104,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
         $text_clean = array("<strong>", "</strong>", "<br/>", "<br />");
         $protocol_status = str_replace($text_clean, "", $protocol_status);
 
-        $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+        $protocolObj = $xnewsletter->getHandler('protocol')->create();
         $protocolObj->setVar("protocol_letter_id", $letter_id);
         $protocolObj->setVar("protocol_subscriber_id", $subscriber_id);
         $protocolObj->setVar("protocol_status", $protocol_status);
@@ -112,16 +112,16 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
         $protocolObj->setVar("protocol_submitter", $senderUid);
         $protocolObj->setVar("protocol_created", time());
 
-        if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
+        if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
             //create protocol is ok
-            $protocolObj2 = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+            $protocolObj2 = $xnewsletter->getHandler('protocol')->create();
             $protocolObj2->setVar("protocol_letter_id", $letter_id);
             $protocolObj2->setVar("protocol_subscriber_id", $subscriber_id);
             $protocolObj2->setVar("protocol_status", _AM_XNEWSLETTER_SEND_SUCCESS_ML);
             $protocolObj2->setVar("protocol_success", 1);
             $protocolObj2->setVar("protocol_submitter", $senderUid);
             $protocolObj2->setVar("protocol_created", time());
-            if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj2)) {
+            if ($xnewsletter->getHandler('protocol')->insert($protocolObj2)) {
                 return true;
             } else {
                 return $protocolObj2->getHtmlErrors();

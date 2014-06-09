@@ -32,20 +32,20 @@ xoops_cp_header();
 //global $indexAdmin;
 
 //count "total"
-$count_cat = $xnewsletter->getHandler('xnewsletter_cat')->getCount();
-$count_accounts = $xnewsletter->getHandler('xnewsletter_accounts')->getCount();
+$count_cat = $xnewsletter->getHandler('cat')->getCount();
+$count_accounts = $xnewsletter->getHandler('accounts')->getCount();
 
-$count_subscr = $xnewsletter->getHandler('xnewsletter_subscr')->getCount();
-$count_catsubscr = $xnewsletter->getHandler('xnewsletter_catsubscr')->getCount();
-$count_letter = $xnewsletter->getHandler('xnewsletter_letter')->getCount();
-$count_protocol = $xnewsletter->getHandler('xnewsletter_protocol')->getCount();
-$count_attachment = $xnewsletter->getHandler('xnewsletter_attachment')->getCount();
+$count_subscr = $xnewsletter->getHandler('subscr')->getCount();
+$count_catsubscr = $xnewsletter->getHandler('catsubscr')->getCount();
+$count_letter = $xnewsletter->getHandler('letter')->getCount();
+$count_protocol = $xnewsletter->getHandler('protocol')->getCount();
+$count_attachment = $xnewsletter->getHandler('attachment')->getCount();
 if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
-    $count_mailinglist = $xnewsletter->getHandler('xnewsletter_mailinglist')->getCount();
+    $count_mailinglist = $xnewsletter->getHandler('mailinglist')->getCount();
 }
-$count_bmh = $xnewsletter->getHandler('xnewsletter_bmh')->getCount();
+$count_bmh = $xnewsletter->getHandler('bmh')->getCount();
 if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    $count_task = $xnewsletter->getHandler('xnewsletter_task')->getCount();
+    $count_task = $xnewsletter->getHandler('task')->getCount();
 }
 
 define('_RED', '#FF0000'); // red color

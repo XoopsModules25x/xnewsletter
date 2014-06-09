@@ -44,7 +44,7 @@ if ($letter_id < 1) {
 }
 
 $content = '';
-$letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+$letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $letterTemplate = "{$letterTemplatePath}{$letterObj->getVar('letter_template')}.tpl";
     // subscr data
@@ -76,7 +76,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
 
     preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
-    if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('xnewsletter_template')->get((int)$matches[1]))) {
+    if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
         // get template from database
         $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', "n"));
     } else {

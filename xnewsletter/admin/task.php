@@ -30,11 +30,11 @@ switch ($op) {
     default:
         echo $indexAdmin->addNavigation('task.php');
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort("task_id");
-        $criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xnewsletter_task')->getCount();
-        $task_arr = $xnewsletter->getHandler('xnewsletter_task')->getall($criteria);
+        $task_criteria = new CriteriaCompo();
+        $task_criteria->setSort("task_id");
+        $task_criteria->setOrder("ASC");
+        $taskCounts = $xnewsletter->getHandler('task')->getCount();
+        $taskObjs = $xnewsletter->getHandler('task')->getall($task_criteria);
 
         //Affichage du tableau
         echo "
@@ -47,21 +47,21 @@ switch ($op) {
                 <th align=\"center\">" . _AM_XNEWSLETTER_TASK_CREATED . "</th>
                 <th align='center' width='10%'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
             </tr>";
-        if ($numrows > 0) {
+        if ($taskCounts > 0) {
             $class = "odd";
-            foreach (array_keys($task_arr) as $i) {
-                if ( $task_arr[$i]->getVar("task_pid") == 0) {
+            foreach ($taskObjs as $task_id => $taskObj) {
+                if ( $taskObj->getVar("task_pid") == 0) {
                     echo "<tr class='" . $class . "'>";
                     $class = ($class == "even") ? "odd" : "even";
 
-                    $obj_letter =& $xnewsletter->getHandler('xnewsletter_letter')->get($task_arr[$i]->getVar("task_letter_id"));
-                    $title_letter = $obj_letter->getVar("letter_title");
+                    $letterObj = $xnewsletter->getHandler('letter')->get($taskObj->getVar("task_letter_id"));
+                    $title_letter = $letterObj->getVar("letter_title");
                     echo "<td align=\"center\">" . $title_letter . "</td>";
-                    if ($task_arr[$i]->getVar("task_subscr_id") == 0) {
+                    if ($taskObj->getVar("task_subscr_id") == 0) {
                         //send_test
-                        $title_subscr = $obj_letter->getVar("letter_email_test") . "<br/>(send_test)";
+                        $title_subscr = $letterObj->getVar("letter_email_test") . "<br/>(send_test)";
                     } else {
-                        $subscr =& $xnewsletter->getHandler('xnewsletter_subscr')->get($task_arr[$i]->getVar("task_subscr_id"));
+                        $subscr = $xnewsletter->getHandler('subscr')->get($taskObj->getVar("task_subscr_id"));
                         if (is_object($subscr)) {
                             $title_subscr = $subscr->getVar("subscr_email");
                         } else {
@@ -69,12 +69,12 @@ switch ($op) {
                         }
                     }
                     echo "<td align=\"center\">" . $title_subscr . "</td>";
-                    echo "<td align=\"center\">" . formatTimeStamp($task_arr[$i]->getVar("task_starttime"), "mysql") . "</td>";
-                    echo "<td class='center'>" . XoopsUser::getUnameFromId($task_arr[$i]->getVar("task_submitter"), "S") . "</td>";
-                    echo "<td class='center'>" . formatTimeStamp($task_arr[$i]->getVar("task_created"), "mysql") . "</td>";
+                    echo "<td align=\"center\">" . formatTimeStamp($taskObj->getVar("task_starttime"), "mysql") . "</td>";
+                    echo "<td class='center'>" . XoopsUser::getUnameFromId($taskObj->getVar("task_submitter"), "S") . "</td>";
+                    echo "<td class='center'>" . formatTimeStamp($taskObj->getVar("task_created"), "mysql") . "</td>";
                     echo "<td align='center' width='10%'>";
                     echo "
-                    <a href='task.php?op=delete_task&task_id=" . $task_arr[$i]->getVar("task_id") . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>
+                    <a href='task.php?op=delete_task&task_id=" . $taskObj->getVar("task_id") . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>
                     </td>";
                     echo "</tr>";
                 }
@@ -86,18 +86,18 @@ switch ($op) {
         break;
 
     case "delete_task":
-        $obj =& $xnewsletter->getHandler('xnewsletter_task')->get($_REQUEST["task_id"]);
+        $taskObj = $xnewsletter->getHandler('task')->get($_REQUEST["task_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header("task.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
-            if ($xnewsletter->getHandler('xnewsletter_task')->delete($obj)) {
+            if ($xnewsletter->getHandler('task')->delete($taskObj)) {
                 redirect_header("task.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
-                echo $obj->getHtmlErrors();
+                echo $taskObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $obj->getVar("task")));
+            xoops_confirm(array("ok" => 1, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $taskObj->getVar("task")));
         }
         break;
 }

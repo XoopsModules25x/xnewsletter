@@ -24,9 +24,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_task
+ * Class XnewsletterTask
  */
-class xnewsletter_task extends XoopsObject
+class XnewsletterTask extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -71,14 +71,14 @@ class xnewsletter_task extends XoopsObject
         $criteria->setSort('letter_id');
         $criteria->setOrder('DESC');
         $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, "task_letter_id", $this->getVar("task_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_letter')->getList($criteria));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($criteria));
         $form->addElement($letter_select, true);
 
         $criteria = new CriteriaCompo();
         $criteria->setSort('subscr_id');
         $criteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, "task_subscr_id", $this->getVar("task_subscr_id"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('xnewsletter_subscr')->getList($criteria));
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($criteria));
         $form->addElement($subscr_select, true);
 
         $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, "task_starttime", "", $this->getVar("task_starttime")));
@@ -95,9 +95,9 @@ class xnewsletter_task extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_taskHandler
+ * Class XnewsletterTaskHandler
  */
-class xnewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
+class XnewsletterTaskHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -110,7 +110,7 @@ class xnewsletterxnewsletter_taskHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_task", "xnewsletter_task", "task_id", "task_letter_id");
+        parent::__construct($db, "xnewsletter_task", "XnewsletterTask", "task_id", "task_letter_id");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

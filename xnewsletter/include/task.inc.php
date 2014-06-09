@@ -48,7 +48,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
         redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
     }
 
-    $letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+    $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
     if (count($letterObj) == 0) {
         redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
     }
@@ -79,8 +79,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
         $sql .= str_replace('|', ',', $letter_cats);
         $sql .= "))) GROUP BY subscr_id;";
 
-        //if(!$subscribers = $xoopsDB->query($sql)) die();
-        $subscribers = $xoopsDB->query($sql) or die();
+        if(!$subscribers = $xoopsDB->query($sql)) die();
 
         while ($subscriber = $xoopsDB->fetchArray($subscribers)) {
             $subscr_id = $subscriber["subscr_id"];
@@ -90,15 +89,15 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
                 $protocol_criteria->add(new Criteria('protocol_letter_id', $letter_id));
                 $protocol_criteria->add(new Criteria('protocol_subscriber_id', $subscr_id));
                 $protocol_criteria->add(new Criteria('protocol_success', 1));
-                $protocolCount = $xnewsletter->getHandler('xnewsletter_protocol')->getCount($protocol_criteria);
+                $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocol_criteria);
                 if ($protocolCount > 0) $subscr_id = 0; //letter already successfully sent
             }
             if ($subscr_id > 0) {
                 if ($subscriber['subscr_actkey'] == '') {
-                    $u = $xnewsletter->getHandler('xnewsletter_subscr')->get($subscr_id);
+                    $u = $xnewsletter->getHandler('subscr')->get($subscr_id);
                     $subscriber['subscr_actkey'] = xoops_makepass();
                     $u->setVar('subscr_actkey', $subscriber['subscr_actkey']);
-                    $xnewsletter->getHandler('xnewsletter_subscr')->insert($u);
+                    $xnewsletter->getHandler('subscr')->insert($u);
                     unset($u);
                 }
                 $recipients[] = $subscriber['subscr_id'];
@@ -126,14 +125,14 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
             $sql .= " (`task_letter_id`, `task_subscr_id`,  `task_starttime`, `task_submitter`, `task_created` )";
             $sql .= " VALUES ({$letter_id}, {$subscriber_id}, {$task_starttime}, {$submitter}, " . time() . ")";
             if (!$xoopsDB->queryF($sql)) {
-                $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+                $protocolObj = $xnewsletter->getHandler('protocol')->create();
                 $protocolObj->setVar('protocol_letter_id', $letter_id);
                 $protocolObj->setVar('protocol_subscriber_id', $subscriber_id);
                 $protocolObj->setVar('protocol_status', _AM_XNEWSLETTER_TASK_ERROR_CREATE);
                 $protocolObj->setVar('protocol_success', 0);
                 $protocolObj->setVar('protocol_submitter', $submitter);
                 $protocolObj->setVar('protocol_created', time());
-                if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
+                if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     // create protocol is ok
                 } else {
                     echo $protocolObj->getHtmlErrors();
@@ -183,7 +182,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
     while ($task_letter = $xoopsDB->fetchArray($task_letters)) {
         $letter_id = $task_letter["task_letter_id"];
-        $letterObj = $xnewsletter->getHandler('xnewsletter_letter')->get($letter_id);
+        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         if (count($letterObj) == 0) {
             return _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID;
         }
@@ -200,7 +199,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         if ($letter_account == '' && $letter_account == 0) {
             return _MA_XNEWSLETTER_ACCOUNTS_NONEAVAIL;
         }
-        $accountObj = $xnewsletter->getHandler('xnewsletter_accounts')->get($letter_account);
+        $accountObj = $xnewsletter->getHandler('accounts')->get($letter_account);
         $account_type = $accountObj->getVar('accounts_type');
         $account_yourname = $accountObj->getVar('accounts_yourname');
         $account_yourmail = $accountObj->getVar('accounts_yourmail');
@@ -274,9 +273,9 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         $attachment_criteria->add(new Criteria('attachment_letter_id', $letter_id));
         $attachment_criteria->setSort('attachment_id');
         $attachment_criteria->setOrder('ASC');
-        $attachmentCount = $xnewsletter->getHandler('xnewsletter_attachment')->getCount($attachment_criteria);
+        $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachment_criteria);
         if ($attachmentCount > 0) {
-            $attachmentObjs = $xnewsletter->getHandler('xnewsletter_attachment')->getall($attachment_criteria);
+            $attachmentObjs = $xnewsletter->getHandler('attachment')->getall($attachment_criteria);
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
                 $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path');
                 if (substr($uploaddir, -1) != "/") {
@@ -345,7 +344,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $letterTpl->assign('unsubscribe_link', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=unsub&email={$recipient['address']}&actkey={$activationKey}");
 
                 preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
-                if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('xnewsletter_template')->get((int)$matches[1]))) {
+                if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
                     // get template from database
                     $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', "n"));
                 } else {
@@ -393,14 +392,14 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $sql_delete .= " WHERE `task_id`= {$recipient["task_id"]}";
                 $result = $xoopsDB->queryF($sql_delete);
 
-                $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+                $protocolObj = $xnewsletter->getHandler('protocol')->create();
                 $protocolObj->setVar('protocol_letter_id', $letter_id);
                 $protocolObj->setVar('protocol_subscriber_id', $subscriber_id);
                 $protocolObj->setVar('protocol_status', $protocol_status);
                 $protocolObj->setVar('protocol_success', $protocol_success);
                 $protocolObj->setVar('protocol_submitter', $senderuid);
                 $protocolObj->setVar('protocol_created', time());
-                if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
+                if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     // create protocol is ok
                 } else {
                     echo $protocolObj->getHtmlErrors();
@@ -436,14 +435,14 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
             $protocol_status = '';
         }
     }
-    $protocolObj = $xnewsletter->getHandler('xnewsletter_protocol')->create();
+    $protocolObj = $xnewsletter->getHandler('protocol')->create();
     $protocolObj->setVar('protocol_letter_id', $letter_id);
     $protocolObj->setVar('protocol_subscriber_id', 0);
     $protocolObj->setVar('protocol_status', $protocol_status);
     $protocolObj->setVar('protocol_success', $protocol_success);
     $protocolObj->setVar('protocol_submitter', $senderuid);
     $protocolObj->setVar('protocol_created', time());
-    if ($xnewsletter->getHandler('xnewsletter_protocol')->insert($protocolObj)) {
+    if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
         // create protocol is ok
     } else {
         echo $protocolObj->getHtmlErrors();

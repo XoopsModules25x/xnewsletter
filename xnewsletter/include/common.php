@@ -30,11 +30,7 @@ define("XNEWSLETTER_ICONS_URL", XNEWSLETTER_URL . '/assets/images/icons');
 
 xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 
-//include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-//include_once XOOPS_ROOT_PATH . '/class/tree.php';
-//include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-
-    include_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
+include_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
 include_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 include_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
 include_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class

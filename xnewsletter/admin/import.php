@@ -53,13 +53,13 @@ switch ($op) {
         $import_criteria = new CriteriaCompo();
         $import_criteria->setSort("import_id");
         $import_criteria->setOrder("ASC");
-        $numrows = $xnewsletter->getHandler('xnewsletter_import')->getCount($import_criteria);
+        $importsCount = $xnewsletter->getHandler('import')->getCount($import_criteria);
 
         $import_criteria->setStart($start);
         $import_criteria->setLimit($limitcheck);
-        $import_arr = $xnewsletter->getHandler('xnewsletter_import')->getall($import_criteria);
+        $importObjs = $xnewsletter->getHandler('import')->getall($import_criteria);
 
-        if ($numrows > 0) {
+        if ($importsCount > 0) {
             include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
 
             $action = $_SERVER["REQUEST_URI"];
@@ -68,12 +68,12 @@ switch ($op) {
             $form .= "<form name=\"form_import_{$unique_id}\" id=\"form_import_{$unique_id}\" action=\"{$currentFile}\" method=\"post\" enctype=\"multipart/form-data\">";
 
             $showlimit = str_replace("%s", $start + 1, _AM_XNEWSLETTER_IMPORT_SHOW);
-            if ($limitcheck < $numrows) {
+            if ($limitcheck < $importsCount) {
                 $showlimit = str_replace("%l", $limitcheck, $showlimit);
             } else {
-                $showlimit = str_replace("%l", $numrows, $showlimit);
+                $showlimit = str_replace("%l", $importsCount, $showlimit);
             }
-            $showlimit = str_replace("%n", $numrows, $showlimit);
+            $showlimit = str_replace("%n", $importsCount, $showlimit);
 
             $form .= "
             <table width=\"100%\" cellspacing=\"1\" class=\"outer\">
@@ -98,24 +98,24 @@ switch ($op) {
             $counter = 0;
 
             //get data for dropdown with cats
-            $criteria = new CriteriaCompo();
-            $criteria->setSort('cat_id ASC, cat_name');
-            $criteria->setOrder('ASC');
-            $cat_arr=$xnewsletter->getHandler('xnewsletter_cat')->getall($criteria);
+            $cat_criteria = new CriteriaCompo();
+            $cat_criteria->setSort('cat_id ASC, cat_name');
+            $cat_criteria->setOrder('ASC');
+            $catObjs = $xnewsletter->getHandler('cat')->getall($cat_criteria);
 
-            foreach (array_keys($import_arr) as $i) {
+            foreach ($importObjs as $i => $importObj) {
                 ++$counter;
                 $form .= "<tr class=\"" . $class . "\">";
                 $class = ($class == "even") ? "odd" : "even";
-                $form .=  "<td align=\"center\">".$counter;
-                $form .=  "<input type='hidden' name='import_id_".$counter."' title='import_id_".$counter."' id='import_id_".$counter."' value='".$import_arr[$i]->getVar("import_id")."' />";
+                $form .=  "<td align=\"center\">" . $counter;
+                $form .=  "<input type='hidden' name='import_id_" . $counter . "' title='import_id_" . $counter . "' id='import_id_" . $counter . "' value='" . $importObj->getVar("import_id") . "' />";
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
-                $form .=  "<input type='text' disabled=disabled name='email_".$counter."' title='"._AM_XNEWSLETTER_SUBSCR_EMAIL."' id='email_".$counter."' value='".$import_arr[$i]->getVar("import_email")."' />";
+                $form .=  "<input type='text' disabled=disabled name='email_" . $counter . "' title='" . _AM_XNEWSLETTER_SUBSCR_EMAIL . "' id='email_" . $counter . "' value='" . $importObj->getVar("import_email") . "' />";
                 $form .=  "</td>";
 
                 $form .=  "<td align=\"center\">";
-                $sex = $import_arr[$i]->getVar("import_sex");
+                $sex = $importObj->getVar("import_sex");
                 $form .= "<select size=\"1\" name=\"sex_" . $counter . "\" id=\"sex_" . $counter . "\" title=\"" . _AM_XNEWSLETTER_SUBSCR_SEX . "\" ";
                 $form .= "value=\"" . $sex . "\">";
                 $form .= "<option value=\"\"";
@@ -142,35 +142,35 @@ switch ($op) {
                 $form .=  "</td>";
 
                 $form .=  "<td align=\"center\">";
-                $form .=  "<input type='text' name='firstname_" . $counter . "' title='"._AM_XNEWSLETTER_SUBSCR_FIRSTNAME."' id='firstname_".$counter."' value='".$import_arr[$i]->getVar("import_firstname")."' />";
+                $form .=  "<input type='text' name='firstname_" . $counter . "' title='" . _AM_XNEWSLETTER_SUBSCR_FIRSTNAME . "' id='firstname_" . $counter . "' value='" . $importObj->getVar("import_firstname") . "' />";
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
-                $form .=  "<input type='text' name='lastname_" . $counter . "' title='"._AM_XNEWSLETTER_SUBSCR_LASTNAME."' id='lastname_".$counter."' value='".$import_arr[$i]->getVar("import_lastname")."' />";
+                $form .=  "<input type='text' name='lastname_" . $counter . "' title='" . _AM_XNEWSLETTER_SUBSCR_LASTNAME . "' id='lastname_" . $counter . "' value='" . $importObj->getVar("import_lastname") . "' />";
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
-                $subscr_id = $import_arr[$i]->getVar("import_subscr_id");
-                $form .= "<input type='hidden' name='subscr_id_".$counter."' title='subscr_id' id='subscr_id_".$counter."' value='".$subscr_id."' />";
+                $subscr_id = $importObj->getVar("import_subscr_id");
+                $form .= "<input type='hidden' name='subscr_id_" . $counter . "' title='subscr_id' id='subscr_id_" . $counter . "' value='" . $subscr_id . "' />";
                 if ($subscr_id > 0)
-                    $form .= "<img src='".XNEWSLETTER_ICONS_URL."/xn_ok.png' alt='"._AM_XNEWSLETTER_IMPORT_EMAIL_EXIST."' title='"._AM_XNEWSLETTER_IMPORT_EMAIL_EXIST."' />";
+                    $form .= "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_IMPORT_EMAIL_EXIST . "' title='"._AM_XNEWSLETTER_IMPORT_EMAIL_EXIST."' />";
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
-                $catsubscr_id = $import_arr[$i]->getVar("import_catsubscr_id");
-                $form .= "<input type='hidden' name='catsubscr_id_".$counter."' title='catsubscr_id' id='catsubscr_id_".$counter."' value='".$catsubscr_id."' />";
+                $catsubscr_id = $importObj->getVar("import_catsubscr_id");
+                $form .= "<input type='hidden' name='catsubscr_id_" . $counter . "' title='catsubscr_id' id='catsubscr_id_" . $counter . "' value='".$catsubscr_id . "' />";
                 if ($catsubscr_id > 0)
-                    $form .= "<img src='".XNEWSLETTER_ICONS_URL."/xn_ok.png' alt='"._AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST."' title='"._AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST."' />";
+                    $form .= "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST . "' title='" . _AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST . "' />";
                 $form .=  "</td>";
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
 
-                $curr_cat_id =$import_arr[$i]->getVar("import_cat_id");
-                $form .= "<select size=\"1\" name=\"cat_id_".$counter."\" id=\"cat_id_".$counter."\" title=\"cat\" ";
-                $form .= "value=\"".$curr_cat_id."\">";
+                $curr_cat_id =$importObj->getVar("import_cat_id");
+                $form .= "<select size=\"1\" name=\"cat_id_" . $counter . "\" id=\"cat_id_" . $counter . "\" title=\"cat\" ";
+                $form .= "value=\"" . $curr_cat_id . "\">";
                 $cat_select = "<option value=\"0\"";
-                $cat_select .= ">"._AM_XNEWSLETTER_IMPORT_NOIMPORT."</option>";
-                foreach (array_keys($cat_arr) as $j) {
-                    $cat_select .= "<option value=\"".$j."\"";
+                $cat_select .= ">" . _AM_XNEWSLETTER_IMPORT_NOIMPORT . "</option>";
+                foreach ($catObjs as $cat_id => $catObj) {
+                    $cat_select .= "<option value=\"" . $cat_id . "\"";
                     if ($curr_cat_id == $j) $cat_select .= " selected=\"selected\"";
-                    $cat_select .= ">".$cat_arr[$j]->getVar("cat_name")."</option>";
+                    $cat_select .= ">" . $catObj->getVar("cat_name") . "</option>";
                 }
 
                 $form .= $cat_select;
@@ -182,10 +182,10 @@ switch ($op) {
             $form .= "<tr class=\"".$class."\">";
             $class = ($class == "even") ? "odd" : "even";
             $form .= "<td colspan=\"8\"align=\"center\">";
-            $form .= "<input type='hidden' name='counter' title='counter' id='counter' value='".$counter."' />";
-            $form .= "<input type='hidden' name='limitcheck' title='limitcheck' id='limitcheck' value='".$limitcheck."' />";
+            $form .= "<input type='hidden' name='counter' title='counter' id='counter' value='" . $counter . "' />";
+            $form .= "<input type='hidden' name='limitcheck' title='limitcheck' id='limitcheck' value='" . $limitcheck . "' />";
             $form .= "<input type='hidden' name='op' title='op' id='op' value='apply_import_form' />";
-            $form .= "<input type='submit' class='formButton' name='submit' id='submit' value='"._AM_XNEWSLETTER_IMPORT_EXEC."' title='"._AM_XNEWSLETTER_IMPORT_EXEC."' />";
+            $form .= "<input type='submit' class='formButton' name='submit' id='submit' value='" . _AM_XNEWSLETTER_IMPORT_EXEC . "' title='" . _AM_XNEWSLETTER_IMPORT_EXEC . "' />";
             $form .= "</td></tr>";
 
             $form .=  "</table></form>";
@@ -216,7 +216,7 @@ switch ($op) {
             //update cat_id and import_status
             $sql = "UPDATE {$xoopsDB->prefix('xnewsletter_import')}";
             $sql .= " SET `import_cat_id`='{$cat_id}', `import_status`=1";
-            $sql.= " WHERE `import_id`={$import_id}";
+            $sql .= " WHERE `import_id`={$import_id}";
             $result=$xoopsDB->queryF($sql);
         }
 
@@ -234,8 +234,8 @@ switch ($op) {
 
         $import_criteria = new CriteriaCompo();
         $import_criteria->add(new Criteria('import_status', '1'));
-        $numrows_total 	= $xnewsletter->getHandler('xnewsletter_import')->getCount();
-        $numrows_act 	= $xnewsletter->getHandler('xnewsletter_import')->getCount($import_criteria);
+        $numrows_total 	= $xnewsletter->getHandler('import')->getCount();
+        $numrows_act 	= $xnewsletter->getHandler('import')->getCount($import_criteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";
@@ -327,7 +327,7 @@ switch ($op) {
             }
 
             echo "<div style='margin-top:20px;margin-bottom:20px;color:#ff0000;font-weight:bold;font-size:14px'>";
-            $img_ok = "<img src='".XNEWSLETTER_ICONS_URL."/xn_ok.png' alt='"._AM_XNEWSLETTER_OK."' title='"._AM_XNEWSLETTER_OK."' />&nbsp;&nbsp;";
+            $img_ok = "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='" . _AM_XNEWSLETTER_OK . "' />&nbsp;&nbsp;";
             $resulttext = str_replace("%p", $numrows_act ,_AM_XNEWSLETTER_IMPORT_FINISHED);
             $resulttext = str_replace("%t", $numrows_total ,$resulttext);
             echo $img_ok.$resulttext;
@@ -336,22 +336,22 @@ switch ($op) {
             $numrows_pend = $xnewsletter->getHandler('xnewsletter_import')->getCount();
             if ($numrows_pend > 0) {
                 $form_continue = "<form id='form_continue' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_continue'>";
-                $form_continue .= "<input id='submit' class='formButton' type='submit' title='"._AM_XNEWSLETTER_IMPORT_CONTINUE."' value='"._AM_XNEWSLETTER_IMPORT_CONTINUE."' name='submit'>";
-                $form_continue .= '<input id="limitcheck" type="hidden" value="'.$limitcheck.'" name="limitcheck">';
+                $form_continue .= "<input id='submit' class='formButton' type='submit' title='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' value='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' name='submit'>";
+                $form_continue .= '<input id="limitcheck" type="hidden" value="' . $limitcheck . '" name="limitcheck">';
                 if ($check_import==1) {
                     //show next form for check settings
                     $form_continue .= '<input id="op" type="hidden" value="show_formcheck" name="op">';
                 } else {
                     // set import_status = 1 for next package
-                    $sql_update = "UPDATE ".$xoopsDB->prefix("xnewsletter_import")." SET `import_status`=1 ORDER BY import_id LIMIT ".$limitcheck;
+                    $sql_update = "UPDATE " . $xoopsDB->prefix("xnewsletter_import")." SET `import_status`=1 ORDER BY import_id LIMIT " . $limitcheck;
                     $xoopsDB->queryF($sql_update);
                     //execute import for the next package
                     $form_continue .= '<input id="op" type="hidden" value="exec_import_final" name="op">';
                 }
-                $form_continue .= '<input id="action_after_read" type="hidden" value="'.$action_after_read.'" name="action_after_read">';
-                $form_continue .= '<input id="limitcheck" type="hidden" value="'.$limitcheck.'" name="limitcheck">';
-                $form_continue .= '<input id="plugin" type="hidden" value="'.$plugin.'" name="plugin">';
-                $form_continue .= '<input id="check_import" type="hidden" value="'.$check_import.'" name="check_import">';
+                $form_continue .= '<input id="action_after_read" type="hidden" value="' . $action_after_read . '" name="action_after_read">';
+                $form_continue .= '<input id="limitcheck" type="hidden" value="' . $limitcheck . '" name="limitcheck">';
+                $form_continue .= '<input id="plugin" type="hidden" value="' . $plugin . '" name="plugin">';
+                $form_continue .= '<input id="check_import" type="hidden" value="' . $check_import . '" name="check_import">';
                 $form_continue .= "</form>";
                 echo $form_continue;
             }
@@ -380,7 +380,7 @@ switch ($op) {
         }
 
         //delete all existing data
-        $sql = "TRUNCATE TABLE ".$xoopsDB->prefix('xnewsletter_import');
+        $sql = "TRUNCATE TABLE " . $xoopsDB->prefix('xnewsletter_import');
         $result= $xoopsDB->queryF($sql);
 
         //import data into xnewsletter_import with plugin
@@ -437,7 +437,7 @@ switch ($op) {
     case "default":
     default:
         //show basic search form
-        $importObj = $xnewsletter->getHandler('xnewsletter_import')->create();
+        $importObj = $xnewsletter->getHandler('import')->create();
         $form = $importObj->getSearchForm($plugin, $action_after_read, $limitcheck);
         $form->display();
         break;

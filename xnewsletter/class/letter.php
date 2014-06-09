@@ -31,9 +31,9 @@
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
- * Class xnewsletter_letter
+ * Class XnewsletterLetter
  */
-class xnewsletter_letter extends XoopsObject
+class XnewsletterLetter extends XoopsObject
 {
     public $xnewsletter = null;
 
@@ -116,9 +116,9 @@ class xnewsletter_letter extends XoopsObject
         $criteria = new CriteriaCompo();
         $criteria->setSort("template_title DESC, template_id");
         $criteria->setOrder("DESC");
-        $templateCount = $this->xnewsletter->getHandler('xnewsletter_template')->getCount();
+        $templateCount = $this->xnewsletter->getHandler('template')->getCount();
         if($templateCount>0) {
-            $templateObjs = $this->xnewsletter->getHandler('xnewsletter_template')->getall($criteria);
+            $templateObjs = $this->xnewsletter->getHandler('template')->getall($criteria);
             foreach($templateObjs as $templateObj) {
                 $template_select->addOption("db:" . $templateObj->getVar('template_id'), "db:" . $templateObj->getVar('template_title'));
             }
@@ -134,7 +134,7 @@ class xnewsletter_letter extends XoopsObject
         $crit_cat->setOrder('ASC');
         $letter_cats = explode("|", $this->getVar("letter_cats"));
         $cat_select  = new XoopsFormCheckBox(_AM_XNEWSLETTER_LETTER_CATS, "letter_cats", $letter_cats);
-        $cat_arr     = $this->xnewsletter->getHandler('xnewsletter_cat')->getall($crit_cat);
+        $cat_arr     = $this->xnewsletter->getHandler('cat')->getall($crit_cat);
         foreach (array_keys($cat_arr) as $i) {
             $cat_id   = $cat_arr[$i]->getVar("cat_id");
             $cat_name = $cat_arr[$i]->getVar("cat_name");
@@ -153,7 +153,7 @@ class xnewsletter_letter extends XoopsObject
             $crit_att->add(new Criteria('attachment_letter_id', $this->getVar("letter_id")));
             $crit_att->setSort("attachment_id");
             $crit_att->setOrder("ASC");
-            $attachment_arr = $this->xnewsletter->getHandler('xnewsletter_attachment')->getall($crit_att);
+            $attachment_arr = $this->xnewsletter->getHandler('attachment')->getall($crit_att);
         }
         $i               = 1;
         $remove_att_tray = array();
@@ -189,10 +189,10 @@ class xnewsletter_letter extends XoopsObject
         $crit_accounts = new CriteriaCompo();
         $crit_accounts->setSort("accounts_id");
         $crit_accounts->setOrder("ASC");
-        $numrows_accounts = $this->xnewsletter->getHandler('xnewsletter_accounts')->getCount($crit_accounts);
+        $numrows_accounts = $this->xnewsletter->getHandler('accounts')->getCount($crit_accounts);
         $account_default  = 0;
         if ($this->isNew()) {
-            $accounts_arr = $this->xnewsletter->getHandler('xnewsletter_accounts')->getall($crit_accounts);
+            $accounts_arr = $this->xnewsletter->getHandler('accounts')->getall($crit_accounts);
             foreach ($accounts_arr as $account) {
                 if ($account->getVar("accounts_default") == 1) {
                     $account_default = $account->getVar("accounts_id");
@@ -204,7 +204,7 @@ class xnewsletter_letter extends XoopsObject
         if ($numrows_accounts == 1) {
             $form->addElement(new XoopsFormHidden("letter_account", $account_default));
         } else {
-            $accounts_list = $this->xnewsletter->getHandler('xnewsletter_accounts')->getList($crit_accounts);
+            $accounts_list = $this->xnewsletter->getHandler('accounts')->getList($crit_accounts);
 
             if ($admin_aerea == true) {
                 $opt_accounts = new XoopsFormRadio(_AM_XNEWSLETTER_LETTER_ACCOUNTS_AVAIL, "letter_account", $account_default);
@@ -241,9 +241,9 @@ class xnewsletter_letter extends XoopsObject
 }
 
 /**
- * Class xnewsletterxnewsletter_letterHandler
+ * Class XnewsletterLetterHandler
  */
-class xnewsletterxnewsletter_letterHandler extends XoopsPersistableObjectHandler
+class XnewsletterLetterHandler extends XoopsPersistableObjectHandler
 {
     /**
      * @var xnewsletterxnewsletter
@@ -256,7 +256,7 @@ class xnewsletterxnewsletter_letterHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_letter", "xnewsletter_letter", "letter_id", "letter_title");
+        parent::__construct($db, "xnewsletter_letter", "XnewsletterLetter", "letter_id", "letter_title");
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }
