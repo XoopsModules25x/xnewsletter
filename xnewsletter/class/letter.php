@@ -118,7 +118,7 @@ class XnewsletterLetter extends XoopsObject
         $criteria->setOrder("DESC");
         $templateCount = $this->xnewsletter->getHandler('template')->getCount();
         if($templateCount>0) {
-            $templateObjs = $this->xnewsletter->getHandler('template')->getall($criteria);
+            $templateObjs = $this->xnewsletter->getHandler('template')->getAll($criteria);
             foreach($templateObjs as $templateObj) {
                 $template_select->addOption("db:" . $templateObj->getVar('template_id'), "db:" . $templateObj->getVar('template_title'));
             }
@@ -134,7 +134,7 @@ class XnewsletterLetter extends XoopsObject
         $crit_cat->setOrder('ASC');
         $letter_cats = explode("|", $this->getVar("letter_cats"));
         $cat_select  = new XoopsFormCheckBox(_AM_XNEWSLETTER_LETTER_CATS, "letter_cats", $letter_cats);
-        $cat_arr     = $this->xnewsletter->getHandler('cat')->getall($crit_cat);
+        $cat_arr     = $this->xnewsletter->getHandler('cat')->getAll($crit_cat);
         foreach (array_keys($cat_arr) as $i) {
             $cat_id   = $cat_arr[$i]->getVar("cat_id");
             $cat_name = $cat_arr[$i]->getVar("cat_name");
@@ -153,7 +153,7 @@ class XnewsletterLetter extends XoopsObject
             $crit_att->add(new Criteria('attachment_letter_id', $this->getVar("letter_id")));
             $crit_att->setSort("attachment_id");
             $crit_att->setOrder("ASC");
-            $attachment_arr = $this->xnewsletter->getHandler('attachment')->getall($crit_att);
+            $attachment_arr = $this->xnewsletter->getHandler('attachment')->getAll($crit_att);
         }
         $i               = 1;
         $remove_att_tray = array();
@@ -192,7 +192,7 @@ class XnewsletterLetter extends XoopsObject
         $numrows_accounts = $this->xnewsletter->getHandler('accounts')->getCount($crit_accounts);
         $account_default  = 0;
         if ($this->isNew()) {
-            $accounts_arr = $this->xnewsletter->getHandler('accounts')->getall($crit_accounts);
+            $accounts_arr = $this->xnewsletter->getHandler('accounts')->getAll($crit_accounts);
             foreach ($accounts_arr as $account) {
                 if ($account->getVar("accounts_default") == 1) {
                     $account_default = $account->getVar("accounts_id");

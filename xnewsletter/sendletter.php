@@ -62,11 +62,11 @@ if (!$sendletter_perm["send"]) {
 }
 
 $start_sending = false;
-$criteria_protocol = new CriteriaCompo();
-$criteria_protocol->add(new Criteria('protocol_letter_id', $letter_id));
-$criteria_protocol->add(new Criteria('protocol_subscriber_id', 0, '>'));
-$criteria_protocol->setLimit(1);
-$protocolCount = $xnewsletter->getHandler('protocol')->getCount($criteria_protocol);
+$protocolCriteria = new CriteriaCompo();
+$protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+$protocolCriteria->add(new Criteria('protocol_subscriber_id', 0, '>'));
+$protocolCriteria->setLimit(1);
+$protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
 if ($protocolCount > 0) {
     if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == true) {
         $start_sending = true;

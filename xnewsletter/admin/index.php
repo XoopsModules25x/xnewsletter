@@ -26,20 +26,19 @@
  * ****************************************************************************
  */
 
+$currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
 
-//global $indexAdmin;
-
 //count "total"
-$count_cat = $xnewsletter->getHandler('cat')->getCount();
-$count_accounts = $xnewsletter->getHandler('accounts')->getCount();
+$catsCount = $xnewsletter->getHandler('cat')->getCount();
+$accountssCount = $xnewsletter->getHandler('accounts')->getCount();
 
-$count_subscr = $xnewsletter->getHandler('subscr')->getCount();
-$count_catsubscr = $xnewsletter->getHandler('catsubscr')->getCount();
-$count_letter = $xnewsletter->getHandler('letter')->getCount();
-$count_protocol = $xnewsletter->getHandler('protocol')->getCount();
-$count_attachment = $xnewsletter->getHandler('attachment')->getCount();
+$subscrsCount = $xnewsletter->getHandler('subscr')->getCount();
+$catsubscrsCount = $xnewsletter->getHandler('catsubscr')->getCount();
+$lettersCount = $xnewsletter->getHandler('letter')->getCount();
+$protocolsCount = $xnewsletter->getHandler('protocol')->getCount();
+$attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
 if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
     $count_mailinglist = $xnewsletter->getHandler('mailinglist')->getCount();
 }
@@ -53,13 +52,13 @@ define('_GREEN', '#00AA00'); // green color
 
 $indexAdmin->addInfoBox(_AM_XNEWSLETTER_LETTER);
 
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ACCOUNTS, $count_accounts, ($count_accounts == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CAT, $count_cat, ($count_cat == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_SUBSCR, $count_subscr, ($count_subscr == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CATSUBSCR, $count_catsubscr, ($count_catsubscr == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_LETTER, $count_letter, ($count_letter == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ATTACHMENT, $count_attachment, ($count_attachment == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_PROTOCOL, $count_protocol, ($count_protocol == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ACCOUNTS, $accountssCount, ($accountssCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CAT, $catsCount, ($catsCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_SUBSCR, $subscrsCount, ($subscrsCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CATSUBSCR, $catsubscrsCount, ($catsubscrsCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_LETTER, $lettersCount, ($lettersCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ATTACHMENT, $attachmentsCount, ($attachmentsCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_PROTOCOL, $protocolsCount, ($protocolsCount == 0) ? _RED : _GREEN);
 
 if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
     $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_MAILINGLIST, $count_mailinglist, ($count_mailinglist == 0) ? _RED : _GREEN);
@@ -71,7 +70,7 @@ if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
 
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_BMH, $count_bmh, ($count_bmh == 0) ? _RED : _GREEN);
 
-echo $indexAdmin->addNavigation("index.php") ;
+echo $indexAdmin->addNavigation($currentFile) ;
 echo $indexAdmin->renderIndex();
 
 include "admin_footer.php";

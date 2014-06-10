@@ -26,9 +26,9 @@
  * ****************************************************************************
  */
 
+$currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
-//global $pathIcon, $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
 $op     = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
@@ -37,19 +37,19 @@ $cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
 switch ($op) {
     case "list" :
     default:
-        echo $indexAdmin->addNavigation('cat.php');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, 'cat.php?op=new_cat', 'add');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, '?op=new_cat', 'add');
         echo $indexAdmin->renderButton();
-        
-        $limit = $GLOBALS['xoopsModuleConfig']['adminperpage'];
-        $cat_criteria = new CriteriaCompo();
-        $cat_criteria->setSort("cat_id ASC, cat_name");
-        $cat_criteria->setOrder("ASC");
+        //
+        $limit = $xnewsletter->getConfig('adminperpage');
+        $catCriteria = new CriteriaCompo();
+        $catCriteria->setSort("cat_id ASC, cat_name");
+        $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
         $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
-        $cat_criteria->setStart($start);
-        $cat_criteria->setLimit($limit);
-        $catObjs = $xnewsletter->getHandler('cat')->getall($cat_criteria);
+        $catCriteria->setStart($start);
+        $catCriteria->setLimit($limit);
+        $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         if ($catsCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($catsCount, $limit, $start, 'start', 'op=list');
@@ -87,7 +87,7 @@ switch ($op) {
                 $class = ($class == "even") ? "odd" : "even";
                 echo "<td class='center'>" . $cat_id . "</td>";
                 echo "<td class='center'>" . $catObj->getVar("cat_name") . "</td>";
-                echo "<td>" . $catObj->getVar("cat_info") . "</td>";
+                echo "<td>" . $catObj->getVar("cat_info") . "&nbsp;</td>";
 
                 // cat_gperms_admin;
                 $arr_cat_gperms_admin = "";
@@ -137,8 +137,9 @@ switch ($op) {
                     echo "<td class='center'>" . $catObj->getVar("cat_mailinglist") . "</td>";
                 }
                 echo "<td class='center width5' nowrap='nowrap'>";
-                echo "<a href='cat.php?op=edit_cat&cat_id=" . $cat_id . "'><img src=".XNEWSLETTER_ICONS_URL."/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
-                echo "&nbsp;<a href='cat.php?op=delete_cat&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "<a href='?op=edit_cat&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "&nbsp;";
+                echo "<a href='?op=delete_cat&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -162,10 +163,10 @@ switch ($op) {
         break;
 
     case "new_cat" :
-        echo $indexAdmin->addNavigation("cat.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, 'cat.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $catObj = $xnewsletter->getHandler('cat')->create();
         $form = $catObj->getForm();
         $form->display();
@@ -173,14 +174,11 @@ switch ($op) {
 
     case "save_cat":
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-            redirect_header("cat.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+            redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
         $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
-
-        // Form cat_name
         $catObj->setVar("cat_name", $_POST["cat_name"] );
-        // Form cat_info
         $catObj->setVar("cat_info", $_POST["cat_info"] );
 
         global $xoopsDB;
@@ -299,7 +297,7 @@ switch ($op) {
                 unset($gperm);
             }
 
-            redirect_header("cat.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
         }
 
         echo $catObj->getHtmlErrors();
@@ -308,11 +306,11 @@ switch ($op) {
         break;
 
     case "edit_cat" :
-        echo $indexAdmin->addNavigation("cat.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, 'cat.php?op=new_cat', 'add');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, 'cat.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, '?op=new_cat', 'add');
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-        
+        //
         $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
         $form = $catObj->getForm();
         $form->display();
@@ -322,10 +320,10 @@ switch ($op) {
         $catObj = $xnewsletter->getHandler('cat')->get($_REQUEST["cat_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-                redirect_header("cat.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
             if ($xnewsletter->getHandler('cat')->delete($catObj)) {
-                redirect_header("cat.php", 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $catObj->getHtmlErrors();
             }

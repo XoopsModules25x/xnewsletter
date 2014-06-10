@@ -29,7 +29,6 @@
 $currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
-//global $indexAdmin;
 
 // We recovered the value of the argument op in the URL$
 $op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
@@ -39,7 +38,7 @@ $filter         = xnewsletter_CleanVars($_REQUEST, 'bmh_measure_filter', _AM_XNE
 
 switch ($op) {
     case "bmh_delsubscr":
-        if ( (isset($_POST["ok"]) && $_POST["ok"] == 1) ) {
+        if ((isset($_POST["ok"]) && $_POST["ok"] == 1)) {
             $count_err = 0;
 
             $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
@@ -68,12 +67,12 @@ switch ($op) {
             }
 
             //delete subscription
-            $catsubscr_criteria = new CriteriaCompo();
-            $catsubscr_criteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
-            $catsubscrsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscr_criteria);
+            $catsubscrCriteria = new CriteriaCompo();
+            $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
+            $catsubscrsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
             if ($catsubscrsCount > 0) {
-                $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getall($catsubscr_criteria);
-                foreach ($catsubscrObjs as $cat_id => $catsubscrObj) {
+                $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
+                foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
                     $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($catsubscrObj->getVar("catsubscr_id"));
                     $catObj = $xnewsletter->getHandler('cat')->get($catsubscrObj->getVar("catsubscr_catid"));
                     $cat_mailinglist = $catObj->getVar("cat_mailinglist");
@@ -137,12 +136,12 @@ switch ($op) {
         require_once('bmh_callback_database.php');
         require_once(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php');
 
-        $account_criteria = new CriteriaCompo();
-        $account_criteria->add(new Criteria("accounts_use_bmh", "1"));
-        $accountsCount = $xnewsletter->getHandler('accounts')->getCount($account_criteria);
+        $accountCriteria = new CriteriaCompo();
+        $accountCriteria->add(new Criteria("accounts_use_bmh", "1"));
+        $accountsCount = $xnewsletter->getHandler('accounts')->getCount($accountCriteria);
 
         if ($accountsCount > 0) {
-            $accountObjs = $xnewsletter->getHandler('accounts')->getall($account_criteria);
+            $accountObjs = $xnewsletter->getHandler('accounts')->getAll($accountCriteria);
             $result_bmh = _AM_XNEWSLETTER_BMH_SUCCESSFUL."<br/>";
 
             foreach ($accountObjs as $account_id => $accountObj) {
@@ -190,7 +189,7 @@ switch ($op) {
                 $result_bmh = str_replace("%m", $bmh->result_moved, $result_bmh);
                 $result_bmh = str_replace("%d", $bmh->result_deleted, $result_bmh);
             }
-            redirect_header(, 5, $result_bmh);
+            redirect_header($currentFile, 5, $result_bmh);
         } else {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE);
         }
@@ -201,7 +200,7 @@ switch ($op) {
         echo $indexAdmin->addNavigation('bmh.php');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_RUNBMH, '?op=run_bmh', 'add');
         echo $indexAdmin->renderButton();
-
+        //
         $arr_measure_type = array(
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL=>_AM_XNEWSLETTER_BMH_MEASURE_ALL,
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING=>_AM_XNEWSLETTER_BMH_MEASURE_PENDING,
@@ -209,16 +208,16 @@ switch ($op) {
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT=>_AM_XNEWSLETTER_BMH_MEASURE_QUITED,
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE=>_AM_XNEWSLETTER_BMH_MEASURE_DELETED);
 
-        $limit = $GLOBALS['xoopsModuleConfig']['adminperpage'];
-        $bhm_criteria = new CriteriaCompo();
+        $limit = $xnewsletter->getConfig('adminperpage');
+        $bhmCriteria = new CriteriaCompo();
         if ($filter > -1) $criteria->add(new Criteria("bmh_measure", $filter));
-        $bhm_criteria->setSort("bmh_id");
-        $bhm_criteria->setOrder("DESC");
-        $bhmsCount = $xnewsletter->getHandler('bmh')->getCount($bhm_criteria);
+        $bhmCriteria->setSort("bmh_id");
+        $bhmCriteria->setOrder("DESC");
+        $bhmsCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
         $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
-        $bhm_criteria->setStart($start);
-        $bhm_criteria->setLimit($limit);
-        $bhmObjs = $xnewsletter->getHandler('bmh')->getall($bhm_criteria);
+        $bhmCriteria->setStart($start);
+        $bhmCriteria->setLimit($limit);
+        $bhmObjs = $xnewsletter->getHandler('bmh')->getAll($bhmCriteria);
         if ($bhmsCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($bhmsCount, $limit, $start, 'start', 'op=list');
@@ -325,7 +324,7 @@ switch ($op) {
     break;
 
     case "save_bmh":
-        if ( !$GLOBALS["xoopsSecurity"]->check() ) {
+        if (!$GLOBALS["xoopsSecurity"]->check()) {
             redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
@@ -352,7 +351,7 @@ switch ($op) {
         echo $indexAdmin->addNavigation('bmh.php');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_BMHLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-        
+        //
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
         $form = $bmhObj->getForm();
         $form->display();

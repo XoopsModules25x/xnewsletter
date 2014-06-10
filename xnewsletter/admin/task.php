@@ -20,6 +20,7 @@
  * @version         $Id: task.php 12491 2014-04-25 13:21:55Z beckmi $
  */
 
+$currentFile = basename(__FILE__);
 include_once "admin_header.php";
 xoops_cp_header();
 
@@ -28,13 +29,13 @@ $op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
 switch ($op) {
     case "list":
     default:
-        echo $indexAdmin->addNavigation('task.php');
-
+        echo $indexAdmin->addNavigation($currentFile);
+        //
         $task_criteria = new CriteriaCompo();
         $task_criteria->setSort("task_id");
         $task_criteria->setOrder("ASC");
         $taskCounts = $xnewsletter->getHandler('task')->getCount();
-        $taskObjs = $xnewsletter->getHandler('task')->getall($task_criteria);
+        $taskObjs = $xnewsletter->getHandler('task')->getAll($task_criteria);
 
         //Affichage du tableau
         echo "
@@ -74,7 +75,7 @@ switch ($op) {
                     echo "<td class='center'>" . formatTimeStamp($taskObj->getVar("task_created"), "mysql") . "</td>";
                     echo "<td align='center' width='10%'>";
                     echo "
-                    <a href='task.php?op=delete_task&task_id=" . $taskObj->getVar("task_id") . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>
+                    <a href='?op=delete_task&task_id=" . $taskObj->getVar("task_id") . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>
                     </td>";
                     echo "</tr>";
                 }
@@ -89,10 +90,10 @@ switch ($op) {
         $taskObj = $xnewsletter->getHandler('task')->get($_REQUEST["task_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
-                redirect_header("task.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
             if ($xnewsletter->getHandler('task')->delete($taskObj)) {
-                redirect_header("task.php", 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $taskObj->getHtmlErrors();
             }

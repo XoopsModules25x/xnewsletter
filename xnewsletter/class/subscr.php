@@ -154,7 +154,7 @@ class XnewsletterSubscr extends XoopsObject
         $crit_cat = new CriteriaCompo();
         $crit_cat->setSort('cat_id');
         $crit_cat->setOrder('ASC');
-        $cat_arr          = $this->xnewsletter->getHandler('cat')->getall($crit_cat);
+        $cat_arr          = $this->xnewsletter->getHandler('cat')->getAll($crit_cat);
         $count_cats_avail = 0;
         foreach (array_keys($cat_arr) as $i) {
             $cat_id = $cat_arr[$i]->getVar("cat_id");
@@ -174,7 +174,7 @@ class XnewsletterSubscr extends XoopsObject
                 $crit_catsubscr = new CriteriaCompo();
                 $crit_catsubscr->add(new Criteria('catsubscr_catid', $cat_id));
                 $crit_catsubscr->add(new Criteria('catsubscr_subscrid', $subscr_id));
-                $catsubscr_arr = $this->xnewsletter->getHandler('catsubscr')->getall($crit_catsubscr);
+                $catsubscr_arr = $this->xnewsletter->getHandler('catsubscr')->getAll($crit_catsubscr);
                 foreach (array_keys($catsubscr_arr) as $catsubscr) {
                     $catsubscr_id     = $catsubscr;
                     $catsubscr_quited = $catsubscr_arr[$catsubscr]->getVar("catsubscr_quited");
