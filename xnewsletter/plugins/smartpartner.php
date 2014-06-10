@@ -35,7 +35,7 @@ function xnewsletter_plugin_getinfo_smartpartner()
 {
     global $xoopsDB;
 
-    $pluginInfo         = array();
+    $pluginInfo = array();
     $pluginInfo['name'] = "smartpartner";
     if (file_exists(XOOPS_URL . "/modules/smartpartner/images/module_logo.gif")) {
         $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/images/module_logo.gif";
@@ -62,7 +62,7 @@ function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $l
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('xnewsletter_import');
+    //$table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;

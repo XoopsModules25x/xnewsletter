@@ -45,27 +45,27 @@ function b_xnewsletter_letter($options) {
     $nb_letter = $options[1];
     $length_title = $options[2];
 
-    $criteria = new CriteriaCompo();
     array_shift($options);
     array_shift($options);
     array_shift($options);
 
+    $letterCriteria = new CriteriaCompo();
     switch ($type_block) {
         // For the block: letter recents
         case "recent":
-            $criteria->setSort('letter_created');
-            $criteria->setOrder("DESC");
+            $letterCriteria->setSort('letter_created');
+            $letterCriteria->setOrder("DESC");
             break;
         // For the block: letter of today
         case "day":
-            $criteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
-            $criteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
-            $criteria->setSort('letter_created');
-            $criteria->setOrder('ASC');
+            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
+            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
+            $letterCriteria->setSort('letter_created');
+            $letterCriteria->setOrder('ASC');
             break;
         // For the block: letter random
         case "random":
-            $criteria->setSort('RAND()');
+            $letterCriteria->setSort('RAND()');
             break;
     }
 
@@ -76,26 +76,26 @@ function b_xnewsletter_letter($options) {
         $my_group_ids = $member_handler->getGroupsByUser($currentUid) ;
     }
 
-    $criteria->setLimit($nb_letter);
-    $letter_arr = $xnewsletter->getHandler('letter')->getall($criteria);
-    foreach (array_keys($letter_arr) as $i) {
+    $letterCriteria->setLimit($nb_letter);
+    $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
+    foreach ($letterObjs as $letter_id => $letterObj) {
         $letter_cat_arr = array();
-        $letter_cat_arr = explode('|', $letter_arr[$i]->getVar('letter_cats'));
+        $letter_cat_arr = explode('|', $letterObj->getVar('letter_cats'));
         $showCat = false;
         foreach (array_keys($letter_cat_arr) as $cat_id) {
             $showCat = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
             if ($showCat == true) {
-                $letter[$i]['letter_id'] = $letter_arr[$i]->getVar('letter_id');
-                $letter_title = $letter_arr[$i]->getVar('letter_title');
+                $letter[$letter_id]['letter_id'] = $letterObj->getVar('letter_id');
+                $letter_title = $letterObj->getVar('letter_title');
                 if ($length_title > 0 && strlen($letter_title) > $length_title) {
                     $letter_title = substr($letter_title, 0, $length_title) . '...';
                 }
-                $letter[$i]['letter_title'] = $letter_title;
-                // $letter[$i]["letter_content"] = $letter_arr[$i]->getVar("letter_content");
-                // $letter[$i]["letter_cats"] = $letter_arr[$i]->getVar("letter_cats");
-                // $letter[$i]["letter_submitter"] = $letter_arr[$i]->getVar("letter_submitter");
-                $letter[$i]['letter_created'] = formatTimeStamp($letter_arr[$i]->getVar('letter_created'), 'S');
-                $letter[$i]['href'] = XOOPS_URL . "/modules/{$xnewsletter->getModule()->dirname()}/letter.php?op=show_preview&letter_id={$letter_arr[$i]->getVar('letter_id')}";
+                $letter[$letter_id]['letter_title'] = $letter_title;
+                // $letter[$letter_id]["letter_content"] = $letterObj->getVar("letter_content");
+                // $letter[$letter_id]["letter_cats"] = $letterObj->getVar("letter_cats");
+                // $letter[$letter_id]["letter_submitter"] = $letterObj->getVar("letter_submitter");
+                $letter[$letter_id]['letter_created'] = formatTimeStamp($letterObj->getVar('letter_created'), 'S');
+                $letter[$letter_id]['href'] = XOOPS_URL . "/modules/{$xnewsletter->getModule()->dirname()}/letter.php?op=show_preview&letter_id={$letterObj->getVar('letter_id')}";
             }
         }
     }

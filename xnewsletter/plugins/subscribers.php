@@ -61,7 +61,7 @@ function xnewsletter_plugin_getdata_subscribers($cat_id, $action_after_read, $li
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('xnewsletter_import');
+    //$table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;

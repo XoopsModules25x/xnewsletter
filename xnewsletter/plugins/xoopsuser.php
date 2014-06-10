@@ -59,7 +59,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('xnewsletter_import');
+    //$table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;
@@ -133,11 +133,11 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
 
     $form->addElement(new XoopsFormLabel("Info", _AM_XNEWSLETTER_IMPORT_INFO));
 
-    $criteria = new CriteriaCompo();
-    $criteria->setSort('cat_id ASC, cat_name');
-    $criteria->setOrder('ASC');
+    $catCriteria = new CriteriaCompo();
+    $catCriteria->setSort('cat_id ASC, cat_name');
+    $catCriteria->setOrder('ASC');
     $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", $cat_id);
-    $cat_select->addOptionArray($xnewsletter->getHandler('cat')->getList());
+    $cat_select->addOptionArray($xnewsletter->getHandler('cat')->getList($catCriteria));
     $form->addElement($cat_select, false);
 
     // checkboxes other groups

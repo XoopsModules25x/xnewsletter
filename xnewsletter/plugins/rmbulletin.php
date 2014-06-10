@@ -57,13 +57,13 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $table_import = $xoopsDB->prefix('xnewsletter_import');
+    //$table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = $action_after_read == 0 ? 1 : 0;
     $i = 0;
     $j = 0;
 
     $sql = "SELECT `email`";
-    $sql .= " FROM ".$xoopsDB->prefix("rmb_users");
+    $sql .= " FROM " . $xoopsDB->prefix("rmb_users");
     if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
     while ($lineArray = mysql_fetch_array($result_users)) {
         ++$i;

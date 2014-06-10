@@ -26,10 +26,9 @@
  * ****************************************************************************
  */
 
+$currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
-
-//global $pathIcon,$indexAdmin;
 
 // We recovered the value of the argument op in the URL$
 $op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
@@ -62,8 +61,8 @@ if ($delete_att_1 != 'none') {
 
 switch ($op) {
     case "delete_attachment":
-        $attachment_id = xnewsletter_CleanVars($_REQUEST, 'attachment_'.$id_del, 'none', 'string');
-        if ($attachment_id == 'none') redirect_header("letter.php", 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
+        $attachment_id = xnewsletter_CleanVars($_REQUEST, 'attachment_' . $id_del, 'none', 'string');
+        if ($attachment_id == 'none') redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $attachment_name = $attachmentObj->getVar("attachment_name");
 
@@ -90,10 +89,10 @@ switch ($op) {
     case "show_preview":
         global $XoopsTpl;
 
-        echo $indexAdmin->addNavigation("letter.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, 'letter.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $letterTpl = new XoopsTpl();
 
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
@@ -138,42 +137,42 @@ switch ($op) {
 
     case "list":
     default:
-        echo $indexAdmin->addNavigation('letter.php');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, 'letter.php?op=new_letter', 'add');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, '?op=new_letter', 'add');
         echo $indexAdmin->renderButton();
-
-        $limit = $GLOBALS['xoopsModuleConfig']['adminperpage'];
-        $criteria = new CriteriaCompo();
-        $criteria->setSort("letter_id");
-        $criteria->setOrder("DESC");
-        $numrows = $xnewsletter->getHandler('letter')->getCount();
+        //
+        $limit = $xnewsletter->getConfig('adminperpage');
+        $letterCriteria = new CriteriaCompo();
+        $letterCriteria->setSort("letter_id");
+        $letterCriteria->setOrder("DESC");
+        $lettersCount = $xnewsletter->getHandler('letter')->getCount();
         $start = xnewsletter_CleanVars($_REQUEST, 'start', 0, 'int');
-        $criteria->setStart($start);
-        $criteria->setLimit($limit);
-        $letterObjs = $xnewsletter->getHandler('letter')->getall($criteria);
-        if ($numrows > $limit) {
+        $letterCriteria->setStart($start);
+        $letterCriteria->setLimit($limit);
+        $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
+        if ($lettersCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-            $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=list');
+            $pagenav = new XoopsPageNav($lettersCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
         }
 
         // View Table
-        if ($numrows>0) {
+        if ($lettersCount > 0) {
             echo "<table class='outer width100' cellspacing='1'>
                 <tr>
-                    <th class='center width2'>"._AM_XNEWSLETTER_LETTER_ID."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_TITLE."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_TEMPLATE."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_CATS."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_ATTACHMENT."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_ACCOUNT."</th>
-                    <th class='center width10'>"._AM_XNEWSLETTER_LETTER_EMAIL_TEST."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_PROTOCOL_LAST_STATUS."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_SUBMITTER."</th>
-                    <th class='center'>"._AM_XNEWSLETTER_LETTER_CREATED."</th>
-                    <th class='center width10'>"._AM_XNEWSLETTER_FORMACTION."</th>
+                    <th class='center width2'>" . _AM_XNEWSLETTER_LETTER_ID . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_TITLE . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_TEMPLATE . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_CATS . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_ATTACHMENT . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_ACCOUNT . "</th>
+                    <th class='center width10'>" . _AM_XNEWSLETTER_LETTER_EMAIL_TEST . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_LAST_STATUS . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_SUBMITTER . "</th>
+                    <th class='center'>" . _AM_XNEWSLETTER_LETTER_CREATED . "</th>
+                    <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
                 </tr>";
 
             $class = "odd";
@@ -204,10 +203,10 @@ switch ($op) {
                 $cat_arr = explode("|" , $letterObj->getVar("letter_cats"));
                 foreach ($cat_arr as $cat) {
                     ++$j;
-                    $cat_obj = $xnewsletter->getHandler('cat')->get($cat);
+                    $catObj = $xnewsletter->getHandler('cat')->get($cat);
                     if (count($cat_arr)>1) $letter_cats .= "($j) ";
-                    if (is_object($cat_obj)) {
-                        $letter_cats .= $cat_obj->getVar("cat_name") . "<br/>";
+                    if (is_object($catObj)) {
+                        $letter_cats .= $catObj->getVar("cat_name") . "<br/>";
                     } else {
                         $letter_cats .= "Invalid cat_name";
                     }
@@ -215,14 +214,14 @@ switch ($op) {
                 $letter_cats = substr($letter_cats, 0, -5);
                 echo "<td class='center'>" . $letter_cats . "</td>";
 
-                $attachment_criteria = new CriteriaCompo();
-                $attachment_criteria->add(new Criteria('attachment_letter_id', $letterObj->getVar("letter_id")));
-                $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachment_criteria);
+                $attachmentCriteria = new CriteriaCompo();
+                $attachmentCriteria->add(new Criteria('attachment_letter_id', $letterObj->getVar("letter_id")));
+                $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachmentCriteria);
                 echo "<td class='center'>" . $attachmentCount . "</td>";
 
-                $account_criteria = new CriteriaCompo();
-                $account_criteria->setSort("accounts_id");
-                $account_criteria->setOrder("ASC");
+                $accountCriteria = new CriteriaCompo();
+                $accountCriteria->setSort("accounts_id");
+                $accountCriteria->setOrder("ASC");
                 $accountObj = $xnewsletter->getHandler('accounts')->get($letterObj->getVar("letter_account"));
                 $letter_account = ( $accountObj ) ? $accountObj->getVar("accounts_name") : _NONE;
                 echo "<td class='center'>" . $letter_account . "</td>";
@@ -232,13 +231,13 @@ switch ($op) {
                 echo "<td class='center'>" . $letter_email_test . "</td>";
 
                 //take last item protocol_subscriber_id=0 from table protocol as actual status
-                $protocol_criteria = new CriteriaCompo();
-                $protocol_criteria->add(new Criteria('protocol_letter_id', $letter_id));
-                $protocol_criteria->add(new Criteria('protocol_subscriber_id', '0'));
-                $protocol_criteria->setSort("protocol_id");
-                $protocol_criteria->setOrder("DESC");
-                $protocol_criteria->setLimit(1);
-                $protocolObjs = $xnewsletter->getHandler('protocol')->getall($protocol_criteria);
+                $protocolCriteria = new CriteriaCompo();
+                $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+                $protocolCriteria->add(new Criteria('protocol_subscriber_id', '0'));
+                $protocolCriteria->setSort("protocol_id");
+                $protocolCriteria->setOrder("DESC");
+                $protocolCriteria->setLimit(1);
+                $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
                 $protocol_status = "";
                 $protocol_letter_id = 0;
                 foreach ($protocolObjs as $protocolObj) {
@@ -251,16 +250,16 @@ switch ($op) {
                 echo "<td class='center'>" . formatTimeStamp($letterObj->getVar("letter_created"), "s") . "</td>";
 
                 echo "<td class='center width10'>";
-                echo "    <a href='letter.php?op=edit_letter&letter_id=" . $letter_id . "'>
+                echo "    <a href='?op=edit_letter&letter_id=" . $letter_id . "'>
                   <img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' style='padding:1px' />
                 </a>";
-                echo "    <a href='letter.php?op=clone_letter&letter_id=" . $letter_id . "'>
+                echo "    <a href='?op=clone_letter&letter_id=" . $letter_id . "'>
                   <img src=" . XNEWSLETTER_ICONS_URL . "/xn_clone.png alt='". _CLONE."' title='" . _CLONE . "' style='padding:1px' />
                 </a>";
-                echo "  <a href='letter.php?op=delete_letter&letter_id=" . $letter_id . "'>
+                echo "  <a href='?op=delete_letter&letter_id=" . $letter_id . "'>
                   <img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" ._DELETE."' title='" . _DELETE . "'  style='padding:1px' />
                 </a>";
-                echo "  <a href='letter.php?op=show_preview&letter_id=" . $letter_id . "'>
+                echo "  <a href='?op=show_preview&letter_id=" . $letter_id . "'>
                   <img src=" . XNEWSLETTER_ICONS_URL . "/xn_preview.png alt='" . _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW . "' title='" . _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW . "' style='padding:1px' />
                 </a>";
                 echo "  <a href='sendletter.php?op=send_test&letter_id=" . $letter_id . "'>
@@ -280,16 +279,16 @@ switch ($op) {
         } else {
             echo "<table class='outer width100' cellspacing='1'>
                     <tr>
-                      <th class='center width2'>"._AM_XNEWSLETTER_LETTER_ID."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_TITLE."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_TEMPLATE."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_ATTACHMENT."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_ACCOUNT."</th>
-                        <th class='center width10'>"._AM_XNEWSLETTER_LETTER_EMAIL_TEST."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_STATUS."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_SUBMITTER."</th>
-                        <th class='center'>"._AM_XNEWSLETTER_LETTER_CREATED."</th>
-                        <th class='center width10'>"._AM_XNEWSLETTER_FORMACTION."</th>
+                      <th class='center width2'>" . _AM_XNEWSLETTER_LETTER_ID . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_TITLE . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_TEMPLATE . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_ATTACHMENT . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_ACCOUNT . "</th>
+                        <th class='center width10'>" . _AM_XNEWSLETTER_LETTER_EMAIL_TEST . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_STATUS . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_SUBMITTER . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_CREATED . "</th>
+                        <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
                     </tr>";
             echo "</table><br /><br />";
         }
@@ -297,10 +296,10 @@ switch ($op) {
     break;
 
     case "new_letter":
-        echo $indexAdmin->addNavigation("letter.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, 'letter.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $letterObj = $xnewsletter->getHandler('letter')->create();
         $form = $letterObj->getForm(false, true);
         $form->display();
@@ -309,7 +308,7 @@ switch ($op) {
     case "save_letter":
 
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-            redirect_header("letter.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+            redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
         if ($letter_id > 0)
           $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
@@ -398,7 +397,7 @@ switch ($op) {
             $action = isset($_REQUEST["letter_action"]) ? $_REQUEST["letter_action"] : 0;
             switch ($action) {
                 case _AM_XNEWSLETTER_LETTER_ACTION_VAL_PREVIEW:
-                    $url = "letter.php?op=show_preview&letter_id=".$letter_id;
+                    $url = "?op=show_preview&letter_id=".$letter_id;
                     break;
                 case _AM_XNEWSLETTER_LETTER_ACTION_VAL_SEND:
                     $url = "sendletter.php?op=send_letter&letter_id=".$letter_id;
@@ -407,7 +406,7 @@ switch ($op) {
                     $url = "sendletter.php?op=send_test&letter_id=".$letter_id;
                     break;
                 default:
-                    $url = "letter.php?op=list";
+                    $url = "?op=list";
                     break;
             }
             $protocolObj->setVar("protocol_status", _AM_XNEWSLETTER_LETTER_ACTION_SAVED);
@@ -426,27 +425,27 @@ switch ($op) {
         break;
 
     case "edit_letter":
-        echo $indexAdmin->addNavigation("letter.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, 'letter.php?op=new_letter', 'add');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, 'letter.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, '?op=new_letter', 'add');
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         $form = $letterObj->getForm(false, true);
         $form->display();
     break;
 
     case "clone_letter":
-        echo $indexAdmin->addNavigation("letter.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, 'letter.php?op=new_letter', 'add');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, 'letter.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWLETTER, '?op=new_letter', 'add');
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_LETTERLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         $letterObj->setNew();
         $letterObj->setVar('letter_id', 0);
         $letterObj->setVar('letter_title', sprintf('cloned: %s', $letterObj->getVar('letter_title')));
-        $form = $letterObj->getForm('letter.php', true);
+        $form = $letterObj->getForm($currentFile, true);
         $form->display();
     break;
 
@@ -454,7 +453,7 @@ switch ($op) {
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-                redirect_header("letter.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
 
             if ($xnewsletter->getHandler('letter')->delete($letterObj)) {
@@ -463,9 +462,9 @@ switch ($op) {
                 if(!$result = $xoopsDB->query($sql)) die("MySQL-Error: " . mysql_error());
 
                 //delete attachments
-                $attachment_criteria = new CriteriaCompo();
-                $attachment_criteria->add(new Criteria("attachment_letter_id", $letter_id));
-                $attachmentObjs = $xnewsletter->getHandler('attachment')->getall($attachment_criteria);
+                $attachmentCriteria = new CriteriaCompo();
+                $attachmentCriteria->add(new Criteria("attachment_letter_id", $letter_id));
+                $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
                 foreach (array_keys($attachmentObjs) as $attachment_id) {
                     $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
                     $attachment_name = $attachmentObj->getVar("attachment_name");
@@ -474,7 +473,7 @@ switch ($op) {
                     $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . "/";
                     unlink($uploaddir . $attachment_name);
                 }
-                redirect_header("letter.php", 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $letterObj->getHtmlErrors();
             }

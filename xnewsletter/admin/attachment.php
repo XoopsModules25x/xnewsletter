@@ -26,6 +26,7 @@
  * ****************************************************************************
  */
 
+$currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
 
@@ -36,19 +37,19 @@ $attachment_id 	= xnewsletter_CleanVars($_REQUEST, 'attachment_id', 0, 'int');
 switch ($op) {
     case "list" :
     default :
-        echo $indexAdmin->addNavigation('attachment.php');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWATTACHMENT, 'attachment.php?op=new_attachment', 'add');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWATTACHMENT, '?op=new_attachment', 'add');
         echo $indexAdmin->renderButton();
-        
-        $limit = $GLOBALS['xoopsModuleConfig']['adminperpage'];
-        $attachment_criteria = new CriteriaCompo();
-        $attachment_criteria->setSort("attachment_letter_id DESC, attachment_id");
-        $attachment_criteria->setOrder("DESC");
+        //
+        $limit = $xnewsletter->getConfig('adminperpage');
+        $attachmentCriteria = new CriteriaCompo();
+        $attachmentCriteria->setSort("attachment_letter_id DESC, attachment_id");
+        $attachmentCriteria->setOrder("DESC");
         $attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
         $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
-        $attachment_criteria->setStart($start);
-        $attachment_criteria->setLimit($limit);
-        $attachmentObjs = $xnewsletter->getHandler('attachment')->getall($attachment_criteria);
+        $attachmentCriteria->setStart($start);
+        $attachmentCriteria->setLimit($limit);
+        $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
         if ($attachmentsCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
             $pagenav = new XoopsPageNav($attachmentsCount, $limit, $start, 'start', 'op=list');
@@ -89,9 +90,9 @@ switch ($op) {
 
                 echo "
                 <td class='center width5' nowrap='nowrap'>
-                    <a href='attachment.php?op=edit_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>
+                    <a href='?op=edit_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>
                     &nbsp;
-                    <a href='attachment.php?op=delete_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>
+                    <a href='?op=delete_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>
                 </td>
                 ";
                 echo "</tr>";
@@ -116,10 +117,10 @@ switch ($op) {
         break;
 
     case "new_attachment" :
-        echo $indexAdmin->addNavigation("attachment.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, 'attachment.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $attachmentObj = $xnewsletter->getHandler('attachment')->create();
         $form = $attachmentObj->getForm();
         $form->display();
@@ -127,7 +128,7 @@ switch ($op) {
 
     case "save_attachment" :
         if (!$GLOBALS["xoopsSecurity"]->check()) {
-           redirect_header("attachment.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+           redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
 
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
@@ -138,7 +139,7 @@ switch ($op) {
         $attachmentObj->setVar("attachment_created",      xnewsletter_CleanVars($_REQUEST, "attachment_created", time(), "int"));
 
         if ($xnewsletter->getHandler('attachment')->insert($attachmentObj)) {
-            redirect_header("attachment.php?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
         }
 
         echo $attachmentObj->getHtmlErrors();
@@ -147,11 +148,11 @@ switch ($op) {
         break;
 
     case "edit_attachment" :
-        echo $indexAdmin->addNavigation("attachment.php");
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWATTACHMENT, 'attachment.php?op=new_attachment', 'add');
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, 'attachment.php?op=list', 'list');
+        echo $indexAdmin->addNavigation($currentFile);
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWATTACHMENT, '?op=new_attachment', 'add');
+        $indexAdmin->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
-        
+        //
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $form = $attachmentObj->getForm();
         $form->display();
@@ -161,10 +162,10 @@ switch ($op) {
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         if (isset($_POST["ok"]) && $_POST["ok"] == 1) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
-                redirect_header("attachment.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
             if ($xnewsletter->getHandler('attachment')->delete($attachmentObj)) {
-                redirect_header("attachment.php", 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $attachmentObj->getHtmlErrors();
             }

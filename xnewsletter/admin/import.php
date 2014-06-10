@@ -25,11 +25,10 @@
  *  Version : $Id $
  * ****************************************************************************
  */
+ 
 $currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
-
-global $xoopsUser, $xoopsDB;
 
 $basic_limit_import_checked = 100;
 $basic_limit_import_at_once = 10;
@@ -49,15 +48,15 @@ switch ($op) {
     case "show_formcheck":
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         echo $indexAdmin->renderButton();
+        //
+        $importCriteria = new CriteriaCompo();
+        $importCriteria->setSort("import_id");
+        $importCriteria->setOrder("ASC");
+        $importsCount = $xnewsletter->getHandler('import')->getCount($importCriteria);
 
-        $import_criteria = new CriteriaCompo();
-        $import_criteria->setSort("import_id");
-        $import_criteria->setOrder("ASC");
-        $importsCount = $xnewsletter->getHandler('import')->getCount($import_criteria);
-
-        $import_criteria->setStart($start);
-        $import_criteria->setLimit($limitcheck);
-        $importObjs = $xnewsletter->getHandler('import')->getall($import_criteria);
+        $importCriteria->setStart($start);
+        $importCriteria->setLimit($limitcheck);
+        $importObjs = $xnewsletter->getHandler('import')->getAll($importCriteria);
 
         if ($importsCount > 0) {
             include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
@@ -101,7 +100,7 @@ switch ($op) {
             $cat_criteria = new CriteriaCompo();
             $cat_criteria->setSort('cat_id ASC, cat_name');
             $cat_criteria->setOrder('ASC');
-            $catObjs = $xnewsletter->getHandler('cat')->getall($cat_criteria);
+            $catObjs = $xnewsletter->getHandler('cat')->getAll($cat_criteria);
 
             foreach ($importObjs as $i => $importObj) {
                 ++$counter;
@@ -228,14 +227,14 @@ switch ($op) {
         //delete data from xnewsletter_import, when imported (successful or not)
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $ip = xoops_getenv("REMOTE_ADDR");
         $submitter = $xoopsUser->uid();
 
-        $import_criteria = new CriteriaCompo();
-        $import_criteria->add(new Criteria('import_status', '1'));
+        $importCriteria = new CriteriaCompo();
+        $importCriteria->add(new Criteria('import_status', '1'));
         $numrows_total 	= $xnewsletter->getHandler('import')->getCount();
-        $numrows_act 	= $xnewsletter->getHandler('import')->getCount($import_criteria);
+        $numrows_act 	= $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";

@@ -183,7 +183,7 @@ class XnewsletterCat extends XoopsObject
         if ($numrows_mailinglist > 0) {
             $opt_mailinglist = new XoopsFormRadio(_AM_XNEWSLETTER_LETTER_MAILINGLIST, "cat_mailinglist", $cat_mailinglist);
             $opt_mailinglist->addOption("0", _AM_XNEWSLETTER_LETTER_MAILINGLIST_NO);
-            $mailinglist_arr = $this->xnewsletter->getHandler('mailinglist')->getall($crit_mailinglist);
+            $mailinglist_arr = $this->xnewsletter->getHandler('mailinglist')->getAll($crit_mailinglist);
             foreach (array_keys($mailinglist_arr) as $i) {
                 $opt_mailinglist->addOption($i, $mailinglist_arr[$i]->getVar("mailinglist_name"));
             }

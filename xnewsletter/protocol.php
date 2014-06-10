@@ -45,15 +45,15 @@ $letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 
-$criteria = new CriteriaCompo();
-$criteria->add(new Criteria('protocol_letter_id', $letter_id));
-$criteria->setSort('protocol_id');
-$criteria->setOrder('DESC');
-$protocolCount = $xnewsletter->getHandler('protocol')->getCount($criteria);
+$protocolCriteria = new CriteriaCompo();
+$protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+$protocolCriteria->setSort('protocol_id');
+$protocolCriteria->setOrder('DESC');
+$protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
 
 // protocol table
 if ($protocolCount > 0) {
-    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($criteria);
+    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
     foreach ($protocolObjs as $protocol_id => $protocolObj) {
         $protocol_array = $protocolObj->toArray();
         $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));

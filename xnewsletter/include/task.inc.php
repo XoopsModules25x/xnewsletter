@@ -85,12 +85,12 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
             $subscr_id = $subscriber["subscr_id"];
             if ($op == 'resend_letter') {
                 //read subscribers, where send failed
-                $protocol_criteria = new CriteriaCompo();
-                $protocol_criteria->add(new Criteria('protocol_letter_id', $letter_id));
-                $protocol_criteria->add(new Criteria('protocol_subscriber_id', $subscr_id));
-                $protocol_criteria->add(new Criteria('protocol_success', 1));
-                $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocol_criteria);
-                if ($protocolCount > 0) $subscr_id = 0; //letter already successfully sent
+                $protocolCriteria = new CriteriaCompo();
+                $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+                $protocolCriteria->add(new Criteria('protocol_subscriber_id', $subscr_id));
+                $protocolCriteria->add(new Criteria('protocol_success', 1));
+                $protocolsCriteria = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
+                if ($protocolsCriteria > 0) $subscr_id = 0; //letter already successfully sent
             }
             if ($subscr_id > 0) {
                 if ($subscriber['subscr_actkey'] == '') {
@@ -269,13 +269,13 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         }
 
         //read attachments
-        $attachment_criteria = new CriteriaCompo();
-        $attachment_criteria->add(new Criteria('attachment_letter_id', $letter_id));
-        $attachment_criteria->setSort('attachment_id');
-        $attachment_criteria->setOrder('ASC');
-        $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachment_criteria);
+        $attachmentCriteria = new CriteriaCompo();
+        $attachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
+        $attachmentCriteria->setSort('attachment_id');
+        $attachmentCriteria->setOrder('ASC');
+        $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachmentCriteria);
         if ($attachmentCount > 0) {
-            $attachmentObjs = $xnewsletter->getHandler('attachment')->getall($attachment_criteria);
+            $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
                 $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path');
                 if (substr($uploaddir, -1) != "/") {
