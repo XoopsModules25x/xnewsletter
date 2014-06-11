@@ -53,6 +53,7 @@ if (is_object($xnewsletter->getModule())) {
     // Find if the user is admin of the module
     $xnewsletter_isAdmin = xnewsletter_userIsAdmin();
 }
+$xoopsModule = $xnewsletter->getModule();
 
 // Load Xoops handlers
 $module_handler = xoops_gethandler('module');

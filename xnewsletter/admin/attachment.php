@@ -31,8 +31,8 @@ include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$attachment_id 	= xnewsletter_CleanVars($_REQUEST, 'attachment_id', 0, 'int');
+$op             = xnewsletterRequest::getString('op', 'list');
+$attachment_id 	= xnewsletterRequest::getInt('attachment_id', 0);
 
 switch ($op) {
     case "list" :
@@ -46,7 +46,7 @@ switch ($op) {
         $attachmentCriteria->setSort("attachment_letter_id DESC, attachment_id");
         $attachmentCriteria->setOrder("DESC");
         $attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
-        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $start = xnewsletterRequest::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
@@ -132,11 +132,11 @@ switch ($op) {
         }
 
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
-        $attachmentObj->setVar("attachment_letter_id",    xnewsletter_CleanVars($_REQUEST, "attachment_letter_id", 0, "int"));
-        $attachmentObj->setVar("attachment_name",         xnewsletter_CleanVars($_REQUEST, "attachment_name", "", "string"));
-        $attachmentObj->setVar("attachment_type",         xnewsletter_CleanVars($_REQUEST, "attachment_type", 0, "int"));
-        $attachmentObj->setVar("attachment_submitter",    xnewsletter_CleanVars($_REQUEST, "attachment_submitter", 0, "int"));
-        $attachmentObj->setVar("attachment_created",      xnewsletter_CleanVars($_REQUEST, "attachment_created", time(), "int"));
+        $attachmentObj->setVar("attachment_letter_id", xnewsletterRequest::getInt('attachment_letter_id', 0));
+        $attachmentObj->setVar("attachment_name",      xnewsletterRequest::getString('attachment_name', ''));
+        $attachmentObj->setVar("attachment_type",      xnewsletterRequest::getInt('attachment_type', 0));
+        $attachmentObj->setVar("attachment_submitter", xnewsletterRequest::getInt('attachment_submitter', 0));
+        $attachmentObj->setVar("attachment_created",   xnewsletterRequest::getInt('attachment_created', time()));
 
         if ($xnewsletter->getHandler('attachment')->insert($attachmentObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);

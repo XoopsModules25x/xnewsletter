@@ -45,11 +45,11 @@ include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
 if (!$xoopsUser) {
     //Guest no Access !!!
-    redirect_header(XOOPS_URL . "/modules/" . $xoopsModule->dirname() . "/index.php", 3, _NOPERM);
+    redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
 }
 
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
+$op = xnewsletterRequest::getString('op', 'list');
+$letter_id = xnewsletterRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
@@ -58,7 +58,7 @@ if ($letter_id < 1) {
 $sendletter_perm = xnewsletter_getUserPermissionsByLetter($letter_id);
 
 if (!$sendletter_perm["send"]) {
-    redirect_header(XOOPS_URL . "/modules/" . $xoopsModule->dirname() . "/index.php", 3, _NOPERM);
+    redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
 }
 
 $start_sending = false;

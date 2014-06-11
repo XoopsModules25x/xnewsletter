@@ -37,7 +37,7 @@ $xoopsLogger->activated = false;
 $GLOBALS['xoopsTpl']->assign('xoops_pagetitle', _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW);
 
 // get letter_id
-$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 'list', 'string');
+$letter_id = xnewsletterRequest::getString('letter_id', 'list');
 // check letter_id
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
@@ -107,7 +107,7 @@ xnewsletter_printPage($content);
  * @param $content
  */
 function xnewsletter_printPage($content) {
-    global $xoopsConfig, $xoopsModule, $xoops_meta_keywords, $xoops_meta_description;
+    global $xoopsConfig, $xoops_meta_keywords, $xoops_meta_description;
     $myts =& MyTextSanitizer::getInstance();
 ?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

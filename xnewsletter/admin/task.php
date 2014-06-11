@@ -25,7 +25,7 @@ include_once "admin_header.php";
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$op = xnewsletterRequest::getString('op', 'list');
 switch ($op) {
     case "list":
     default:
@@ -51,7 +51,7 @@ switch ($op) {
         if ($taskCounts > 0) {
             $class = "odd";
             foreach ($taskObjs as $task_id => $taskObj) {
-                if ( $taskObj->getVar("task_pid") == 0) {
+                if ($taskObj->getVar("task_pid") == 0) {
                     echo "<tr class='" . $class . "'>";
                     $class = ($class == "even") ? "odd" : "even";
 

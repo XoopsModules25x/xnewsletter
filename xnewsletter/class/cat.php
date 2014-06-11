@@ -64,7 +64,7 @@ class XnewsletterCat extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB, $xoopsModule;
+        global $xoopsDB;
 
         $gperm_handler = xoops_gethandler('groupperm');
 
@@ -97,7 +97,7 @@ class XnewsletterCat extends XoopsObject
 
         // ********************************************************
         // permission read cat
-        $cat_gperms_read     = & $gperm_handler->getGroupIds('newsletter_read_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_read     = & $gperm_handler->getGroupIds('newsletter_read_cat', $this->getVar("cat_id"), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_read = $this->isNew() ? "0" : $cat_gperms_read;
 
         $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ, '');
@@ -117,7 +117,7 @@ class XnewsletterCat extends XoopsObject
 
         // ********************************************************
         // permission create cat
-        $cat_gperms_create     =& $gperm_handler->getGroupIds('newsletter_create_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_create     =& $gperm_handler->getGroupIds('newsletter_create_cat', $this->getVar("cat_id"), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_create = $this->isNew() ? "0" : $cat_gperms_create;
 
         $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE . _AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC, '');
@@ -137,7 +137,7 @@ class XnewsletterCat extends XoopsObject
 
         // ********************************************************
         // permission admin cat
-        $cat_gperms_admin     =& $gperm_handler->getGroupIds('newsletter_admin_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_admin     =& $gperm_handler->getGroupIds('newsletter_admin_cat', $this->getVar("cat_id"), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? "0" : $cat_gperms_admin;
 
         $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC, '');
@@ -157,7 +157,7 @@ class XnewsletterCat extends XoopsObject
 
         // ********************************************************
         // permission list subscriber of this cat
-        $cat_gperms_list      =& $gperm_handler->getGroupIds('newsletter_list_cat', $this->getVar("cat_id"), $xoopsModule->mid());
+        $cat_gperms_list      =& $gperm_handler->getGroupIds('newsletter_list_cat', $this->getVar("cat_id"), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? "0" : $cat_gperms_list;
 
         $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST, '');

@@ -31,10 +31,9 @@ include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$op = xnewsletterRequest::getString('op', 'list');
 
-switch ($op)
-{
+switch ($op) {
     case "list":
     default:
         echo $indexAdmin->addNavigation($currentFile);
@@ -46,7 +45,7 @@ switch ($op)
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $start = xnewsletterRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -58,52 +57,53 @@ switch ($op)
             $pagenav = '';
         }
 
-      // View Table
-      if ($catsCount>0)
-      {
-        echo "<table class='outer width100' cellspacing='1'>
-          <tr>
-            <th class='center width2'>" . _AM_XNEWSLETTER_CAT_ID . "</th>
-            <th class='center'>" . _AM_XNEWSLETTER_CAT_NAME . "</th>
-            <th class='center'>" . _AM_XNEWSLETTER_CAT_INFO . "</th>
-            <th class='center'>" . _AM_XNEWSLETTER_CATSUBSCR_SUBSCRID . "</th>
-            <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-          </tr>";
+        // View Table
+        if ($catsCount>0) {
+            echo "
+                <table class='outer width100' cellspacing='1'>
+                    <tr>
+                        <th class='center width2'>" . _AM_XNEWSLETTER_CAT_ID . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_CAT_NAME . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_CAT_INFO . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_CATSUBSCR_SUBSCRID . "</th>
+                        <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+                    </tr>";
 
-        $class = "odd";
+            $class = "odd";
 
-        foreach ($catObjs as $cat_id => $catObj) {
-          echo "<tr class='" . $class . "'>";
-          $class = ($class == "even") ? "odd" : "even";
-          echo "<td class='center'>" . $cat_id . "</td>";
-          echo "<td class='center'>
-                  <a href='?op=list_cat&cat_id=" . $cat_id . "'>" . $catObj->getVar("cat_name") . "</a>
-                </td>";
-          echo "<td class='center'>" . $catObj->getVar("cat_info") . "</td>";
-
-          $catsubscrCriteria = new CriteriaCompo();
-          $catsubscrCriteria->add(new Criteria("catsubscr_catid", $cat_id));
-          $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-          echo "<td class='center'>" . $catsCount . "</td>";
-
-          echo "<td class='center width5'>
-            <a href='?op=list_cat&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "' /></a>
-            </td>";
-          echo "</tr>";
+            foreach ($catObjs as $cat_id => $catObj) {
+                echo "<tr class='" . $class . "'>";
+                $class = ($class == "even") ? "odd" : "even";
+                echo "<td class='center'>" . $cat_id . "</td>";
+                echo "
+                    <td class='center'>
+                        <a href='?op=list_cat&cat_id=" . $cat_id . "'>" . $catObj->getVar("cat_name") . "</a>
+                    </td>";
+                echo "<td class='center'>" . $catObj->getVar("cat_info") . "</td>";
+                $catsubscrCriteria = new CriteriaCompo();
+                $catsubscrCriteria->add(new Criteria("catsubscr_catid", $cat_id));
+                $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
+                echo "<td class='center'>" . $catsCount . "</td>";
+                echo "
+                    <td class='center width5'>
+                        <a href='?op=list_cat&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "' /></a>
+                    </td>";
+                echo "</tr>";
+            }
+            echo "</table><br /><br />";
+            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
+        } else {
+            echo "
+                <table class='outer width100' cellspacing='1'>
+                    <tr>
+                        <th class='center width2'>" . _AM_XNEWSLETTER_CAT_ID . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_CAT_NAME . "</th>
+                        <th class='center'>" . _AM_XNEWSLETTER_CAT_INFO . "</th>
+                        <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+                    </tr>";
+            echo "</table><br /><br />";
         }
-        echo "</table><br /><br />";
-        echo "<br /><div class='center'>" . $pagenav . "</div><br />";
-      } else {
-        echo "<table class='outer width100' cellspacing='1'>
-            <tr>
-              <th class='center width2'>" . _AM_XNEWSLETTER_CAT_ID . "</th>
-              <th class='center'>" . _AM_XNEWSLETTER_CAT_NAME . "</th>
-              <th class='center'>" . _AM_XNEWSLETTER_CAT_INFO . "</th>
-              <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-            </tr>";
-        echo "</table><br /><br />";
-      }
-      break;
+    break;
 
     case "list_cat":
 
@@ -120,7 +120,7 @@ switch ($op)
         $catsubscrCriteria->setSort("catsubscr_id ASC, catsubscr_catid");
         $catsubscrCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $start = xnewsletterRequest::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -218,7 +218,7 @@ switch ($op)
         $catsubscr_subscrid = $_REQUEST["catsubscr_subscrid"];
         $catsubscrObj->setVar("catsubscr_subscrid", $catsubscr_subscrid);
         //Form catsubscr_quited
-        $catsubscr_quit_now = xnewsletter_CleanVars($_REQUEST, 'catsubscr_quit_now', 0, 'int');
+        $catsubscr_quit_now = xnewsletterRequest::getInt('catsubscr_quit_now', 0);
         if ($catsubscr_quit_now == 1) {
             $catsubscrObj->setVar("catsubscr_quited",  time());
         } elseif ($catsubscr_quit_now == 2) {

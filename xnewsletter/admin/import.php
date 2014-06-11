@@ -30,17 +30,17 @@ $currentFile = basename(__FILE__);
 include "admin_header.php";
 xoops_cp_header();
 
-$basic_limit_import_checked = 100;
-$basic_limit_import_at_once = 10;
+define('XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED', 100);
+define('XNEWSLETTER_BASIC_LIMIT_IMPORT_AT_ONCE', 10);
 
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'default', 'string');
-$plugin = xnewsletter_CleanVars($_REQUEST, 'plugin', 'csv', 'string');
-$cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id', 0, 'int');
-$action_after_read = xnewsletter_CleanVars($_REQUEST, 'action_after_read', 1, 'int');
-$start = xnewsletter_CleanVars($_REQUEST, 'start', 0, 'int' );
-$limitcheck = xnewsletter_CleanVars($_REQUEST, 'limitcheck', $basic_limit_import_checked, 'int' );
-$skipcatsubscrexist = xnewsletter_CleanVars($_REQUEST, 'skipcatsubscrexist', 1, 'int' );
-$check_import = xnewsletter_CleanVars($_REQUEST, 'check_import', 0, 'int');
+$op                 = xnewsletterRequest::getString('op', 'default');
+$plugin             = xnewsletterRequest::getString('plugin', 'csv');
+$cat_id             = xnewsletterRequest::getInt('cat_id', 0, 'int');
+$action_after_read  = xnewsletterRequest::getInt('action_after_read', 1);
+$start              = xnewsletterRequest::getInt('start', 0);
+$limitcheck         = xnewsletterRequest::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
+$skipcatsubscrexist = xnewsletterRequest::getInt('skipcatsubscrexist', 1);
+$check_import       = xnewsletterRequest::getInt('check_import', 0);
 
 echo $indexAdmin->addNavigation($currentFile);
 
@@ -189,19 +189,21 @@ switch ($op) {
 
             $form .=  "</table></form>";
             echo $form;
-            }
+        }
         break;
+
+
 
     case "apply_import_form":
         //update xnewsletter with settings form_import
-        $counter = xnewsletter_CleanVars($_REQUEST, 'counter', 0, 'int');
+        $counter = xnewsletterRequest::getInt('counter', 0);
 
         for ($i=1; $i < ($counter + 1); ++$i) {
-            $import_id = xnewsletter_CleanVars($_REQUEST, 'import_id_'.$i, 'default', 'string');
-            $subscr_firstname = xnewsletter_CleanVars($_REQUEST, 'firstname_'.$i, '', 'string');
-            $subscr_lastname = xnewsletter_CleanVars($_REQUEST, 'lastname_'.$i, '', 'string');
-            $subscr_sex = xnewsletter_CleanVars($_REQUEST, 'sex_'.$i, '', 'string');
-            $cat_id = xnewsletter_CleanVars($_REQUEST, 'cat_id_'.$i, 0, 'int');
+            $import_id        = xnewsletterRequest::getString("import_id_{$i}", 'default');
+            $subscr_firstname = xnewsletterRequest::getString("firstname_{$i}", '');
+            $subscr_lastname  = xnewsletterRequest::getString("lastname_{$i}", '');
+            $subscr_sex       = xnewsletterRequest::getString("sex_{$i}", '');
+            $cat_id           = xnewsletterRequest::getInt("cat_id_{$i}", 0);
 
             if ($cat_id > 0) {
                 if ($subscr_id == 0) {
@@ -221,6 +223,8 @@ switch ($op) {
 
         redirect_header("{$currentFile}?op=exec_import_final&check_import=1&limitcheck={$limitcheck}", 0, '');
         break;
+
+
 
     case "exec_import_final":
         //execute final import of all data from xnewsletter_import, where import_status = 1
@@ -284,10 +288,10 @@ switch ($op) {
                     } else {
                         //email already registered
                         $resulttext = $subscr_email . ": "  ._AM_XNEWSLETTER_IMPORT_EMAIL_EXIST . " | ";
-                        $subscribe=1;
+                        $subscribe = 1;
                     }
                     if ($subscribe == 1) {
-                        if ($catsubscr_id==0) {
+                        if ($catsubscr_id == 0) {
                         //add subscription of this email
                         $sql = "INSERT";
                         $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_catsubscr')}`";
@@ -326,10 +330,9 @@ switch ($op) {
             }
 
             echo "<div style='margin-top:20px;margin-bottom:20px;color:#ff0000;font-weight:bold;font-size:14px'>";
-            $img_ok = "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='" . _AM_XNEWSLETTER_OK . "' />&nbsp;&nbsp;";
             $resulttext = str_replace("%p", $numrows_act ,_AM_XNEWSLETTER_IMPORT_FINISHED);
             $resulttext = str_replace("%t", $numrows_total ,$resulttext);
-            echo $img_ok.$resulttext;
+            echo XNEWSLETTER_IMG_OK . $resulttext;
             echo "</div>";
 
             $numrows_pend = $xnewsletter->getHandler('xnewsletter_import')->getCount();
@@ -359,6 +362,8 @@ switch ($op) {
         }
         break;
 
+
+
     case "searchdata":
         //delete all existing data, import data into xnewsletter_import with plugin
         //set cat_id as preselected, update information about existing registration/subscriptions
@@ -385,8 +390,8 @@ switch ($op) {
         //import data into xnewsletter_import with plugin
         if ($plugin == 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
-            $csv_header = xnewsletter_CleanVars($_REQUEST, 'csv_header', 0, 'int');
-            $csv_delimiter = xnewsletter_CleanVars($_REQUEST, 'csv_delimiter', ',', 'string');
+            $csv_header    = xnewsletterRequest::getInt('csv_header', 0);
+            $csv_delimiter = xnewsletterRequest::getString('csv_delimiter', ',');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
         } else if ($plugin == 'xoopsuser') {
@@ -411,11 +416,13 @@ switch ($op) {
         }
         break;
 
+
+
     case "form_additional":
         //show form for additional settings
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         echo $indexAdmin->renderButton();
-
+        //
         $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/{$plugin}.php";
         if (!file_exists($pluginFile)) {
             echo str_replace("%p", $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
@@ -432,6 +439,8 @@ switch ($op) {
         $form = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist);
         $form->display();
         break;
+
+
 
     case "default":
     default:
