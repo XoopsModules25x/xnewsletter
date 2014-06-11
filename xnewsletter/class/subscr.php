@@ -103,7 +103,7 @@ class XnewsletterSubscr extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB, $xoopsModule, $xoopsUser;
+        global $xoopsDB, $xoopsUser;
 
         if ($action === false) {
             $action = $_SERVER["REQUEST_URI"];
@@ -159,9 +159,9 @@ class XnewsletterSubscr extends XoopsObject
         foreach (array_keys($cat_arr) as $i) {
             $cat_id = $cat_arr[$i]->getVar("cat_id");
             //first check group anonymous
-            $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $xoopsModule->mid());
+            $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $this->xnewsletter->getModule()->mid());
             if ($show == 0) {
-                $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $my_group_ids, $xoopsModule->mid());
+                $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $my_group_ids, $this->xnewsletter->getModule()->mid());
             }
             if ($show == 1) {
                 ++$count_cats_avail;

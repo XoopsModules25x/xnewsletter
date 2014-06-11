@@ -29,8 +29,8 @@
 include_once dirname(__FILE__) . '/admin_header.php';
 include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
+$op        = xnewsletterRequest::getString('op', 'list');
+$letter_id = xnewsletterRequest::getInt('letter_id', 0);
 
 $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
 

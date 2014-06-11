@@ -66,7 +66,7 @@ class XnewsletterLetter extends XoopsObject
      */
     public function getForm($action = false, $admin_aerea = false)
     {
-        global $xoopsDB, $xoopsModule, $xoopsUser, $pathImageIcon;
+        global $xoopsDB, $xoopsUser, $pathImageIcon;
 
         if ($action === false) {
             $action = $_SERVER["REQUEST_URI"];
@@ -138,7 +138,7 @@ class XnewsletterLetter extends XoopsObject
         foreach (array_keys($cat_arr) as $i) {
             $cat_id   = $cat_arr[$i]->getVar("cat_id");
             $cat_name = $cat_arr[$i]->getVar("cat_name");
-            $show     = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xoopsModule->mid());
+            $show     = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $this->xnewsletter->getModule()->mid());
             if ($show == 1) {
                 $cat_select->addOption($cat_id, $cat_name);
             }

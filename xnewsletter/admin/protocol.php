@@ -31,7 +31,7 @@ include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
+$op = xnewsletterRequest::getString('op', 'list');
 
 $protocolAdmin = new ModuleAdmin();
 $letterAdmin = new ModuleAdmin();
@@ -39,12 +39,13 @@ $letterAdmin = new ModuleAdmin();
 switch ($op) {
     case "list":
         echo $letterAdmin->addNavigation($currentFile);
+        //
         $limit = $xnewsletter->getConfig('adminperpage');
         $letterCriteria = new CriteriaCompo();
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $start = xnewsletterRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -168,7 +169,7 @@ switch ($op) {
         $protocolCriteria->setSort("protocol_id");
         $protocolCriteria->setOrder("DESC");
         $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-        $start = xnewsletter_CleanVars ($_REQUEST, 'start', 0, 'int');
+        $start = xnewsletterRequest::getInt('start', 0);
         $protocolCriteria->setStart($start);
         $protocolCriteria->setLimit($limit);
         $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
@@ -197,9 +198,6 @@ switch ($op) {
                     </tr>";
 
             $class = "odd";
-            $img_ok = "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='" . _AM_XNEWSLETTER_OK . "' />&nbsp;&nbsp;";
-            $img_failed = "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_failed.png' alt='" . _AM_XNEWSLETTER_FAILED . "' title='" . _AM_XNEWSLETTER_FAILED . "' />&nbsp;&nbsp;";
-
             foreach ($protocolObjs as $protocol_id => $protocolObj) {
                 echo "<tr class='" . $class . "'>";
                 $class = ($class == "even") ? "odd" : "even";
@@ -207,7 +205,7 @@ switch ($op) {
                 $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar("protocol_subscriber_id"));
                 $subscriber = ($subscrObj) ? $subscrObj->getVar("subscr_email") : _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
                 if ($subscriber == "") $subscriber = "-";
-                $success = ($protocolObj->getVar("protocol_success") == 1) ? $img_ok : $img_failed;
+                $success = ($protocolObj->getVar("protocol_success") == 1) ? XNEWSLETTER_IMG_OK : XNEWSLETTER_IMG_FAILED;
                 echo "<td class='center'>" . $subscriber . "</td>";
                 echo "<td class='center'>" . $protocolObj->getVar("protocol_status") . "</td>";
                 echo "<td class='center'>" . $success . "</td>";

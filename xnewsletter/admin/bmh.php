@@ -31,10 +31,10 @@ include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
-$bmh_id         = xnewsletter_CleanVars($_REQUEST, 'bmh_id', 0, 'int');
-$bmh_measure    = xnewsletter_CleanVars($_REQUEST, 'bmh_measure', 0, 'int');
-$filter         = xnewsletter_CleanVars($_REQUEST, 'bmh_measure_filter', _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL, 'int');
+$op           = xnewsletterRequest::getString('op', 'list');
+$bmh_id       = xnewsletterRequest::getInt('bmh_id', 0);
+$bmh_measure  = xnewsletterRequest::getInt('bmh_measure', 0);
+$filter       = xnewsletterRequest::getInt('bmh_measure_filter', _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL);
 
 switch ($op) {
     case "bmh_delsubscr":
@@ -214,7 +214,7 @@ switch ($op) {
         $bhmCriteria->setSort("bmh_id");
         $bhmCriteria->setOrder("DESC");
         $bhmsCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
-        $start = xnewsletter_CleanVars ( $_REQUEST, 'start', 0, 'int' );
+        $start = xnewsletterRequest::getInt('start', 0);
         $bhmCriteria->setStart($start);
         $bhmCriteria->setLimit($limit);
         $bhmObjs = $xnewsletter->getHandler('bmh')->getAll($bhmCriteria);
@@ -329,15 +329,18 @@ switch ($op) {
         }
 
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
-        $bmhObj->setVar("bmh_rule_no", xnewsletter_CleanVars($_REQUEST, "bmh_rule_no", "", "string"));
-        $bmhObj->setVar("bmh_rule_cat", xnewsletter_CleanVars($_REQUEST, "bmh_rule_cat", "", "string"));
-        $bmhObj->setVar("bmh_bouncetype", xnewsletter_CleanVars($_REQUEST, "bmh_bouncetype", "", "string"));
-        $bmhObj->setVar("bmh_remove", xnewsletter_CleanVars($_REQUEST, "bmh_remove", "", "string"));
-        $bmhObj->setVar("bmh_email", xnewsletter_CleanVars($_REQUEST, "bmh_email", "", "email"));
-        $bmhObj->setVar("bmh_subject", xnewsletter_CleanVars($_REQUEST, "bmh_subject", "", "string"));
-        $bmhObj->setVar("bmh_measure", xnewsletter_CleanVars($_REQUEST, "bmh_measure", 0, "int"));
-        $bmhObj->setVar("bmh_submitter", xnewsletter_CleanVars($_REQUEST, "bmh_submitter", 0, "int"));
-        $bmhObj->setVar("bmh_created", xnewsletter_CleanVars($_REQUEST, "bmh_created", 0, "int"));
+        $bmhObj->setVar("bmh_rule_no",    xnewsletterRequest::getString('bmh_rule_no', ''));
+        $bmhObj->setVar("bmh_rule_cat",   xnewsletterRequest::getString('bmh_rule_cat', ''));
+        $bmhObj->setVar("bmh_bouncetype", xnewsletterRequest::getString('bmh_bouncetype', ''));
+        $bmhObj->setVar("bmh_remove",     xnewsletterRequest::getString('bmh_remove', ''));
+        $bmh_email = xnewsletterRequest::getString('bmh_email', '');
+        $bmh_email = filter_var($bmh_email, FILTER_SANITIZE_EMAIL);
+        $bmh_email = xnewsletter_checkEmail($bmh_email);
+        $bmhObj->setVar("bmh_email",      $bmh_email);
+        $bmhObj->setVar("bmh_subject",    xnewsletterRequest::getString('bmh_subject', ''));
+        $bmhObj->setVar("bmh_measure",    xnewsletterRequest::getInt('bmh_measure', 0));
+        $bmhObj->setVar("bmh_submitter",  xnewsletterRequest::getInt('bmh_submitter', 0));
+        $bmhObj->setVar("bmh_created",    xnewsletterRequest::getInt('bmh_created', 0));
 
         if ($xnewsletter->getHandler('bmh')->insert($bmhObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);

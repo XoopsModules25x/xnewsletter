@@ -41,7 +41,7 @@ $breadcrumb = new xnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-$letter_id = xnewsletter_CleanVars($_REQUEST, 'letter_id', 0, 'int');
+$letter_id = xnewsletterRequest::getInt('letter_id', 0);
 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 

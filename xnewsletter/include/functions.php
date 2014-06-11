@@ -169,7 +169,6 @@ function xnewsletter_setPost($contentObj, $sets) {
         $contentObj->setVar("accounts_yourmail",       xnewsletter_CleanVars($sets, "accounts_yourmail", _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL, 'email', true));
         $contentObj->setVar("accounts_username",       xnewsletter_CleanVars($sets, "accounts_username", _AM_XNEWSLETTER_ACCOUNTS_USERNAME, 'string', true));
         $contentObj->setVar("accounts_password",       xnewsletter_CleanVars($sets, "accounts_password", _AM_XNEWSLETTER_ACCOUNTS_PASSWORD, 'string', true));
-
         if ($contentObj->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP) {
             if ($contentObj->isNew()) {
                 if (@$set['accounts_server_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_IN) $sets['accounts_server_in'] = null;
@@ -183,7 +182,6 @@ function xnewsletter_setPost($contentObj, $sets) {
             $contentObj->setVar("accounts_port_out",       xnewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_OUT, 'string', true));
             $contentObj->setVar("accounts_securetype_in",  xnewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
             $contentObj->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
-
         } elseif ($contentObj->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
             if ($contentObj->isNew()) {
                 if (@$set['accounts_server_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_IN) $sets['accounts_server_in'] = null;
@@ -221,7 +219,6 @@ function xnewsletter_setPost($contentObj, $sets) {
         $contentObj->setVar("accounts_submitter",      xnewsletter_CleanVars( $sets, "accounts_submitter", 0, 'int'));
         $contentObj->setVar("accounts_created",        time());
     }
-
     return $contentObj;
 }
 

@@ -76,7 +76,7 @@ class XnewsletterAccounts extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB, $xoopsModule;
+        global $xoopsDB;
 
         if ($action === false) {
             $action = $_SERVER["REQUEST_URI"];
@@ -85,7 +85,7 @@ class XnewsletterAccounts extends XoopsObject
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ACCOUNTS_ADD) : sprintf(_AM_XNEWSLETTER_ACCOUNTS_EDIT);
 
         include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, $xoopsModule->getVar('dirname') . "_form", $action, "post", true);
+        $form = new XoopsThemeForm($title, $this->xnewsletter->getModule()->getVar('dirname') . "_form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $default = $this->getVar("accounts_type");
@@ -124,7 +124,7 @@ class XnewsletterAccounts extends XoopsObject
         }
 
         $accstd_select = new XoopsFormSelect(_AM_XNEWSLETTER_ACCOUNTS_TYPE, "accounts_type", $this->getVar("accounts_type"));
-        $accstd_select->setextra('onchange="document.forms.' . $xoopsModule->getVar('dirname') . '_form.submit()"');
+        $accstd_select->setextra('onchange="document.forms.' . $this->xnewsletter->getModule()->getVar('dirname') . '_form.submit()"');
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL);
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL);
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3, _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3);
