@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
 $op = xnewsletter_CleanVars($_REQUEST, 'op', 'list', 'string');
@@ -46,4 +46,4 @@ $result_exec = xnewsletter_executeTasks($xn_send_in_packages, $letter_id);
 
 redirect_header("letter.php", 3, $result_exec);
 
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

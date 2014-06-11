@@ -25,9 +25,9 @@
  *  Version : $Id $
  * ****************************************************************************
  */
- 
+
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 $basic_limit_import_checked = 100;
@@ -441,7 +441,7 @@ switch ($op) {
         $form->display();
         break;
 }
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';
 
 /**
  * @param $prot_text
