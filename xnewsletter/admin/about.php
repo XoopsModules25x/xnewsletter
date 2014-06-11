@@ -26,11 +26,11 @@
  * ****************************************************************************
  */
 
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 //global $indexAdmin;
 
 echo $indexAdmin->addNavigation("about.php");
 echo $indexAdmin->renderabout('9P3B3FXKF868J', false);
 
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';
