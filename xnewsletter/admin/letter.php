@@ -31,14 +31,14 @@ include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op           = xnewsletterRequest::getString('op', 'list');
-$letter_id    = xnewsletterRequest::getInt('letter_id', 0);
+$op           = XnewsletterRequest::getString('op', 'list');
+$letter_id    = XnewsletterRequest::getInt('letter_id', 0);
 
-$delete_att_1 = xnewsletterRequest::getString('delete_attachment_1', 'none');
-$delete_att_2 = xnewsletterRequest::getString('delete_attachment_2', 'none');
-$delete_att_3 = xnewsletterRequest::getString('delete_attachment_3', 'none');
-$delete_att_4 = xnewsletterRequest::getString('delete_attachment_4', 'none');
-$delete_att_5 = xnewsletterRequest::getString('delete_attachment_5', 'none');
+$delete_att_1 = XnewsletterRequest::getString('delete_attachment_1', 'none');
+$delete_att_2 = XnewsletterRequest::getString('delete_attachment_2', 'none');
+$delete_att_3 = XnewsletterRequest::getString('delete_attachment_3', 'none');
+$delete_att_4 = XnewsletterRequest::getString('delete_attachment_4', 'none');
+$delete_att_5 = XnewsletterRequest::getString('delete_attachment_5', 'none');
 
 
 
@@ -63,7 +63,7 @@ if ($delete_att_1 != 'none') {
 
 switch ($op) {
     case "delete_attachment":
-        $attachment_id = xnewsletterRequest::getString("attachment_{$id_del}", 'none');
+        $attachment_id = XnewsletterRequest::getString("attachment_{$id_del}", 'none');
         if ($attachment_id == 'none') redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $attachment_name = $attachmentObj->getVar("attachment_name");
@@ -148,7 +148,7 @@ switch ($op) {
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -341,9 +341,9 @@ switch ($op) {
         //Form letter_email_test
         $letterObj->setVar("letter_email_test", $_REQUEST["letter_email_test"]);
         //Form letter_submitter
-        $letterObj->setVar("letter_submitter", xnewsletterRequest::getInt('letter_submitter', 0));
+        $letterObj->setVar("letter_submitter", XnewsletterRequest::getInt('letter_submitter', 0));
         //Form letter_created
-        $letterObj->setVar("letter_created", xnewsletterRequest::getInt('letter_created', time()));
+        $letterObj->setVar("letter_created", XnewsletterRequest::getInt('letter_created', time()));
 
         if ($xnewsletter->getHandler('letter')->insert($letterObj)) {
 
