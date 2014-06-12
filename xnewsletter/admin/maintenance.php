@@ -31,7 +31,7 @@ include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op = XnewsletterRequest::getString('op', 'list');
 
 switch ($op) {
     case "list":

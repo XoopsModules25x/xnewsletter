@@ -31,7 +31,7 @@ include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op = XnewsletterRequest::getString('op', 'list');
 
 switch ($op) {
     case "list" :
@@ -44,7 +44,7 @@ switch ($op) {
         $mailinglistCriteria->setSort("mailinglist_id ASC, mailinglist_email");
         $mailinglistCriteria->setOrder("ASC");
         $mailinglistsCount = $xnewsletter->getHandler('mailinglist')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
         $mailinglistObjs = $xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
