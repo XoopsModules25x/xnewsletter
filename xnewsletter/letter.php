@@ -32,18 +32,18 @@ include_once "header.php";
 $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
 $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
 
-$op         = xnewsletterRequest::getString('op', 'list_letters');
-$letter_id  = xnewsletterRequest::getInt('letter_id', 0);
-$cat_id     = xnewsletterRequest::getInt('cat_id', 0);
+$op         = XnewsletterRequest::getString('op', 'list_letters');
+$letter_id  = XnewsletterRequest::getInt('letter_id', 0);
+$cat_id     = XnewsletterRequest::getInt('cat_id', 0);
 
 //check the rights of current user first
 if (!xnewsletter_userAllowedCreateCat()) redirect_header("index.php", 3, _NOPERM);
 
-$delete_att_1 = xnewsletterRequest::getString('delete_attachment_1', 'none');
-$delete_att_2 = xnewsletterRequest::getString('delete_attachment_2', 'none');
-$delete_att_3 = xnewsletterRequest::getString('delete_attachment_3', 'none');
-$delete_att_4 = xnewsletterRequest::getString('delete_attachment_4', 'none');
-$delete_att_5 = xnewsletterRequest::getString('delete_attachment_5', 'none');
+$delete_att_1 = XnewsletterRequest::getString('delete_attachment_1', 'none');
+$delete_att_2 = XnewsletterRequest::getString('delete_attachment_2', 'none');
+$delete_att_3 = XnewsletterRequest::getString('delete_attachment_3', 'none');
+$delete_att_4 = XnewsletterRequest::getString('delete_attachment_4', 'none');
+$delete_att_5 = XnewsletterRequest::getString('delete_attachment_5', 'none');
 
 if ($delete_att_1 != 'none') {
     $op = "delete_attachment";
@@ -116,7 +116,7 @@ switch ($op) {
             }
         }
         // get cat_id
-        $cat_id = xnewsletterRequest::getInt('cat_id', 0);
+        $cat_id = XnewsletterRequest::getInt('cat_id', 0);
         $xoopsTpl->assign('cat_id', $cat_id);
         if ($cat_id > 0) {
             $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
@@ -150,7 +150,7 @@ switch ($op) {
 
 // IN PROGRESS FROM HERE
         // get attachment
-        $attachment_id = xnewsletterRequest::getString("attachment_{$id_del}", 'none');
+        $attachment_id = XnewsletterRequest::getString("attachment_{$id_del}", 'none');
         if ($attachment_id == 'none') {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         }
@@ -174,7 +174,7 @@ switch ($op) {
             //Form letter_cats
             $letter_cats = '';
             //$cat_arr = isset($_REQUEST["letter_cats"]) ? $_REQUEST["letter_cats"] : "";
-            $cats_arr = xnewsletterRequest::getArray('letter_cats', array());
+            $cats_arr = XnewsletterRequest::getArray('letter_cats', array());
             if (count($cats_arr) > 0) {
                 foreach ($cats_arr as $cat) {
                     $letter_cats .= $cat . '|';
@@ -221,7 +221,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get letter_id
-        $letter_id = xnewsletterRequest::getInt('letter_id', 0);
+        $letter_id = XnewsletterRequest::getInt('letter_id', 0);
         // get letter object
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data
@@ -253,7 +253,7 @@ switch ($op) {
             $htmlBody = $xoopsTpl->fetch($template);
         }
         $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
-        
+
         $letter_array['letter_content_templated'] = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
@@ -285,7 +285,7 @@ break;
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $letterCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $limit = $xnewsletter->getConfig('adminperpage');
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
@@ -440,7 +440,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
         //Form letter_cats
         $letter_cats = "";
         //$cat_arr = isset($_REQUEST["letter_cats"]) ? $_REQUEST["letter_cats"] : "";
-        $cat_arr = xnewsletterRequest::getArray('letter_cats', array());
+        $cat_arr = XnewsletterRequest::getArray('letter_cats', array());
         if (count($cat_arr) > 0) {
             foreach ($cat_arr as $cat) {
                 $letter_cats .= $cat . '|';
@@ -464,9 +464,9 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
         // Form letter_email_test
         $letterObj->setVar("letter_email_test", $_REQUEST["letter_email_test"]);
         // Form letter_submitter
-        $letterObj->setVar("letter_submitter", xnewsletterRequest::getInt('letter_submitter', 0));
+        $letterObj->setVar("letter_submitter", XnewsletterRequest::getInt('letter_submitter', 0));
         // Form letter_created
-        $letterObj->setVar("letter_created", xnewsletterRequest::getInt('letter_created', 0));
+        $letterObj->setVar("letter_created", XnewsletterRequest::getInt('letter_created', 0));
         if ($xnewsletter->getHandler('letter')->insert($letterObj)) {
             $letter_id = $letterObj->getVar("letter_id");
 
@@ -516,7 +516,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
             $protocolObj->setVar("protocol_success", '1');
             $action = "";
             //$action = isset($_REQUEST["letter_action"]) ? $_REQUEST["letter_action"] : 0;
-            $action = xnewsletterRequest::getInt('letter_action', 0);
+            $action = XnewsletterRequest::getInt('letter_action', 0);
             switch ($action) {
                 case _AM_XNEWSLETTER_LETTER_ACTION_VAL_PREVIEW :
                     $url = "{$currentFile}?op=show_preview&letter_id={$letter_id}";

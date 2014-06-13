@@ -27,17 +27,17 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op                      = xnewsletterRequest::getString('op', 'list');
-$subscr_id               = xnewsletterRequest::getInt('subscr_id', 0);
+$op                      = XnewsletterRequest::getString('op', 'list');
+$subscr_id               = XnewsletterRequest::getInt('subscr_id', 0);
 
-$filter_subscr           = xnewsletterRequest::getString('filter_subscr', '=');
-$filter_subscr_firstname = xnewsletterRequest::getString('filter_subscr_firstname', '');
-$filter_subscr_lastname  = xnewsletterRequest::getString('filter_subscr_lastname', '');
-$filter_subscr_email     = xnewsletterRequest::getString('filter_subscr_email', '');
+$filter_subscr           = XnewsletterRequest::getString('filter_subscr', '=');
+$filter_subscr_firstname = XnewsletterRequest::getString('filter_subscr_firstname', '');
+$filter_subscr_lastname  = XnewsletterRequest::getString('filter_subscr_lastname', '');
+$filter_subscr_email     = XnewsletterRequest::getString('filter_subscr_email', '');
 
 if ($op == 'apply_filter') {
     if ($filter_subscr == "LIKE" && !$filter_subscr_firstname=='') $filter_subscr_firstname = "%".$filter_subscr_firstname."%";
@@ -50,7 +50,7 @@ $subscrAdmin = new ModuleAdmin();
 switch ($op) {
     case "show_catsubscr":
         echo $subscrAdmin->addNavigation($currentFile);
-        $apply_filter = xnewsletterRequest::getString('apply_filter', 'list');
+        $apply_filter = XnewsletterRequest::getString('apply_filter', 'list');
         $linklist = "?op=$apply_filter&filter_subscr=$filter_subscr";
         $linklist .= "&filter_subscr_firstname=$filter_subscr_firstname";
         $linklist .= "&filter_subscr_lastname=$filter_subscr_lastname";
@@ -116,7 +116,7 @@ switch ($op) {
         $subscrCriteria->setSort("subscr_id");
         $subscrCriteria->setOrder("DESC");
         $subscrsCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $subscrCriteria->setStart($start);
         $subscrCriteria->setLimit($limit);
         $subscrObjs = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria);
@@ -218,10 +218,10 @@ switch ($op) {
                 echo "  </td>";
                 echo "</tr>";
 
-                $filter_subscr           = xnewsletterRequest::getString('filter_subscr', '=');
-                $filter_subscr_firstname = xnewsletterRequest::getString('filter_subscr_firstname', '');
-                $filter_subscr_lastname  = xnewsletterRequest::getString('filter_subscr_lastname', '');
-                $filter_subscr_email     = xnewsletterRequest::getString('filter_subscr_email', '');
+                $filter_subscr           = XnewsletterRequest::getString('filter_subscr', '=');
+                $filter_subscr_firstname = XnewsletterRequest::getString('filter_subscr_firstname', '');
+                $filter_subscr_lastname  = XnewsletterRequest::getString('filter_subscr_lastname', '');
+                $filter_subscr_email     = XnewsletterRequest::getString('filter_subscr_email', '');
 
             }
             echo "</table><br /><br />";
@@ -272,7 +272,7 @@ switch ($op) {
         $subscrObj->setVar("subscr_created", $_REQUEST["subscr_created"]);
         $subscrObj->setVar("subscr_ip", $_REQUEST["subscr_ip"]);
         $subscrObj->setVar("subscr_actkey", $_REQUEST["subscr_actkey"]);
-        $subscrObj->setVar("subscr_activated", xnewsletterRequest::getInt('subscr_activated', 0));
+        $subscrObj->setVar("subscr_activated", XnewsletterRequest::getInt('subscr_activated', 0));
 
         if ($xnewsletter->getHandler('subscr')->insert($subscrObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
@@ -317,4 +317,4 @@ switch ($op) {
         }
     break;
 }
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

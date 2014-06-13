@@ -25,22 +25,22 @@
  *  Version : $Id $
  * ****************************************************************************
  */
- 
+
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED', 100);
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_AT_ONCE', 10);
 
-$op                 = xnewsletterRequest::getString('op', 'default');
-$plugin             = xnewsletterRequest::getString('plugin', 'csv');
-$cat_id             = xnewsletterRequest::getInt('cat_id', 0, 'int');
-$action_after_read  = xnewsletterRequest::getInt('action_after_read', 1);
-$start              = xnewsletterRequest::getInt('start', 0);
-$limitcheck         = xnewsletterRequest::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
-$skipcatsubscrexist = xnewsletterRequest::getInt('skipcatsubscrexist', 1);
-$check_import       = xnewsletterRequest::getInt('check_import', 0);
+$op                 = XnewsletterRequest::getString('op', 'default');
+$plugin             = XnewsletterRequest::getString('plugin', 'csv');
+$cat_id             = XnewsletterRequest::getInt('cat_id', 0, 'int');
+$action_after_read  = XnewsletterRequest::getInt('action_after_read', 1);
+$start              = XnewsletterRequest::getInt('start', 0);
+$limitcheck         = XnewsletterRequest::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
+$skipcatsubscrexist = XnewsletterRequest::getInt('skipcatsubscrexist', 1);
+$check_import       = XnewsletterRequest::getInt('check_import', 0);
 
 echo $indexAdmin->addNavigation($currentFile);
 
@@ -196,14 +196,14 @@ switch ($op) {
 
     case "apply_import_form":
         //update xnewsletter with settings form_import
-        $counter = xnewsletterRequest::getInt('counter', 0);
+        $counter = XnewsletterRequest::getInt('counter', 0);
 
         for ($i=1; $i < ($counter + 1); ++$i) {
-            $import_id        = xnewsletterRequest::getString("import_id_{$i}", 'default');
-            $subscr_firstname = xnewsletterRequest::getString("firstname_{$i}", '');
-            $subscr_lastname  = xnewsletterRequest::getString("lastname_{$i}", '');
-            $subscr_sex       = xnewsletterRequest::getString("sex_{$i}", '');
-            $cat_id           = xnewsletterRequest::getInt("cat_id_{$i}", 0);
+            $import_id        = XnewsletterRequest::getString("import_id_{$i}", 'default');
+            $subscr_firstname = XnewsletterRequest::getString("firstname_{$i}", '');
+            $subscr_lastname  = XnewsletterRequest::getString("lastname_{$i}", '');
+            $subscr_sex       = XnewsletterRequest::getString("sex_{$i}", '');
+            $cat_id           = XnewsletterRequest::getInt("cat_id_{$i}", 0);
 
             if ($cat_id > 0) {
                 if ($subscr_id == 0) {
@@ -390,8 +390,8 @@ switch ($op) {
         //import data into xnewsletter_import with plugin
         if ($plugin == 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
-            $csv_header    = xnewsletterRequest::getInt('csv_header', 0);
-            $csv_delimiter = xnewsletterRequest::getString('csv_delimiter', ',');
+            $csv_header    = XnewsletterRequest::getInt('csv_header', 0);
+            $csv_delimiter = XnewsletterRequest::getString('csv_delimiter', ',');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
         } else if ($plugin == 'xoopsuser') {
@@ -450,7 +450,7 @@ switch ($op) {
         $form->display();
         break;
 }
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';
 
 /**
  * @param $prot_text

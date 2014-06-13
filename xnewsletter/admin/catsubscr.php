@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op = XnewsletterRequest::getString('op', 'list');
 
 switch ($op) {
     case "list":
@@ -45,7 +45,7 @@ switch ($op) {
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -120,7 +120,7 @@ switch ($op) {
         $catsubscrCriteria->setSort("catsubscr_id ASC, catsubscr_catid");
         $catsubscrCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XnewsletterRequest::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -218,7 +218,7 @@ switch ($op) {
         $catsubscr_subscrid = $_REQUEST["catsubscr_subscrid"];
         $catsubscrObj->setVar("catsubscr_subscrid", $catsubscr_subscrid);
         //Form catsubscr_quited
-        $catsubscr_quit_now = xnewsletterRequest::getInt('catsubscr_quit_now', 0);
+        $catsubscr_quit_now = XnewsletterRequest::getInt('catsubscr_quit_now', 0);
         if ($catsubscr_quit_now == 1) {
             $catsubscrObj->setVar("catsubscr_quited",  time());
         } elseif ($catsubscr_quit_now == 2) {
@@ -284,4 +284,4 @@ switch ($op) {
         }
     break;
 }
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

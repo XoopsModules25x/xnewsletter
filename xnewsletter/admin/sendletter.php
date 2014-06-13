@@ -26,11 +26,11 @@
  * ****************************************************************************
  */
 
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
 
-$op        = xnewsletterRequest::getString('op', 'list');
-$letter_id = xnewsletterRequest::getInt('letter_id', 0);
+$op        = XnewsletterRequest::getString('op', 'list');
+$letter_id = XnewsletterRequest::getInt('letter_id', 0);
 
 $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
 
@@ -46,4 +46,4 @@ $result_exec = xnewsletter_executeTasks($xn_send_in_packages, $letter_id);
 
 redirect_header("letter.php", 3, $result_exec);
 
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

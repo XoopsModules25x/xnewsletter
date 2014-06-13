@@ -37,7 +37,7 @@ define('XNEWSLETTER_REQUEST_ALLOWHTML', 4);
  * request variables.  This includes $_POST, $_GET, and naturally $_REQUEST.  Variables
  * can be passed through an input filter to avoid injection or returned raw.
  */
-class xnewsletterRequest
+class XnewsletterRequest
 {
 
     /**
@@ -113,14 +113,14 @@ class xnewsletterRequest
         }
         if (isset($input[$name]) && $input[$name] !== null) {
             // Get the variable from the input hash and clean it
-            $var = xnewsletterRequest::_cleanVar($input[$name], $mask, $type);
+            $var = XnewsletterRequest::_cleanVar($input[$name], $mask, $type);
             // Handle magic quotes compatability
             if (get_magic_quotes_gpc() && ($var != $default) && ($hash != 'FILES')) {
-                $var = xnewsletterRequest::_stripSlashesRecursive($var);
+                $var = XnewsletterRequest::_stripSlashesRecursive($var);
             }
         } elseif ($default !== null) {
             // Clean the default value
-            $var = xnewsletterRequest::_cleanVar($default, $mask, $type);
+            $var = XnewsletterRequest::_cleanVar($default, $mask, $type);
         } else {
             $var = $default;
         }
@@ -144,7 +144,7 @@ class xnewsletterRequest
      */
     static function getInt($name, $default = 0, $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'int');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'int');
     }
 
     /**
@@ -163,7 +163,7 @@ class xnewsletterRequest
      */
     static function getFloat($name, $default = 0.0, $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'float');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'float');
     }
 
     /**
@@ -182,7 +182,7 @@ class xnewsletterRequest
      */
     static function getBool($name, $default = false, $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'bool');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'bool');
     }
 
     /**
@@ -201,7 +201,7 @@ class xnewsletterRequest
      */
     static function getWord($name, $default = '', $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'word');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'word');
     }
 
     /**
@@ -220,7 +220,7 @@ class xnewsletterRequest
      */
     static function getCmd($name, $default = '', $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'cmd');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'cmd');
     }
 
     /**
@@ -241,7 +241,7 @@ class xnewsletterRequest
     static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case JREQUEST_ALLOWRAW was specified for mask
-        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
+        return (string) XnewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
     }
 
     /**
@@ -253,7 +253,7 @@ class xnewsletterRequest
      */
     static function getArray($name, $default = array(), $hash = 'default')
     {
-        return xnewsletterRequest::getVar($name, $default, $hash, 'array');
+        return XnewsletterRequest::getVar($name, $default, $hash, 'array');
     }
 
     /**
@@ -265,7 +265,7 @@ class xnewsletterRequest
      */
     static function getText($name, $default = '', $hash = 'default')
     {
-        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
+        return (string) XnewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
     }
 
     /**
@@ -370,10 +370,10 @@ class xnewsletterRequest
                 $input = $_REQUEST;
                 break;
         }
-        $result = xnewsletterRequest::_cleanVar($input, $mask);
+        $result = XnewsletterRequest::_cleanVar($input, $mask);
         // Handle magic quotes compatability
         if (get_magic_quotes_gpc() && ($hash != 'FILES')) {
-            $result = xnewsletterRequest::_stripSlashesRecursive($result);
+            $result = XnewsletterRequest::_stripSlashesRecursive($result);
         }
 
         return $result;
@@ -389,7 +389,7 @@ class xnewsletterRequest
     static function set($array, $hash = 'default', $overwrite = true)
     {
         foreach ($array as $key => $value) {
-            xnewsletterRequest::setVar($key, $value, $hash, $overwrite);
+            XnewsletterRequest::setVar($key, $value, $hash, $overwrite);
         }
     }
 
@@ -401,14 +401,14 @@ class xnewsletterRequest
      */
     static function clean()
     {
-        xnewsletterRequest::_cleanArray($_FILES);
-        xnewsletterRequest::_cleanArray($_ENV);
-        xnewsletterRequest::_cleanArray($_GET);
-        xnewsletterRequest::_cleanArray($_POST);
-        xnewsletterRequest::_cleanArray($_COOKIE);
-        xnewsletterRequest::_cleanArray($_SERVER);
+        XnewsletterRequest::_cleanArray($_FILES);
+        XnewsletterRequest::_cleanArray($_ENV);
+        XnewsletterRequest::_cleanArray($_GET);
+        XnewsletterRequest::_cleanArray($_POST);
+        XnewsletterRequest::_cleanArray($_COOKIE);
+        XnewsletterRequest::_cleanArray($_SERVER);
         if (isset($_SESSION)) {
-            xnewsletterRequest::_cleanArray($_SESSION);
+            XnewsletterRequest::_cleanArray($_SESSION);
         }
         $REQUEST = $_REQUEST;
         $GET     = $_GET;
