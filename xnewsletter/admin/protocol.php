@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = xnewsletterRequest::getString('op', 'list');
 
 $protocolAdmin = new ModuleAdmin();
 $letterAdmin = new ModuleAdmin();
@@ -45,7 +45,7 @@ switch ($op) {
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -169,7 +169,7 @@ switch ($op) {
         $protocolCriteria->setSort("protocol_id");
         $protocolCriteria->setOrder("DESC");
         $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $protocolCriteria->setStart($start);
         $protocolCriteria->setLimit($limit);
         $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
@@ -322,4 +322,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include "admin_footer.php";

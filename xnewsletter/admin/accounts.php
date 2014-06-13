@@ -27,14 +27,14 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = XnewsletterRequest::getString('op', 'list');
-$save_and_check = XnewsletterRequest::getString('save_and_check', 'none');
-$accounts_id    = XnewsletterRequest::getInt('accounts_id', 0);
-$post           = XnewsletterRequest::getString('post', '');
+$op             = xnewsletterRequest::getString('op', 'list');
+$save_and_check = xnewsletterRequest::getString('save_and_check', 'none');
+$accounts_id    = xnewsletterRequest::getInt('accounts_id', 0);
+$post           = xnewsletterRequest::getString('post', '');
 
 if ($post == "" &&  $op == "save_accounts" && $save_and_check =="none" ) $op = "edit_account";
 
@@ -195,7 +195,7 @@ switch ($op) {
         $accountsCriteria->setSort("accounts_id ASC, accounts_type");
         $accountsCriteria->setOrder("ASC");
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
@@ -358,4 +358,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include "admin_footer.php";

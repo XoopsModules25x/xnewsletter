@@ -21,11 +21,11 @@
  */
 
 $currentFile = basename(__FILE__);
-require_once dirname(__FILE__) . '/admin_header.php';
+include_once "admin_header.php";
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = xnewsletterRequest::getString('op', 'list');
 switch ($op) {
     case "list":
     default:
@@ -102,4 +102,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once "admin_footer.php";

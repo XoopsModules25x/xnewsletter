@@ -29,10 +29,10 @@
 $currentFile = basename(__FILE__);
 include_once "header.php";
 
-$op             = XnewsletterRequest::getString('op', 'list_subscriptions');
-$activationKey  = XnewsletterRequest::getString('actkey', '');
-$subscr_id      = XnewsletterRequest::getInt('subscr_id', 0);
-$subscr_email   = ($op != 'unsub') ? XnewsletterRequest::getString('subscr_email', '') : '';
+$op             = xnewsletterRequest::getString('op', 'list_subscriptions');
+$activationKey  = xnewsletterRequest::getString('actkey', '');
+$subscr_id      = xnewsletterRequest::getInt('subscr_id', 0);
+$subscr_email   = ($op != 'unsub') ? xnewsletterRequest::getString('subscr_email', '') : '';
 $ip             =  xoops_getenv('REMOTE_ADDR');
 
 if ($op == 'save_subscription' || $activationKey != '') {
@@ -52,7 +52,7 @@ if ($op == 'delete_subscription_confirmed') {
 if ($op == 'unsub') {
     $op = 'list_subscriptions';
     $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-    $_SESSION['redirect_mail'] = XnewsletterRequest::getString('email', '');
+    $_SESSION['redirect_mail'] = xnewsletterRequest::getString('email', '');
     $_SESSION['unsub'] = '1';
 }
 
@@ -83,7 +83,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // resend the email with the confirmation code
-        $subscr_id = XnewsletterRequest::getInt('subscr_id', 0);
+        $subscr_id = xnewsletterRequest::getInt('subscr_id', 0);
         $subscrCriteria = new CriteriaCompo();
         $subscrCriteria->add(new Criteria('subscr_id', $subscr_id));
         $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
@@ -174,10 +174,10 @@ switch ($op) {
                 $code_selections .= $cat_id . "-";
                 $code_selections .= (isset($_REQUEST["letter_cats_{$cat_id}"])) ? '1' : '0';
                 $code_selections .= "-";
-                $old_catsubcr_id = XnewsletterRequest::getInt("letter_cats_old_catsubcr_id_{$cat_id}", 0);
+                $old_catsubcr_id = xnewsletterRequest::getInt("letter_cats_old_catsubcr_id_{$cat_id}", 0);
                 $code_selections .= $old_catsubcr_id;
                 $code_selections .= "-";
-                $old_catsubcr_quited = XnewsletterRequest::getInt("letter_cats_old_catsubscr_quited_{$cat_id}", 0);
+                $old_catsubcr_quited = xnewsletterRequest::getInt("letter_cats_old_catsubscr_quited_{$cat_id}", 0);
                 $code_selections .= $old_catsubcr_quited;
             }
 
@@ -221,20 +221,20 @@ switch ($op) {
 
             if ($activationKey || $allowedWithoutActivationKey) {
                 // subscr_firstname
-                $subscrObj->setVar('subscr_firstname', XnewsletterRequest::getString('subscr_firstname', ''));
+                $subscrObj->setVar('subscr_firstname', xnewsletterRequest::getString('subscr_firstname', ''));
                 // subscr_lastname
-                $subscrObj->setVar('subscr_lastname',  XnewsletterRequest::getString('subscr_lastname', ''));
+                $subscrObj->setVar('subscr_lastname',  xnewsletterRequest::getString('subscr_lastname', ''));
                 // subscr_sex
-                $subscrObj->setVar('subscr_sex', XnewsletterRequest::getString('subscr_sex', ''));
+                $subscrObj->setVar('subscr_sex', xnewsletterRequest::getString('subscr_sex', ''));
                 // subscr_actoptions
                 $subscrObj->setVar('subscr_actoptions', '');
             } else {
                 //format subscr_actoptions: selected_newsletters||firstname||lastname||sex
                 $code_options = array();
                 $code_options[0] = $code_selections;
-                $code_options[1] = XnewsletterRequest::getString('subscr_firstname', '');
-                $code_options[2] = XnewsletterRequest::getString('subscr_lastname', '');
-                $code_options[3] = XnewsletterRequest::getString('subscr_sex', '');
+                $code_options[1] = xnewsletterRequest::getString('subscr_firstname', '');
+                $code_options[2] = xnewsletterRequest::getString('subscr_lastname', '');
+                $code_options[3] = xnewsletterRequest::getString('subscr_sex', '');
                 $code_options[4] = time();
                 $code_options[5] = $ip;
                 $subscrObj->setVar('subscr_actoptions', serialize($code_options));
@@ -540,7 +540,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get edit subscr form
-        $subscr_id = XnewsletterRequest::getInt('subscr_id', 0);
+        $subscr_id = xnewsletterRequest::getInt('subscr_id', 0);
         if ($subscr_id <= 0) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
@@ -616,11 +616,11 @@ switch ($op) {
                         $subscrCriteria->add(new Criteria('subscr_actkey', $subscr_actkey));
                     $subscrCriteria->setLimit(1);
                     $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
-
+                    
                     if ($subscrCount != 1) {
                         redirect_header($currentFile, 2, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
                     }
-
+                    
                     $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
 /*
                     $sql = "SELECT subscr_id";
@@ -741,7 +741,7 @@ switch ($op) {
 
         $subscr_id = 0;
         // get subscr email
-        $subscr_email = XnewsletterRequest::getString('subscr_email', '');
+        $subscr_email = xnewsletterRequest::getString('subscr_email', '');
         if ($subscr_email != '') {
             // existing email from search form
             if (!xnewsletter_checkEmail($subscr_email))
