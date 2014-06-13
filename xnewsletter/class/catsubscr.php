@@ -79,11 +79,11 @@ class XnewsletterCatsubscr extends XoopsObject
         $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
         $form->addElement($cat_select, true);
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('subscr_email ');
-        $criteria->setOrder('ASC');
+        $subscrCriteria = new CriteriaCompo();
+        $subscrCriteria->setSort('subscr_email ');
+        $subscrCriteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID, "catsubscr_subscrid", $this->getVar("catsubscr_subscrid"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList());
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
         $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, "&nbsp;");

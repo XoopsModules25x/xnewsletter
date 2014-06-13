@@ -31,11 +31,11 @@ switch ($op) {
     default:
         echo $indexAdmin->addNavigation($currentFile);
         //
-        $task_criteria = new CriteriaCompo();
-        $task_criteria->setSort("task_id");
-        $task_criteria->setOrder("ASC");
+        $taskCriteria = new CriteriaCompo();
+        $taskCriteria->setSort("task_id");
+        $taskCriteria->setOrder("ASC");
         $taskCounts = $xnewsletter->getHandler('task')->getCount();
-        $taskObjs = $xnewsletter->getHandler('task')->getAll($task_criteria);
+        $taskObjs = $xnewsletter->getHandler('task')->getAll($taskCriteria);
 
         //Affichage du tableau
         echo "

@@ -49,7 +49,7 @@ $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
 
 //About
 $modversion['module_status']       = "Alpha 1";
-$modversion['release_date']        = "2014/06/10";
+$modversion['release_date']        = "2014/06/13";
 //$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = "";
 $modversion['demo_site_name']      = "";
@@ -107,7 +107,7 @@ $modversion['tables'][11] = "xnewsletter_task";
 $modversion['tables'][12] = "xnewsletter_template";
 
 // Scripts to run upon installation or update
-$modversion['onInstall'] = "include/install.php";
+$modversion['onInstall'] = "include/oninstall.php";
 $modversion['onUpdate'] = "include/onupdate.php";
 
 // Comments
@@ -140,10 +140,10 @@ if (is_object($xoopsUser) && isset($xoopsUser)) {
         $my_group_ids = $member_handler->getGroupsByUser($xoopsUser->uid());
 
         $catHandler = xoops_getModuleHandler('cat', 'xnewsletter');
-        $cat_criteria = new CriteriaCompo();
-        $cat_criteria->setSort('cat_id');
-        $cat_criteria->setOrder('ASC');
-        $catObjs = $catHandler->getAll($cat_criteria);
+        $catCriteria = new CriteriaCompo();
+        $catCriteria->setSort('cat_id');
+        $catCriteria->setOrder('ASC');
+        $catObjs = $catHandler->getAll($catCriteria);
         foreach ($catObjs as $catObj) {
             if ($gperm_handler->checkRight('newsletter_create_cat', $catObj->getVar('cat_id'), $my_group_ids, $mid) == true)
                 $showCreate = true;

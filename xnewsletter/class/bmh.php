@@ -77,11 +77,11 @@ class XnewsletterBmh extends XoopsObject
         $form->setExtra('enctype="multipart/form-data"');
 
         $account_default = $this->getVar("bmh_accounts_id");
-        $crit_accounts   = new CriteriaCompo();
-        $crit_accounts->setSort("accounts_id");
-        $crit_accounts->setOrder("ASC");
+        $accontsCriteria   = new CriteriaCompo();
+        $accontsCriteria->setSort("accounts_id");
+        $accontsCriteria->setOrder("ASC");
         $opt_accounts = new XoopsFormSelect(_AM_XNEWSLETTER_BMH_ACCOUNTS_ID, "bmh_accounts_id", $account_default);
-        $opt_accounts->addOptionArray($this->xnewsletter->getHandler('accounts')->getList($crit_accounts));
+        $opt_accounts->addOptionArray($this->xnewsletter->getHandler('accounts')->getList($accontsCriteria));
         $form->addElement($opt_accounts, false);
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_NO, "bmh_rule_no", 50, 255, $this->getVar("bmh_rule_no")), true);
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_CAT, "bmh_rule_cat", 50, 255, $this->getVar("bmh_rule_cat")), true);
