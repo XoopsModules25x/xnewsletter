@@ -97,10 +97,10 @@ switch ($op) {
             $counter = 0;
 
             //get data for dropdown with cats
-            $cat_criteria = new CriteriaCompo();
-            $cat_criteria->setSort('cat_id ASC, cat_name');
-            $cat_criteria->setOrder('ASC');
-            $catObjs = $xnewsletter->getHandler('cat')->getAll($cat_criteria);
+            $catCriteria = new CriteriaCompo();
+            $catCriteria->setSort('cat_id ASC, cat_name');
+            $catCriteria->setOrder('ASC');
+            $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
 
             foreach ($importObjs as $i => $importObj) {
                 ++$counter;

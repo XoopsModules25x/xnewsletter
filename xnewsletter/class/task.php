@@ -67,18 +67,18 @@ class XnewsletterTask extends XoopsObject
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('letter_id');
-        $criteria->setOrder('DESC');
+        $letterCriteria = new CriteriaCompo();
+        $letterCriteria->setSort('letter_id');
+        $letterCriteria->setOrder('DESC');
         $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, "task_letter_id", $this->getVar("task_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($criteria));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('subscr_id');
-        $criteria->setOrder('ASC');
+        $subscrCriteria = new CriteriaCompo();
+        $subscrCriteria->setSort('subscr_id');
+        $subscrCriteria->setOrder('ASC');
         $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, "task_subscr_id", $this->getVar("task_subscr_id"));
-        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($criteria));
+        $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
         $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, "task_starttime", "", $this->getVar("task_starttime")));

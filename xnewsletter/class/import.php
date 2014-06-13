@@ -78,11 +78,11 @@ class XnewsletterImport extends XoopsObject
         $form = new XoopsThemeForm($title, "form_select_import", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('cat_id ASC, cat_name');
-        $criteria->setOrder('ASC');
+        $catCriteria = new CriteriaCompo();
+        $catCriteria->setSort('cat_id ASC, cat_name');
+        $catCriteria->setOrder('ASC');
         $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", "1");
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList($catCriteria));
         $form->addElement($cat_select, false);
 
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");

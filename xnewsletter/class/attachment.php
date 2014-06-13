@@ -72,11 +72,11 @@ class XnewsletterAttachment extends XoopsObject
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('letter_id');
-        $criteria->setOrder('DESC');
+        $letterCriteria = new CriteriaCompo();
+        $letterCriteria->setSort('letter_id');
+        $letterCriteria->setOrder('DESC');
         $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "attachment_letter_id", $this->getVar("attachment_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($criteria));
+        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_NAME, "attachment_name", 50, 255, $this->getVar("attachment_name")), true);

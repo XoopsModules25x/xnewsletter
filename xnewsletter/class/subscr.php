@@ -151,13 +151,12 @@ class XnewsletterSubscr extends XoopsObject
             $my_group_ids = $member_handler->getGroupsByUser($currentuid);
         }
 
-        $crit_cat = new CriteriaCompo();
-        $crit_cat->setSort('cat_id');
-        $crit_cat->setOrder('ASC');
-        $cat_arr          = $this->xnewsletter->getHandler('cat')->getAll($crit_cat);
+        $catCriteria = new CriteriaCompo();
+        $catCriteria->setSort('cat_id');
+        $catCriteria->setOrder('ASC');
+        $catObjs          = $this->xnewsletter->getHandler('cat')->getAll($catCriteria);
         $count_cats_avail = 0;
-        foreach (array_keys($cat_arr) as $i) {
-            $cat_id = $cat_arr[$i]->getVar("cat_id");
+        foreach ($catObjs as $cat_id => $catObj) {
             //first check group anonymous
             $show = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $this->xnewsletter->getModule()->mid());
             if ($show == 0) {
@@ -165,19 +164,18 @@ class XnewsletterSubscr extends XoopsObject
             }
             if ($show == 1) {
                 ++$count_cats_avail;
-                $cat_name = $cat_arr[$i]->getVar("cat_name");
+                $cat_name = $catObj->getVar("cat_name");
                 //get subscription of current cat and current user
                 $catsubscr        = 0;
                 $catsubscr_id     = 0;
                 $catsubscr_quited = 0;
 
-                $crit_catsubscr = new CriteriaCompo();
-                $crit_catsubscr->add(new Criteria('catsubscr_catid', $cat_id));
-                $crit_catsubscr->add(new Criteria('catsubscr_subscrid', $subscr_id));
-                $catsubscr_arr = $this->xnewsletter->getHandler('catsubscr')->getAll($crit_catsubscr);
-                foreach (array_keys($catsubscr_arr) as $catsubscr) {
-                    $catsubscr_id     = $catsubscr;
-                    $catsubscr_quited = $catsubscr_arr[$catsubscr]->getVar("catsubscr_quited");
+                $catsubscrCriteria = new CriteriaCompo();
+                $catsubscrCriteria->add(new Criteria('catsubscr_catid', $cat_id));
+                $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
+                $catsubscrObjs = $this->xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
+                foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
+                    $catsubscr_quited = $catsubscrObj->getVar("catsubscr_quited");
                 }
 
                 if ($catsubscr_quited > 0) {
@@ -189,7 +187,7 @@ class XnewsletterSubscr extends XoopsObject
                     $catsubscr_quited = 0;
                 }
                 $cat_info = "<div style='padding-left:20px;padding-top:10px'>";
-                $cat_info .= $cat_arr[$i]->getVar("cat_info");
+                $cat_info .= $catObj->getVar("cat_info");
                 $cat_info .= "</div>";
                 $opt_cat[$cat_id] = new XoopsFormCheckBox('', "letter_cats_" . $cat_id, $catsubscr_id > 0);
                 $opt_cat[$cat_id]->addOption($cat_id, $cat_name);
