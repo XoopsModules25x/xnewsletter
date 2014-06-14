@@ -61,8 +61,3 @@ $member_handler = xoops_gethandler('member');
 $notification_handler = &xoops_gethandler('notification');
 $gperm_handler = xoops_gethandler('groupperm');
 $config_handler = xoops_gethandler('config');
-
-$pathIcon16 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons16');
-$pathIcon32 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons32');
-$pathModuleAdmin = XOOPS_ROOT_PATH . '/' . $xnewsletter->getModule()->getInfo('dirmoduleadmin');
-require_once $pathModuleAdmin . '/moduleadmin/moduleadmin.php';
