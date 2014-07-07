@@ -50,13 +50,13 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
         $action_code = $mailinglistObj->getVar("mailinglist_unsubscribe");
     }
     $action_code = str_replace("{email}", $subscr_email, $action_code);
-
+/*
     echo "<br />type {$type}";
     echo "<br />subscr_id: {$subscr_id}";
     echo "<br />mailinglist_id: {$mailinglist_id}";
     echo "<br />action_code: {$action_code}";
     echo "<br />";
-
+*/
     require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php");
     require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.pop3.php");
     require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php");
