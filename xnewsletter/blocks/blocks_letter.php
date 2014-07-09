@@ -54,7 +54,7 @@ function b_xnewsletter_letter($options) {
         // For the block: letter recents
         case "recent":
             $letterCriteria->setSort('letter_created');
-            $letterCriteria->setOrder("DESC");
+            $letterCriteria->setOrder('DESC');
             break;
         // For the block: letter of today
         case "day":
@@ -69,21 +69,21 @@ function b_xnewsletter_letter($options) {
             break;
     }
 
-    $currentUid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
-    if ($currentUid == 0) {
-        $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);
+    $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
+    if ($uid == 0) {
+        $groups = array(XOOPS_GROUP_ANONYMOUS);
     } else {
-        $my_group_ids = $member_handler->getGroupsByUser($currentUid) ;
+        $groups = $member_handler->getGroupsByUser($uid) ;
     }
 
     $letterCriteria->setLimit($nb_letter);
     $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
     foreach ($letterObjs as $letter_id => $letterObj) {
-        $letter_cat_arr = array();
-        $letter_cat_arr = explode('|', $letterObj->getVar('letter_cats'));
+        $letter_cats = array();
+        $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         $showCat = false;
-        foreach (array_keys($letter_cat_arr) as $cat_id) {
-            $showCat = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
+        foreach ($letter_cats as $cat_id) {
+            $showCat = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
             if ($showCat == true) {
                 $letter[$letter_id]['letter_id'] = $letterObj->getVar('letter_id');
                 $letter_title = $letterObj->getVar('letter_title');
