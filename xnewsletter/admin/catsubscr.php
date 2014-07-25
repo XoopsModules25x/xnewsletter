@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = xnewsletterRequest::getString('op', 'list');
 
 switch ($op) {
     case "list":
@@ -45,7 +45,7 @@ switch ($op) {
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -56,9 +56,8 @@ switch ($op) {
         } else {
             $pagenav = '';
         }
-
         // View Table
-        if ($catsCount>0) {
+        if ($catsCount > 0) {
             echo "
                 <table class='outer width100' cellspacing='1'>
                     <tr>
@@ -103,10 +102,9 @@ switch ($op) {
                     </tr>";
             echo "</table><br /><br />";
         }
-    break;
+        break;
 
     case "list_cat":
-
         $cat_id = isset($_REQUEST["cat_id"]) ? $_REQUEST["cat_id"] : 0;
 
         echo $indexAdmin->addNavigation($currentFile);
@@ -120,7 +118,7 @@ switch ($op) {
         $catsubscrCriteria->setSort("catsubscr_id ASC, catsubscr_catid");
         $catsubscrCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -133,8 +131,7 @@ switch ($op) {
         }
 
         // View Table
-        if ($catsCount>0)
-        {
+        if ($catsCount > 0) {
             echo "<table class='outer width100' cellspacing='1'>
                 <tr>
                     <th class='center width2'>" . _AM_XNEWSLETTER_CATSUBSCR_ID . "</th>
@@ -188,9 +185,9 @@ switch ($op) {
                         <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
                     </tr>";
             echo "</table><br /><br />";
-    }
+        }
 
-    break;
+        break;
 
     case "new_catsubscr":
         echo $indexAdmin->addNavigation($currentFile);
@@ -200,7 +197,7 @@ switch ($op) {
         $catsubscrObj = $xnewsletter->getHandler('catsubscr')->create();
         $form = $catsubscrObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "save_catsubscr":
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
@@ -218,7 +215,7 @@ switch ($op) {
         $catsubscr_subscrid = $_REQUEST["catsubscr_subscrid"];
         $catsubscrObj->setVar("catsubscr_subscrid", $catsubscr_subscrid);
         //Form catsubscr_quited
-        $catsubscr_quit_now = XnewsletterRequest::getInt('catsubscr_quit_now', 0);
+        $catsubscr_quit_now = xnewsletterRequest::getInt('catsubscr_quit_now', 0);
         if ($catsubscr_quit_now == 1) {
             $catsubscrObj->setVar("catsubscr_quited",  time());
         } elseif ($catsubscr_quit_now == 2) {
@@ -242,7 +239,7 @@ switch ($op) {
         echo $catsubscrObj->getHtmlErrors();
         $form = $catsubscrObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "edit_catsubscr":
         $cat_id = isset($_REQUEST["cat_id"]) ? $_REQUEST["cat_id"] : 0;
@@ -255,33 +252,32 @@ switch ($op) {
         $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($_REQUEST["catsubscr_id"]);
         $form = $catsubscrObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "delete_catsubscr":
         $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($_REQUEST["catsubscr_id"]);
-        if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
+        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header("catsubscr.php", 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
             if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj)) {
-        //remove subscriber from mailinglist
-        $subscr_id = $_REQUEST["subscr_id"];
-        $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["cat_id"]);
-        if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
-          require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
-          subscribingMLHandler(0, $subscr_id, $catsubscrObj_cat->getVar("cat_mailinglist"));
-        }
+                //remove subscriber from mailinglist
+                $subscr_id = $_REQUEST["subscr_id"];
+                $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["cat_id"]);
+                if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
+                    require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
+                    subscribingMLHandler(0, $subscr_id, $catsubscrObj_cat->getVar("cat_mailinglist"));
+                }
                 redirect_header("catsubscr.php", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $catsubscrObj->getHtmlErrors();
             }
         } else {
-      $confirmtext = str_replace("%c", $_REQUEST["cat_name"], _AM_XNEWSLETTER_CATSUBSCR_SUREDELETE);
-      $confirmtext = str_replace("%s", $_REQUEST["subscr_email"], $confirmtext);
-      $confirmtext = str_replace('"', " ", $confirmtext);
-
-            xoops_confirm(array("ok" => 1, "catsubscr_id" => $_REQUEST["catsubscr_id"], "op" => "delete_catsubscr"), $_SERVER["REQUEST_URI"], sprintf($confirmtext));
+            $confirmtext = str_replace("%c", $_REQUEST["cat_name"], _AM_XNEWSLETTER_CATSUBSCR_SUREDELETE);
+            $confirmtext = str_replace("%s", $_REQUEST["subscr_email"], $confirmtext);
+            $confirmtext = str_replace('"', " ", $confirmtext);
+            xoops_confirm(array("ok" => true, "catsubscr_id" => $_REQUEST["catsubscr_id"], "op" => "delete_catsubscr"), $_SERVER["REQUEST_URI"], sprintf($confirmtext));
         }
-    break;
+        break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include "admin_footer.php";

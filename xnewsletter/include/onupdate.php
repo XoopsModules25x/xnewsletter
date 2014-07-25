@@ -66,7 +66,7 @@ function xoops_module_update_xnewsletter_130() {
     $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('xnewsletter_template') . "`");
     $result = $xoopsDB->queryF($sql);
     if (!$result)
-        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'xnewsletter_template'";
+        echo '<br />' . _AM_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'xnewsletter_template'";
 
     $sql = sprintf(
         "CREATE TABLE `" . $xoopsDB->prefix('xnewsletter_template') . "` (
@@ -94,7 +94,7 @@ function xoops_module_update_xnewsletter_104() {
     $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('mod_xnewsletter_task') . "`");
     $result = $xoopsDB->queryF($sql);
     if (!$result)
-        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'mod_xnewsletter_task'";
+        echo '<br />' . _AM_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'mod_xnewsletter_task'";
 
     $sql = sprintf(
         "CREATE TABLE `" . $xoopsDB->prefix('mod_xnewsletter_task') . "` (

@@ -29,7 +29,7 @@
 $currentFile = basename(__FILE__);
 include_once "header.php";
 
-$op = XnewsletterRequest::getString('op', 'welcome');
+$op = xnewsletterRequest::getString('op', 'welcome');
 
 switch ($op) {
     case "welcome" :
@@ -67,7 +67,7 @@ switch ($op) {
         $xoopsTpl->assign('welcome_message', $xnewsletter->getConfig('welcome_message'));
 
         // get letter_id
-        $letter_id = XnewsletterRequest::getInt('letter_id', 0);
+        $letter_id = xnewsletterRequest::getInt('letter_id', 0);
         // get letter object
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data
@@ -84,7 +84,7 @@ switch ($op) {
         $xoopsTpl->assign('date', time()); // new from v1.3
         $xoopsTpl->assign('unsubscribe_url', XOOPS_URL . '/modules/xnewsletter/');
         $xoopsTpl->assign('catsubscr_id', '0');
-
+        
         $letter_array = $letterObj->toArray();
 
         preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
@@ -99,7 +99,7 @@ switch ($op) {
             $htmlBody = $xoopsTpl->fetch($template);
         }
         $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
-
+        
         $letter_array['letter_content_templated'] = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3

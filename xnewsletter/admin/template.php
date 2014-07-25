@@ -153,7 +153,7 @@ switch ($op) {
 
     case "delete_template" :
         $templateObj = $xnewsletter->getHandler('template')->get($template_id);
-        if (isset($_POST["ok"]) && $_POST["ok"] == 1) {
+        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
@@ -163,7 +163,7 @@ switch ($op) {
                 echo $obj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "template_id" => $template_id, "op" => "delete_template"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar("template_title")));
+            xoops_confirm(array("ok" => true, "template_id" => $template_id, "op" => "delete_template"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar("template_title")));
         }
     break;
 }

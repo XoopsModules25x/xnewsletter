@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = xnewsletterRequest::getString('op', 'list');
 
 $protocolAdmin = new ModuleAdmin();
 $letterAdmin = new ModuleAdmin();
@@ -45,7 +45,7 @@ switch ($op) {
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -154,7 +154,8 @@ switch ($op) {
                     </tr>
                 </table><br /><br />";
         }
-    break;
+        break;
+
     case "list_letter":
         $letter_id = isset($_REQUEST["letter_id"]) ? $_REQUEST["letter_id"] :'0';
         echo $protocolAdmin->addNavigation($currentFile);
@@ -169,7 +170,7 @@ switch ($op) {
         $protocolCriteria->setSort("protocol_id");
         $protocolCriteria->setOrder("DESC");
         $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = xnewsletterRequest::getInt('start', 0);
         $protocolCriteria->setStart($start);
         $protocolCriteria->setLimit($limit);
         $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
@@ -236,7 +237,7 @@ switch ($op) {
                 <br />
                 <br />";
         }
-    break;
+        break;
 
     case "new_protocol":
         echo $protocolAdmin->addNavigation($currentFile);
@@ -246,7 +247,7 @@ switch ($op) {
         $protocolObj = $xnewsletter->getHandler('protocol')->create();
         $form = $protocolObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "save_protocol":
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
@@ -272,7 +273,7 @@ switch ($op) {
         echo $protocolObj->getHtmlErrors();
         $form = $protocolObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "edit_protocol":
         echo $protocolAdmin->addNavigation($currentFile);
@@ -283,11 +284,11 @@ switch ($op) {
         $protocolObj = $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
         $form = $protocolObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "delete_protocol":
         $protocolObj =& $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
-        if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
+        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
@@ -297,9 +298,9 @@ switch ($op) {
                 echo $protocolObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "protocol_id" => $_REQUEST["protocol_id"], "op" => "delete_protocol"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar("protocol_id")));
+            xoops_confirm(array("ok" => true, "protocol_id" => $_REQUEST["protocol_id"], "op" => "delete_protocol"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar("protocol_id")));
         }
-    break;
+        break;
 
     case "delete_protocol_list":
         $letter_id = isset($_REQUEST["letter_id"]) ? $_REQUEST["letter_id"] : 0;
@@ -320,6 +321,6 @@ switch ($op) {
                 xoops_confirm(array("ok" => 1, "letter_id" => $letter_id, "op" => "delete_protocol_list"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar("letter_title")));
             }
         }
-    break;
+        break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include "admin_footer.php";

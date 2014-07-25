@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include "admin_header.php";
 xoops_cp_header();
 
 //count "total"
@@ -73,4 +73,4 @@ $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_BMH
 echo $indexAdmin->addNavigation($currentFile) ;
 echo $indexAdmin->renderIndex();
 
-include_once dirname(__FILE__) . '/admin_footer.php';
+include "admin_footer.php";

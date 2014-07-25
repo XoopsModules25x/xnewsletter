@@ -38,7 +38,7 @@ define('_MI_XNEWSLETTER_ADMENU6',"Newsletters");
 define('_MI_XNEWSLETTER_ADMENU7',"Attachments");
 define('_MI_XNEWSLETTER_ADMENU8',"Protocols");
 define('_MI_XNEWSLETTER_ADMENU9',"Mailinglists");
-define('_MI_XNEWSLETTER_ADMENU10',"Bounced email");
+define('_MI_XNEWSLETTER_ADMENU10',"Bounced email handler");
 define('_MI_XNEWSLETTER_ADMENU11',"Maintenance");
 define('_MI_XNEWSLETTER_ADMENU12',"Import");
 define('_MI_XNEWSLETTER_ADMENU13',"Task list");

@@ -21,11 +21,11 @@
  */
 
 $currentFile = basename(__FILE__);
-require_once dirname(__FILE__) . '/admin_header.php';
+include_once "admin_header.php";
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = xnewsletterRequest::getString('op', 'list');
 switch ($op) {
     case "list":
     default:
@@ -88,7 +88,7 @@ switch ($op) {
 
     case "delete_task":
         $taskObj = $xnewsletter->getHandler('task')->get($_REQUEST["task_id"]);
-        if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
+        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
             if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
@@ -98,8 +98,8 @@ switch ($op) {
                 echo $taskObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $taskObj->getVar("task")));
+            xoops_confirm(array("ok" => true, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $taskObj->getVar("task")));
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once "admin_footer.php";
