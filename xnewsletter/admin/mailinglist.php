@@ -43,34 +43,34 @@ switch ($op) {
         $mailinglistCriteria = new CriteriaCompo();
         $mailinglistCriteria->setSort("mailinglist_id ASC, mailinglist_email");
         $mailinglistCriteria->setOrder("ASC");
-        $mailinglistsCount = $xnewsletter->getHandler('mailinglist')->getCount();
+        $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
         $start = xnewsletterRequest::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
         $mailinglistObjs = $xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
-        if ($mailinglistsCount > $limit) {
+        if ($mailinglistCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-            $pagenav = new XoopsPageNav($mailinglistsCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new XoopsPageNav($mailinglistCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
         }
 
         // View Table
-        if ($mailinglistsCount > 0) {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_MAILINGLIST_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_NAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_EMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_LISTNAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-                ";
+        echo "
+        <table class='outer width100' cellspacing='1'>
+            <tr>
+                <th class='center width2'>" . _AM_XNEWSLETTER_MAILINGLIST_ID . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_NAME . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_EMAIL . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_LISTNAME . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_CREATED . "</th>
+                <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+            </tr>
+            ";
+        if ($mailinglistCount > 0) {
             $class = "odd";
             foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
                 echo "<tr class='" . $class . "'>";
@@ -82,29 +82,17 @@ switch ($op) {
                 echo "<td class='center'>" . $mailinglistObj->getVar("mailinglist_subscribe") . "</td>";
                 echo "<td class='center'>" . $mailinglistObj->getVar("mailinglist_unsubscribe") . "</td>";
                 echo "<td class='center'>" . formatTimeStamp($mailinglistObj->getVar("mailinglist_created"), "S") . "</td>";
-                echo "<td class='center width5'>
-                    <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='"._EDIT."' title='"._EDIT . "' /></a>
-                    <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='"._DELETE."' title='" . _DELETE . "' /></a>
-                    </td>";
+                echo "<td class='center width5'>";
+                echo "    <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='"._EDIT."' title='"._EDIT . "' /></a>";
+                echo "    <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='"._DELETE."' title='" . _DELETE . "' /></a>";
+                echo "</td>";
                 echo "</tr>";
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
-        } else {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_MAILINGLIST_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_NAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_EMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_LISTNAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAILINGLIST_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-            </table><br /><br />";
         }
+        echo "</table>";
+        echo "<br />";
+        echo "<div class='center'>" . $pagenav . "</div>";
+        echo "<br />";
         break;
 
     case "new_mailinglist" :
@@ -126,19 +114,19 @@ switch ($op) {
         } else {
             $mailinglistObj = $xnewsletter->getHandler('mailinglist')->create();
         }
-        //Form mailinglist_name
+        // Form mailinglist_name
         $mailinglistObj->setVar("mailinglist_name", $_REQUEST["mailinglist_name"]);
-        //Form mailinglist_email
+        // Form mailinglist_email
         $mailinglistObj->setVar("mailinglist_email", $_REQUEST["mailinglist_email"]);
-        //Form mailinglist_listname
+        // Form mailinglist_listname
         $mailinglistObj->setVar("mailinglist_listname", $_REQUEST["mailinglist_listname"]);
-        //Form mailinglist_subscribe
+        // Form mailinglist_subscribe
         $mailinglistObj->setVar("mailinglist_subscribe", $_REQUEST["mailinglist_subscribe"]);
-        //Form mailinglist_unsubscribe
+        // Form mailinglist_unsubscribe
         $mailinglistObj->setVar("mailinglist_unsubscribe", $_REQUEST["mailinglist_unsubscribe"]);
-        //Form mailinglist_submitter
+        // Form mailinglist_submitter
         $mailinglistObj->setVar("mailinglist_submitter", $_REQUEST["mailinglist_submitter"]);
-        //Form mailinglist_created
+        // Form mailinglist_created
         $mailinglistObj->setVar("mailinglist_created", $_REQUEST["mailinglist_created"]);
 
         if ($xnewsletter->getHandler('mailinglist')->insert($mailinglistObj)) {

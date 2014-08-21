@@ -154,20 +154,16 @@ switch ($op) {
 
     case 'del_import':
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
-            $sql = "TRUNCATE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "ALTER TABLE `{$xoopsDB->prefix('xnewsletter_import')}` AUTO_INCREMENT =1";
-            $result = $xoopsDB->queryF($sql);
+            $result = $xoopsDB->queryF("TRUNCATE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`");
+            $result = $xoopsDB->queryF("REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_import')}`");
+            $result = $xoopsDB->queryF("OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`");
+            $result = $xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('xnewsletter_import')}` AUTO_INCREMENT =1");
 
             $protocolObj = $xnewsletter->getHandler('protocol')->create();
             $protocolObj->setVar("protocol_letter_id", 0);
             $protocolObj->setVar("protocol_subscriber_id", 0);
             $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " import] " . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
-            $protocolObj->setVar("protocol_success", 1);
+            $protocolObj->setVar("protocol_success", true);
             $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
             $protocolObj->setVar("protocol_created", time());
 
@@ -183,12 +179,12 @@ switch ($op) {
     case 'del_oldsubscr':
         $time = strtotime($_POST['del_date']);
         if ($time >= time() || $time == 0) {
-            $subscrsCount = -1; // for error
+            $subscrCount = -1; // for error
         } else {
             $subscrCriteria = new CriteriaCompo();
             $subscrCriteria->add(new Criteria('subscr_activated', 0));
             $subscrCriteria->add(new Criteria('subscr_created', $time, '<'));
-            $subscrsCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
+            $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         }
 
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
@@ -197,11 +193,15 @@ switch ($op) {
             $subscrArrays = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria, array('subscr_id'), false, false);
             foreach ($subscrArrays as $subscrArray) {
                 $subscrObj = $xnewsletter->getHandler('subscr')->get((int) $subscrArray['subscr_id']);
-                $sql = "DELETE FROM `{$xoopsDB->prefix('xnewsletter_subscr')}` WHERE subscr_id={$subscrArray['subscr_id']}";
+                $sql = "DELETE";
+                $sql .= " FROM `{$xoopsDB->prefix('xnewsletter_subscr')}`";
+                $sql .= " WHERE subscr_id={$subscrArray['subscr_id']}";
                 $result = $xoopsDB->queryF($sql);
                 if ($result) {
                     // Newsletterlist delete
-                    $sql = "DELETE FROM `{$xoopsDB->prefix('xnewsletter_catsubscr')}` WHERE catsubscr_subscrid={$subscrArray['subscr_id']}";
+                    $sql = "DELETE";
+                    $sql .= " FROM `{$xoopsDB->prefix('xnewsletter_catsubscr')}`";
+                    $sql .= " WHERE catsubscr_subscrid={$subscrArray['subscr_id']}";
                     $result = $xoopsDB->queryF($sql);
                     if (!$result) {
                         $errors[] = "Error CAT-Subscr-ID: " . $subscrArray['subscr_id'] . " / " . $result->getHtmlErrors();
@@ -218,7 +218,7 @@ switch ($op) {
                     $protocolObj->setVar("protocol_letter_id", 0);
                     $protocolObj->setVar("protocol_subscriber_id", 0);
                     $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " reguser] " . $error);
-                    $protocolObj->setVar("protocol_success", 0);
+                    $protocolObj->setVar("protocol_success", false);
                     $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                     $protocolObj->setVar("protocol_created", time());
                     $xnewsletter->getHandler('protocol')->insert($protocolObj);
@@ -230,7 +230,7 @@ switch ($op) {
                 $protocolObj->setVar("protocol_letter_id", 0);
                 $protocolObj->setVar("protocol_subscriber_id", 0);
                 $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " reguser] " . sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
-                $protocolObj->setVar("protocol_success", 1);
+                $protocolObj->setVar("protocol_success", true);
                 $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                 $protocolObj->setVar("protocol_created", time());
                 $xnewsletter->getHandler('protocol')->insert($protocolObj);
@@ -238,8 +238,8 @@ switch ($op) {
 
             redirect_header($currentFile, 2,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
         } else {
-            if ($subscrsCount > 0) {
-                xoops_confirm(array("ok" => true, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrsCount, $_POST['del_date']));
+            if ($subscrCount > 0) {
+                xoops_confirm(array("ok" => true, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrCount, $_POST['del_date']));
             } else {
                 redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETENOTHING);
             }
@@ -248,20 +248,16 @@ switch ($op) {
 
     case 'del_oldprotocol':
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
-            $sql = "TRUNCATE TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`";
-            $result = $xoopsDB->queryF($sql);
-            $sql = "ALTER TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}` AUTO_INCREMENT =1";
-            $result = $xoopsDB->queryF($sql);
+            $result = $xoopsDB->queryF("TRUNCATE TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`");
+            $result = $xoopsDB->queryF("REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`");
+            $result = $xoopsDB->queryF("OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}`");
+            $result = $xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}` AUTO_INCREMENT =1");
 
             $protocolObj = $xnewsletter->getHandler('protocol')->create();
             $protocolObj->setVar("protocol_letter_id", 0);
             $protocolObj->setVar("protocol_subscriber_id", 0);
             $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " prot] " . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
-            $protocolObj->setVar("protocol_success", 1);
+            $protocolObj->setVar("protocol_success", true);
             $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
             $protocolObj->setVar("protocol_created", time());
 
@@ -279,13 +275,17 @@ switch ($op) {
             $number_ids = 0;
             $deleted = 0;
             $errors = array();
-            $sql = "SELECT Count(`catsubscr_id`) AS `nb_ids` FROM `{$xoopsDB->prefix("xnewsletter_catsubscr")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_subscr")}` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
+            $sql = "SELECT Count(`catsubscr_id`) AS `nb_ids`";
+            $sql .= " FROM `{$xoopsDB->prefix("xnewsletter_catsubscr")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_subscr")}` ON `catsubscr_subscrid` = `subscr_id`";
+            $sql .= " WHERE (`subscr_id` Is Null)";
             if ( $result = $xoopsDB->query($sql) ) {
                 $row_result = $xoopsDB->fetchRow($result);
                 $number_ids = $row_result[0];
             }
             if ($number_ids > 0) {
-                $sql = "DELETE `{$xoopsDB->prefix("xnewsletter_catsubscr")}` FROM `{$xoopsDB->prefix("xnewsletter_catsubscr")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_subscr")}` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
+                $sql = "DELETE `{$xoopsDB->prefix("xnewsletter_catsubscr")}`";
+                $sql .= " FROM `{$xoopsDB->prefix("xnewsletter_catsubscr")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_subscr")}` ON `catsubscr_subscrid` = `subscr_id`";
+                $sql .= " WHERE (`subscr_id` Is Null)";
                 $result = $xoopsDB->query($sql);
                 if ($result = $xoopsDB->query($sql)) {
                     ++$deleted;
@@ -300,7 +300,7 @@ switch ($op) {
                     $protocolObj->setVar("protocol_letter_id", 0);
                     $protocolObj->setVar("protocol_subscriber_id", 0);
                     $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " catsubscr] " . $error);
-                    $protocolObj->setVar("protocol_success", 0);
+                    $protocolObj->setVar("protocol_success", false);
                     $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                     $protocolObj->setVar("protocol_created", time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
@@ -313,7 +313,7 @@ switch ($op) {
                 $protocolObj->setVar("protocol_subscriber_id", 0);
                 $status = $number_ids == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_NODATA :  sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids);
                 $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " catsubscr] " . $status);
-                $protocolObj->setVar("protocol_success", 1);
+                $protocolObj->setVar("protocol_success", true);
                 $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                 $protocolObj->setVar("protocol_created", time());
 
@@ -335,7 +335,9 @@ switch ($op) {
             $errors = array();
             if ($use_mailinglist == 0 || $use_mailinglist == '0') {
                 //set cat_mailinglist = 0, if use mailinglist = false (if someone changed module preferences later)
-                $sql = "SELECT Count(`cat_id`) AS `nb_ids` FROM `{$xoopsDB->prefix("xnewsletter_cat")}` WHERE (`cat_mailinglist` > 0)";
+                $sql = "SELECT Count(`cat_id`) AS `nb_ids`";
+                $sql .= " FROM `{$xoopsDB->prefix("xnewsletter_cat")}`";
+                $sql .= " WHERE (`cat_mailinglist` > 0)";
                 if ( $result = $xoopsDB->query($sql) ) {
                     $row_result = $xoopsDB->fetchRow($result);
                     $number_ids = $row_result[0];
@@ -350,13 +352,16 @@ switch ($op) {
                 }
             } else {
                 //set cat_mailinglist = 0, if mailinglist_id is no more existing in table mailinglist
-                $sql = "SELECT Count(`cat_mailinglist`) AS `nb_ids` FROM `{$xoopsDB->prefix("xnewsletter_cat")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_mailinglist")}` ON `cat_mailinglist` = `mailinglist_id` WHERE (((`mailinglist_id`) Is Null) AND ((`cat_mailinglist`)>0)) HAVING (((Count(`cat_mailinglist`))>0));";
+                $sql = "SELECT Count(`cat_mailinglist`) AS `nb_ids`";
+                $sql .= " FROM `{$xoopsDB->prefix("xnewsletter_cat")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_mailinglist")}` ON `cat_mailinglist` = `mailinglist_id`";
+                $sql .= " WHERE (((`mailinglist_id`) Is Null) AND ((`cat_mailinglist`)>0)) HAVING (((Count(`cat_mailinglist`))>0));";
                 if ( $result = $xoopsDB->query($sql) ) {
                     $row_result = $xoopsDB->fetchRow($result);
                     $number_ids = $row_result[0];
                 }
                 if ($number_ids > 0) {
-                    $sql = "UPDATE `{$xoopsDB->prefix("xnewsletter_cat")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_mailinglist")}` ON `cat_mailinglist` = `mailinglist_id` SET `cat_mailinglist` = 0 WHERE (((`cat_mailinglist`)>0) AND ((`mailinglist_id`) Is Null));";
+                    $sql = "UPDATE `{$xoopsDB->prefix("xnewsletter_cat")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_mailinglist")}` ON `cat_mailinglist` = `mailinglist_id` SET `cat_mailinglist` = 0";
+                    $sql .= " WHERE (((`cat_mailinglist`)>0) AND ((`mailinglist_id`) Is Null));";
                     if ($result = $xoopsDB->query($sql)) {
                         ++$update;
                     } else {
@@ -371,7 +376,7 @@ switch ($op) {
                     $protocolObj->setVar("protocol_letter_id", 0);
                     $protocolObj->setVar("protocol_subscriber_id", 0);
                     $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " ml] " . $error);
-                    $protocolObj->setVar("protocol_success", 0);
+                    $protocolObj->setVar("protocol_success", false);
                     $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                     $protocolObj->setVar("protocol_created", time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
@@ -384,7 +389,7 @@ switch ($op) {
                 $protocolObj->setVar("protocol_subscriber_id", 0);
                 $status = $number_ids == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids);
                 $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " ml] " . $status);
-                $protocolObj->setVar("protocol_success", 1);
+                $protocolObj->setVar("protocol_success", true);
                 $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                 $protocolObj->setVar("protocol_created", time());
 
@@ -440,7 +445,7 @@ switch ($op) {
                     $protocolObj->setVar("protocol_letter_id", 0);
                     $protocolObj->setVar("protocol_subscriber_id", 0);
                     $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " cat] " . $error);
-                    $protocolObj->setVar("protocol_success", 0);
+                    $protocolObj->setVar("protocol_success", false);
                     $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                     $protocolObj->setVar("protocol_created", time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
@@ -453,7 +458,7 @@ switch ($op) {
                 $protocolObj->setVar("protocol_subscriber_id", 0);
                 $status = $update == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $update);
                 $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " cat] " . $status);
-                $protocolObj->setVar("protocol_success", 1);
+                $protocolObj->setVar("protocol_success", true);
                 $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
                 $protocolObj->setVar("protocol_created", time());
 

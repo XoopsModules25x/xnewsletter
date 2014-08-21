@@ -31,6 +31,6 @@ xoops_cp_header();
 //global $indexAdmin;
 
 echo $indexAdmin->addNavigation("about.php");
-echo $indexAdmin->renderabout('9P3B3FXKF868J', false);
+echo $indexAdmin->renderAbout('9P3B3FXKF868J', false);
 
 include "admin_footer.php";

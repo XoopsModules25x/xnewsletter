@@ -45,36 +45,33 @@ switch ($op) {
         $attachmentCriteria = new CriteriaCompo();
         $attachmentCriteria->setSort("attachment_letter_id DESC, attachment_id");
         $attachmentCriteria->setOrder("DESC");
-        $attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
+        $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
         $start = xnewsletterRequest::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
-        if ($attachmentsCount > $limit) {
+        if ($attachmentCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-            $pagenav = new XoopsPageNav($attachmentsCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new XoopsPageNav($attachmentCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
         }
 
         // View Table
-        if ($attachmentsCount>0) {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_ATTACHMENT_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_LETTER_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_NAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_TYPE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_SUBMITTER . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-            ";
+        echo "<table class='outer width100' cellspacing='1'>";
+        echo "<tr>";
+        echo "    <th class='center width2'>" . _AM_XNEWSLETTER_ATTACHMENT_ID . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_LETTER_ID . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_NAME . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_TYPE . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_SUBMITTER . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_CREATED . "</th>";
+        echo "    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>";
+        echo "</tr>";
 
+        if ($attachmentCount>0) {
             $class = "odd";
-
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
                 echo "<tr class='" . $class . "'>";
                 $class = ($class == "even") ? "odd" : "even";
@@ -88,32 +85,17 @@ switch ($op) {
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($attachmentObj->getVar("attachment_submitter"), "S") . "</td>";
                 echo "<td class='center'>" . formatTimeStamp($attachmentObj->getVar("attachment_created"), "S") . "</td>";
 
-                echo "
-                <td class='center width5' nowrap='nowrap'>
-                    <a href='?op=edit_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>
-                    &nbsp;
-                    <a href='?op=delete_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>
-                </td>
-                ";
-                echo "</tr>";
+                echo "<td class='center width5' nowrap='nowrap'>";
+                echo "    <a href='?op=edit_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "    &nbsp;";
+                echo "    <a href='?op=delete_attachment&attachment_id=" . $attachment_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "</td>";
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
-        } else {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_ATTACHMENT_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_LETTER_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_NAME . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_TYPE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_SUBMITTER . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_ATTACHMENT_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-            </table><br /><br />
-            ";
         }
+        echo "</table>";
+        echo "<br />";
+        echo "<div class='center'>" . $pagenav . "</div>";
+        echo "<br />";
         break;
 
     case "new_attachment" :
@@ -133,10 +115,10 @@ switch ($op) {
 
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $attachmentObj->setVar("attachment_letter_id", xnewsletterRequest::getInt('attachment_letter_id', 0));
-        $attachmentObj->setVar("attachment_name",      xnewsletterRequest::getString('attachment_name', ''));
-        $attachmentObj->setVar("attachment_type",      xnewsletterRequest::getInt('attachment_type', 0));
+        $attachmentObj->setVar("attachment_name", xnewsletterRequest::getString('attachment_name', ''));
+        $attachmentObj->setVar("attachment_type", xnewsletterRequest::getInt('attachment_type', 0));
         $attachmentObj->setVar("attachment_submitter", xnewsletterRequest::getInt('attachment_submitter', 0));
-        $attachmentObj->setVar("attachment_created",   xnewsletterRequest::getInt('attachment_created', time()));
+        $attachmentObj->setVar("attachment_created", xnewsletterRequest::getInt('attachment_created', time()));
 
         if ($xnewsletter->getHandler('attachment')->insert($attachmentObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);

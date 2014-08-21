@@ -93,7 +93,7 @@ define('_AM_XNEWSLETTER_SEND_SURE_SENT',"This newsletter was already sent to all
 define('_AM_XNEWSLETTER_SEND_ERROR_NO_SUBSCR',"Error: No valid subscriptions for the selected newsletter(s) found");
 //Index
 define('_AM_XNEWSLETTER_LETTER',"Newsletter Statistics");
-define('_AM_XNEWSLETTER_THEREARE_ACCOUNTS',"There are <span class='bold'>%s</span> Accounts in the Database");
+define('_AM_XNEWSLETTER_THEREARE_ACCOUNTS',"There are <span class='bold'>%s</span> Email accounts in the Database");
 define('_AM_XNEWSLETTER_THEREARE_CAT',"There are <span class='bold'>%s</span> Categories in the Database");
 define('_AM_XNEWSLETTER_THEREARE_SUBSCR',"There are <span class='bold'>%s</span> Subscribers in the Database");
 define('_AM_XNEWSLETTER_THEREARE_CATSUBSCR',"There are <span class='bold'>%s</span> Categories-Subscribers in the Database");
@@ -104,9 +104,9 @@ define('_AM_XNEWSLETTER_THEREARE_MAILINGLIST',"There are <span class='bold'>%s</
 define('_AM_XNEWSLETTER_THEREARE_BMH',"There are <span class='bold'>%s</span> Bounce Mails in the Database");
 define('_AM_XNEWSLETTER_THEREARE_TASK',"There are <span class='bold'>%s</span> Task in the Database");
 //Buttons
-define('_AM_XNEWSLETTER_NEWACCOUNTS',"Add New Account");
-define('_AM_XNEWSLETTER_ACCOUNTSLIST',"List Accounts");
-define('_AM_XNEWSLETTER_ACCOUNTSWAIT',"Pending Accounts");
+define('_AM_XNEWSLETTER_NEWACCOUNTS',"Add New Email account");
+define('_AM_XNEWSLETTER_ACCOUNTSLIST',"List Email accounts");
+define('_AM_XNEWSLETTER_ACCOUNTSWAIT',"Pending Email accounts");
 define('_AM_XNEWSLETTER_NEWCAT',"Add New Category");
 define('_AM_XNEWSLETTER_CATLIST',"List Categories");
 define('_AM_XNEWSLETTER_CATWAIT',"Pending Categories");
@@ -132,9 +132,9 @@ define('_AM_XNEWSLETTER_MAILINGLISTWAIT',"Pending Mailinglist");
 define('_AM_XNEWSLETTER_RUNBMH',"Run Bounced email handler");
 define('_AM_XNEWSLETTER_BMHLIST',"List Bounced email handlers");
 define('_AM_XNEWSLETTER_BMHWAIT',"Pending Bounced email handlers");
-define('_AM_XNEWSLETTER_ACCOUNTS_ADD',"Add an Account");
-define('_AM_XNEWSLETTER_ACCOUNTS_EDIT',"Edit an Account");
-define('_AM_XNEWSLETTER_ACCOUNTS_DELETE',"Delete an Account");
+define('_AM_XNEWSLETTER_ACCOUNTS_ADD',"Add an Email account");
+define('_AM_XNEWSLETTER_ACCOUNTS_EDIT',"Edit an Email account");
+define('_AM_XNEWSLETTER_ACCOUNTS_DELETE',"Delete an Email account");
 define('_AM_XNEWSLETTER_ACCOUNTS_ID',"Id");
 define('_AM_XNEWSLETTER_ACCOUNTS_TYPE',"Type");
 define('_AM_XNEWSLETTER_ACCOUNTS_NAME',"Name");
@@ -150,7 +150,7 @@ define('_AM_XNEWSLETTER_ACCOUNTS_OUTGOING',"Outgoing");
 define('_AM_XNEWSLETTER_ACCOUNTS_SERVER_OUT',"Server outgoing");
 define('_AM_XNEWSLETTER_ACCOUNTS_PORT_OUT',"Port out");
 define('_AM_XNEWSLETTER_ACCOUNTS_SECURETYPE_OUT',"Secure type out");
-define('_AM_XNEWSLETTER_ACCOUNTS_DEFAULT',"Default account");
+define('_AM_XNEWSLETTER_ACCOUNTS_DEFAULT',"Default email account");
 define('_AM_XNEWSLETTER_ACCOUNTS_BOUNCE_INFO',"Additional info for Bounced emails handling");
 define('_AM_XNEWSLETTER_ACCOUNTS_USE_BMH',"Use Bounced emails handling");
 define('_AM_XNEWSLETTER_ACCOUNTS_INBOX',"Mailbox to check for Bounced emails");
@@ -160,7 +160,7 @@ define('_AM_XNEWSLETTER_ACCOUNTS_MOVEHARD',"Move Bounced email in 'hard box'");
 define('_AM_XNEWSLETTER_ACCOUNTS_SOFTBOX',"Use this mailbox as 'soft box'");
 define('_AM_XNEWSLETTER_ACCOUNTS_MOVESOFT',"Move Bounced email in 'soft box'");
 define('_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_ACCOUNTS_CREATED',"Created");
+define('_AM_XNEWSLETTER_ACCOUNTS_CREATED',"Created on");
 define('_AM_XNEWSLETTER_ACCOUNTS_ERROR_OPEN_MAILBOX',"Error open mailbox! Please check your settings!");
 define('_AM_XNEWSLETTER_SAVE_AND_CHECK',"Save and check settings");
 define('_AM_XNEWSLETTER_ACCOUNTS_CHECK_OK',"successful  ");
@@ -179,7 +179,7 @@ define('_AM_XNEWSLETTER_CAT_EDIT',"Edit a category");
 define('_AM_XNEWSLETTER_CAT_DELETE',"Delete a category");
 define('_AM_XNEWSLETTER_CAT_ID',"Id");
 define('_AM_XNEWSLETTER_CAT_NAME',"Newsletter name");
-define('_AM_XNEWSLETTER_CAT_INFO',"Additional info");
+define('_AM_XNEWSLETTER_CAT_INFO',"Description");
 define('_AM_XNEWSLETTER_CAT_GPERMS_CREATE',"Permissions to create");
 define('_AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC',"<br /><span style='font-weight:normal'>- Create new newsletters<br />- Edit, delete, send of own newsletters</span>");
 define('_AM_XNEWSLETTER_CAT_GPERMS_ADMIN',"Permission to admin");
@@ -187,7 +187,7 @@ define('_AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC',"<br /><span style='font-weight:n
 define('_AM_XNEWSLETTER_CAT_GPERMS_READ',"Permissions to read/subscribe");
 define('_AM_XNEWSLETTER_CAT_GPERMS_LIST',"Permissions to see list of subscribers");
 define('_AM_XNEWSLETTER_CAT_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_CAT_CREATED',"Created");
+define('_AM_XNEWSLETTER_CAT_CREATED',"Created on");
 define('_AM_XNEWSLETTER_CAT_MAILINGLIST',"Mailing list");
 define('_AM_XNEWSLETTER_SUBSCR_ADD',"Add a Subscriber");
 define('_AM_XNEWSLETTER_SUBSCR_EDIT',"Edit a Subscriber");
@@ -204,7 +204,7 @@ define('_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE',"Mrs.");
 define('_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY',"Family");
 define('_AM_XNEWSLETTER_SUBSCR_SEX_COMP',"Company");
 define('_AM_XNEWSLETTER_SUBSCR_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_SUBSCR_CREATED',"Created");
+define('_AM_XNEWSLETTER_SUBSCR_CREATED',"Created on");
 define('_AM_XNEWSLETTER_SUBSCR_ACTIVATED',"activated?");
 define('_AM_XNEWSLETTER_SUBSCR_SHOW_ALL',"Show all");
 define('_AM_XNEWSLETTER_CATSUBSCR_ADD',"Add a subscriber to a category");
@@ -215,7 +215,7 @@ define('_AM_XNEWSLETTER_CATSUBSCR_CATID',"Newsletter");
 define('_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID',"Subscribers");
 define('_AM_XNEWSLETTER_CATSUBSCR_QUITED',"Unsubscribed");
 define('_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_CATSUBSCR_CREATED',"Created");
+define('_AM_XNEWSLETTER_CATSUBSCR_CREATED',"Created on");
 define('_AM_XNEWSLETTER_CATSUBSCR_SUREDELETE',"Do you really want to delete<br />'%s'<br />from<br />'%c' ?");
 define('_AM_XNEWSLETTER_CATSUBSCR_QUIT_NONE',"None");
 define('_AM_XNEWSLETTER_CATSUBSCR_QUIT_NOW',"Quit now");
@@ -231,9 +231,9 @@ define('_AM_XNEWSLETTER_LETTER_CATS',"Categories");
 define('_AM_XNEWSLETTER_LETTER_ATTACHMENT',"Attachments");
 define('_AM_XNEWSLETTER_LETTER_STATUS',"Status");
 define('_AM_XNEWSLETTER_LETTER_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_LETTER_CREATED',"Created");
-define('_AM_XNEWSLETTER_LETTER_ACCOUNTS_AVAIL',"Available accounts");
-define('_AM_XNEWSLETTER_LETTER_ACCOUNT',"Account");
+define('_AM_XNEWSLETTER_LETTER_CREATED',"Created on");
+define('_AM_XNEWSLETTER_LETTER_ACCOUNTS_AVAIL',"Available email accounts");
+define('_AM_XNEWSLETTER_LETTER_ACCOUNT',"Email account");
 define('_AM_XNEWSLETTER_LETTER_MAILINGLIST',"Use mailing list");
 define('_AM_XNEWSLETTER_LETTER_MAILINGLIST_NO',"None");
 define('_AM_XNEWSLETTER_ATTACHMENT_ADD',"Add an attachment");
@@ -244,7 +244,7 @@ define('_AM_XNEWSLETTER_ATTACHMENT_LETTER_ID',"Letter-Id");
 define('_AM_XNEWSLETTER_ATTACHMENT_NAME',"Name");
 define('_AM_XNEWSLETTER_ATTACHMENT_TYPE',"File type");
 define('_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_ATTACHMENT_CREATED',"Created");
+define('_AM_XNEWSLETTER_ATTACHMENT_CREATED',"Created on");
 define('_AM_XNEWSLETTER_PROTOCOL_ADD',"Add a Protocol");
 define('_AM_XNEWSLETTER_PROTOCOL_EDIT',"Edit a Protocol");
 define('_AM_XNEWSLETTER_PROTOCOL_DELETE',"Delete a Protocol");
@@ -254,7 +254,7 @@ define('_AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID',"Subscriber-Id");
 define('_AM_XNEWSLETTER_PROTOCOL_STATUS',"Status");
 define('_AM_XNEWSLETTER_PROTOCOL_SUCCESS',"Success");
 define('_AM_XNEWSLETTER_PROTOCOL_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_PROTOCOL_CREATED',"Created");
+define('_AM_XNEWSLETTER_PROTOCOL_CREATED',"Created on");
 define('_AM_XNEWSLETTER_PROTOCOL_LAST_STATUS',"Last status");
 define('_AM_XNEWSLETTER_PROTOCOL_MISC',"Misc protocol items");
 define('_AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL',"No email of recipient found");
@@ -270,7 +270,7 @@ define('_AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE',"Subscribe code");
 define('_AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC',"{email} will be replaced by the email of the subscriber");
 define('_AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE',"Unsubscribe code");
 define('_AM_XNEWSLETTER_MAILINGLIST_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_MAILINGLIST_CREATED',"Created");
+define('_AM_XNEWSLETTER_MAILINGLIST_CREATED',"Created on");
 define('_AM_XNEWSLETTER_BOUNCETYPE',"Bounce type");
 define('_AM_XNEWSLETTER_BMH_EDIT',"Edit a Bounced email handler");
 define('_AM_XNEWSLETTER_BMH_DELETE',"Delete a Bounced email handler");
@@ -283,7 +283,7 @@ define('_AM_XNEWSLETTER_BMH_EMAIL',"Email");
 define('_AM_XNEWSLETTER_BMH_SUBJECT',"Subject");
 define('_AM_XNEWSLETTER_BMH_MEASURE',"Measure");
 define('_AM_XNEWSLETTER_BMH_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_BMH_CREATED',"Created");
+define('_AM_XNEWSLETTER_BMH_CREATED',"Created on");
 define('_AM_XNEWSLETTER_BMH_MEASURE_PENDING',"Pending");
 define('_AM_XNEWSLETTER_BMH_MEASURE_NOTHING',"Do nothing");
 define('_AM_XNEWSLETTER_BMH_MEASURE_QUIT',"Quit this subscriber temporary");
@@ -293,7 +293,7 @@ define('_AM_XNEWSLETTER_BMH_MEASURE_DELETED',"Subscriber deleted");
 define('_AM_XNEWSLETTER_BMH_MEASURE_ALREADY_DELETED',"Subscriber already deleted! Action not possible!");
 define('_AM_XNEWSLETTER_BMH_MEASURE_DELETE_SURE',"Do you really want to delete this registration with all subscriptions?<br /><br />Reactivating by the subscriber will not be possible later!<br /><br />");
 define('_AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID',"There is nor existing registration for the this email!");
-define('_AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE',"Bounced email handler isn't activated in any account");
+define('_AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE',"Bounced email handler isn't activated in any email account");
 define('_AM_XNEWSLETTER_BMH_RSLT',"Result of checking mailbox %b<br />Messages read: %r<br />Action taken: %a<br />No action taken: %n<br />Moved: %m<br />Deleted: %d<br /><br /><br />");
 define('_AM_XNEWSLETTER_BMH_SUCCESSFUL',"Bounced email handler successfully finished");
 define('_AM_XNEWSLETTER_BMH_MEASURE_ALL',"Show all");
@@ -360,7 +360,7 @@ define('_AM_XNEWSLETTER_TASK_SUBSCR_ID',"Subscriber");
 define('_AM_XNEWSLETTER_TASK_STATUS',"Status");
 define('_AM_XNEWSLETTER_TASK_STARTTIME',"Starttime");
 define('_AM_XNEWSLETTER_TASK_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_TASK_CREATED',"Created");
+define('_AM_XNEWSLETTER_TASK_CREATED',"Created on");
 define('_AM_XNEWSLETTER_TASK_ERROR_CREATE',"Error creating item in task list");
 define('_AM_XNEWSLETTER_TASK_NO_DATA',"No tasks waiting");
 //Error NoFrameworks
@@ -406,7 +406,7 @@ define('_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC','
     <li>&lt;{$content}&gt;: the newsletter Content field</li>
     </ul>
     <ul>
-    <li>&lt;{$date}&gt;: the sending date as timestamp integer <br /><span style="font-size:0.9em">(e.g.: &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as 2001/01/04)</span></li>
+    <li>&lt;{$date}&gt;: the sending date as timestamp integer <br /><span style="font-size:0.9em">(e.g.: &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as ' . date("Y/m/d") . ')</span></li>
     <li>&lt;{$unsubscribe_url}&gt;: the unsubscribe url</li>
     </ul>
     <ul>
@@ -415,7 +415,20 @@ define('_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC','
     <li>&lt;{$xoops_charset}&gt;: the site cherset (e.g. UTF-8)</li>
     </ul>');
 define('_AM_XNEWSLETTER_TEMPLATE_SUBMITTER',"Submitter");
-define('_AM_XNEWSLETTER_TEMPLATE_CREATED',"Created");
+define('_AM_XNEWSLETTER_TEMPLATE_CREATED',"Created on");
+define('_AM_XNEWSLETTER_LETTER_CLONED',"cloned: %s");
+define('_AM_XNEWSLETTER_CAT_INFO_DESC',"");
+define('_AM_XNEWSLETTER_TEXTOPTIONS',"Text options");
+define('_AM_XNEWSLETTER_TEXTOPTIONS_DESC',"Description text options");
+define('_AM_XNEWSLETTER_ALLOWHTML',"Allow HTML tags");
+define('_AM_XNEWSLETTER_ALLOWSMILEY',"Allow Smiley icons");
+define('_AM_XNEWSLETTER_ALLOWXCODE',"Allow XOOPS codes");
+define('_AM_XNEWSLETTER_ALLOWIMAGES',"Allow images");
+define('_AM_XNEWSLETTER_ALLOWBREAK',"Use XOOPS line break conversion");
+define('_AM_XNEWSLETTER_LETTER_ACTION_PRINT',"Print");
+define('_AM_XNEWSLETTER_LETTER_SENDER',"First sender");
+define('_AM_XNEWSLETTER_LETTER_SENT',"Sent on");
+define('_AM_XNEWSLETTER_THEREARE_NOT_ACCOUNTS',"<span color='#FF0000'>Warning: there are no email accounts, create an email account before.</span>");
 //Buttons
 define('_AM_XNEWSLETTER_NEWTEMPLATE',"Add New Template");
 define('_AM_XNEWSLETTER_TEMPLATELIST',"List Template");

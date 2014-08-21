@@ -45,12 +45,12 @@ class XnewsletterAttachment extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("attachment_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("attachment_letter_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("attachment_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("attachment_letter_id", XOBJ_DTYPE_INT, null, false);
         $this->initVar("attachment_name", XOBJ_DTYPE_TXTBOX, null, false, 200);
         $this->initVar("attachment_type", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("attachment_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("attachment_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("attachment_submitter", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("attachment_created", XOBJ_DTYPE_INT, time(), false);
     }
 
     /**

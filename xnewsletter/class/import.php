@@ -45,15 +45,15 @@ class XnewsletterImport extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("import_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("import_id", XOBJ_DTYPE_INT, null, false);
         $this->initVar("import_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("import_firstname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("import_lastname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("import_sex", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_cat_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("import_subscr_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("import_catsubscr_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("import_status", XOBJ_DTYPE_INT, null, false, 1);
+        $this->initVar("import_cat_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("import_subscr_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("import_catsubscr_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("import_status", XOBJ_DTYPE_INT, false, false); // boolean
     }
 
     /**

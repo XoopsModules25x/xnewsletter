@@ -169,7 +169,7 @@ function xnewsletter_setPost($contentObj, $sets) {
         $contentObj->setVar("accounts_yourmail",       xnewsletter_CleanVars($sets, "accounts_yourmail", _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL, 'email', true));
         $contentObj->setVar("accounts_username",       xnewsletter_CleanVars($sets, "accounts_username", _AM_XNEWSLETTER_ACCOUNTS_USERNAME, 'string', true));
         $contentObj->setVar("accounts_password",       xnewsletter_CleanVars($sets, "accounts_password", _AM_XNEWSLETTER_ACCOUNTS_PASSWORD, 'string', true));
-        if ($contentObj->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP) {
+        if ($contentObj->getVar("accounts_type") == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP) {
             if ($contentObj->isNew()) {
                 if (@$set['accounts_server_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_SERVER_IN) $sets['accounts_server_in'] = null;
                 if (@$set['accounts_port_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_IN) $sets['accounts_port_in'] = null;
@@ -182,7 +182,7 @@ function xnewsletter_setPost($contentObj, $sets) {
             $contentObj->setVar("accounts_port_out",       xnewsletter_CleanVars( $sets, "accounts_port_out", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP_PORT_OUT, 'string', true));
             $contentObj->setVar("accounts_securetype_in",  xnewsletter_CleanVars( $sets, "accounts_securetype_in", '', 'string'));
             $contentObj->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
-        } elseif ($contentObj->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
+        } elseif ($contentObj->getVar("accounts_type") == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
             if ($contentObj->isNew()) {
                 if (@$set['accounts_server_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_SERVER_IN) $sets['accounts_server_in'] = null;
                 if (@$set['accounts_port_in'] == _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL_PORT_IN) $sets['accounts_port_in'] = null;
@@ -210,10 +210,10 @@ function xnewsletter_setPost($contentObj, $sets) {
             $contentObj->setVar("accounts_securetype_out", xnewsletter_CleanVars( $sets, "accounts_securetype_out", '', 'string'));
         }
         $contentObj->setVar("accounts_use_bmh",        xnewsletter_CleanVars( $sets, "accounts_use_bmh", 0, 'int'));
-        $contentObj->setVar("accounts_inbox",          xnewsletter_CleanVars( $sets, "accounts_inbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_INBOX, 'string', true));
-        $contentObj->setVar("accounts_hardbox",        xnewsletter_CleanVars( $sets, "accounts_hardbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_HARDBOX, 'string'));
+        $contentObj->setVar("accounts_inbox",          xnewsletter_CleanVars( $sets, "accounts_inbox", _XNEWSLETTER_ACCOUNTS_TYPE_INBOX, 'string', true));
+        $contentObj->setVar("accounts_hardbox",        xnewsletter_CleanVars( $sets, "accounts_hardbox", _XNEWSLETTER_ACCOUNTS_TYPE_HARDBOX, 'string'));
         $contentObj->setVar("accounts_movehard",       xnewsletter_CleanVars( $sets, "accounts_movehard", 0, 'int'));
-        $contentObj->setVar("accounts_softbox",        xnewsletter_CleanVars( $sets, "accounts_softbox", _AM_XNEWSLETTER_ACCOUNTS_TYPE_SOFTBOX, 'string'));
+        $contentObj->setVar("accounts_softbox",        xnewsletter_CleanVars( $sets, "accounts_softbox", _XNEWSLETTER_ACCOUNTS_TYPE_SOFTBOX, 'string'));
         $contentObj->setVar("accounts_movesoft",       xnewsletter_CleanVars( $sets, "accounts_movesoft", 0, 'int'));
         $contentObj->setVar("accounts_default",        xnewsletter_CleanVars( $sets, "accounts_default", 0, 'int'));
         $contentObj->setVar("accounts_submitter",      xnewsletter_CleanVars( $sets, "accounts_submitter", 0, 'int'));
@@ -228,63 +228,62 @@ function xnewsletter_setPost($contentObj, $sets) {
  * @return array
  */
 function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
-    //check the rights of current user for this letter
+    // check the rights of current user for this letter
     // returns the permission as array
     global $xoopsUser;
     $gperm_handler = xoops_gethandler('groupperm');
     $member_handler = xoops_gethandler('member');
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $perm = array(
-        "read" => false,
-        "edit" => false,
-        "delete" => false,
-        "create" => false,
-        "send" => false
-        );
-    $letter_cats = array();
-    $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
+    $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
+    $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
 
-    // perm read
-    if ($currentuid > 0 && $xoopsUser->isAdmin()) {
-        $perm["read"] = true;
-        $perm["edit"] = true;
-        $perm["delete"] = true;
-        $perm["create"] = true;
-        $perm["send"] = true;
+    $permissions = array(
+        'read' => false,
+        'edit' => false,
+        'delete' => false,
+        'create' => false,
+        'send' => false,
+        'list' => false
+        );
+
+    if ($uid > 0 && $xoopsUser->isAdmin()) {
+        $permissions['read'] = true;
+        $permissions['edit'] = true;
+        $permissions['delete'] = true;
+        $permissions['create'] = true;
+        $permissions['send'] = true;
+        $permissions['list'] = true;
     } else {
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
-        $letter_cats = explode("|", $letterObj->getVar("letter_cats"));
-        $submitter = $letterObj->getVar("letter_submitter");
-        $my_group_ids = $member_handler->getGroupsByUser( $currentuid ) ;
-
+        $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         foreach ($letter_cats as $cat_id) {
-            if ($gperm_handler->checkRight('newsletter_admin_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid())) {
-                $perm["create"] = true;
-                $perm["read"] = true;
-                $perm["edit"] = true;
-                $perm["delete"] = true;
-                $perm["send"] = true;
-                $perm["list"] = true;
+            if ($gperm_handler->checkRight('newsletter_admin_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                $permissions['read'] = true;
+                $permissions['edit'] = true;
+                $permissions['delete'] = true;
+                $permissions['create'] = true;
+                $permissions['send'] = true;
+                $permissions['list'] = true;
             } else {
-                if ($gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid())) {
-                    $perm["create"] = true;
-                    $perm["read"] = true; //creator should have perm to read all letters of this cat
-                    if ($currentuid == $submitter) {
-                        $perm["edit"] = true; //creator must have perm to edit own letters
-                        $perm["delete"] = true; //creator must have perm to edit own letters
-                        $perm["send"] = true; //creator must have perm to send/resend own letters
+                if ($gperm_handler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                    $permissions['create'] = true;
+                    $permissions['read'] = true; //creator should have perm to read all letters of this cat
+                    if ($uid == $letterObj->getVar('letter_submitter')) {
+                        $permissions['edit'] = true; //creator must have perm to edit own letters
+                        $permissions['delete'] = true; //creator must have perm to edit own letters
+                        $permissions['send'] = true; //creator must have perm to send/resend own letters
                     }
                 }
-                if ($gperm_handler->checkRight( 'newsletter_read_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid()))
-                    $perm["read"] = true;
-                if ($gperm_handler->checkRight( 'newsletter_list_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid()))
-                    $perm["list"] = true;
+                if ($gperm_handler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid()))
+                    $permissions['read'] = true;
+                if ($gperm_handler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid()))
+                    $permissions['list'] = true;
             }
         }
     }
 
-    return $perm;
+    return $permissions;
 }
 
 /**
@@ -302,20 +301,20 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0) {
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $allowedit = 0;
-    $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
-    if ($currentuid == 0) return false;
+    $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
+    if ($uid == 0) return false;
 
-    $my_group_ids = $member_handler->getGroupsByUser($currentuid);
+    $groups = $member_handler->getGroupsByUser($uid);
 
     if ($cat_id > 0) {
         $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
-        $allowedit = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
+        $allowedit = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
     } else {
         $catCriteria = new CriteriaCompo();
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         foreach ($catObjs as $i => $catObj) {
             $cat_id = $catObj->getVar('cat_id');
-            $allowedit += $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $my_group_ids, $xnewsletter->getModule()->mid());
+            $allowedit += $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
         }
     }
 

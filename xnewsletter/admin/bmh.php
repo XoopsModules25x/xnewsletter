@@ -34,7 +34,7 @@ xoops_cp_header();
 $op           = xnewsletterRequest::getString('op', 'list');
 $bmh_id       = xnewsletterRequest::getInt('bmh_id', 0);
 $bmh_measure  = xnewsletterRequest::getInt('bmh_measure', 0);
-$filter       = xnewsletterRequest::getInt('bmh_measure_filter', _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL);
+$filter       = xnewsletterRequest::getInt('bmh_measure_filter', _XNEWSLETTER_BMH_MEASURE_VAL_ALL);
 
 switch ($op) {
     case "bmh_delsubscr":
@@ -53,7 +53,7 @@ switch ($op) {
             }
             if ($subscr_id == 0) {
                 //set bmh_measure for all entries in bmh with this email
-                $sql_upd_measure = "UPDATE " . $xoopsDB->prefix("xnewsletter_bmh") . " SET `bmh_measure` = '" . _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "'";
+                $sql_upd_measure = "UPDATE " . $xoopsDB->prefix("xnewsletter_bmh") . " SET `bmh_measure` = '" . _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "'";
                 $sql_upd_measure .=" WHERE ((`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_email` ='" . $bmh_email . "') AND (`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_measure` ='0'))";
                 $xoopsDB->query($sql_upd_measure);
                 redirect_header("?op=list", 5, _AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID);
@@ -91,14 +91,14 @@ switch ($op) {
             }
 
             if ($count_err == 0) {
-                redirect_header("?op=handle_bmh&bmh_id=".$bmh_id."&bmh_measure="._AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE."&filter=".$filter, 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header("?op=handle_bmh&bmh_id=".$bmh_id."&bmh_measure="._XNEWSLETTER_BMH_MEASURE_VAL_DELETE."&filter=".$filter, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $actionprot_err;
             }
         } else {
             xoops_confirm(array("ok" => true, "bmh_id" => $bmh_id, "op" => "bmh_delsubscr", "filter" => $filter), $currentFile, sprintf(_AM_XNEWSLETTER_BMH_MEASURE_DELETE_SURE));
         }
-    break;
+        break;
 
     case "handle_bmh":
         if ($bmh_id == 0) redirect_header($currentFile, 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
@@ -106,13 +106,13 @@ switch ($op) {
 
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
 
-        if ($bmhObj->getVar("bmh_measure") == _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE ) {
+        if ($bmhObj->getVar("bmh_measure") == _XNEWSLETTER_BMH_MEASURE_VAL_DELETE ) {
             redirect_header("?op=list&filter=".$filter."'", 3, _AM_XNEWSLETTER_BMH_MEASURE_ALREADY_DELETED);
         }
 
         $bmh_email = $bmhObj->getVar("bmh_email");
 
-        if ($bmh_measure == _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT) {
+        if ($bmh_measure == _XNEWSLETTER_BMH_MEASURE_VAL_QUIT) {
             $sql = "UPDATE `".$xoopsDB->prefix("xnewsletter_subscr")."` INNER JOIN `";
             $sql .= $xoopsDB->prefix("xnewsletter_catsubscr")."` ON `subscr_id` = `catsubscr_subscrid` ";
             $sql .= "SET `catsubscr_quited` = ".time()." WHERE (((`subscr_email`)='";
@@ -130,7 +130,7 @@ switch ($op) {
         redirect_header("?op=list&filter=".$filter, 3, _AM_XNEWSLETTER_FORMOK);
 
         echo $bmhObj->getHtmlErrors();
-    break;
+        break;
 
     case "run_bmh":
         require_once('bmh_callback_database.php');
@@ -163,7 +163,7 @@ switch ($op) {
                 $bmh->mailbox_username  = $accountObj->getVar("accounts_username"); // your mailbox username
                 $bmh->mailbox_password  = $accountObj->getVar("accounts_password"); // your mailbox password
                 $bmh->port              = $accountObj->getVar("accounts_port_in"); // the port to access your mailbox, default is 143
-                if ($accountObj->getVar("accounts_type") == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
+                if ($accountObj->getVar("accounts_type") == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
                     $bmh->service           = 'pop3'; // the service to use (imap or pop3), default is 'imap'
                 } else {
                     $bmh->service           = 'imap'; // the service to use (imap or pop3), default is 'imap'
@@ -193,7 +193,7 @@ switch ($op) {
         } else {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE);
         }
-    break;
+        break;
 
     case "list":
     default:
@@ -202,25 +202,25 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $arr_measure_type = array(
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL=>_AM_XNEWSLETTER_BMH_MEASURE_ALL,
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING=>_AM_XNEWSLETTER_BMH_MEASURE_PENDING,
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING=>_AM_XNEWSLETTER_BMH_MEASURE_NOTHING,
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT=>_AM_XNEWSLETTER_BMH_MEASURE_QUITED,
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE=>_AM_XNEWSLETTER_BMH_MEASURE_DELETED);
+            _XNEWSLETTER_BMH_MEASURE_VAL_ALL=>_AM_XNEWSLETTER_BMH_MEASURE_ALL,
+            _XNEWSLETTER_BMH_MEASURE_VAL_PENDING=>_AM_XNEWSLETTER_BMH_MEASURE_PENDING,
+            _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING=>_AM_XNEWSLETTER_BMH_MEASURE_NOTHING,
+            _XNEWSLETTER_BMH_MEASURE_VAL_QUIT=>_AM_XNEWSLETTER_BMH_MEASURE_QUITED,
+            _XNEWSLETTER_BMH_MEASURE_VAL_DELETE=>_AM_XNEWSLETTER_BMH_MEASURE_DELETED);
 
         $limit = $xnewsletter->getConfig('adminperpage');
         $bhmCriteria = new CriteriaCompo();
         if ($filter > -1) $criteria->add(new Criteria("bmh_measure", $filter));
         $bhmCriteria->setSort("bmh_id");
         $bhmCriteria->setOrder("DESC");
-        $bhmsCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
+        $bhmCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
         $start = xnewsletterRequest::getInt('start', 0);
         $bhmCriteria->setStart($start);
         $bhmCriteria->setLimit($limit);
         $bhmObjs = $xnewsletter->getHandler('bmh')->getAll($bhmCriteria);
-        if ($bhmsCount > $limit) {
+        if ($bhmCount > $limit) {
             include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-            $pagenav = new XoopsPageNav($bhmsCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new XoopsPageNav($bhmCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -234,41 +234,40 @@ switch ($op) {
         echo "<input id='bmh_measure_all' type='radio' $checked value='-1' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter' onclick='submit()' />
             <label for='bmh_measure_all' name='bmh_measure_all'>"._AM_XNEWSLETTER_BMH_MEASURE_ALL."</label>";
 
-        $checked = ($filter == _AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING)  ? "checked='checked'" : "";
-        echo "<input id='bmh_measure0' type='radio' $checked value='"._AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
+        $checked = ($filter == _XNEWSLETTER_BMH_MEASURE_VAL_PENDING)  ? "checked='checked'" : "";
+        echo "<input id='bmh_measure0' type='radio' $checked value='"._XNEWSLETTER_BMH_MEASURE_VAL_PENDING."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
             <label for='bmh_measure0' name='bmh_measure0'>"._AM_XNEWSLETTER_BMH_MEASURE_PENDING."</label>";
 
-        $checked = ($filter == _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING)  ? "checked='checked'" : "";
-        echo "<input id='bmh_measure1' type='radio' $checked value='"._AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
+        $checked = ($filter == _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING)  ? "checked='checked'" : "";
+        echo "<input id='bmh_measure1' type='radio' $checked value='"._XNEWSLETTER_BMH_MEASURE_VAL_NOTHING."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
             <label for='bmh_measure1' name='bmh_measure1'>"._AM_XNEWSLETTER_BMH_MEASURE_NOTHING."</label>";
 
-        $checked = ($filter == _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT)  ? "checked='checked'" : "";
-        echo "<input id='bmh_measure2' type='radio' $checked value='"._AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()'>
+        $checked = ($filter == _XNEWSLETTER_BMH_MEASURE_VAL_QUIT)  ? "checked='checked'" : "";
+        echo "<input id='bmh_measure2' type='radio' $checked value='"._XNEWSLETTER_BMH_MEASURE_VAL_QUIT."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()'>
             <label for='bmh_measure2' name='bmh_measure2'>"._AM_XNEWSLETTER_BMH_MEASURE_QUITED."</label>";
 
-        $checked = ($filter == _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE)  ? "checked='checked'" : "";
-        echo "<input id='bmh_measure3' type='radio' $checked value='"._AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
+        $checked = ($filter == _XNEWSLETTER_BMH_MEASURE_VAL_DELETE)  ? "checked='checked'" : "";
+        echo "<input id='bmh_measure3' type='radio' $checked value='"._XNEWSLETTER_BMH_MEASURE_VAL_DELETE."' title='"._AM_XNEWSLETTER_BMH_MEASURE."' name='bmh_measure_filter'  onclick='submit()' />
             <label for='bmh_measure3' name='bmh_measure3'>"._AM_XNEWSLETTER_BMH_MEASURE_DELETED."</label>";
         echo "</form>";
         echo "</td></tr></table>";
 
         // View Table
-        if ($bhmsCount > 0) {
-            echo "<table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_BMH_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_NO . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_CAT . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_BOUNCETYPE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_REMOVE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_EMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_MEASURE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_CREATED . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>";
+        echo "<table class='outer width100' cellspacing='1'>
+            <tr>
+                <th class='center width2'>" . _AM_XNEWSLETTER_BMH_ID . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_NO . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_CAT . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_BOUNCETYPE . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_REMOVE . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_EMAIL . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_MEASURE . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_BMH_CREATED . "</th>
+                <th class='center'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+            </tr>";
 
+        if ($bhmCount > 0) {
             $class = "odd";
-
             foreach ($bhmObjs as $bhm_id => $bhmObj) {
                 echo "<tr class='".$class."'>";
                 $class = ($class == "even") ? "odd" : "even";
@@ -277,51 +276,32 @@ switch ($op) {
                 echo "<td class='center'>" . $bhmObj->getVar("bmh_rule_cat")."</td>";
                 echo "<td class='center'>" . $bhmObj->getVar("bmh_bouncetype")."</td>";
 
-                $verif_bmh_remove = ( $bhmObj->getVar("bmh_remove") == "0" ) ? ' ' : $bhmObj->getVar("bmh_remove");
+                $verif_bmh_remove = ($bhmObj->getVar("bmh_remove") == "0") ? ' ' : $bhmObj->getVar("bmh_remove");
                 echo "<td class='center'>" . $verif_bmh_remove . "</td>";
                 echo "<td class='center'>" . $bhmObj->getVar("bmh_email") . "</td>";
 
                 echo "<td class='center'>" . $arr_measure_type[$bhmObj->getVar("bmh_measure")] . "</td>";
                 echo "<td class='center'>" . formatTimeStamp($bhmObj->getVar("bmh_created"),"S") . "</td>";
 
-                echo "<td class='center width20'>
-                    <a href='?op=handle_bmh&bmh_id=" . $bhm_id . "&bmh_measure=" . _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "&filter=" . $filter . "'>
-                        <img src=" . XNEWSLETTER_ICONS_URL . "/xn_nothing.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_NOTHING . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_NOTHING . "' />
-                    </a>
-                    <a href='?op=handle_bmh&bmh_id=". $bhm_id . "&bmh_measure=" . _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT . "&filter=" . $filter . "'>
-                        <img src=" . XNEWSLETTER_ICONS_URL . "/xn_catsubscr_temp.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_QUIT . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_QUIT . "' />
-                    </a>
-                    <a href='?op=bmh_delsubscr&bmh_id=".$bhm_id."&filter=".$filter . "'>
-                        <img src=" . XNEWSLETTER_ICONS_URL . "/xn_quit.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_DELETE . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_DELETE . "' />
-                    </a>
-                    <a href='?op=edit_bmh&bmh_id=" . $bhm_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _AM_XNEWSLETTER_BMH_EDIT . "' title='" . _AM_XNEWSLETTER_BMH_EDIT . "' width='16px' /></a>
-                    <a href='?op=delete_bmh&bmh_id=" . $bhm_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _AM_XNEWSLETTER_BMH_DELETE . "' title='" . _AM_XNEWSLETTER_BMH_DELETE . "' width='16px' /></a>
-                    </td>";
+                echo "<td class='center width20'>";
+                echo "    <a href='?op=handle_bmh&bmh_id=" . $bhm_id . "&bmh_measure=" . _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "&filter=" . $filter . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_nothing.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_NOTHING . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_NOTHING . "' /></a>";
+                echo "    <a href='?op=handle_bmh&bmh_id=". $bhm_id . "&bmh_measure=" . _XNEWSLETTER_BMH_MEASURE_VAL_QUIT . "&filter=" . $filter . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_catsubscr_temp.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_QUIT . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_QUIT . "' /></a>";
+                echo "    <a href='?op=bmh_delsubscr&bmh_id=" . $bhm_id . "&filter=" . $filter . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_quit.png alt='" . _AM_XNEWSLETTER_BMH_MEASURE_DELETE . "' title='" . _AM_XNEWSLETTER_BMH_MEASURE_DELETE . "' /></a>";
+                echo "    <a href='?op=edit_bmh&bmh_id=" . $bhm_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _AM_XNEWSLETTER_BMH_EDIT . "' title='" . _AM_XNEWSLETTER_BMH_EDIT . "' width='16px' /></a>";
+                echo "    <a href='?op=delete_bmh&bmh_id=" . $bhm_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _AM_XNEWSLETTER_BMH_DELETE . "' title='" . _AM_XNEWSLETTER_BMH_DELETE . "' width='16px' /></a>";
+                echo "</td>";
                 echo "</tr>";
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
         } else {
-            echo "
-                <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_BMH_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_NO . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_RULE_CAT . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_BOUNCETYPE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_REMOVE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_EMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_SUBJECT . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_MEASURE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_BMH_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-                <tr>
-                    <td class='even' colspan='10'>" . sprintf(_AM_XNEWSLETTER_BMH_MEASURE_SHOW_NONE, $arr_measure_type[$filter]) . "</td>
-                </tr>";
-        echo "</table><br />";
+            echo "<tr>";
+            echo "    <td class='even' colspan='10'>" . sprintf(_AM_XNEWSLETTER_BMH_MEASURE_SHOW_NONE, $arr_measure_type[$filter]) . "</td>";
+            echo "</tr>";
         }
-    break;
+        echo "</table>";
+        echo "<br />";
+        echo "<div class='center'>" . $pagenav . "</div>";
+        echo "<br />";
+        break;
 
     case "save_bmh":
         if (!$GLOBALS["xoopsSecurity"]->check()) {
@@ -348,7 +328,7 @@ switch ($op) {
         echo $bmhObj->getHtmlErrors();
         $form = $bmhObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "edit_bmh":
         echo $indexAdmin->addNavigation('bmh.php');
@@ -358,12 +338,12 @@ switch ($op) {
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
         $form = $bmhObj->getForm();
         $form->display();
-    break;
+        break;
 
     case "delete_bmh":
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
-            if ( !$GLOBALS["xoopsSecurity"]->check() ) {
+            if (!$GLOBALS["xoopsSecurity"]->check()) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
             }
             if ($xnewsletter->getHandler('bmh')->delete($bmhObj)) {
@@ -374,7 +354,7 @@ switch ($op) {
         } else {
             xoops_confirm(array("ok" => true, "bmh_id" => $bmh_id, "op" => "delete_bmh"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $bmhObj->getVar("bmh_rule_no")));
         }
-    break;
+        break;
 }
 include "admin_footer.php";
 

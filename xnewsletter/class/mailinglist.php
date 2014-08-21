@@ -45,14 +45,14 @@ class XnewsletterMailinglist extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("mailinglist_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("mailinglist_id", XOBJ_DTYPE_INT, null, fals);
         $this->initVar("mailinglist_name", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("mailinglist_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("mailinglist_listname", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("mailinglist_subscribe", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("mailinglist_unsubscribe", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("mailinglist_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("mailinglist_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("mailinglist_submitter", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("mailinglist_created", XOBJ_DTYPE_INT, time(), false);
     }
 
     /**

@@ -60,21 +60,18 @@ switch ($op) {
         }
 
         // View Table
+        echo "<table class='outer width100' cellspacing='1'>";
+        echo "<tr>";
+        echo "    <th class='center width2'>" . _AM_XNEWSLETTER_TEMPLATE_ID . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_TITLE . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_DESCRIPTION . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_SUBMITTER . "</th>";
+        echo "    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_CREATED . "</th>";
+        echo "    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>";
+        echo "</tr>";
+
         if ($templatesCount > 0) {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_TEMPLATE_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_TITLE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_DESCRIPTION . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_SUBMITTER . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-            ";
-
             $class = "odd";
-
             foreach ($templateObjs as $template_id => $templateObj) {
                 echo "<tr class='" . $class . "'>";
                 $class = ($class == "even") ? "odd" : "even";
@@ -83,30 +80,18 @@ switch ($op) {
                 echo "<td>" . $templateObj->getVar("template_description") . "</td>";
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($templateObj->getVar("template_submitter"), "S") . "</td>";
                 echo "<td class='center'>" . formatTimeStamp($templateObj->getVar("template_created"), "S") . "</td>";
-                echo "
-                <td class='center width5' nowrap='nowrap'>
-                    <a href='?op=edit_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>
-                    &nbsp;<a href='?op=delete_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>
-                </td>
-                ";
+                echo "<td class='center width5' nowrap='nowrap'>";
+                echo "    <a href='?op=edit_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "    &nbsp;";
+                echo "    <a href='?op=delete_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "</td>";
                 echo "</tr>";
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
-        } else {
-            echo "
-            <table class='outer width100' cellspacing='1'>
-                <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_TEMPLATE_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_TITLE . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_DESCRIPTION . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_SUBMITTER . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_TEMPLATE_CREATED . "</th>
-                    <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>
-            </table><br /><br />
-            ";
         }
+        echo "</table>";
+        echo "<br />";
+        echo "<div class='center'>" . $pagenav . "</div>";
+        echo "<br />";
         break;
 
     case "new_template" :
@@ -123,18 +108,17 @@ switch ($op) {
         if (!$GLOBALS["xoopsSecurity"]->check()) {
            redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
-
         $templateObj = $xnewsletter->getHandler('template')->get($template_id);
-        $templateObj->setVar("template_title",        xnewsletterRequest::getString('template_title', ''));
-        $templateObj->setVar("template_description",  xnewsletterRequest::getString('template_description', ''));
-        $templateObj->setVar("template_content",      xnewsletterRequest::getString('template_content', ''));
-        $templateObj->setVar("template_submitter",    xnewsletterRequest::getInt('template_submitter', 0));
-        $templateObj->setVar("template_created",      xnewsletterRequest::getInt('template_created', time()));
-
+        $templateObj->setVar("template_title", xnewsletterRequest::getString('template_title', ''));
+        $templateObj->setVar("template_description", $_REQUEST['template_description']);
+        $templateObj->setVar("template_content", $_REQUEST['template_content']);
+        $templateObj->setVar("template_submitter", xnewsletterRequest::getInt('template_submitter', 0));
+        $templateObj->setVar("template_created", xnewsletterRequest::getInt('template_created', time()));
+        //
         if ($xnewsletter->getHandler('template')->insert($templateObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
         }
-
+        //
         echo $templateObj->getHtmlErrors();
         $form = $templateObj->getForm();
         $form->display();

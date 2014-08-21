@@ -45,13 +45,13 @@ class XnewsletterProtocol extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("protocol_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("protocol_letter_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_subscriber_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_status", XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar("protocol_success", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("protocol_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("protocol_letter_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("protocol_subscriber_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("protocol_status", XOBJ_DTYPE_TXTBOX, '', false, 200);
+        $this->initVar("protocol_success", XOBJ_DTYPE_OTHER, null, false); // boolean
+        $this->initVar("protocol_submitter", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("protocol_created", XOBJ_DTYPE_INT, null, false);
     }
 
     /**
@@ -87,7 +87,7 @@ class XnewsletterProtocol extends XoopsObject
         $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, "protocol_status", 50, 255, $this->getVar("protocol_status")), false);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, "protocol_status", 50, 200, $this->getVar("protocol_status")), false);
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_SUCCESS, "protocol_success", 50, 255, $this->getVar("protocol_success")), false);
 

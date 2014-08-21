@@ -30,7 +30,7 @@ define('_MI_XNEWSLETTER_NAME',"xNewsletter");
 define('_MI_XNEWSLETTER_DESC',"Newsletter module for Xoops");
 //Menu
 define('_MI_XNEWSLETTER_ADMENU1',"Dashboard");
-define('_MI_XNEWSLETTER_ADMENU2',"Accounts");
+define('_MI_XNEWSLETTER_ADMENU2',"Email accounts");
 define('_MI_XNEWSLETTER_ADMENU3',"Categories");
 define('_MI_XNEWSLETTER_ADMENU4',"Subscribers");
 define('_MI_XNEWSLETTER_ADMENU5',"Categories-Subscribers");
@@ -91,8 +91,15 @@ define('_MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK',"If you want to be informed in ti
 define('_MI_XNEWSLETTER_WELCOME_MESSAGE',"Welcome message");
 define('_MI_XNEWSLETTER_WELCOME_MESSAGE_DESC',"Html format");
 define('_MI_XNEWSLETTER_WELCOME',"<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.");
-define('_MI_XNEWSLETTER_DATEFORMAT', "Timestamp");
-define('_MI_XNEWSLETTER_DATEFORMATDSC', "Default Timestamp for module front end. <br />More info here: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
+define('_MI_XNEWSLETTER_DATEFORMAT', "Date format");
+define('_MI_XNEWSLETTER_DATEFORMATDSC', "Default data format for module front end. <br />More info here: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME', "Confirmation email will expire within");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_DESC', "Registration will be valid if confirmed before...");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_0', "no limits");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_1', "1 hour");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_6', "6 hours");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_24', "1 day");
+define('_MI_XNEWSLETTER_CONFIRMATION_TIME_48', "2 days");
 //
 define('_MI_XNEWSLETTER_ADMENU_TEMPLATES',"Templates");
 define('_MI_XNEWSLETTER_EDITOR_DESC',"");

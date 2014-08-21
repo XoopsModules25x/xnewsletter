@@ -45,16 +45,16 @@ class XnewsletterBmh extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("bmh_id", XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar("bmh_id", XOBJ_DTYPE_INT, null, false);
         $this->initVar("bmh_rule_no", XOBJ_DTYPE_TXTBOX, null, false, 10);
         $this->initVar("bmh_rule_cat", XOBJ_DTYPE_TXTBOX, null, false, 50);
         $this->initVar("bmh_bouncetype", XOBJ_DTYPE_TXTBOX, null, false, 50);
         $this->initVar("bmh_remove", XOBJ_DTYPE_TXTBOX, null, false, 50);
         $this->initVar("bmh_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("bmh_subject", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("bmh_measure", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("bmh_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("bmh_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("bmh_measure", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("bmh_submitter", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("bmh_created", XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -91,9 +91,9 @@ class XnewsletterBmh extends XoopsObject
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_BMH_SUBJECT, "bmh_subject", 50, 255, $this->getVar("bmh_subject")), false);
 
         $measure_select = new XoopsFormSelect(_AM_XNEWSLETTER_BMH_MEASURE, "bmh_measure", $this->getVar("bmh_measure"));
-        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING, _AM_XNEWSLETTER_BMH_MEASURE_PENDING);
-        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING, _AM_XNEWSLETTER_BMH_MEASURE_NOTHING);
-        $measure_select->addOption(_AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT, _AM_XNEWSLETTER_BMH_MEASURE_QUIT);
+        $measure_select->addOption(_XNEWSLETTER_BMH_MEASURE_VAL_PENDING, _AM_XNEWSLETTER_BMH_MEASURE_PENDING);
+        $measure_select->addOption(_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING, _AM_XNEWSLETTER_BMH_MEASURE_NOTHING);
+        $measure_select->addOption(_XNEWSLETTER_BMH_MEASURE_VAL_QUIT, _AM_XNEWSLETTER_BMH_MEASURE_QUIT);
         $form->addElement($measure_select, true);
 
         $time = ($this->isNew()) ? time() : $this->getVar("bmh_created");

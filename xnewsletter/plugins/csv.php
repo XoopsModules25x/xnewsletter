@@ -61,7 +61,7 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     //$table_import = $xoopsDB->prefix('xnewsletter_import');
-    $import_status = $action_after_read == 0 ? 1 : 0;
+    $import_status = $action_after_read == 0 ? true : false;
     $i = 0;
     $j = 0;
 
@@ -107,7 +107,7 @@ function xnewsletter_plugin_getdata_csv($cat_id, $action_after_read, $limitCheck
         }
         ++$i;
         if ($j == 100000) break; //maximum number of processing to avoid cache overflow
-        if ($limitCheck > 0 && $j == $limitCheck) $import_status = 0;
+        if ($limitCheck > 0 && $j == $limitCheck) $import_status = false;
         }
     fclose($handle);
     }

@@ -227,7 +227,7 @@ switch ($op) {
 
 
     case "exec_import_final":
-        //execute final import of all data from xnewsletter_import, where import_status = 1
+        //execute final import of all data from xnewsletter_import, where import_status = true
         //delete data from xnewsletter_import, when imported (successful or not)
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         echo $indexAdmin->renderButton();
@@ -236,7 +236,7 @@ switch ($op) {
         $submitter = $xoopsUser->uid();
 
         $importCriteria = new CriteriaCompo();
-        $importCriteria->add(new Criteria('import_status', '1'));
+        $importCriteria->add(new Criteria('import_status', true));
         $numrows_total 	= $xnewsletter->getHandler('import')->getCount();
         $numrows_act 	= $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
@@ -258,7 +258,7 @@ switch ($op) {
                 $subscribe = 0;
 
                 if ($cat_id == 0) {
-                    createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_SKIP), 1, $submitter);
+                    createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_SKIP), true, $submitter);
                 } else {
                     //register email
                     if ($subscr_id==0) {
@@ -276,9 +276,9 @@ switch ($op) {
                         $sql = "INSERT";
                         $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_subscr')}`";
                         $sql .= " (`subscr_email`, `subscr_firstname`, `subscr_lastname`, `subscr_uid`, `subscr_sex`, `subscr_submitter`, `subscr_created`, `subscr_ip`, `subscr_activated`, `subscr_actoptions`)";
-                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . intval($subscr_uid) . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', '1', '')";
+                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . intval($subscr_uid) . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', 1, '')";
                         if (!$xoopsDB->queryF($sql)) {
-                            createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), 0, $submitter);
+                            createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), false, $submitter);
                         } else {
                             //register email successful
                             $resulttext = $subscr_email . ": " . _AM_XNEWSLETTER_IMPORT_RESULT_REG_OK . " | ";
@@ -298,7 +298,7 @@ switch ($op) {
                         $sql .= " (`catsubscr_catid`, `catsubscr_subscrid`, `catsubscr_submitter`, `catsubscr_created`)";
                         $sql .= " VALUES ({$cat_id}, {$subscr_id}, {$submitter}," . time() . ")";
                         if ($xoopsDB->queryF($sql)) {
-                            createProtocol($resulttext . _AM_XNEWSLETTER_IMPORT_RESULT_SUBSCR_OK, 1, $submitter);
+                            createProtocol($resulttext . _AM_XNEWSLETTER_IMPORT_RESULT_SUBSCR_OK, true, $submitter);
                             //handle mailinglists
                             $cat_mailinglist = 0;
                             $sql = "SELECT `cat_mailinglist`";
@@ -316,10 +316,10 @@ switch ($op) {
                                 subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                             }
                         } else {
-                            createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), 0, $submitter);
+                            createProtocol(str_replace("%e", $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), false, $submitter);
                             }
                         } else {
-                            createProtocol($resulttext . _AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST, 1, $submitter);
+                            createProtocol($resulttext . _AM_XNEWSLETTER_IMPORT_CATSUBSCR_EXIST, true, $submitter);
                         }
                     }
                 }

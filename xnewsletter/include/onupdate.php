@@ -48,7 +48,7 @@ function xoops_module_update_xnewsletter(&$module, $oldversion = null) {
  * @return bool
  */
 function xoops_module_update_xnewsletter_130() {
-    //reverse 'mod_' prefix on tables
+    // reverse 'mod_' prefix on tables
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_accounts");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_attachment");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_bmh");
@@ -61,15 +61,15 @@ function xoops_module_update_xnewsletter_130() {
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_subscr");
     xoops_module_update_xnewsletter_rename_mod_table("xnewsletter_task");
 
-    //create 'xnewsletter_template' table
+    // create 'xnewsletter_template' table
     global $xoopsDB;
     $sql = sprintf("DROP TABLE IF EXISTS `" . $xoopsDB->prefix('xnewsletter_template') . "`");
     $result = $xoopsDB->queryF($sql);
     if (!$result)
         echo '<br />' . _AM_XNEWSLETTER_UPGRADEFAILED . ": 'DROP TABLE 'xnewsletter_template'";
 
-    $sql = sprintf(
-        "CREATE TABLE `" . $xoopsDB->prefix('xnewsletter_template') . "` (
+    $sql =  "
+        CREATE TABLE `" . $xoopsDB->prefix('xnewsletter_template') . "` (
         `template_id` int (8)   NOT NULL  auto_increment,
         `template_title` varchar (100)   NOT NULL default '',
         `template_description` text   NOT NULL default '',
@@ -77,11 +77,32 @@ function xoops_module_update_xnewsletter_130() {
         `template_submitter` int (8)   NOT NULL default '0',
         `template_created` int (8)   NOT NULL default '0',
         PRIMARY KEY (`template_id`)
-        ) ENGINE=MyISAM;"
-        );
+        ) ENGINE=MyISAM;";
     $result = $xoopsDB->queryF($sql);
     if (!$result)
         echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": CREATE TABLE 'xnewsletter_template'";
+
+    // add fields to 'xnewsletter_cat' table
+    global $xoopsDB;
+    $sql = "ALTER TABLE `" . $xoopsDB->prefix('xnewsletter_cat') . "`";
+    $sql .= " ADD COLUMN `dohtml` tinyint(1) NOT NULL default '0',";
+    $sql .= " ADD COLUMN `dosmiley` tinyint(1) NOT NULL default '1',";
+    $sql .= " ADD COLUMN `doxcode` tinyint(1) NOT NULL default '1',";
+    $sql .= " ADD COLUMN `doimage` tinyint(1) NOT NULL default '1',";
+    $sql .= " ADD COLUMN `dobr` tinyint(1) NOT NULL default '1';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result)
+        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_cat' ADD";
+
+    // add fields to 'xnewsletter_letter' table
+    global $xoopsDB;
+    $sql = "ALTER TABLE `" . $xoopsDB->prefix('xnewsletter_letter') . "`";
+    $sql .= " ADD COLUMN `letter_sender` int(8) NOT NULL default '0',";
+    $sql .= " ADD COLUMN `letter_sent` int(10) NOT NULL default '0';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result)
+        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_letter' ADD";
+
     return true;
 }
 

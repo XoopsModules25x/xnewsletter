@@ -64,7 +64,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
 
     $letter_array = $letterObj->toArray();
     $letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
-    $letter_array['letter_created_timestamp'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
+    $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
     $letter_array['letter_submitter_name'] = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
     $xoopsTpl->assign('letter', $letter_array);
 
@@ -74,7 +74,6 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
 
     $content .= "<h2>{$letterObj->getVar('letter_title')}</h2>";
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
-
     preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
     if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
         // get template from database
@@ -87,7 +86,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
         $htmlBody = $xoopsTpl->fetch($template);
     }
     $content .= $htmlBody;
-    $content .=  '</div></div>\n';
+    $content .=  "</div></div>\n";
 }
 
 if ($content == '') {
@@ -114,17 +113,17 @@ function xnewsletter_printPage($content) {
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo _LANGCODE; ?>" lang="<?php echo _LANGCODE; ?>">
 <?php
     echo "<head>\n";
-    echo '<title>' . $xoopsConfig['sitename'] . '</title>\n';
-    echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\n';
-    echo '<meta name="AUTHOR" content="' . $xoopsConfig['sitename'] . '" />\n';
-    echo '<meta name="keywords" content="' . $xoops_meta_keywords . '" />\n';
-    echo '<meta name="COPYRIGHT" content="Copyright (c) 2012 by ' . $xoopsConfig['sitename'] . '" />\n';
-    echo '<meta name="DESCRIPTION" content="' . $xoops_meta_description . '" />\n';
-    echo '<meta name="GENERATOR" content="XOOPS" />\n';
-    echo '<!-- Sheet Css -->';
-    echo '<link rel="stylesheet" type="text/css" media="all" title="Style sheet" href="' . XOOPS_URL . '/xoops.css" />\n';
-    echo '<link rel="stylesheet" type="text/css" media="all" title="Style sheet" href="' . XOOPS_URL . '/themes/default/style.css" />\n';
-    echo '<link rel="stylesheet" type="text/css" media="all" title="Style sheet" href="' . XOOPS_URL . '/modules/xnewsletter/assets/css/module.css" />\n';
+    echo "<title>{$xoopsConfig['sitename']}</title>\n";
+    echo "<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />\n";
+    echo "<meta name='AUTHOR' content='{$xoopsConfig['sitename']}' />\n";
+    echo "<meta name='keywords' content='{$xoops_meta_keywords}' />\n";
+    echo "<meta name='COPYRIGHT' content='Copyright (c) " . date('Y') . " by {$xoopsConfig['sitename']}' />\n";
+    echo "<meta name='DESCRIPTION' content='{$xoops_meta_description}' />\n";
+    echo "<meta name='GENERATOR' content='XOOPS' />\n";
+    echo "<!-- Sheet Css -->\n";
+    echo "<link rel='stylesheet' type='text/css' media='all' title='Style sheet' href='" . XOOPS_URL . "'/xoops.css' />\n";
+    echo "<link rel='stylesheet' type='text/css' media='all' title='Style sheet' href='" . XOOPS_URL . "'/themes/default/style.css' />\n";
+    echo "<link rel='stylesheet' type='text/css' media='all' title='Style sheet' href='" . XOOPS_URL . "'/modules/xnewsletter/assets/css/module.css' />\n";
 
 ?>
     <script type="text/javascript">

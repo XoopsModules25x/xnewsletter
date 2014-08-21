@@ -45,12 +45,12 @@ class XnewsletterTemplate extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("template_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("template_title", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("template_description", XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar("template_content", XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar("template_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("template_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar("template_id", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("template_title", XOBJ_DTYPE_TXTBOX, '', true, 100);
+        $this->initVar("template_description", XOBJ_DTYPE_TXTAREA, '', false);
+        $this->initVar("template_content", XOBJ_DTYPE_TXTAREA, '', true);
+        $this->initVar("template_submitter", XOBJ_DTYPE_INT, null, false);
+        $this->initVar("template_created", XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -66,33 +66,27 @@ class XnewsletterTemplate extends XoopsObject
             $action = $_SERVER["REQUEST_URI"];
         }
 
-        $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_TEMPLATE_ADD) : sprintf(_AM_XNEWSLETTER_TEMPLATE_EDIT);
-
         include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_TEMPLATE_ADD) : sprintf(_AM_XNEWSLETTER_TEMPLATE_EDIT);
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
+        // template_title
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, "template_title", 50, 255, $this->getVar("template_title", 'e')), true);
 
-        $editor_configs           = array();
-        $editor_configs["name"]   = "template_description";
-        $editor_configs["value"]  = $this->getVar("template_description", "e");
-        $editor_configs["rows"]   = 10;
-        $editor_configs["cols"]   = 80;
-        $editor_configs["width"]  = "100%";
-        $editor_configs["height"] = "400px";
-        $editor_configs["editor"] = $this->xnewsletter->getConfig('xnewsletter_editor');
-        $template_description_editor = new XoopsFormEditor(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION, "template_description", $editor_configs);
-        $template_description_editor->setDescription(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC);
-        $form->addElement($template_description_editor, false);
+        // template_description
+        $template_description_textarea = new XoopsFormTextArea(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION, "template_description", $this->getVar("template_description", "e"), 5, 50);
+        $template_description_textarea->setDescription(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC);
+        $form->addElement($template_description_textarea, false);
 
+        // template_content
         $editor_configs           = array();
         $editor_configs["name"]   = "template_content";
         $editor_configs["value"]  = $this->getVar("template_content", "e");
-        $editor_configs["rows"]   = 10;
+        $editor_configs["rows"]   = 40;
         $editor_configs["cols"]   = 80;
         $editor_configs["width"]  = "100%";
-        $editor_configs["height"] = "400px";
+        $editor_configs["height"] = "800px";
         $editor_configs["editor"] = $this->xnewsletter->getConfig('template_editor');
         $template_content_editor = new XoopsFormEditor(_AM_XNEWSLETTER_TEMPLATE_CONTENT, "template_content", $editor_configs);
         $template_content_editor->setDescription(_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC);
