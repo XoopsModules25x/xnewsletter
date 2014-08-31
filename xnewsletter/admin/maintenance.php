@@ -170,7 +170,7 @@ switch ($op) {
             if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                 // IN PROGRESS
             }
-            redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
+            redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
         } else {
             xoops_confirm(array("ok" => true, "", "op" => "del_import"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT);
         }
@@ -236,12 +236,12 @@ switch ($op) {
                 $xnewsletter->getHandler('protocol')->insert($protocolObj);
             }
 
-            redirect_header($currentFile, 2,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
+            redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
         } else {
             if ($subscrCount > 0) {
                 xoops_confirm(array("ok" => true, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrCount, $_POST['del_date']));
             } else {
-                redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETENOTHING);
+                redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETENOTHING);
             }
         }
         break;
@@ -263,7 +263,7 @@ switch ($op) {
 
             if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
             }
-            redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
+            redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
         } else {
             xoops_confirm(array("ok" => true, "", "op" => "del_oldprotocol"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL);
         }
@@ -320,7 +320,7 @@ switch ($op) {
                 if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                 }
-                redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids));
+                redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids));
             }
         } else {
             xoops_confirm(array("ok" => true, "", "op" => "del_invalid_catsubscr"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
@@ -397,7 +397,7 @@ switch ($op) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                 }
             }
-            redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids));
+            redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids));
 
         } else {
           xoops_confirm(array("ok" => true, "", "op" => "del_invalid_ml"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML);
@@ -466,7 +466,7 @@ switch ($op) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                 }
             }
-            redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $number_ids));
+            redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $number_ids));
         } else {
             xoops_confirm(array("ok" => true, "", "op" => "del_invalid_cat"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL);
         }

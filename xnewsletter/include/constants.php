@@ -18,7 +18,7 @@
  * @author          Xoops Development Team
  * @version         svn:$id$
  */
-// constants for account
+// constants for accounts
 define("_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL",     1);
 define("_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL", 2);
 define("_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3",         3);
@@ -29,11 +29,17 @@ define("_XNEWSLETTER_ACCOUNTS_TYPE_INBOX",   "INBOX");
 define("_XNEWSLETTER_ACCOUNTS_TYPE_HARDBOX", "INBOX.hard");
 define("_XNEWSLETTER_ACCOUNTS_TYPE_SOFTBOX", "INBOX.soft");
 
+// constants for attachments
+define("_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT", 0);
+define("_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK", 1);
+define("_XNEWSLETTER_ATTACHMENTS_MODE_AUTO", 2); // IN PROGRESS
+
 // constants for actions letter
 define("_XNEWSLETTER_LETTER_ACTION_VAL_NO",       0);
 define("_XNEWSLETTER_LETTER_ACTION_VAL_PREVIEW",  1);
 define("_XNEWSLETTER_LETTER_ACTION_VAL_SEND",     2);
 define("_XNEWSLETTER_LETTER_ACTION_VAL_SENDTEST", 3);
+
 
 // constants for catsubscr_quit_now
 define("_XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE",    0);

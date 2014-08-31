@@ -135,6 +135,8 @@ CREATE TABLE `xnewsletter_attachment` (
     `attachment_type`           varchar(100) NULL default '',
     `attachment_submitter`      int(8) NOT NULL default '0',
     `attachment_created`        int(10) NOT NULL default '0',
+    `attachment_size`           int(8) NOT NULL default '0',
+    `attachment_mode`           int(8) NOT NULL default '0',
     PRIMARY KEY (`attachment_id`),
     KEY `idx_attachment_letter_id` (`attachment_letter_id`)
 ) ENGINE=MyISAM;

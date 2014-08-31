@@ -404,9 +404,34 @@ define('_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC','
     <ul>
     <li>&lt;{$title}&gt;: the newsletter Title field</li>
     <li>&lt;{$content}&gt;: the newsletter Content field</li>
+    <li>&lt;{$attachments}&gt;: attachments array
+        <br />
+        <span style="font-size:0.9em">
+        e.g.:
+        <br>
+        &lt;ul&gt;
+        <br>
+        &lt;{foreach item="attachment" from=$attachments}&gt;
+        <br>
+        &lt;li&gt;&lt;a href="&lt;{$attachment.attachment_url}&gt;"&gt;&lt;{$attachment.attachment_name}&gt;&lt;/a&gt;&lt;/li&gt;
+        <br>
+        &lt;{/foreach}&gt;
+        <br>
+        &lt;/ul&gt;
+        <br>
+        will output the linked attachments list
+        </span>
+    </li>
     </ul>
     <ul>
-    <li>&lt;{$date}&gt;: the sending date as timestamp integer <br /><span style="font-size:0.9em">(e.g.: &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as ' . date("Y/m/d") . ')</span></li>
+    <li>&lt;{$date}&gt;: the sending date as timestamp integer
+        <br />
+        <span style="font-size:0.9em">
+        e.g.:
+        <br>
+        &lt;{$date|date_format:"%Y/%m/%d"}&gt; will output the date formatted as ' . date("Y/m/d") . '
+        </span>
+        </li>
     <li>&lt;{$unsubscribe_url}&gt;: the unsubscribe url</li>
     </ul>
     <ul>
@@ -429,6 +454,22 @@ define('_AM_XNEWSLETTER_LETTER_ACTION_PRINT',"Print");
 define('_AM_XNEWSLETTER_LETTER_SENDER',"First sender");
 define('_AM_XNEWSLETTER_LETTER_SENT',"Sent on");
 define('_AM_XNEWSLETTER_THEREARE_NOT_ACCOUNTS',"<span color='#FF0000'>Warning: there are no email accounts, create an email account before.</span>");
+define('_AM_XNEWSLETTER_LETTER_SIZE',"Size");
+define('_AM_XNEWSLETTER_LETTER_EMAIL_SIZE',"Estimated size");
+define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_SIZE',"Size");
+define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_TOTALSIZE',"Attachments size");
+//
+define('_AM_XNEWSLETTER_ATTACHMENT_SIZE',"Size");
+define('_AM_XNEWSLETTER_ATTACHMENT_MODE',"Attached as");
+define('_AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT',"Attachment");
+define('_AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK',"Link");
+define('_AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO',"Auto");
+//
+define('_AM_XNEWSLETTER_ACTIONS_ACTIVATE',"Activate");
+define('_AM_XNEWSLETTER_ACTIONS_UNACTIVATE',"Unactivate");
+define('_AM_XNEWSLETTER_ACTIONS_EXEC',"Exec");
+define('_AM_XNEWSLETTER_FORMACTIVATEOK',"Activated successfully");
+define('_AM_XNEWSLETTER_FORMUNACTIVATEOK',"Unactivated successfully");
 //Buttons
 define('_AM_XNEWSLETTER_NEWTEMPLATE',"Add New Template");
 define('_AM_XNEWSLETTER_TEMPLATELIST',"List Template");

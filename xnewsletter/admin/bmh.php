@@ -56,7 +56,7 @@ switch ($op) {
                 $sql_upd_measure = "UPDATE " . $xoopsDB->prefix("xnewsletter_bmh") . " SET `bmh_measure` = '" . _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "'";
                 $sql_upd_measure .=" WHERE ((`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_email` ='" . $bmh_email . "') AND (`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_measure` ='0'))";
                 $xoopsDB->query($sql_upd_measure);
-                redirect_header("?op=list", 5, _AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID);
+                redirect_header("?op=list", 3, _AM_XNEWSLETTER_BMH_ERROR_NO_SUBSCRID);
             }
             $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
 
@@ -91,7 +91,7 @@ switch ($op) {
             }
 
             if ($count_err == 0) {
-                redirect_header("?op=handle_bmh&bmh_id=".$bmh_id."&bmh_measure="._XNEWSLETTER_BMH_MEASURE_VAL_DELETE."&filter=".$filter, 3, _AM_XNEWSLETTER_FORMDELOK);
+                redirect_header("?op=handle_bmh&bmh_id={$bmh_id}&bmh_measure=" . _XNEWSLETTER_BMH_MEASURE_VAL_DELETE . "&filter={$filter}", 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $actionprot_err;
             }
@@ -107,27 +107,27 @@ switch ($op) {
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
 
         if ($bmhObj->getVar("bmh_measure") == _XNEWSLETTER_BMH_MEASURE_VAL_DELETE ) {
-            redirect_header("?op=list&filter=".$filter."'", 3, _AM_XNEWSLETTER_BMH_MEASURE_ALREADY_DELETED);
+            redirect_header("?op=list&filter={$filter}'", 3, _AM_XNEWSLETTER_BMH_MEASURE_ALREADY_DELETED);
         }
 
         $bmh_email = $bmhObj->getVar("bmh_email");
 
         if ($bmh_measure == _XNEWSLETTER_BMH_MEASURE_VAL_QUIT) {
-            $sql = "UPDATE `".$xoopsDB->prefix("xnewsletter_subscr")."` INNER JOIN `";
-            $sql .= $xoopsDB->prefix("xnewsletter_catsubscr")."` ON `subscr_id` = `catsubscr_subscrid` ";
-            $sql .= "SET `catsubscr_quited` = ".time()." WHERE (((`subscr_email`)='";
-            $sql .= $bmh_email. "'))";
+            $sql = "UPDATE `" . $xoopsDB->prefix("xnewsletter_subscr")."` INNER JOIN `";
+            $sql .= $xoopsDB->prefix("xnewsletter_catsubscr") . "` ON `subscr_id` = `catsubscr_subscrid` ";
+            $sql .= "SET `catsubscr_quited` = " . time();
+            $sql .= " WHERE (((`subscr_email`)='" . $bmh_email . "'))";
             if(!$result = $xoopsDB->queryF($sql)) die ("MySQL-Error: " . mysql_error());
         }
         //set bmh_measure for all entries in bmh with this email
-        $sql_upd = "UPDATE ".$xoopsDB->prefix("xnewsletter_bmh")." SET ";
-        $sql_upd .="`bmh_measure` = '".$bmh_measure."'";
-        $sql_upd .=", `bmh_submitter` = '".$xoopsUser->uid()."'";
-        $sql_upd .=", `bmh_created` = '".time()."'";
-        $sql_upd .=" WHERE ((`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_email` ='".$bmh_email."') AND (`".$xoopsDB->prefix("xnewsletter_bmh")."`.`bmh_measure` ='0'))";
+        $sql_upd = "UPDATE " . $xoopsDB->prefix("xnewsletter_bmh") . " SET ";
+        $sql_upd .="`bmh_measure` = '" . $bmh_measure . "'";
+        $sql_upd .=", `bmh_submitter` = '" . $xoopsUser->uid() . "'";
+        $sql_upd .=", `bmh_created` = '" . time() . "'";
+        $sql_upd .=" WHERE ((`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_email` ='" . $bmh_email . "') AND (`" . $xoopsDB->prefix("xnewsletter_bmh") . "`.`bmh_measure` ='0'))";
         if(!$result = $xoopsDB->queryF($sql_upd)) die ("MySQL-Error: " . mysql_error());
 
-        redirect_header("?op=list&filter=".$filter, 3, _AM_XNEWSLETTER_FORMOK);
+        redirect_header("?op=list&filter={$filter}", 3, _AM_XNEWSLETTER_FORMOK);
 
         echo $bmhObj->getHtmlErrors();
         break;
@@ -142,7 +142,7 @@ switch ($op) {
 
         if ($accountsCount > 0) {
             $accountObjs = $xnewsletter->getHandler('accounts')->getAll($accountCriteria);
-            $result_bmh = _AM_XNEWSLETTER_BMH_SUCCESSFUL."<br/>";
+            $result_bmh = _AM_XNEWSLETTER_BMH_SUCCESSFUL . "<br/>";
 
             foreach ($accountObjs as $account_id => $accountObj) {
                 $bmh = new BounceMailHandler();
@@ -189,7 +189,7 @@ switch ($op) {
                 $result_bmh = str_replace("%m", $bmh->result_moved, $result_bmh);
                 $result_bmh = str_replace("%d", $bmh->result_deleted, $result_bmh);
             }
-            redirect_header($currentFile, 5, $result_bmh);
+            redirect_header($currentFile, 3, $result_bmh);
         } else {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_BMH_ERROR_NO_ACTIVE);
         }
@@ -323,7 +323,7 @@ switch ($op) {
         $bmhObj->setVar("bmh_created",    xnewsletterRequest::getInt('bmh_created', 0));
 
         if ($xnewsletter->getHandler('bmh')->insert($bmhObj)) {
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
         }
         echo $bmhObj->getHtmlErrors();
         $form = $bmhObj->getForm();

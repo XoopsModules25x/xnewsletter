@@ -62,7 +62,7 @@ function xnewsletter_checkModuleAdmin() {
 }
 
 /**
- * Checks if a user is admin of Wfdownloads
+ * Checks if a user is admin of xnewsletter
  *
  * @return boolean
  */
@@ -223,13 +223,15 @@ function xnewsletter_setPost($contentObj, $sets) {
 }
 
 /**
+ * Check the rights of current user for this letter
+ * returns the permission as array
+ *
  * @param int $letter_id
  *
  * @return array
  */
 function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
-    // check the rights of current user for this letter
-    // returns the permission as array
+
     global $xoopsUser;
     $gperm_handler = xoops_gethandler('groupperm');
     $member_handler = xoops_gethandler('member');
@@ -287,14 +289,14 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
 }
 
 /**
+ * Check the rights of current user
+ * if a cat is defined, than only check for this cat, otherwise check whether there is minimum one cat with right create
+ *
  * @param int $cat_id
  *
  * @return bool
  */
 function xnewsletter_userAllowedCreateCat($cat_id = 0) {
-    //check the rights of current user
-    //if a cat is defined, than only check for this cat, otherwise check whether there is minimum one cat with right create
-
     global $xoopsUser;
     $gperm_handler =& xoops_gethandler('groupperm');
     $member_handler =& xoops_gethandler('member');
@@ -363,4 +365,292 @@ function xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id) {
     unset($subscriber);
 
     return $ret;
+}
+
+/**
+ * @param     $bytes
+ * @param int $precision
+ *
+ * @return string
+ */
+function xnewsletter_bytesToSize1024($bytes, $precision = 2)
+{
+    // human readable format -- powers of 1024
+    $unit = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
+
+    return @round(
+            $bytes / pow(1024, ($i = floor(log($bytes, 1024)))),
+            $precision
+        ) . '' . $unit[(int)$i];
+}
+
+/**
+ * Try to calculate email size (quite precise)
+ *
+ * @param int $letter_id
+ *
+ * @return int
+ */
+function xnewsletter_emailSize($letter_id = 0) {
+    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
+    global $XoopsTpl;
+    $xnewsletter = xnewsletterxnewsletter::getInstance();
+
+    if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
+        include_once(XOOPS_ROOT_PATH . "/class/template.php");
+        $xoopsTpl = new XoopsTpl();
+    }
+    // get template path
+    $template_path = XNEWSLETTER_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+    if (!is_dir($template_path)) $template_path = XNEWSLETTER_ROOT_PATH . '/language/english/templates/';
+    if (!is_dir($template_path)) {
+        return str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH);
+    }
+
+    $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+    if (count($letterObj) == 0) {
+        return false;
+    }
+
+    // read categories
+    $letter_cats = $letterObj->getVar('letter_cats');
+    if ($letter_cats == '') {
+        //no cats
+        return false;
+    }
+
+    // read data of account
+    $letter_account = $letterObj->getVar('letter_account');
+    if ($letter_account == '' && $letter_account == 0) {
+        return false;
+    }
+    $accountObj = $xnewsletter->getHandler('accounts')->get($letter_account);
+    $account_type = $accountObj->getVar('accounts_type');
+    $account_yourname = $accountObj->getVar('accounts_yourname');
+    $account_yourmail = $accountObj->getVar('accounts_yourmail');
+    $account_username = $accountObj->getVar('accounts_username');
+    $account_password = $accountObj->getVar('accounts_password');
+    $account_server_out = $accountObj->getVar('accounts_server_out');
+    $account_port_out = $accountObj->getVar('accounts_port_out');
+    $account_securetype_out = $accountObj->getVar('accounts_securetype_out');
+
+    // create basic mail body
+    $letter_title 	= $letterObj->getVar('letter_title');
+    $letter_content = $letterObj->getVar('letter_content', 'n');
+
+    $letterTpl = new XoopsTpl();
+    // letter data
+    $letterTpl->assign('content', $letter_content);
+    $letterTpl->assign('title', $letter_title); // new from v1.3
+    // letter attachments as link
+    $attachmentAslinkCriteria = new CriteriaCompo();
+    $attachmentAslinkCriteria->add(new Criteria('attachment_letter_id', $letter_id));
+    $attachmentAslinkCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
+    $attachmentAslinkCriteria->setSort('attachment_id');
+    $attachmentAslinkCriteria->setOrder('ASC');
+    $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
+    foreach($attachmentObjs as $attachment_id => $attachmentObj) {
+        $attachment_array = $attachmentObj->toArray();
+        $attachment_array['attachment_url'] = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
+        $attachment_array['attachment_link'] = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
+        $letterTpl->append('attachments', $attachment_array);
+    }
+    // extra data
+    $letterTpl->assign('date', time()); // new from v1.3
+    $letterTpl->assign('xoops_url', XOOPS_URL); // new from v1.3
+    $letterTpl->assign('xoops_langcode', _LANGCODE); // new from v1.3
+    $letterTpl->assign('xoops_charset', _CHARSET); // new from v1.3
+    // subscr data
+    $letterTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
+    $letterTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
+    $letterTpl->assign('firstname', _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW);
+    $letterTpl->assign('lastname', _AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW);
+    $letterTpl->assign('subscr_email', $letterObj->getVar('letter_email_test'));
+    $letterTpl->assign('email', $letterObj->getVar('letter_email_test')); // new from v1.3
+    $letterTpl->assign('unsubscribe_link', 'Test');
+    $letterTpl->assign('unsubscribe_url', 'Test'); // new from v1.3
+
+    preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+    if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+        // get template from database
+        $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+    } else {
+        // get template from filesystem
+        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+        if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+        $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
+        $htmlBody = $letterTpl->fetch($template);
+    }
+    $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
+    //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
+
+    // get letter attachments as attachment
+    $attachmentAsattachmentCriteria = new CriteriaCompo();
+    $attachmentAsattachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
+    $attachmentAsattachmentCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
+    $attachmentAsattachmentCriteria->setSort('attachment_id');
+    $attachmentAsattachmentCriteria->setOrder('ASC');
+    $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsattachmentCriteria, true);
+    $attachmentsPath = array();
+    foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
+        $attachmentsPath[] = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');
+    }
+
+    $mail = new XnewsletterMailer();
+    $mail->CharSet = _CHARSET; //use xoops default character set
+    $mail->Username = $account_username; // SMTP account username
+    $mail->Password = $account_password; // SMTP account password
+    if ($account_type == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
+        $mail->IsSMTP();
+        //$mail->SMTPDebug = 2;
+        $mail->Host = $account_server_out;
+    }
+    if ($account_type == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP || $account_type == _XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL) {
+        $mail->Port = $account_port_out; // set the SMTP port
+        $mail->Host = $account_server_out; //sometimes necessary to repeat
+    }
+    if ($account_securetype_out != '') {
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = $account_securetype_out; // sets the prefix to the server
+    }
+    $mail->SetFrom($account_yourmail, $account_yourname);
+    $mail->AddReplyTo($account_yourmail, $account_yourname);
+    $mail->Subject = html_entity_decode($letter_title, ENT_QUOTES);
+
+
+    $mail->AddAddress($letterObj->getVar('letter_email_test'), _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW . " " . _AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW);
+    $mail->MsgHTML($htmlBody); // $mail->Body = $htmlBody;
+    $mail->AltBody = $textBody;
+
+    foreach ($attachmentsPath as $attachmentPath) {
+        if (file_exists($attachmentPath)) {
+            $mail->AddAttachment($attachmentPath);
+        }
+    }
+    return $mail->GetSize();
+    unset($mail);
+}
+
+/**
+ * @param      $filePath
+ * @param bool $isBinary
+ * @param bool $retBytes
+ *
+ * @return bool|int|mixed
+ */
+function xnewsletter_download($filePath, $isBinary = true, $retBytes = true)
+{
+    // how many bytes per chunk
+    //$chunkSize = 1 * (1024 * 1024);
+    $chunkSize = 8 * (1024 * 1024); //8MB (highest possible fread length)
+    $buffer = '';
+    $bytesCounter = 0;
+
+    if ($isBinary == true) {
+        $handler = fopen($filePath, 'rb');
+    } else {
+        $handler = fopen($filePath, 'r');
+    }
+    if ($handler === false) {
+        return false;
+    }
+    while (!feof($handler)) {
+        $buffer = fread($handler, $chunkSize);
+        echo $buffer;
+        ob_flush();
+        flush();
+        if ($retBytes) {
+            $bytesCounter += strlen($buffer);
+        }
+    }
+    $status = fclose($handler);
+    if ($retBytes && $status) {
+        return $bytesCounter; // return num. bytes delivered like readfile() does.
+    }
+
+    return $status;
+}
+
+/**
+ * @author     Jack Mason
+ * @website    volunteer @ http://www.osipage.com, web access application and bookmarking tool.
+ * @copyright  Free script, use anywhere as you like, no attribution required
+ * @created    2014
+ * The script is capable of downloading really large files in PHP. Files greater than 2GB may fail in 32-bit windows or similar system.
+ * All incorrect headers have been removed and no nonsense code remains in this script. Should work well.
+ * The best and most recommended way to download files with PHP is using xsendfile, learn
+ * more here: https://tn123.org/mod_xsendfile/
+ *
+ * @param $filePath
+ * @param $fileMimetype
+ */
+function xnewsletter_largeDownload($filePath, $fileMimetype)
+{
+    /* You may need these ini settings too */
+    set_time_limit(0);
+    ini_set('memory_limit', '512M');
+    if (!empty($filePath)) {
+        $fileInfo = pathinfo($filePath);
+        $fileName  = $fileInfo['basename'];
+        $fileExtrension   = $fileInfo['extension'];
+        $default_contentType = "application/octet-stream";
+        // to find and use specific content type, check out this IANA page : http://www.iana.org/assignments/media-types/media-types.xhtml
+        if ($fileMimetype =! '') {
+            $contentType = $fileMimetype;
+        } else {
+            $contentType =  $default_contentType;
+        }
+        if (file_exists($filePath)) {
+            $size = filesize($filePath);
+            $offset = 0;
+            $length = $size;
+            //HEADERS FOR PARTIAL DOWNLOAD FACILITY BEGINS
+            if (isset($_SERVER['HTTP_RANGE'])) {
+                preg_match('/bytes=(\d+)-(\d+)?/', $_SERVER['HTTP_RANGE'], $matches);
+                $offset = intval($matches[1]);
+                $length = intval($matches[2]) - $offset;
+                $fhandle = fopen($filePath, 'r');
+                fseek($fhandle, $offset); // seek to the requested offset, this is 0 if it's not a partial content request
+                $data = fread($fhandle, $length);
+                fclose($fhandle);
+                header('HTTP/1.1 206 Partial Content');
+                header('Content-Range: bytes ' . $offset . '-' . ($offset + $length) . '/' . $size);
+            }//HEADERS FOR PARTIAL DOWNLOAD FACILITY BEGINS
+            //USUAL HEADERS FOR DOWNLOAD
+            header("Content-Disposition: attachment;filename=".$fileName);
+            header('Content-Type: '.$contentType);
+            header("Accept-Ranges: bytes");
+            header("Pragma: public");
+            header("Expires: -1");
+            header("Cache-Control: no-cache");
+            header("Cache-Control: public, must-revalidate, post-check=0, pre-check=0");
+            header("Content-Length: ".filesize($filePath));
+            $chunksize = 8 * (1024 * 1024); //8MB (highest possible fread length)
+            if ($size > $chunksize) {
+                $handle = fopen($_FILES['file']['tmp_name'], 'rb');
+                $buffer = '';
+                while (!feof($handle) && (connection_status() === CONNECTION_NORMAL)) {
+                    $buffer = fread($handle, $chunksize);
+                    print $buffer;
+                    ob_flush();
+                    flush();
+                }
+                if (connection_status() !== CONNECTION_NORMAL) {
+                    //TODO traslation
+                    echo 'Connection aborted';
+                }
+                fclose($handle);
+            } else {
+                ob_clean();
+                flush();
+                readfile($filePath);
+            }
+         } else {
+            //TODO traslation
+            echo 'File does not exist!';
+         }
+    } else {
+        //TODO traslation
+        echo 'There is no file to download!';
+    }
 }

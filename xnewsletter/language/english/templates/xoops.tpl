@@ -14,3 +14,10 @@
         <p style="margin-top:10px;margin-bottom:20px;">If you want to unsubscribe please click <a href="<{$unsubscribe_link}>" target="_blank">here</a></p>
     </div>
 </div>
+<div>
+    <ul>
+    <{foreach item='attachment' from=$attachments}>
+        <li><a href="<{$attachment.attachment_link}>"><{$attachment.attachment_name}></a></li>
+    <{/foreach}>
+    </ul>
+</div>

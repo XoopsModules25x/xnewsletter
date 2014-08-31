@@ -199,7 +199,7 @@ switch ($op) {
                 $gperm_handler->addRight('newsletter_list_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
             }
             //
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
         }
 
         echo $catObj->getHtmlErrors();

@@ -243,7 +243,7 @@ switch ($op) {
         $protocolObj->setVar("protocol_created", strtotime($_REQUEST["protocol_created"]));
 
         if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
         }
 
         echo $protocolObj->getHtmlErrors();

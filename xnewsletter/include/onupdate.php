@@ -103,6 +103,15 @@ function xoops_module_update_xnewsletter_130() {
     if (!$result)
         echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_letter' ADD";
 
+    // add fields to 'xnewsletter_attachment' table
+    global $xoopsDB;
+    $sql = "ALTER TABLE `" . $xoopsDB->prefix('xnewsletter_attachment') . "`";
+    $sql .= " ADD COLUMN `attachment_size` int(8) NOT NULL default '0',";
+    $sql .= " ADD COLUMN `attachment_mode` int(8) NOT NULL default '0';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result)
+        echo '<br />' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_attachment' ADD";
+
     return true;
 }
 

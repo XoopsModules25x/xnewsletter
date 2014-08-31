@@ -197,7 +197,7 @@ switch ($op) {
                 require_once( XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php" );
                 subscribingMLHandler(1, $catsubscr_subscrid, $catsubscrObj_cat->getVar('cat_mailinglist'));
             }
-            redirect_header('?op=list', 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         }
 
         echo $catsubscrObj->getHtmlErrors();

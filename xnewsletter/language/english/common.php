@@ -26,3 +26,4 @@
  * ****************************************************************************
  */
 // Common
+define('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS',"Warning: insufficient permissions!");

@@ -33,34 +33,34 @@ xoops_load('XoopsLists');
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['version']             = 1.3;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
-$modversion['author']              = "Goffy, Alfred";
-$modversion['credits']             = "";
-$modversion['license']             = "GPL 2.0";
+$modversion['author']              = 'Goffy, Alfred';
+$modversion['credits']             = '';
+$modversion['license']             = 'GPL 2.0';
 $modversion['help']                = 'page=help';
-$modversion['image']               = "assets/images/logo.png";
+$modversion['image']               = 'assets/images/logo.png';
 $modversion['official']            = false;
-$modversion['author_mail']         = "webmaster@wedega.com";
-$modversion['author_website_url']  = "wedega.com";
-$modversion['author_website_name'] = "Webdesign Gabor";
+$modversion['author_mail']         = 'webmaster@wedega.com';
+$modversion['author_website_url']  = 'wedega.com';
+$modversion['author_website_name'] = 'Webdesign Gabor';
 $modversion['dirname']             = basename(dirname(__FILE__));
 
 $modversion['license']     = 'GNU GPL 2.0 see Licence';
-$modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
+$modversion['license_url'] = 'www.gnu.org/licenses/gpl-2.0.html/';
 
 //About
-$modversion['module_status']       = "Beta 1";
-$modversion['release_date']        = "2014/08/21";
+$modversion['module_status']       = 'Beta 1';
+$modversion['release_date']        = '2014/08/28';
 //$modversion['release']           = "1.3";
-$modversion['demo_site_url']       = "";
-$modversion['demo_site_name']      = "";
-$modversion['forum_site_url']      = "";
-$modversion['forum_site_name']     = "";
-$modversion['module_website_url']  = "wedega.com";
-$modversion['module_website_name'] = "Webdesign Gabor";
-$modversion['release_info']        = "";
-$modversion['release_file']        = XOOPS_URL . "/modules/" . $modversion['dirname'] . "/docs/changelog.txt";
+$modversion['demo_site_url']       = '';
+$modversion['demo_site_name']      = '';
+$modversion['forum_site_url']      = '';
+$modversion['forum_site_name']     = '';
+$modversion['module_website_url']  = 'wedega.com';
+$modversion['module_website_name'] = 'Webdesign Gabor';
+$modversion['release_info']        = '';
+$modversion['release_file']        = XOOPS_URL . '/modules/' . $modversion['dirname'] . '/docs/changelog.txt';
 
-$modversion['manual']      = "xnewsletter.txt";
+$modversion['manual']      = 'xnewsletter.txt';
 $modversion['manual_file'] = XOOPS_URL . "/modules/{$modversion['dirname']}/docs/";
 $modversion['min_php']     = '5.3.7';
 $modversion['min_xoops']   = '2.5.7';
@@ -70,9 +70,9 @@ $modversion['min_db']      = array(
     'mysqli' => '5.0.7'
 );
 
-$modversion['dirmoduleadmin']       = "Frameworks/moduleclasses";
-$modversion['icons16']              = "Frameworks/moduleclasses/icons/16";
-$modversion['icons32']              = "Frameworks/moduleclasses/icons/32";
+$modversion['dirmoduleadmin']       = 'Frameworks/moduleclasses';
+$modversion['icons16']              = 'Frameworks/moduleclasses/icons/16';
+$modversion['icons32']              = 'Frameworks/moduleclasses/icons/32';
 
 //help files
 $i                                     = 0;
@@ -155,22 +155,22 @@ if (is_object($xoopsModule)) {
 
 if ($showRead == true) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_SUBSCRIBE;
-    $modversion['sub'][$subcount]['url'] = "subscription.php";
+    $modversion['sub'][$subcount]['url'] = 'subscription.php';
     ++$subcount;
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_LIST;
-    $modversion['sub'][$subcount]['url'] = "letter.php?op=list_letters";
+    $modversion['sub'][$subcount]['url'] = 'letter.php?op=list_letters';
     ++$subcount;
 }
 if ($showEdit == true) {
 }
 if ($showCreate == true) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_CREATE;
-    $modversion['sub'][$subcount]['url'] = "letter.php?op=new_letter";
+    $modversion['sub'][$subcount]['url'] = 'letter.php?op=new_letter';
     ++$subcount;
 }
 if ($showList == true) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_LIST_SUBSCR;
-    $modversion['sub'][$subcount]['url'] = "letter.php?op=list_subscrs";
+    $modversion['sub'][$subcount]['url'] = 'letter.php?op=list_subscrs';
     ++$subcount;
 }
 
@@ -246,6 +246,14 @@ $modversion['config'][$i]['description']    = '_MI_XNEWSLETTER_KEYWORDS_DESC';
 $modversion['config'][$i]['formtype']       = 'textbox';
 $modversion['config'][$i]['valuetype']      = 'text';
 $modversion['config'][$i]['default']        = '';
+++$i;
+//Uploads : max letter_attachments
+$modversion['config'][$i]['name']           = 'xn_maxattachments';
+$modversion['config'][$i]['title']          = '_MI_XNEWSLETTER_MAXATTACHMENTS';
+$modversion['config'][$i]['description']    = '_MI_XNEWSLETTER_MAXATTACHMENTS_DESC';
+$modversion['config'][$i]['formtype']       = 'textbox';
+$modversion['config'][$i]['valuetype']      = 'int';
+$modversion['config'][$i]['default']        = '5';
 ++$i;
 //Uploads : size letter_attachment
 $modversion['config'][$i]['name']           = 'xn_maxsize';

@@ -236,7 +236,7 @@ if (isset($_SESSION['redirect_mail'])) {
         $subscrCriteria = new Criteria('subscr_id', $subscr_id);
         $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         if ($subscrCount == 0) {
-            redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
+            redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
         // get subscr data
         $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
@@ -289,7 +289,7 @@ if (isset($_SESSION['redirect_mail'])) {
         if ($subscr_email != '') {
             // existing email
             if (!xnewsletter_checkEmail($subscr_email)) {
-                redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
+                redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
             }
         } elseif (is_object($xoopsUser) && isset($xoopsUser)) {
             // take actual xoops user
@@ -322,7 +322,7 @@ if (isset($_SESSION['redirect_mail'])) {
         // get edit subscr form
         $subscr_id = xnewsletterRequest::getInt('subscr_id', 0);
         if ($subscr_id <= 0) {
-            redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
+            redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
         $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
         $subscrForm = $subscrObj->getForm();
@@ -371,12 +371,12 @@ if (isset($_SESSION['redirect_mail'])) {
         // 1st case: subscribe WITHOUT confirmation
             // check form
             if (!$GLOBALS['xoopsSecurity']->check()) {
-                redirect_header($currentFile, 5, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
                 exit();
             }
             // check email
             if ($subscr_email == '' || !xnewsletter_checkEmail($subscr_email)) {
-                redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
+                redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
                 exit();
             }
             // get or create subscr
@@ -392,7 +392,7 @@ if (isset($_SESSION['redirect_mail'])) {
             $subscrObj->setVar('subscr_lastname',  xnewsletterRequest::getString('subscr_lastname', ''));
             // insert subscr
             if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
-                redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
+                redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
                 exit();
             }
             if ($subscr_id > 0) {
@@ -429,12 +429,12 @@ if (isset($_SESSION['redirect_mail'])) {
             // create and send confirmation email
                 // check form
                 if (!$GLOBALS['xoopsSecurity']->check()) {
-                    redirect_header($currentFile, 5, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+                    redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
                     exit();
                 }
                 // check email
                 if ($subscr_email == '' || !xnewsletter_checkEmail($subscr_email)) {
-                    redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
                     exit();
                 }
                 // get subscr fields from form
@@ -502,7 +502,7 @@ if (isset($_SESSION['redirect_mail'])) {
                 $subscrObj->setVar('subscr_actoptions', $activationOptions); // XOBJ_DTYPE_ARRAY
                 // insert subscr
                 if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
-                    redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
                     exit();
                 }
                 if ($subscr_id > 0) {
@@ -718,7 +718,7 @@ if (isset($_SESSION['redirect_mail'])) {
                 if (!$xoopsMailer->send()) {
                     $count_err++;
                     $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors();
-                    redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
                 } else {
                     $actionProts_ok[] = str_replace("%e", $subscr_email, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SENT_INFO);
                 }
@@ -742,7 +742,7 @@ if (isset($_SESSION['redirect_mail'])) {
 
     case 'delete_subscription':
         if ((!$activationKey && $subscr_id <= 0) && ($_SESSION['unsub'] != '1')) {
-            redirect_header($currentFile, 5, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
+            redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
             exit();
         }
 // IN PROGRESS
@@ -849,7 +849,7 @@ if (isset($_SESSION['redirect_mail'])) {
                 $subscrObj->setVar('subscr_actkey', $subscr_actkey);
                 // insert subscr
                 if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
-                    redirect_header($currentFile, 2, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
                     exit();
                 }
 //                if (!$allowedWithoutActivationKey) {

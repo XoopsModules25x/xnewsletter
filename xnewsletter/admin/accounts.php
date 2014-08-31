@@ -299,9 +299,9 @@ switch ($op) {
         if ($accountObj->getVar('accounts_yourmail') != '' && $accountObj->getVar('accounts_yourmail') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
             if ($xnewsletter->getHandler('accounts')->insert($accountObj)) {
                 if ($save_and_check == 'none') {
-                    redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+                    redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
                 } else {
-                    redirect_header("?op=check_account&accounts_id={$accountObj->getVar("accounts_id")}", 2, _AM_XNEWSLETTER_FORMOK);
+                    redirect_header("?op=check_account&accounts_id={$accountObj->getVar("accounts_id")}", 3, _AM_XNEWSLETTER_FORMOK);
                 }
             }
         } else {

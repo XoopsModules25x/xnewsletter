@@ -116,7 +116,7 @@ switch ($op) {
         $templateObj->setVar("template_created", xnewsletterRequest::getInt('template_created', time()));
         //
         if ($xnewsletter->getHandler('template')->insert($templateObj)) {
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
         }
         //
         echo $templateObj->getHtmlErrors();

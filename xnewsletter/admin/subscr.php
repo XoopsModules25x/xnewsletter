@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include 'admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -40,49 +40,48 @@ $filter_subscr_lastname  = xnewsletterRequest::getString('filter_subscr_lastname
 $filter_subscr_email     = xnewsletterRequest::getString('filter_subscr_email', '');
 
 if ($op == 'apply_filter') {
-    if ($filter_subscr == "LIKE" && !$filter_subscr_firstname=='') $filter_subscr_firstname = "%".$filter_subscr_firstname."%";
-    if ($filter_subscr == "LIKE" && !$filter_subscr_lastname=='') $filter_subscr_lastname = "%".$filter_subscr_lastname."%";
-    if ($filter_subscr == "LIKE" && !$filter_subscr_email=='') $filter_subscr_email = "%".$filter_subscr_email."%";
+    if ($filter_subscr == 'LIKE' && !$filter_subscr_firstname=='') $filter_subscr_firstname = "%{$filter_subscr_firstname}%";
+    if ($filter_subscr == 'LIKE' && !$filter_subscr_lastname=='') $filter_subscr_lastname = "%{$filter_subscr_lastname}%";
+    if ($filter_subscr == 'LIKE' && !$filter_subscr_email=='') $filter_subscr_email = "%{$filter_subscr_email}%";
     if ($filter_subscr_firstname == '' && $filter_subscr_lastname == '' && $filter_subscr_email == '') $op = 'list';
 }
 
 $subscrAdmin = new ModuleAdmin();
 switch ($op) {
-    case "show_catsubscr":
+    case 'show_catsubscr':
         echo $subscrAdmin->addNavigation($currentFile);
         $apply_filter = xnewsletterRequest::getString('apply_filter', 'list');
-        $linklist = "?op=$apply_filter&filter_subscr=$filter_subscr";
-        $linklist .= "&filter_subscr_firstname=$filter_subscr_firstname";
-        $linklist .= "&filter_subscr_lastname=$filter_subscr_lastname";
-        $linklist .= "&filter_subscr_email=$filter_subscr_email";
+        $linklist = "?op=$apply_filter&filter_subscr={$filter_subscr}";
+        $linklist .= "&filter_subscr_firstname={$filter_subscr_firstname}";
+        $linklist .= "&filter_subscr_lastname={$filter_subscr_lastname}";
+        $linklist .= "&filter_subscr_email={$filter_subscr_email}";
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCR_SHOW_ALL, $linklist, 'view_detailed');
         echo $subscrAdmin->renderButton();
 
         $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
 
-        echo "
-            <table class='outer width100' cellspacing='1'>
+        echo "<table class='outer' cellspacing='1'>
                 <tr>
-                    <th class='center width2'>" . _AM_XNEWSLETTER_SUBSCR_ID . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_SUBSCR_EMAIL . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_LETTERLIST . "</th>
+                    <th>" . _AM_XNEWSLETTER_SUBSCR_ID . "</th>
+                    <th>" . _AM_XNEWSLETTER_SUBSCR_EMAIL . "</th>
+                    <th>" . _AM_XNEWSLETTER_LETTERLIST . "</th>
                 </tr>";
 
-        $class = "odd";
-        echo "<tr class='"  .$class . "'>";
-        $class = ($class == "even") ? "odd" : "even";
-        echo "<td class='center'>" . $subscr_id . "</td>";
-        echo "<td class='center'>" . $subscrObj->getVar("subscr_email") . "</td>";
-        echo "<td class='center'>";
+        $class = 'odd';
+        echo "<tr class='{$class}'>";
+        $class = ($class == 'even') ? 'odd' : 'even';
+        echo "<td>{$subscr_id}</td>";
+        echo "<td>" . $subscrObj->getVar('subscr_email') . "</td>";
+        echo "<td>";
         $catsubscrCriteria = new CriteriaCompo();
-        $catsubscrCriteria->add(new Criteria("catsubscr_subscrid", $subscr_id));
+        $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
         $catsubscrCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
         if ($catsubscrCount > 0) {
             $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
             foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
                 $cat_id = $catsubscrObj->getVar("catsubscr_catid");
                 $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
-                echo $catObj->getVar("cat_name") . "<br/>";
+                echo $catObj->getVar('cat_name') . "<br/>";
             }
         } else {
             echo _AM_XNEWSLETTER_SUBSCR_NO_CATSUBSCR;
@@ -94,8 +93,8 @@ switch ($op) {
 
 
 
-    case "list":
-    case "apply_filter":
+    case 'list':
+    case 'apply_filter':
     default:
         echo $subscrAdmin->addNavigation($currentFile);
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
@@ -107,21 +106,21 @@ switch ($op) {
 
         if ($op == 'apply_filter') {
             if ($filter_subscr_firstname != '')
-                $subscrCriteria->add(new Criteria("subscr_firstname", $filter_subscr_firstname,$filter_subscr));
+                $subscrCriteria->add(new Criteria('subscr_firstname', $filter_subscr_firstname,$filter_subscr));
             if ($filter_subscr_lastname != '')
-                $subscrCriteria->add(new Criteria("subscr_lastname", $filter_subscr_lastname,$filter_subscr));
+                $subscrCriteria->add(new Criteria('subscr_lastname', $filter_subscr_lastname,$filter_subscr));
             if ($filter_subscr_email != '')
-                $subscrCriteria->add(new Criteria("subscr_email", $filter_subscr_email,$filter_subscr));
+                $subscrCriteria->add(new Criteria('subscr_email', $filter_subscr_email,$filter_subscr));
         }
-        $subscrCriteria->setSort("subscr_id");
-        $subscrCriteria->setOrder("DESC");
+        $subscrCriteria->setSort('subscr_id');
+        $subscrCriteria->setOrder('DESC');
         $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         $start = xnewsletterRequest::getInt('start', 0);
         $subscrCriteria->setStart($start);
         $subscrCriteria->setLimit($limit);
         $subscrObjs = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria);
         if ($subscrCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $linklist = "op={$op}";
             $linklist .= "&filter_subscr={$filter_subscr}";
             $linklist .= "&filter_subscr_firstname={$filter_subscr_firstname}";
@@ -132,11 +131,11 @@ switch ($op) {
         } else {
             $pagenav = '';
         }
-        if ($filter_subscr == "LIKE") {
+        if ($filter_subscr == 'LIKE') {
             //clean up var for refill form
-            $filter_subscr_firstname = str_replace("%", "", $filter_subscr_firstname);
-            $filter_subscr_lastname = str_replace("%", "", $filter_subscr_lastname);
-            $filter_subscr_email = str_replace("%", "", $filter_subscr_email);
+            $filter_subscr_firstname = str_replace('%', '', $filter_subscr_firstname);
+            $filter_subscr_lastname = str_replace('%', '', $filter_subscr_lastname);
+            $filter_subscr_email = str_replace('%', '', $filter_subscr_email);
         }
 
         // View Table
@@ -154,11 +153,11 @@ switch ($op) {
         echo "</tr>";
 
         if ($subscrCount > 0) {
-            $class = "odd";
+            $class = 'odd';
             echo "<form id='form_filter' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_filter'>";
-            $inputstyle = "";//style='border: 1px solid #000000;";
-            echo "<tr class='" . $class . "'>";
-            $class = ($class == "even") ? "odd" : "even";
+            $inputstyle = '';//style='border: 1px solid #000000;";
+            echo "<tr class='{$class}'>";
+            $class = ($class == 'even') ? 'odd' : 'even';
             echo "    <td class='center'>&nbsp;</td>";
             echo "    <td colspan='2'>" . _SEARCH . ":&nbsp;&nbsp;";
             echo "    <select id='filter_subscr' title='" . _SEARCH . "' name='filter_subscr' size='1'>";
@@ -196,17 +195,17 @@ switch ($op) {
 
             echo "<form id='form_action' onsubmit='return check(this);' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_action'>";
             foreach ($subscrObjs as $subscr_id => $subscrObj) {
-                echo "<tr class='" . $class . "'>";
-                $class = ($class == "even") ? "odd" : "even";
+                echo "<tr class='{$class}'>";
+                $class = ($class == 'even') ? 'odd' : 'even';
                 echo "    <td class='center'><input type='checkbox' name='subscr_ids[]' value='{$subscr_id}'></td>";
                 echo "    <td>" . $subscr_id . "</td>";
-                echo "    <td>" . $subscrObj->getVar("subscr_sex") . "&nbsp;</td>";
-                echo "    <td>" . $subscrObj->getVar("subscr_firstname") . "&nbsp;</td>";
-                echo "    <td>" . $subscrObj->getVar("subscr_lastname") . "&nbsp;</td>";
-                echo "    <td>" . $subscrObj->getVar("subscr_email") . "&nbsp;</td>";
+                echo "    <td>" . $subscrObj->getVar('subscr_sex') . "&nbsp;</td>";
+                echo "    <td>" . $subscrObj->getVar('subscr_firstname') . "&nbsp;</td>";
+                echo "    <td>" . $subscrObj->getVar('subscr_lastname') . "&nbsp;</td>";
+                echo "    <td>" . $subscrObj->getVar('subscr_email') . "&nbsp;</td>";
                 echo "    <td>";
-                if ($subscrObj->getVar("subscr_uid") > 0) {
-                    echo XoopsUser::getUnameFromId($subscrObj->getVar("subscr_uid"), "S");
+                if ($subscrObj->getVar('subscr_uid') > 0) {
+                    echo XoopsUser::getUnameFromId($subscrObj->getVar('subscr_uid'), 'S');
                 } else {
                     echo "-";
                 }
@@ -217,7 +216,7 @@ switch ($op) {
                 } else {
                     echo '<img src="' . XNEWSLETTER_ICONS_URL . '/xn_ok.png" alt="' . _MA_XNEWSLETTER_SUBSCRIPTION_REG_CLOSED . '" title="' . _MA_XNEWSLETTER_SUBSCRIPTION_REG_CLOSED . '" /> ';
                 }
-                echo formatTimestamp($subscrObj->getVar("subscr_created"), $xnewsletter->getConfig('dateformat')) . " [" . $subscrObj->getVar("subscr_ip") . "]";
+                echo formatTimestamp($subscrObj->getVar("subscr_created"), $xnewsletter->getConfig('dateformat')) . " [" . $subscrObj->getVar('subscr_ip') . "]";
                 echo "    </td>";
 
                 echo "    <td nowrap='nowrap'>";
@@ -257,12 +256,12 @@ switch ($op) {
 
 
 
-    case "apply_actions":
+    case 'apply_actions':
         $action = xnewsletterRequest::getString('actions_action');
         $subscr_ids = xnewsletterRequest::getArray('subscr_ids', unserialize(xnewsletterRequest::getString('serialize_subscr_ids')));
         $subscrCriteria = new Criteria('subscr_id', '(' . implode(',', $subscr_ids) . ')', 'IN');
         switch ($action) {
-            case "delete":
+            case 'delete':
                 if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
                     // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
                     if ($xnewsletter->getHandler('subscr')->deleteAll($subscrCriteria, true, true)) {
@@ -274,11 +273,10 @@ switch ($op) {
                     $subscr_emails = array();
                     foreach ($xnewsletter->getHandler('subscr')->getObjects($subscrCriteria) as $subscrObj)
                         $subscr_emails[] = $subscrObj->getVar('subscr_email');
-                    xoops_confirm(array("ok" => true, "op" => "apply_actions", "actions_action" => $action, "serialize_subscr_ids" => serialize($subscr_ids)), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, implode(', ', $subscr_emails)));
+                    xoops_confirm(array('ok' => true, 'op' => 'apply_actions', 'actions_action' => $action, 'serialize_subscr_ids' => serialize($subscr_ids)), $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, implode(', ', $subscr_emails)));
                 }
                 break;
-            case "activate":
-// IN PROGRESS
+            case 'activate':
                     // activate subscriber (subscr)
                     if ($xnewsletter->getHandler('subscr')->updateAll('subscr_activated', true, $subscrCriteria, true)) {
                         redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMACTIVATEOK);
@@ -286,11 +284,10 @@ switch ($op) {
                         echo $subscrObj->getHtmlErrors();
                     }
                 break;
-            case "unactivate":
-// IN PROGRESS
+            case 'unactivate':
                     // unactivate subscriber (subscr)
                     if ($xnewsletter->getHandler('subscr')->updateAll('subscr_activated', false, $subscrCriteria, true)) {
-                        redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMACTIVATEOK);
+                        redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMUNACTIVATEOK);
                     } else {
                         echo $subscrObj->getHtmlErrors();
                     }
@@ -303,7 +300,7 @@ switch ($op) {
 
 
 
-    case "new_subscr":
+    case 'new_subscr':
         echo $subscrAdmin->addNavigation($currentFile);
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
         echo $subscrAdmin->renderButton();
@@ -315,25 +312,25 @@ switch ($op) {
 
 
 
-    case "save_subscr":
+    case 'save_subscr':
         if (!$GLOBALS["xoopsSecurity"]->check()) {
-            redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+            redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         //
         $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
-        $subscrObj->setVar("subscr_email", $_REQUEST["subscr_email"]);
-        $subscrObj->setVar("subscr_firstname", $_REQUEST["subscr_firstname"]);
-        $subscrObj->setVar("subscr_lastname", $_REQUEST["subscr_lastname"]);
-        $subscrObj->setVar("subscr_uid", $_REQUEST["subscr_uid"]);
-        $subscrObj->setVar("subscr_sex", $_REQUEST["subscr_sex"]);
-        $subscrObj->setVar("subscr_submitter", $_REQUEST["subscr_submitter"]);
-        $subscrObj->setVar("subscr_created", $_REQUEST["subscr_created"]);
-        $subscrObj->setVar("subscr_ip", $_REQUEST["subscr_ip"]);
-        $subscrObj->setVar("subscr_actkey", $_REQUEST["subscr_actkey"]);
-        $subscrObj->setVar("subscr_activated", xnewsletterRequest::getInt('subscr_activated', 0));
+        $subscrObj->setVar('subscr_email', $_REQUEST['subscr_email']);
+        $subscrObj->setVar('subscr_firstname', $_REQUEST['subscr_firstname']);
+        $subscrObj->setVar('subscr_lastname', $_REQUEST['subscr_lastname']);
+        $subscrObj->setVar('subscr_uid', $_REQUEST['subscr_uid']);
+        $subscrObj->setVar('subscr_sex', $_REQUEST['subscr_sex']);
+        $subscrObj->setVar('subscr_submitter', $_REQUEST['subscr_submitter']);
+        $subscrObj->setVar('subscr_created', $_REQUEST['subscr_created']);
+        $subscrObj->setVar('subscr_ip', $_REQUEST['subscr_ip']);
+        $subscrObj->setVar('subscr_actkey', $_REQUEST['subscr_actkey']);
+        $subscrObj->setVar('subscr_activated', xnewsletterRequest::getInt('subscr_activated', 0));
         //
         if ($xnewsletter->getHandler('subscr')->insert($subscrObj)) {
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
+            redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         }
         //
         echo $subscrObj->getHtmlErrors();
@@ -343,7 +340,7 @@ switch ($op) {
 
 
 
-    case "edit_subscr":
+    case 'edit_subscr':
         echo $subscrAdmin->addNavigation($currentFile);
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
@@ -356,11 +353,11 @@ switch ($op) {
 
 
 
-    case "delete_subscr":
+    case 'delete_subscr':
         $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
-            if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+            if ( !$GLOBALS['xoopsSecurity']->check() ) {
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
             if ($xnewsletter->getHandler('subscr')->delete($subscrObj)) {
@@ -369,8 +366,8 @@ switch ($op) {
                 echo $subscrObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => true, "subscr_id" => $_REQUEST["subscr_id"], "op" => "delete_subscr"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar("subscr_email")));
+            xoops_confirm(array('ok' => true, 'subscr_id' => $_REQUEST['subscr_id'], 'op' => 'delete_subscr'), $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar('subscr_email')));
         }
         break;
 }
-include "admin_footer.php";
+include 'admin_footer.php';

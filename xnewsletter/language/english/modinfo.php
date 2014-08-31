@@ -100,6 +100,8 @@ define('_MI_XNEWSLETTER_CONFIRMATION_TIME_1', "1 hour");
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_6', "6 hours");
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_24', "1 day");
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_48', "2 days");
+define('_MI_XNEWSLETTER_MAXATTACHMENTS',"Maximum number of attachments");
+define('_MI_XNEWSLETTER_MAXATTACHMENTS_DESC',"Default is 5");
 //
 define('_MI_XNEWSLETTER_ADMENU_TEMPLATES',"Templates");
 define('_MI_XNEWSLETTER_EDITOR_DESC',"");
