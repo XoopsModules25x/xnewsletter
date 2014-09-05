@@ -27,15 +27,15 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once 'header.php';
+include_once dirname(__FILE__) . '/header.php';
 
 $op = xnewsletterRequest::getString('op', 'welcome');
 
 switch ($op) {
-    case 'welcome' :
-    default :
+    case 'welcome':
+    default:
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_index.tpl";
-        include XOOPS_ROOT_PATH . "/header.php";
+        include XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -50,4 +50,4 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_content', _MA_XNEWSLETTER_WELCOME); // this definition is not removed for backward compatibility issues
         break;
 }
-include 'footer.php';
+include_once dirname(__FILE__) . '/footer.php';
