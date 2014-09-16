@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include 'admin_header.php';
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -39,7 +39,7 @@ $post           = xnewsletterRequest::getString('post', '');
 if ($post == '' &&  $op == 'save_accounts' && $save_and_check =='none') $op = "edit_account";
 
 switch ($op) {
-    case 'check_accoun':
+    case 'check_account':
         echo $indexAdmin->addNavigation($currentFile);
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
@@ -204,7 +204,7 @@ switch ($op) {
         $accountsCriteria->setLimit($limit);
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
         if ($accountsCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
@@ -246,7 +246,7 @@ switch ($op) {
                 echo "<td>";
                 echo "    <a href='?op=edit_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='"._EDIT . "' /></a>";
                 echo "    <a href='?op=delete_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
-                if ($accountsObj->getVar("accounts_type") != _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accountsObj->getVar("accounts_type") != _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
+                if ($accountsObj->getVar("accounts_type") != _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accountsObj->getVar('accounts_type') != _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
                     echo "    <a href='?op=check_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_check.png alt='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' title='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' /></a>";
                 }
                 echo "</td>";
@@ -284,24 +284,24 @@ switch ($op) {
         $count_accounts_default = $xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
         if ($count_accounts_default > 0) {
             if ($accountObj->getVar('accounts_default') == 1) {
-                global $xoopsDB;
-                $verif_accounts_default = '1';
+                $verif_accounts_default = 1;
                 //reset old accounts_default
-                $sql = "UPDATE `{$xoopsDB->prefix("xnewsletter_accounts")}` SET `accounts_default` = '0'";
-                if(!$result = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
+                if(!$xnewsletter->getHandler('accounts')->updateAll('accounts_default', 0, null, false)) {
+                    exit('MySQL-Error: ' . mysql_error());
+                }
             } else {
-                $verif_accounts_default = '0';
+                $verif_accounts_default = 0;
             }
         } else {
-            $verif_accounts_default = '1';
+            $verif_accounts_default = 1;
         }
         $accountObj->setVar('accounts_default', $verif_accounts_default);
         if ($accountObj->getVar('accounts_yourmail') != '' && $accountObj->getVar('accounts_yourmail') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
             if ($xnewsletter->getHandler('accounts')->insert($accountObj)) {
                 if ($save_and_check == 'none') {
-                    redirect_header("?op=list", 3, _AM_XNEWSLETTER_FORMOK);
+                    redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
                 } else {
-                    redirect_header("?op=check_account&accounts_id={$accountObj->getVar("accounts_id")}", 3, _AM_XNEWSLETTER_FORMOK);
+                    redirect_header("?op=check_account&accounts_id={$accountObj->getVar('accounts_id')}", 3, _AM_XNEWSLETTER_FORMOK);
                 }
             }
         } else {
@@ -343,4 +343,4 @@ switch ($op) {
         }
         break;
 }
-include 'admin_footer.php';
+include_once dirname(__FILE__) . '/admin_footer.php';

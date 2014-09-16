@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,19 +43,19 @@ class XnewsletterLetter extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("letter_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("letter_title", XOBJ_DTYPE_TXTBOX, null, true, 100);
-        $this->initVar("letter_content", XOBJ_DTYPE_TXTAREA, null, true);
-        $this->initVar("letter_template", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("letter_cats", XOBJ_DTYPE_TXTBOX, null, false, 100); // IN PROGRESS: AN ARRAY SHOULD BE BETTER
-        $this->initVar("letter_attachment", XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar("letter_account", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("letter_email_test", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("letter_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("letter_created", XOBJ_DTYPE_INT, time(), false); // timestamp
-        $this->initVar("letter_sender", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("letter_sent", XOBJ_DTYPE_INT, false, false); // timestamp or false
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('letter_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('letter_title', XOBJ_DTYPE_TXTBOX, null, true, 100);
+        $this->initVar('letter_content', XOBJ_DTYPE_TXTAREA, null, true);
+        $this->initVar('letter_template', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('letter_cats', XOBJ_DTYPE_TXTBOX, null, false, 100); // IN PROGRESS: AN ARRAY SHOULD BE BETTER
+        $this->initVar('letter_attachment', XOBJ_DTYPE_TXTBOX, null, false, 200);
+        $this->initVar('letter_account', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('letter_email_test', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('letter_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('letter_created', XOBJ_DTYPE_INT, time(), false); // timestamp
+        $this->initVar('letter_sender', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('letter_sent', XOBJ_DTYPE_INT, false, false); // timestamp or false
     }
 
     /**
@@ -75,8 +74,8 @@ class XnewsletterLetter extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_LETTER_ADD) : sprintf(_AM_XNEWSLETTER_LETTER_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         // letter_title
@@ -167,7 +166,7 @@ class XnewsletterLetter extends XoopsObject
                 $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "existing_attachments_mode[{$attachment_id}]", $attachmentObj->getVar("attachment_mode"), '&nbsp;');
                 $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
                 $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
-                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // IN PROGRESS
+                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
             $delete_attachment_tray->addElement($mode_select);
             $delete_attachment_tray->addElement(new XoopsFormLabel('', $attachmentObj->getVar('attachment_name')));
                 $delete_button = new XoopsFormButton('', "delete_attachment_{$i}", _DELETE, 'submit');
@@ -184,7 +183,7 @@ class XnewsletterLetter extends XoopsObject
                 $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "new_attachments_mode[{$j}]", _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, '&nbsp;');
                 $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
                 $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
-                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // IN PROGRESS
+                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
             $add_attachment_tray->addElement($mode_select);
             $add_attachment_tray->addElement(new XoopsFormFile('', "new_attachment_index={$j}", $this->xnewsletter->getConfig('xn_maxsize')));
             $attachment_tray->addElement($add_attachment_tray);
@@ -214,8 +213,8 @@ class XnewsletterLetter extends XoopsObject
         $accountsCriteria = new CriteriaCompo();
         $accountsCriteria->setSort('accounts_id');
         $accountsCriteria->setOrder('ASC');
-        $numrows_accounts = $this->xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
-        $account_default  = 0;
+        $accountsCount = $this->xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
+        $account_default = 0;
         if ($this->isNew()) {
             $accountsObjs = $this->xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
             foreach ($accountsObjs as $accountsObj) {
@@ -226,7 +225,7 @@ class XnewsletterLetter extends XoopsObject
         } else {
             $account_default = $this->getVar('letter_account');
         }
-        if ($numrows_accounts == 1) {
+        if ($accountsCount == 1) {
             $form->addElement(new XoopsFormHidden('letter_account', $account_default));
         } else {
             $accounts_list = $this->xnewsletter->getHandler('accounts')->getList($accountsCriteria);

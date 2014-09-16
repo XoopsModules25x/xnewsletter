@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include 'admin_header.php';
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -128,7 +128,7 @@ switch ($op) {
                 <th style='white-space: nowrap'>" . _AM_XNEWSLETTER_LETTER_SUBMITTER . "<br />" . _AM_XNEWSLETTER_LETTER_CREATED . "</th>
                 <th style='white-space: nowrap'>" . _AM_XNEWSLETTER_LETTER_SENDER . "<br />" . _AM_XNEWSLETTER_LETTER_SENT . "</th>
                 <th>" . _AM_XNEWSLETTER_LETTER_TEMPLATE . "</th>
-                <th>" . _AM_XNEWSLETTER_LETTER_ATTACHMENT . "<br />" . _AM_XNEWSLETTER_LETTER_EMAIL_SIZE . "</th>
+                <th>" . _AM_XNEWSLETTER_LETTER_ATTACHMENT . "<br />" . _AM_XNEWSLETTER_LETTER_SIZE . "</th>
                 <th>" . _AM_XNEWSLETTER_LETTER_ACCOUNT . "</th>
                 <th>" . _AM_XNEWSLETTER_LETTER_EMAIL_TEST . "</th>
                 <th>" . _AM_XNEWSLETTER_PROTOCOL_LAST_STATUS . "</th>
@@ -221,6 +221,7 @@ switch ($op) {
                 $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
                 $protocol_status = '';
                 $protocol_letter_id = 0;
+// why foreach?
                 foreach ($protocolObjs as $protocolObj) {
                     $protocol_status .= $protocolObj->getVar('protocol_status');
                     $protocol_letter_id = $protocolObj->getVar('protocol_letter_id');
@@ -396,7 +397,9 @@ switch ($op) {
                     $redirectUrl = '?op=list_letters';
                     break;
             }
-            $protocolObj->setVar('protocol_status', _AM_XNEWSLETTER_LETTER_ACTION_SAVED);
+            $protocolObj->setVar('protocol_status', _AM_XNEWSLETTER_LETTER_ACTION_SAVED); // old style
+            $protocolObj->setVar('protocol_status_str_id', _XNEWSLETTER_PROTOCOL_STATUS_SAVED); // new from v1.3
+            $protocolObj->setVar('protocol_status_vars', array()); // new from v1.3
             $protocolObj->setVar('protocol_submitter', $xoopsUser->uid());
             $protocolObj->setVar('protocol_created', time());
             //
@@ -450,4 +453,4 @@ switch ($op) {
         }
         break;
 }
-include 'admin_footer.php';
+include_once dirname(__FILE__) . '/admin_footer.php';

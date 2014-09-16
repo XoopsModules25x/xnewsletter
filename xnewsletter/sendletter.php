@@ -27,10 +27,10 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once dirname(__FILE__) . '/header.php';
 
 $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_empty.tpl";
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 //
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -42,20 +42,20 @@ $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
 if (!$xoopsUser) {
     //Guest no Access !!!
-    redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
+    redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
 $op = xnewsletterRequest::getString('op', 'list');
 $letter_id = xnewsletterRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
-    redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
+    redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
 }
 
 $sendletter_perm = xnewsletter_getUserPermissionsByLetter($letter_id);
 
-if (!$sendletter_perm["send"]) {
-    redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
+if (!$sendletter_perm['send']) {
+    redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
 $start_sending = false;
@@ -68,7 +68,7 @@ if ($protocolCount > 0) {
     if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
         $start_sending = true;
     } else {
-        xoops_confirm(array("ok" => true, "op" => $op, "letter_id" => $letter_id), $_SERVER["REQUEST_URI"], _AM_XNEWSLETTER_SEND_SURE_SENT);
+        xoops_confirm(array('ok' => true, 'op' => $op, 'letter_id' => $letter_id), $_SERVER['REQUEST_URI'], _AM_XNEWSLETTER_SEND_SURE_SENT);
     }
 } else {
     $start_sending = true;
@@ -81,7 +81,7 @@ if ($start_sending == true) {
     } else {
         $xn_send_in_packages_time = 0;
     }
-    include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
+    include XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
     // create tasks
     $result_create = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
     // execute tasks
@@ -89,4 +89,4 @@ if ($start_sending == true) {
     redirect_header('letter.php', 3, $result_exec);
 }
 
-include 'footer.php';
+include_once dirname(__FILE__) . '/footer.php';

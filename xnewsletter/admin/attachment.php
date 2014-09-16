@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include 'admin_header.php';
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -50,7 +50,7 @@ switch ($op) {
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentCriteria, true);
         if ($attachmentCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new XoopsPageNav($attachmentCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
@@ -141,4 +141,4 @@ switch ($op) {
     break;
 }
 
-include 'admin_footer.php';
+include_once dirname(__FILE__) . '/admin_footer.php';

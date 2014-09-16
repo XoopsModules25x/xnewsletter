@@ -456,6 +456,7 @@ define('_AM_XNEWSLETTER_LETTER_SENT',"Sent on");
 define('_AM_XNEWSLETTER_THEREARE_NOT_ACCOUNTS',"<span color='#FF0000'>Warning: there are no email accounts, create an email account before.</span>");
 define('_AM_XNEWSLETTER_LETTER_SIZE',"Size");
 define('_AM_XNEWSLETTER_LETTER_EMAIL_SIZE',"Estimated size");
+define('_AM_XNEWSLETTER_LETTER_EMAIL_SIZE_DESC',"");
 define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_SIZE',"Size");
 define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_TOTALSIZE',"Attachments size");
 //
@@ -473,3 +474,11 @@ define('_AM_XNEWSLETTER_FORMUNACTIVATEOK',"Unactivated successfully");
 //Buttons
 define('_AM_XNEWSLETTER_NEWTEMPLATE',"Add New Template");
 define('_AM_XNEWSLETTER_TEMPLATELIST',"List Template");
+
+define('_AM_XNEWSLETTER_PROTOCOL_STATUS_SAVED','Saved');
+define('_AM_XNEWSLETTER_PROTOCOL_STATUS_ERROR_CREATE_TASK','Error creating item in task list');
+define('_AM_XNEWSLETTER_PROTOCOL_STATUS_OK_SEND_TEST','Newsletter sent for test (%recipient)');
+define('_AM_XNEWSLETTER_PROTOCOL_STATUS_OK_SEND','Newsletter sent');
+define('_AM_XNEWSLETTER_PROTOCOL_STATUS_ERROR_SEND','Newsletter send failed -> %error');
+// IN PROGRESS
+

@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
-$op             = xnewsletterRequest::getString('op', 'search_subscription');
+include_once dirname(__FILE__) . '/header.php';
+$op = xnewsletterRequest::getString('op', 'search_subscription');
 $activationKey  = xnewsletterRequest::getString('actkey', '');
-$subscr_id      = xnewsletterRequest::getInt('subscr_id', 0);
-$subscr_email   = xnewsletterRequest::getString('subscr_email', '');
+$subscr_id = xnewsletterRequest::getInt('subscr_id', 0);
+$subscr_email = xnewsletterRequest::getString('subscr_email', '');
 
 if (isset($_REQUEST['addnew'])) {
     $op = 'addnew_subscription';
@@ -67,7 +67,7 @@ switch ($op) {
         }
         // if anonymous subscriber
         $xoopsOption['template_main'] = 'xnewsletter_subscription_list_subscriptions.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -98,7 +98,7 @@ switch ($op) {
 
     case 'list_subscriptions':
         $xoopsOption['template_main'] = 'xnewsletter_subscription_list_subscriptions.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -217,7 +217,7 @@ if (isset($_SESSION['redirect_mail'])) {
 
     case 'resend_subscription':
         $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -260,7 +260,7 @@ if (isset($_SESSION['redirect_mail'])) {
         $subject = _MA_XNEWSLETTER_SUBSCRIPTIONSUBJECT . $GLOBALS['xoopsConfig']['sitename'];
         $xoopsMailer->setSubject($subject);
         if (!$xoopsMailer->send()) {
-            $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors();
+            $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors();
         } else {
             $actionProts_ok[] = str_replace('%subscr_email', $subscr_email, _MA_XNEWSLETTER_RESENDMAIL_REG_OK);
         }
@@ -275,7 +275,7 @@ if (isset($_SESSION['redirect_mail'])) {
     case 'add_subscription':
     case 'create_subscription':
         $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -307,7 +307,7 @@ if (isset($_SESSION['redirect_mail'])) {
 
     case 'edit_subscription':
         $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -331,9 +331,9 @@ if (isset($_SESSION['redirect_mail'])) {
 
 
 
-    case "save_subscription" :
+    case 'save_subscription':
         $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -451,7 +451,7 @@ if (isset($_SESSION['redirect_mail'])) {
                     // create selections: $cat_id-$cat_selected-$old_catsubcr_id-$old_catsubscr_quited
                     $selection = array();
                     $selection[0] = $cat_id;
-                    $selection[1] = in_array($cat_id, xnewsletterRequest::getArray("cats")) ? '1' : '0';//isset($_REQUEST["cats_{$cat_id}"]);
+                    $selection[1] = in_array($cat_id, xnewsletterRequest::getArray('cats')) ? '1' : '0';//isset($_REQUEST["cats_{$cat_id}"]);
                     $selection[2] = xnewsletterRequest::getInt("existing_catsubcr_id_{$cat_id}", 0);
                     $selection[3] = xnewsletterRequest::getInt("existing_catsubscr_quited_{$cat_id}", 0);
                     $code_selection = implode('-', $selection);
@@ -653,7 +653,7 @@ if (isset($_SESSION['redirect_mail'])) {
                     if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                         // handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                            require_once(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php');
                             subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -717,8 +717,8 @@ if (isset($_SESSION['redirect_mail'])) {
                 $xoopsMailer->setSubject($subject);
                 if (!$xoopsMailer->send()) {
                     $count_err++;
-                    $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors();
-                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
+                    $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors();
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors());
                 } else {
                     $actionProts_ok[] = str_replace("%e", $subscr_email, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SENT_INFO);
                 }
@@ -762,7 +762,7 @@ if (isset($_SESSION['redirect_mail'])) {
 
         if (xnewsletterRequest::getBool('ok', false, 'POST') || $activationKey != '') {
             $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
-            include_once XOOPS_ROOT_PATH . "/header.php";
+            include_once XOOPS_ROOT_PATH . '/header.php';
             //
             $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
             $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -877,8 +877,8 @@ if (isset($_SESSION['redirect_mail'])) {
                 $xoopsMailer->setSubject(_MA_XNEWSLETTER_DELETESUBJECT . $GLOBALS['xoopsConfig']['sitename']);
                 if (!$xoopsMailer->send()) {
                     $count_err++;
-                    $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors();
-                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
+                    $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors();
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors());
                 }
 //                }
                 if ($count_err == 0) {
@@ -891,7 +891,7 @@ if (isset($_SESSION['redirect_mail'])) {
             $xoopsTpl->assign('actionProts_error', $actionProts_error);
         } else {
             $xoopsOption['template_main'] = 'xnewsletter_empty.tpl';
-            include_once XOOPS_ROOT_PATH . "/header.php";
+            include_once XOOPS_ROOT_PATH . '/header.php';
             //
             $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
             $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -909,4 +909,4 @@ if (isset($_SESSION['redirect_mail'])) {
         break;
 }
 
-include 'footer.php';
+include_once dirname(__FILE__) . '/footer.php';

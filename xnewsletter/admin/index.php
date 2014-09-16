@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // count "total"
@@ -77,4 +77,4 @@ if ($accountsCount < 1) {
 // Render
 echo $indexAdmin->renderIndex();
 
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

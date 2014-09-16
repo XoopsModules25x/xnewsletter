@@ -2,6 +2,7 @@ Version 1.3     NOT RELEASED
 -------------------------------
  - standardize code (mamba,luciorota)
  - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
+ - update procedure: rename module's directory name to lowercase (luciorota)
  - templatize user side (luciorota)
  - added: send attachment as email attachment or as link (luciorota)
  - added: possibility to choose the maximum number of attachments (luciorota)

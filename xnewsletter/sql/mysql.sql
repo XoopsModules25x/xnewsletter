@@ -94,7 +94,7 @@ CREATE TABLE `xnewsletter_catsubscr` (
 CREATE TABLE `xnewsletter_letter` (
     `letter_id`                 int(8) NOT NULL  auto_increment,
     `letter_title`              varchar(100) NOT NULL default '',
-    `letter_content`            text NOT NULL ,
+    `letter_content`            text NOT NULL default '',
     `letter_template`           varchar(100) NOT NULL default '',
     `letter_cats`               varchar(100) NULL default '',
     `letter_account`            int(8) NOT NULL default '0',
@@ -119,6 +119,8 @@ CREATE TABLE `xnewsletter_protocol` (
     `protocol_submitter`        int(8) NOT NULL default '0',
     `protocol_created`          int(10) NOT NULL default '0',
     `protocol_success`          int(8) NOT NULL,
+    `protocol_status_str_id`    text NOT NULL default '',
+    `protocol_status_vars`      text,
     PRIMARY KEY (`protocol_id`),
     KEY `idx_protocol_letter_id` (`protocol_letter_id`)
 ) ENGINE=MyISAM;

@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 
 $op = xnewsletterRequest::getString('op', 'list');
 $letter_id = xnewsletterRequest::getInt('letter_id', 0);
@@ -37,11 +37,11 @@ if ($xn_send_in_packages > 0 && $op != 'send_test') {
     $xn_send_in_packages_time = 0;
 }
 
-include XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
+include XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
 // create tasks
 $result_create = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
 // execute tasks
 $result_exec = xnewsletter_executeTasks($xn_send_in_packages, $letter_id);
 redirect_header('letter.php', 3, $result_exec);
 
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,17 +43,17 @@ class XnewsletterBmh extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("bmh_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("bmh_rule_no", XOBJ_DTYPE_TXTBOX, null, false, 10);
-        $this->initVar("bmh_rule_cat", XOBJ_DTYPE_TXTBOX, null, false, 50);
-        $this->initVar("bmh_bouncetype", XOBJ_DTYPE_TXTBOX, null, false, 50);
-        $this->initVar("bmh_remove", XOBJ_DTYPE_TXTBOX, null, false, 50);
-        $this->initVar("bmh_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("bmh_subject", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("bmh_measure", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("bmh_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("bmh_created", XOBJ_DTYPE_INT, time(), false);
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('bmh_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('bmh_rule_no', XOBJ_DTYPE_TXTBOX, null, false, 10);
+        $this->initVar('bmh_rule_cat', XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar('bmh_bouncetype', XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar('bmh_remove', XOBJ_DTYPE_TXTBOX, null, false, 50);
+        $this->initVar('bmh_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('bmh_subject', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('bmh_measure', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('bmh_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('bmh_created', XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -72,8 +71,8 @@ class XnewsletterBmh extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_BMH_ADD) : sprintf(_AM_XNEWSLETTER_BMH_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $account_default = $this->getVar("bmh_accounts_id");

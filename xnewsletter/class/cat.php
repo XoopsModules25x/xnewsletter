@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -48,13 +47,13 @@ class XnewsletterCat extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("cat_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("cat_name", XOBJ_DTYPE_TXTBOX, '', false, 100);
-        $this->initVar("cat_info", XOBJ_DTYPE_TXTAREA, '', false);
-        $this->initVar("cat_mailinglist", XOBJ_DTYPE_INT, 0, false);
-        $this->initVar("cat_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("cat_created", XOBJ_DTYPE_INT, time(), false);
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('cat_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('cat_name', XOBJ_DTYPE_TXTBOX, '', false, 100);
+        $this->initVar('cat_info', XOBJ_DTYPE_TXTAREA, '', false);
+        $this->initVar('cat_mailinglist', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('cat_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('cat_created', XOBJ_DTYPE_INT, time(), false);
         $this->initVar('dohtml', XOBJ_DTYPE_INT, false); // boolean
         $this->initVar('dosmiley', XOBJ_DTYPE_INT, true); // boolean
         $this->initVar('doxcode', XOBJ_DTYPE_INT, true); // boolean
@@ -79,8 +78,8 @@ class XnewsletterCat extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_CAT_ADD) : sprintf(_AM_XNEWSLETTER_CAT_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         // cat_name

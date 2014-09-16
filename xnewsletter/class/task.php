@@ -37,14 +37,14 @@ class XnewsletterTask extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
         $this->XoopsObject();
-        $this->initVar("task_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("task_letter_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("task_subscr_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("task_starttime", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("task_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("task_created", XOBJ_DTYPE_INT, time(), false);
+        $this->initVar('task_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('task_letter_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('task_subscr_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('task_starttime', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('task_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('task_created', XOBJ_DTYPE_INT, time(), false);
     }
 
     /**

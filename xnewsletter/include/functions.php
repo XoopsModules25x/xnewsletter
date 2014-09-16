@@ -25,7 +25,7 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
+
 include_once dirname(__FILE__) . '/common.php';
 
 /**
@@ -151,6 +151,22 @@ function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $no
     }
 
     return $ret;
+}
+
+/**
+ * @param string $str
+ * @param array $vars associative array
+ *
+ * @return string
+ */
+function xnewsletter_sprintf($str = '', $vars = array(), $char = '') {
+    if (!$str) return '';
+    if (count($vars) > 0) {
+        foreach ($vars as $k => $v) {
+            $str = str_replace($char . $k, $v, $str);
+        }
+    }
+    return $str;
 }
 
 /**

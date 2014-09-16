@@ -27,72 +27,67 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include_once dirname(__FILE__) . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
 $op = xnewsletterRequest::getString('op', 'list');
 
 switch ($op) {
-    case "list":
+    case 'list':
     default:
         echo $indexAdmin->addNavigation($currentFile);
-        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         echo "
             <table class='outer width75'>
                 <tr>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAINTENANCE_CAT . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAINTENANCE_DESCR . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_MAINTENANCE_PARAM . "</th>
-                    <th class='center'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
+                    <th>" . _AM_XNEWSLETTER_MAINTENANCE_CAT . "</th>
+                    <th>" . _AM_XNEWSLETTER_MAINTENANCE_DESCR . "</th>
+                    <th>" . _AM_XNEWSLETTER_MAINTENANCE_PARAM . "</th>
+                    <th>" . _AM_XNEWSLETTER_FORMACTION . "</th>
                 </tr>";
-        $class = "odd";
+        $class = 'odd';
 
         // delete protocols
         echo "   <tr class='{$class}'>";
-        $class = ($class == "even") ? "odd" : "even";
+        $class = ($class == 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
-        echo "            <td align='center' valign='middle'>protocol</td>";
-        echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL . "</td>";
-        echo "            <td valign='middle' align='center'>&nbsp;";
-        echo "            </td><td valign='middle' align='left'>";
-        $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden("op", "del_oldprotocol"));
-        $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
-        echo $cal_tray->render();
-        echo "            </td>";
+        echo "            <td>protocol</td>";
+        echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL . "</td>";
+        echo "            <td>&nbsp;</td>";
+        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new XoopsFormHidden('op', 'del_oldprotocol'));
+        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        echo "            <td>" . $cal_tray->render() . "</td>";
         echo "        </form>";
         echo "    </tr>";
 
         // delete unconfirmed registrations
         echo "   <tr class='{$class}'>";
-        $class = ($class == "even") ? "odd" : "even";
+        $class = ($class == 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
-        echo "            <td align='center' valign='middle'>subscr</td>";
-        echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEDATE . "</td>";
-        echo "            <td valign='middle' align='center'>";
+        echo "            <td>subscr</td>";
+        echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEDATE . "</td>";
         $cal = new XoopsFormTextDateSelect('', 'del_date', 15, time() - (84600 * 10));
-        echo $cal->render();
-        echo "            </td><td valign='middle' align='left'>";
+        echo "            <td>" . $cal->render() . "</td>";
         $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
         $cal_tray->addElement(new XoopsFormHidden("op", "del_oldsubscr"));
         $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
-        echo $cal_tray->render();
-        echo "            </td>";
+        echo "            <td>" . $cal_tray->render() . "</td>";
         echo "        </form>";
         echo "    </tr>";
 
         // delete invalid catsubscr
         echo "   <tr class='{$class}'>";
-        $class = ($class == "even") ? "odd" : "even";
+        $class = ($class == 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
-        echo "            <td align='center' valign='middle'>catsubscr</td>";
-        echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR . "</td>";
-        echo "            <td valign='middle' align='center'>&nbsp;";
-        echo "            </td><td valign='middle' align='left'>";
-        $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden("op", "del_invalid_catsubscr"));
-        $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
+        echo "            <td>catsubscr</td>";
+        echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR . "</td>";
+        echo "            <td>&nbsp;</td>";
+        echo "            <td>";
+        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_catsubscr'));
+        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo "            </td>";
         echo "        </form>";
@@ -102,15 +97,15 @@ switch ($op) {
 
         if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
             echo "   <tr class='{$class}'>";
-            $class = ($class == "even") ? "odd" : "even";
+            $class = ($class == 'even') ? 'odd' : 'even';
             echo "        <form action='{$currentFile}' method='post'>";
-            echo "            <td align='center' valign='middle'>ml</td>";
-            echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML . "</td>";
-            echo "            <td valign='middle' align='center'>&nbsp;";
-            echo "            </td><td valign='middle' align='left'>";
-            $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
-            $cal_tray->addElement(new XoopsFormHidden("op", "del_invalid_ml"));
-            $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
+            echo "            <td>ml</td>";
+            echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML . "</td>";
+            echo "            <td>&nbsp;</td>";
+            echo "            <td>";
+            $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+            $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_ml'));
+            $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
             echo $cal_tray->render();
             echo "            </td>";
             echo "        </form>";
@@ -119,15 +114,15 @@ switch ($op) {
 
         // delete invalid cat
         echo "   <tr class='{$class}'>";
-        $class = ($class == "even") ? "odd" : "even";
+        $class = ($class == 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
-        echo "            <td align='center' valign='middle'>cat</td>";
-        echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL . "</td>";
-        echo "            <td valign='middle' align='center'>&nbsp;";
-        echo "            </td><td valign='middle' align='left'>";
-        $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden("op", "del_invalid_cat"));
-        $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
+        echo "            <td>cat</td>";
+        echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL . "</td>";
+        echo "            <td>&nbsp;</td>";
+        echo "            <td>";
+        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_cat'));
+        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo "            </td>";
         echo "        </form>";
@@ -135,15 +130,15 @@ switch ($op) {
 
         // delete import
         echo "   <tr class='{$class}'>";
-        $class = ($class == "even") ? "odd" : "even";
+        $class = ($class == 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
-        echo "            <td align='center' valign='middle'>import</td>";
-        echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT . "</td>";
-        echo "            <td valign='middle' align='center'>&nbsp;";
-        echo "            </td><td valign='middle' align='left'>";
-        $cal_tray = new XoopsFormElementTray(" ", '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden("op", "del_import"));
-        $cal_tray->addElement(new XoopsFormButton("", "post", _SUBMIT, "submit"));
+        echo "            <td>import</td>";
+        echo "            <td>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT . "</td>";
+        echo "            <td>&nbsp;</td>";
+        echo "            <td>";
+        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new XoopsFormHidden('op', 'del_import'));
+        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo "            </td>";
         echo "        </form>";
@@ -158,21 +153,21 @@ switch ($op) {
             $result = $xoopsDB->queryF("REPAIR TABLE `{$xoopsDB->prefix('xnewsletter_import')}`");
             $result = $xoopsDB->queryF("OPTIMIZE TABLE `{$xoopsDB->prefix('xnewsletter_import')}`");
             $result = $xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('xnewsletter_import')}` AUTO_INCREMENT =1");
-
+            //
             $protocolObj = $xnewsletter->getHandler('protocol')->create();
-            $protocolObj->setVar("protocol_letter_id", 0);
-            $protocolObj->setVar("protocol_subscriber_id", 0);
-            $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " import] " . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
-            $protocolObj->setVar("protocol_success", true);
-            $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-            $protocolObj->setVar("protocol_created", time());
-
+            $protocolObj->setVar('protocol_letter_id', 0);
+            $protocolObj->setVar('protocol_subscriber_id', 0);
+            $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' import] ' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
+            $protocolObj->setVar('protocol_success', true);
+            $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+            $protocolObj->setVar('protocol_created', time());
+            //
             if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                 // IN PROGRESS
             }
             redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
         } else {
-            xoops_confirm(array("ok" => true, "", "op" => "del_import"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT);
+            xoops_confirm(array('ok' => true, 'op' => 'del_import'), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT);
         }
         break;
 
@@ -204,42 +199,41 @@ switch ($op) {
                     $sql .= " WHERE catsubscr_subscrid={$subscrArray['subscr_id']}";
                     $result = $xoopsDB->queryF($sql);
                     if (!$result) {
-                        $errors[] = "Error CAT-Subscr-ID: " . $subscrArray['subscr_id'] . " / " . $result->getHtmlErrors();
+                        $errors[] = 'Error CAT-Subscr-ID: ' . $subscrArray['subscr_id'] . ' / ' . $result->getHtmlErrors();
                     }
                     ++$deleted;
                 } else {
-                    $errors[] = "Error Subscr-ID: " . $subscrArray['subscr_id'] . " / " . $result->getHtmlErrors();
+                    $errors[] = 'Error Subscr-ID: ' . $subscrArray['subscr_id'] . ' / ' . $result->getHtmlErrors();
                 }
             }
 
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                    $protocolObj->setVar("protocol_letter_id", 0);
-                    $protocolObj->setVar("protocol_subscriber_id", 0);
-                    $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " reguser] " . $error);
-                    $protocolObj->setVar("protocol_success", false);
-                    $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                    $protocolObj->setVar("protocol_created", time());
+                    $protocolObj->setVar('protocol_letter_id', 0);
+                    $protocolObj->setVar('protocol_subscriber_id', 0);
+                    $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' reguser] ' . $error);
+                    $protocolObj->setVar('protocol_success', false);
+                    $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                    $protocolObj->setVar('protocol_created', time());
                     $xnewsletter->getHandler('protocol')->insert($protocolObj);
                 }
             }
 
             if ($deleted > 0) {
                 $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                $protocolObj->setVar("protocol_letter_id", 0);
-                $protocolObj->setVar("protocol_subscriber_id", 0);
-                $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " reguser] " . sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
-                $protocolObj->setVar("protocol_success", true);
-                $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                $protocolObj->setVar("protocol_created", time());
+                $protocolObj->setVar('protocol_letter_id', 0);
+                $protocolObj->setVar('protocol_subscriber_id', 0);
+                $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' reguser] ' . sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
+                $protocolObj->setVar('protocol_success', true);
+                $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                $protocolObj->setVar('protocol_created', time());
                 $xnewsletter->getHandler('protocol')->insert($protocolObj);
             }
-
             redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSEROK, $deleted));
         } else {
             if ($subscrCount > 0) {
-                xoops_confirm(array("ok" => true, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrCount, $_POST['del_date']));
+                xoops_confirm(array('ok' => true, 'del_date' => $_POST['del_date'], 'op' => 'del_oldsubscr'), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrCount, $_POST['del_date']));
             } else {
                 redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETENOTHING);
             }
@@ -254,18 +248,19 @@ switch ($op) {
             $result = $xoopsDB->queryF("ALTER TABLE `{$xoopsDB->prefix('xnewsletter_protocol')}` AUTO_INCREMENT =1");
 
             $protocolObj = $xnewsletter->getHandler('protocol')->create();
-            $protocolObj->setVar("protocol_letter_id", 0);
-            $protocolObj->setVar("protocol_subscriber_id", 0);
-            $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " prot] " . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
-            $protocolObj->setVar("protocol_success", true);
-            $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-            $protocolObj->setVar("protocol_created", time());
+            $protocolObj->setVar('protocol_letter_id', 0);
+            $protocolObj->setVar('protocol_subscriber_id', 0);
+            $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' prot] ' . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
+            $protocolObj->setVar('protocol_success', true);
+            $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+            $protocolObj->setVar('protocol_created', time());
 
             if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
+                // IN PROGRESS
             }
             redirect_header($currentFile, 3,_AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
         } else {
-            xoops_confirm(array("ok" => true, "", "op" => "del_oldprotocol"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL);
+            xoops_confirm(array('ok' => true, 'op' => 'del_oldprotocol'), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL);
         }
         break;
 
@@ -290,32 +285,32 @@ switch ($op) {
                 if ($result = $xoopsDB->query($sql)) {
                     ++$deleted;
                 } else {
-                    $errors[] = "Error delete catsubscr: " . $result->getHtmlErrors();
+                    $errors[] = 'Error delete catsubscr: ' . $result->getHtmlErrors();
                 }
             }
 
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                    $protocolObj->setVar("protocol_letter_id", 0);
-                    $protocolObj->setVar("protocol_subscriber_id", 0);
-                    $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " catsubscr] " . $error);
-                    $protocolObj->setVar("protocol_success", false);
-                    $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                    $protocolObj->setVar("protocol_created", time());
+                    $protocolObj->setVar('protocol_letter_id', 0);
+                    $protocolObj->setVar('protocol_subscriber_id', 0);
+                    $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' catsubscr] ' . $error);
+                    $protocolObj->setVar('protocol_success', false);
+                    $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                    $protocolObj->setVar('protocol_created', time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                         echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                     }
                 }
             } else {
                 $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                $protocolObj->setVar("protocol_letter_id", 0);
-                $protocolObj->setVar("protocol_subscriber_id", 0);
-                $status = $number_ids == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_NODATA :  sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids);
-                $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " catsubscr] " . $status);
-                $protocolObj->setVar("protocol_success", true);
-                $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                $protocolObj->setVar("protocol_created", time());
+                $protocolObj->setVar('protocol_letter_id', 0);
+                $protocolObj->setVar('protocol_subscriber_id', 0);
+                $status = $number_ids == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids);
+                $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' catsubscr] ' . $status);
+                $protocolObj->setVar('protocol_success', true);
+                $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                $protocolObj->setVar('protocol_created', time());
 
                 if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
@@ -323,7 +318,7 @@ switch ($op) {
                 redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids));
             }
         } else {
-            xoops_confirm(array("ok" => true, "", "op" => "del_invalid_catsubscr"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
+            xoops_confirm(array('ok' => true, 'op' => 'del_invalid_catsubscr'), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
         }
         break;
 
@@ -373,25 +368,25 @@ switch ($op) {
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                    $protocolObj->setVar("protocol_letter_id", 0);
-                    $protocolObj->setVar("protocol_subscriber_id", 0);
-                    $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " ml] " . $error);
-                    $protocolObj->setVar("protocol_success", false);
-                    $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                    $protocolObj->setVar("protocol_created", time());
+                    $protocolObj->setVar('protocol_letter_id', 0);
+                    $protocolObj->setVar('protocol_subscriber_id', 0);
+                    $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' ml] ' . $error);
+                    $protocolObj->setVar('protocol_success', false);
+                    $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                    $protocolObj->setVar('protocol_created', time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                         echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                     }
                 }
             } else {
                 $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                $protocolObj->setVar("protocol_letter_id", 0);
-                $protocolObj->setVar("protocol_subscriber_id", 0);
+                $protocolObj->setVar('protocol_letter_id', 0);
+                $protocolObj->setVar('protocol_subscriber_id', 0);
                 $status = $number_ids == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids);
-                $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " ml] " . $status);
-                $protocolObj->setVar("protocol_success", true);
-                $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                $protocolObj->setVar("protocol_created", time());
+                $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' ml] ' . $status);
+                $protocolObj->setVar('protocol_success', true);
+                $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                $protocolObj->setVar('protocol_created', time());
 
                 if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
@@ -400,7 +395,7 @@ switch ($op) {
             redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids));
 
         } else {
-          xoops_confirm(array("ok" => true, "", "op" => "del_invalid_ml"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML);
+          xoops_confirm(array('ok' => true, 'op' => 'del_invalid_ml'), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML);
         }
         break;
 
@@ -413,10 +408,10 @@ switch ($op) {
 
             $letterObjs = $xnewsletter->getHandler('letter')->getall();
             foreach ($letterObjs as $letter_id => $letterObj) {
-                $letter_cats_new = "";
+                $letter_cats_new = '';
                 $letter_cats_old = $letterObj->getVar("letter_cats");
                 $letter_cats = array();
-                $letter_cats = explode("|", $letter_cats_old);
+                $letter_cats = explode('|', $letter_cats_old);
 
                 foreach ($letter_cats as $cat_id) {
                     // check each cat and create new string 'letter_cats'
@@ -430,11 +425,11 @@ switch ($op) {
                 if ($letter_cats_old != $letter_cats_new) {
                     //update with correct value
                     $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
-                    $letterObj->setVar("letter_cats", $letter_cats_new);
+                    $letterObj->setVar('letter_cats', $letter_cats_new);
                     if ($xnewsletter->getHandler('letter')->insert($letterObj)) {
                         ++$update;
                     } else {
-                        $errors[] = "Error update cat: " . $result->getHtmlErrors();
+                        $errors[] = 'Error update cat: ' . $result->getHtmlErrors();
                     }
                 }
             }
@@ -442,25 +437,25 @@ switch ($op) {
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                    $protocolObj->setVar("protocol_letter_id", 0);
-                    $protocolObj->setVar("protocol_subscriber_id", 0);
-                    $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " cat] " . $error);
-                    $protocolObj->setVar("protocol_success", false);
-                    $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                    $protocolObj->setVar("protocol_created", time());
+                    $protocolObj->setVar('protocol_letter_id', 0);
+                    $protocolObj->setVar('protocol_subscriber_id', 0);
+                    $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' cat] ' . $error);
+                    $protocolObj->setVar('protocol_success', false);
+                    $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                    $protocolObj->setVar('protocol_created', time());
                     if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                         echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
                     }
                 }
             } else {
                 $protocolObj = $xnewsletter->getHandler('protocol')->create();
-                $protocolObj->setVar("protocol_letter_id", 0);
-                $protocolObj->setVar("protocol_subscriber_id", 0);
+                $protocolObj->setVar('protocol_letter_id', 0);
+                $protocolObj->setVar('protocol_subscriber_id', 0);
                 $status = $update == 0 ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $update);
-                $protocolObj->setVar("protocol_status", "[" . _MI_XNEWSLETTER_ADMENU11 . " cat] " . $status);
-                $protocolObj->setVar("protocol_success", true);
-                $protocolObj->setVar("protocol_submitter", $GLOBALS['xoopsUser']->uid());
-                $protocolObj->setVar("protocol_created", time());
+                $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' cat] ' . $status);
+                $protocolObj->setVar('protocol_success', true);
+                $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                $protocolObj->setVar('protocol_created', time());
 
                 if (!$xnewsletter->getHandler('protocol')->insert($protocolObj)) {
                     echo _AM_XNEWSLETTER_MAINTENANCE_ERROR;
@@ -468,8 +463,8 @@ switch ($op) {
             }
             redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $number_ids));
         } else {
-            xoops_confirm(array("ok" => true, "", "op" => "del_invalid_cat"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL);
+            xoops_confirm(array('ok' => true, 'op' => 'del_invalid_cat'), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL);
         }
         break;
 }
-include "admin_footer.php";
+include_once dirname(__FILE__) . '/admin_footer.php';

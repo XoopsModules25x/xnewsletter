@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,13 +43,13 @@ class XnewsletterTemplate extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("template_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("template_title", XOBJ_DTYPE_TXTBOX, '', true, 100);
-        $this->initVar("template_description", XOBJ_DTYPE_TXTAREA, '', false);
-        $this->initVar("template_content", XOBJ_DTYPE_TXTAREA, '', true);
-        $this->initVar("template_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("template_created", XOBJ_DTYPE_INT, time(), false);
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('template_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('template_title', XOBJ_DTYPE_TXTBOX, '', true, 100);
+        $this->initVar('template_description', XOBJ_DTYPE_TXTAREA, '', false);
+        $this->initVar('template_content', XOBJ_DTYPE_TXTAREA, '', true);
+        $this->initVar('template_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('template_created', XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -63,16 +62,16 @@ class XnewsletterTemplate extends XoopsObject
         global $xoopsDB;
 
         if ($action === false) {
-            $action = $_SERVER["REQUEST_URI"];
+            $action = $_SERVER['REQUEST_URI'];
         }
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_TEMPLATE_ADD) : sprintf(_AM_XNEWSLETTER_TEMPLATE_EDIT);
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         // template_title
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, "template_title", 50, 255, $this->getVar("template_title", 'e')), true);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, 'template_title', 50, 255, $this->getVar('template_title', 'e')), true);
 
         // template_description
         $template_description_textarea = new XoopsFormTextArea(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION, "template_description", $this->getVar("template_description", "e"), 5, 50);

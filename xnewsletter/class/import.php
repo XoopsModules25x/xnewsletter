@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,16 +43,16 @@ class XnewsletterImport extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("import_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("import_email", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_firstname", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_lastname", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_sex", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("import_cat_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("import_subscr_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("import_catsubscr_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("import_status", XOBJ_DTYPE_INT, false, false); // boolean
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('import_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('import_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('import_firstname', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('import_lastname', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('import_sex', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('import_cat_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('import_subscr_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('import_catsubscr_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('import_status', XOBJ_DTYPE_INT, false, false); // boolean
     }
 
     /**
@@ -74,26 +73,26 @@ class XnewsletterImport extends XoopsObject
 
         $title = _AM_XNEWSLETTER_IMPORT_SEARCH;
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form_select_import", $action, "post", true);
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        $form = new XoopsThemeForm($title, 'form_select_import', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $catCriteria = new CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
-        $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, "cat_id", "1");
+        $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, 'cat_id', '1');
         $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList($catCriteria));
         $form->addElement($cat_select, false);
 
-        $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
+        $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, 'plugin', $plugin, '<br />');
         $opt_import_type->setextra('onclick="document.forms.form_select_import.submit()"');
-        $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . "/plugins/");
+        $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . '/plugins/');
         $arrPlugin         = array();
         $currpluginhasform = 0;
         foreach ($aFiles as $file) {
             if (substr($file, strlen($file) - 4, 4) == '.php') {
                 $pluginName = str_replace('.php', '', $file);
-                $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/" . $pluginName . '.php';
+                $pluginFile = XNEWSLETTER_ROOT_PATH . '/plugins/' . $pluginName . '.php';
                 if (file_exists($pluginFile)) {
                     require_once($pluginFile);
                     $function    = 'xnewsletter_plugin_getinfo_' . $pluginName;

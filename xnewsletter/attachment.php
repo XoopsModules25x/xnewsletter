@@ -1,6 +1,6 @@
 <?php
 $currentFile = basename(__FILE__);
-include_once 'header.php';
+include_once dirname(__FILE__) . '/header.php';
 
 // We recovered the value of the argument op in the URL$
 $attachment_id 	= xnewsletterRequest::getInt('attachment_id', 0);

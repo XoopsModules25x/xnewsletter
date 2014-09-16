@@ -27,9 +27,9 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once dirname(__FILE__) . '/header.php';
 
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 
 error_reporting(0);
 $xoopsLogger->activated = false;

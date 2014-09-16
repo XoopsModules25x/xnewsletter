@@ -128,6 +128,8 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
                 $protocolObj->setVar('protocol_letter_id', $letter_id);
                 $protocolObj->setVar('protocol_subscriber_id', $subscr_id);
                 $protocolObj->setVar('protocol_status', _AM_XNEWSLETTER_TASK_ERROR_CREATE);
+                    $protocolObj->setVar('protocol_status_str_id', _XNEWSLETTER_PROTOCOL_STATUS_ERROR_CREATE_TASK);
+                    $protocolObj->setVar('protocol_status_vars', array());
                 $protocolObj->setVar('protocol_success', false);
                 $protocolObj->setVar('protocol_submitter', $uid);
                 $protocolObj->setVar('protocol_created', time());
@@ -388,13 +390,20 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
                 if ($mail->Send()) {
                     if ($subscr_id == 0) {
-                        $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS_TEST . " (" . $recipient['address'] . ")";
+                        $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS_TEST . " (" . $recipient['address'] . ")"; // old style
+                        $protocol_status_str_id = _XNEWSLETTER_PROTOCOL_STATUS_OK_SEND_TEST; // new from v1.3
+                        $protocol_status_vars = array('%recipient' => $recipient['address']); // new from v1.3
                     } else {
-                        $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS;
+                        $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS; // old style
+                        $protocol_status_str_id = _XNEWSLETTER_PROTOCOL_STATUS_OK_SEND; // new from v1.3
+                        $protocol_status_vars = array(); // new from v1.3
                     }
                     $protocol_success = true;
                 } else {
-                    $protocol_status = _AM_XNEWSLETTER_FAILED . "-> " . $mail->ErrorInfo;
+                    $protocol_status = _AM_XNEWSLETTER_FAILED . "-> " . $mail->ErrorInfo; // old style
+                    $protocol_status_str_id = _XNEWSLETTER_PROTOCOL_STATUS_ERROR_SEND; // new from v1.3
+                    $protocol_status_vars = array('%error' => $mail->ErrorInfo); // new from v1.3
+
                     $protocol_success = false;
                     ++$count_err;
                 }
@@ -412,7 +421,9 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $protocolObj = $xnewsletter->getHandler('protocol')->create();
                 $protocolObj->setVar('protocol_letter_id', $letter_id);
                 $protocolObj->setVar('protocol_subscriber_id', $subscr_id);
-                $protocolObj->setVar('protocol_status', $protocol_status);
+                $protocolObj->setVar('protocol_status', $protocol_status); // old style
+                $protocolObj->setVar('protocol_status_str_id', $protocol_status_str_id); // new from v1.3
+                $protocolObj->setVar('protocol_status_vars', $protocol_status_vars); // new from v1.3
                 $protocolObj->setVar('protocol_success', $protocol_success);
                 $protocolObj->setVar('protocol_submitter', $uid);
                 $protocolObj->setVar('protocol_created', time());
@@ -427,10 +438,12 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
             unset($mail);
 
         } catch (phpmailerException $e) {
+// IN PROGRESS
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->errorMessage(); //error messages from PHPMailer
             ++$count_err;
             $protocol_success = false;
         } catch (Exception $e) {
+// IN PROGRESS
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->getMessage(); //error messages from anything else!
             ++$count_err;
             $protocol_success = false;
@@ -439,15 +452,16 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
 
     //create final protocol item
     if ($count_err > 0) {
-        $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_NUMBER;
-        $protocol_status = str_replace("%e", $count_err, $protocol_status);
-        $protocol_status = str_replace("%t", $count_total, $protocol_status);
+// IN PROGRESS
+        $protocol_status = xnewsletter_sprintf(_AM_XNEWSLETTER_SEND_ERROR_NUMBER, array('%e' => $count_err, '%t' => $count_total));
         $protocol_success = false;
     } else {
         $protocol_success = true;
         if ($count_total > 0) {
-            $protocol_status = str_replace("%t", $count_total, _AM_XNEWSLETTER_SEND_SUCCESS_NUMBER);
+// IN PROGRESS
+            $protocol_status = xnewsletter_sprintf(_AM_XNEWSLETTER_SEND_SUCCESS_NUMBER, array('%t' => $count_total));
         } else {
+// IN PROGRESS
             $protocol_status = '';
         }
     }
@@ -455,6 +469,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
     $protocolObj->setVar('protocol_letter_id', $letter_id);
     $protocolObj->setVar('protocol_subscriber_id', 0);
     $protocolObj->setVar('protocol_status', $protocol_status);
+// IN PROGRESS
     $protocolObj->setVar('protocol_success', $protocol_success);
     $protocolObj->setVar('protocol_submitter', $uid);
     $protocolObj->setVar('protocol_created', time());

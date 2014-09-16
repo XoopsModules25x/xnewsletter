@@ -1,5 +1,5 @@
 <?php
-require XNEWSLETTER_ROOT_PATH . "/include/phpmailer/PHPMailerAutoload.php";
+require XNEWSLETTER_ROOT_PATH . '/include/phpmailer/PHPMailerAutoload.php';
 
 class XnewsletterMailer extends PHPMailer {
     public function GetMIMEHeader() {

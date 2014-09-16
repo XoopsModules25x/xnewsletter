@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,19 +43,19 @@ class XnewsletterSubscr extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("subscr_id", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("subscr_email", XOBJ_DTYPE_TXTBOX, '', false, 100);
-        $this->initVar("subscr_firstname", XOBJ_DTYPE_TXTBOX, '', true, 100);
-        $this->initVar("subscr_lastname", XOBJ_DTYPE_TXTBOX, '', false, 100);
-        $this->initVar("subscr_uid", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("subscr_sex", XOBJ_DTYPE_TXTBOX, '', false, 100);
-        $this->initVar("subscr_submitter", XOBJ_DTYPE_INT, null, false);
-        $this->initVar("subscr_created", XOBJ_DTYPE_INT, time(), false);
-        $this->initVar("subscr_actkey", XOBJ_DTYPE_TXTBOX, '', false, 255);
-        $this->initVar("subscr_ip", XOBJ_DTYPE_TXTBOX, xoops_getenv('REMOTE_ADDR'), false, 32);
-        $this->initVar("subscr_activated", XOBJ_DTYPE_INT, 0, false);  // IN PROGRESS: should be false or timestamp
-        $this->initVar("subscr_actoptions", XOBJ_DTYPE_ARRAY, array(), false);
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->initVar('subscr_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('subscr_email', XOBJ_DTYPE_TXTBOX, '', false, 100);
+        $this->initVar('subscr_firstname', XOBJ_DTYPE_TXTBOX, '', true, 100);
+        $this->initVar('subscr_lastname', XOBJ_DTYPE_TXTBOX, '', false, 100);
+        $this->initVar('subscr_uid', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('subscr_sex', XOBJ_DTYPE_TXTBOX, '', false, 100);
+        $this->initVar('subscr_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('subscr_created', XOBJ_DTYPE_INT, time(), false);
+        $this->initVar('subscr_actkey', XOBJ_DTYPE_TXTBOX, '', false, 255);
+        $this->initVar('subscr_ip', XOBJ_DTYPE_TXTBOX, xoops_getenv('REMOTE_ADDR'), false, 32);
+        $this->initVar('subscr_activated', XOBJ_DTYPE_INT, 0, false);  // IN PROGRESS: should be false or timestamp
+        $this->initVar('subscr_actoptions', XOBJ_DTYPE_ARRAY, array(), false);
     }
 
     /**
@@ -72,7 +71,7 @@ class XnewsletterSubscr extends XoopsObject
             $action = $_SERVER['REQUEST_URI'];
         }
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         $form = new XoopsThemeForm(_MA_XNEWSLETTER_SUBSCRIPTION_SEARCH, 'formsearch', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -116,7 +115,7 @@ class XnewsletterSubscr extends XoopsObject
             $action = $_SERVER['REQUEST_URI'];
         }
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         $title = $this->isNew() ? sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_ADD) : sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_EDIT);
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
@@ -237,7 +236,7 @@ class XnewsletterSubscr extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_SUBSCR_ADD) : sprintf(_AM_XNEWSLETTER_SUBSCR_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 

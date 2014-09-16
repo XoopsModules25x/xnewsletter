@@ -27,10 +27,10 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once dirname(__FILE__) . '/header.php';
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 //
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -70,4 +70,4 @@ if ($protocolCount > 0) {
     }
 }
 
-include 'footer.php';
+include_once dirname(__FILE__) . '/footer.php';

@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once dirname(__FILE__) . '/header.php';
 
-echo "<br/>start cron job<br/>";
+echo '<br/>start cron job<br/>';
 
-require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/task.inc.php";
+require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
 // execute all pending tasks
 $result_exec = xnewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_packages'), 0);
 

@@ -27,7 +27,6 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
 /**
@@ -44,7 +43,7 @@ class XnewsletterCatsubscr extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('catsubscr_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('catsubscr_catid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('catsubscr_subscrid', XOBJ_DTYPE_INT, null, false);
@@ -68,7 +67,7 @@ class XnewsletterCatsubscr extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_CATSUBSCR_ADD) : sprintf(_AM_XNEWSLETTER_CATSUBSCR_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -131,7 +130,7 @@ class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_catsubscr", "XnewsletterCatsubscr", "catsubscr_id", "catsubscr_catid");
+        parent::__construct($db, 'xnewsletter_catsubscr', 'XnewsletterCatsubscr', 'catsubscr_id', 'catsubscr_catid');
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

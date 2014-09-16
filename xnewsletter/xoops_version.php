@@ -49,7 +49,7 @@ $modversion['license_url'] = 'www.gnu.org/licenses/gpl-2.0.html/';
 
 //About
 $modversion['module_status']       = 'Beta 1';
-$modversion['release_date']        = '2014/08/28';
+$modversion['release_date']        = '2014/09/16';
 //$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = '';
 $modversion['demo_site_name']      = '';
@@ -119,6 +119,7 @@ global $xoopsUser;
 $modversion['hasMain'] = true;
 
 $subcount = 1;
+$modversion['sub'] = array();
 
 // check user rights
 $gperm_handler = xoops_gethandler('groupperm');
@@ -408,13 +409,10 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_TIM
 $modversion['config'][$i]['formtype'] = 'textbox';
 $modversion['config'][$i]['valuetype'] = 'int';
 $modversion['config'][$i]['default'] = '60';
-
 unset($i);
 
 // Blocks
-$b = 0;
-
-$b++;
+$b = 1;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_subscrinfo.php',
     'name'          => _MI_XNEWSLETTER_SUBSCRINFO_BLOCK,
@@ -425,8 +423,7 @@ $modversion['blocks'][$b] = array(
     'can_clone'     => true,
     'options'       => ''
 );
-
-$b++;
+++$b;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_catsubscr.php',
     'name'          => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_RECENT,
@@ -437,8 +434,7 @@ $modversion['blocks'][$b] = array(
     'can_clone'     => true,
     'options'       => 'recent|5|0|0'
 );
-
-$b++;
+++$b;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_catsubscr.php',
     'name'          => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_DAY,
@@ -450,7 +446,7 @@ $modversion['blocks'][$b] = array(
     'options'       => 'day|5|0|0'
 );
 
-$b++;
+++$b;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_letter.php',
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_RECENT,
@@ -461,8 +457,7 @@ $modversion['blocks'][$b] = array(
     'can_clone'     => true,
     'options'       => 'recent|5|0|0'
 );
-
-$b++;
+++$b;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_letter.php',
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_DAY,
@@ -473,8 +468,7 @@ $modversion['blocks'][$b] = array(
     'can_clone'     => true,
     'options'       => 'day|5|0|0'
 );
-
-$b++;
+++$b;
 $modversion['blocks'][$b] = array(
     'file'          => 'blocks_letter.php' ,
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_RANDOM,
@@ -485,3 +479,7 @@ $modversion['blocks'][$b] = array(
     'can_clone'     => true,
     'options'       => 'random|5|0|0'
 );
+unset($b);
+
+// Notification
+$modversion['hasNotification'] = false;

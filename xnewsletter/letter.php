@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once 'header.php';
+include_once dirname(__FILE__) . '/header.php';
 
 $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
 $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
@@ -61,7 +61,7 @@ switch ($op) {
         $xoopsTpl->assign('permissionChangeOthersSubscriptions', $permissionChangeOthersSubscriptions);
         // get search subscriber form
         if ($permissionChangeOthersSubscriptions) {
-            include_once(XOOPS_ROOT_PATH . '/class/xoopsformloader.php');
+            include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
             $form = new XoopsThemeForm(_AM_XNEWSLETTER_FORMSEARCH_SUBSCR_EXIST, 'form_search', 'subscription.php', 'post', true);
             $form->setExtra('enctype="multipart/form-data"');
             $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, 'subscr_email', 60, 255, '', true));
@@ -109,7 +109,7 @@ switch ($op) {
     case 'show_preview':
     case 'show_letter_preview':
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_preview.tpl";
-        include XOOPS_ROOT_PATH . '/header.php';
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -178,7 +178,7 @@ switch ($op) {
 
     case 'print_letter':
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_print.tpl";
-        include XOOPS_ROOT_PATH . '/header.php';
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         //$xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -356,7 +356,7 @@ switch ($op) {
 
     case 'edit_letter':
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter.tpl";
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
         //
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -459,7 +459,7 @@ switch ($op) {
             }
             // upload attachments
             $uploadedFiles = array();
-            include_once XOOPS_ROOT_PATH . "/class/uploader.php";
+            include_once XOOPS_ROOT_PATH . '/class/uploader.php';
             $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/';
             // check upload_dir
             if (!is_dir($uploaddir)) {
@@ -523,6 +523,8 @@ switch ($op) {
                     break;
             }
             $protocolObj->setVar('protocol_status', _AM_XNEWSLETTER_LETTER_ACTION_SAVED);
+            $protocolObj->setVar('protocol_status_str_id', _XNEWSLETTER_PROTOCOL_STATUS_SAVED); // new from v1.3
+            $protocolObj->setVar('protocol_status_vars', array()); // new from v1.3
             $protocolObj->setVar('protocol_submitter', $xoopsUser->uid());
             $protocolObj->setVar('protocol_created', time());
             //
@@ -607,4 +609,4 @@ switch ($op) {
         break;
 }
 
-include 'footer.php';
+include_once dirname(__FILE__) . '/footer.php';

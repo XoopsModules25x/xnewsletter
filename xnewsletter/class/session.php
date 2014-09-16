@@ -19,7 +19,6 @@
  * @author          Harry Fuecks (PHP Anthology Volume II)
  * @version         svn:$id$
  */
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 include_once dirname(dirname(__FILE__)) . '/include/common.php';
 
