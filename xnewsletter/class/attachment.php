@@ -27,7 +27,7 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterAttachment
@@ -42,8 +42,8 @@ class XnewsletterAttachment extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
+        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('attachment_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('attachment_letter_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('attachment_name', XOBJ_DTYPE_TXTBOX, null, false, 200);
@@ -61,8 +61,6 @@ class XnewsletterAttachment extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
@@ -75,7 +73,9 @@ class XnewsletterAttachment extends XoopsObject
 
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_NAME, $this->getVar('attachment_name')));
 
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SIZE, "<span title='" . $this->getVar('attachment_size') . " B'>" . xnewsletter_bytesToSize1024($this->getVar('attachment_size')) . "</span>"));
+        $form->addElement(
+            new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SIZE, "<span title='" . $this->getVar('attachment_size') . " B'>" . xnewsletter_bytesToSize1024($this->getVar('attachment_size')) . "</span>")
+        );
 
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_TYPE, $this->getVar('attachment_type')));
 
@@ -102,7 +102,7 @@ class XnewsletterAttachment extends XoopsObject
 class XnewsletterAttachmentHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -113,27 +113,29 @@ class XnewsletterAttachmentHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, 'xnewsletter_attachment', 'XnewsletterAttachment', 'attachment_id', 'attachment_letter_id');
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 
     /**
      * Delete attachment ({@link attachment} object) and file from filesystem
      *
-     * @param object $object
-     * @param bool $force
+     * @param object $attachmentObj
+     * @param bool   $force
      *
+     * @internal param object $object
      * @return bool
      */
     public function delete($attachmentObj, $force = false)
     {
-        $res = true;
-        $attachment_letter_id = (int) $attachmentObj->getVar('attachment_letter_id');
-        $attachment_name = (string) $attachmentObj->getVar('attachment_name');
+        $res                  = true;
+        $attachment_letter_id = (int)$attachmentObj->getVar('attachment_letter_id');
+        $attachment_name      = (string)$attachmentObj->getVar('attachment_name');
         //
         if ($res = parent::delete($attachmentObj, $force)) {
             // delete file from filesystem
             @unlink(XOOPS_UPLOAD_PATH . $this->xnewsletter->getConfig('xn_attachment_path') . $attachment_letter_id . '/' . $attachment_name);
         }
+
         return $res;
     }
 }

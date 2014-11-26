@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GNU General Public License 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GNU General Public License 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -42,12 +43,12 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWTEMPLATE, '?op=new_template', 'add');
         echo $indexAdmin->renderButton();
         //
-        $limit = $xnewsletter->getConfig('adminperpage');
+        $limit            = $xnewsletter->getConfig('adminperpage');
         $templateCriteria = new CriteriaCompo();
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder('DESC');
         $templatesCount = $xnewsletter->getHandler('template')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start          = xnewsletterRequest::getInt('start', 0);
         $templateCriteria->setStart($start);
         $templateCriteria->setLimit($limit);
         $templateObjs = $xnewsletter->getHandler('template')->getAll($templateCriteria);
@@ -78,9 +79,9 @@ switch ($op) {
                 echo "<td>" . $template_id . "</td>";
                 echo "<td>" . $templateObj->getVar("template_title") . "</td>";
                 echo "<td>" . $templateObj->getVar("template_description") . "</td>";
-                echo "<td>" . XoopsUser::getUnameFromId($templateObj->getVar("template_submitter"), "S") . "</td>";
-                echo "<td>" . formatTimeStamp($templateObj->getVar("template_created"), "S") . "</td>";
-                echo "<td nowrap='nowrap'>";
+                echo "<td class='center'>" . XoopsUser::getUnameFromId($templateObj->getVar("template_submitter"), "S") . "</td>";
+                echo "<td class='center'>" . formatTimeStamp($templateObj->getVar("template_created"), "S") . "</td>";
+                echo "<td class='center' nowrap='nowrap'>";
                 echo "    <a href='?op=edit_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
                 echo "    &nbsp;";
                 echo "    <a href='?op=delete_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
@@ -100,13 +101,13 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $templateObj = $xnewsletter->getHandler('template')->create();
-        $form = $templateObj->getForm();
+        $form        = $templateObj->getForm();
         $form->display();
         break;
 
     case 'save_template':
         if (!$GLOBALS['xoopsSecurity']->check()) {
-           redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+            redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         $templateObj = $xnewsletter->getHandler('template')->get($template_id);
         $templateObj->setVar("template_title", xnewsletterRequest::getString('template_title', ''));
@@ -131,7 +132,7 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $templateObj = $xnewsletter->getHandler('template')->get($template_id);
-        $form = $templateObj->getForm();
+        $form        = $templateObj->getForm();
         $form->display();
         break;
 
@@ -147,8 +148,12 @@ switch ($op) {
                 echo $obj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array('ok' => true, 'template_id' => $template_id, 'op' => 'delete_template'), $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar('template_title')));
+            xoops_confirm(
+                array('ok' => true, 'template_id' => $template_id, 'op' => 'delete_template'),
+                $_SERVER['REQUEST_URI'],
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar('template_title'))
+            );
         }
-    break;
+        break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

@@ -27,7 +27,7 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterCatsubscr
@@ -42,8 +42,8 @@ class XnewsletterCatsubscr extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
+        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('catsubscr_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('catsubscr_catid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('catsubscr_subscrid', XOBJ_DTYPE_INT, null, false);
@@ -59,8 +59,6 @@ class XnewsletterCatsubscr extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
@@ -88,11 +86,13 @@ class XnewsletterCatsubscr extends XoopsObject
         $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, '&nbsp;');
 
         $quit_now = new XoopsFormRadio('', 'catsubscr_quit_now', _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE);
-        $quit_now->addOptionArray(array(
-            _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NONE,
-            _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NOW => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NOW,
-            _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_REMOVE => _AM_XNEWSLETTER_CATSUBSCR_QUIT_REMOVE
-        ));
+        $quit_now->addOptionArray(
+            array(
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE   => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NONE,
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NOW    => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NOW,
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_REMOVE => _AM_XNEWSLETTER_CATSUBSCR_QUIT_REMOVE
+            )
+        );
         $quited_tray->addElement($quit_now, false);
         $quited_tray->addElement(new XoopsFormLabel('', $this->getVar('catsubscr_quited')));
         $form->addElement($quited_tray, false);
@@ -120,7 +120,7 @@ class XnewsletterCatsubscr extends XoopsObject
 class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -131,6 +131,6 @@ class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, 'xnewsletter_catsubscr', 'XnewsletterCatsubscr', 'catsubscr_id', 'catsubscr_catid');
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 }

@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GNU General Public License 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GNU General Public License 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -44,7 +45,7 @@ switch ($op) {
         $mailinglistCriteria->setSort('mailinglist_id ASC, mailinglist_email');
         $mailinglistCriteria->setOrder('ASC');
         $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start            = xnewsletterRequest::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
         $mailinglistObjs = $xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
@@ -83,8 +84,9 @@ switch ($op) {
                 echo "<td>" . $mailinglistObj->getVar("mailinglist_unsubscribe") . "</td>";
                 echo "<td>" . formatTimeStamp($mailinglistObj->getVar("mailinglist_created"), "S") . "</td>";
                 echo "<td>";
-                echo "    <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='"._EDIT."' title='"._EDIT . "' /></a>";
-                echo "    <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='"._DELETE."' title='" . _DELETE . "' /></a>";
+                echo "    <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "    <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE
+                    . "' /></a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -101,7 +103,7 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $mailinglistObj = $xnewsletter->getHandler('mailinglist')->create();
-        $form = $mailinglistObj->getForm();
+        $form           = $mailinglistObj->getForm();
         $form->display();
         break;
 
@@ -138,24 +140,28 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $mailinglistObj = $xnewsletter->getHandler('mailinglist')->get($_REQUEST['mailinglist_id']);
-        $form = $mailinglistObj->getForm();
+        $form           = $mailinglistObj->getForm();
         $form->display();
         break;
 
     case 'delete_mailinglist':
         $mailinglistObj = $xnewsletter->getHandler('mailinglist')->get($_REQUEST['mailinglist_id']);
         if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
-        if (!$GLOBALS['xoopsSecurity']->check()) {
-            redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
-        }
-        if ($xnewsletter->getHandler('mailinglist')->delete($mailinglistObj)) {
-            redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
+            if (!$GLOBALS['xoopsSecurity']->check()) {
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+            }
+            if ($xnewsletter->getHandler('mailinglist')->delete($mailinglistObj)) {
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
+            } else {
+                echo $mailinglistObj->getHtmlErrors();
+            }
         } else {
-            echo $mailinglistObj->getHtmlErrors();
-        }
-        } else {
-            xoops_confirm(array('ok' => true, 'mailinglist_id' => $_REQUEST['mailinglist_id'], 'op' => 'delete_mailinglist'), $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar('mailinglist_email')));
+            xoops_confirm(
+                array('ok' => true, 'mailinglist_id' => $_REQUEST['mailinglist_id'], 'op' => 'delete_mailinglist'),
+                $_SERVER['REQUEST_URI'],
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar('mailinglist_email'))
+            );
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

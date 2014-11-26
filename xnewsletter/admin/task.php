@@ -17,11 +17,11 @@
  * @package         xnewsletter
  * @since           2.5.x
  * @author          XOOPS Development Team ( name@site.com ) - ( http://xoops.org )
- * @version         $Id: task.php 12491 2014-04-25 13:21:55Z beckmi $
+ * @version         $Id: task.php 12787 2014-09-17 10:58:25Z beckmi $
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
@@ -35,7 +35,7 @@ switch ($op) {
         $taskCriteria->setSort('task_id');
         $taskCriteria->setOrder('ASC');
         $taskCounts = $xnewsletter->getHandler('task')->getCount();
-        $taskObjs = $xnewsletter->getHandler('task')->getAll($taskCriteria);
+        $taskObjs   = $xnewsletter->getHandler('task')->getAll($taskCriteria);
 
         //Affichage du tableau
         echo "
@@ -55,7 +55,7 @@ switch ($op) {
                     echo "<tr class='{$class}'>";
                     $class = ($class == 'even') ? 'odd' : 'even';
 
-                    $letterObj = $xnewsletter->getHandler('letter')->get($taskObj->getVar('task_letter_id'));
+                    $letterObj    = $xnewsletter->getHandler('letter')->get($taskObj->getVar('task_letter_id'));
                     $title_letter = $letterObj->getVar('letter_title');
                     echo "<td>" . $title_letter . "</td>";
                     if ($taskObj->getVar('task_subscr_id') == 0) {
@@ -75,7 +75,7 @@ switch ($op) {
                     echo "<td>" . formatTimeStamp($taskObj->getVar('task_created'), 'mysql') . "</td>";
                     echo "<td>";
                     echo "
-                    <a href='?op=delete_task&task_id=" . $taskObj->getVar('task_id') . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>
+                    <a href='?op=delete_task&task_id=" . $taskObj->getVar('task_id') . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
                     </td>";
                     echo "</tr>";
                 }
@@ -102,4 +102,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

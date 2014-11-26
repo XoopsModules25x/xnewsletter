@@ -27,7 +27,7 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterLetter
@@ -42,8 +42,8 @@ class XnewsletterLetter extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
+        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('letter_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('letter_title', XOBJ_DTYPE_TXTBOX, null, true, 100);
         $this->initVar('letter_content', XOBJ_DTYPE_TXTAREA, null, true);
@@ -66,8 +66,6 @@ class XnewsletterLetter extends XoopsObject
      */
     public function getForm($action = false, $admin_aerea = false)
     {
-        global $xoopsDB, $xoopsUser, $pathImageIcon;
-
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
@@ -90,7 +88,7 @@ class XnewsletterLetter extends XoopsObject
         $editor_configs['width']  = '100%';
         $editor_configs['height'] = '800px';
         $editor_configs['editor'] = $this->xnewsletter->getConfig('xnewsletter_editor');
-        $letter_content_editor = new XoopsFormEditor(_AM_XNEWSLETTER_LETTER_CONTENT, 'letter_content', $editor_configs);
+        $letter_content_editor    = new XoopsFormEditor(_AM_XNEWSLETTER_LETTER_CONTENT, 'letter_content', $editor_configs);
         $letter_content_editor->setDescription(_AM_XNEWSLETTER_LETTER_CONTENT_DESC);
         $form->addElement($letter_content_editor, true);
 
@@ -103,10 +101,12 @@ class XnewsletterLetter extends XoopsObject
             $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
         }
         $templateFiles = array();
-        if (!$dirHandler = @opendir($template_path)) die(str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
+        if (!$dirHandler = @opendir($template_path)) {
+            die(str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
+        }
         while ($filename = readdir($dirHandler)) {
             if (($filename != '.') and ($filename != '..') and ($filename != 'index.html')) {
-                $info = pathinfo($filename);
+                $info            = pathinfo($filename);
                 $templateFiles[] = basename($filename, '.' . $info['extension']);
             }
         }
@@ -119,9 +119,9 @@ class XnewsletterLetter extends XoopsObject
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder("DESC");
         $templateCount = $this->xnewsletter->getHandler('template')->getCount();
-        if($templateCount > 0) {
+        if ($templateCount > 0) {
             $templateObjs = $this->xnewsletter->getHandler('template')->getAll($templateCriteria);
-            foreach($templateObjs as $templateObj) {
+            foreach ($templateObjs as $templateObj) {
                 $template_select->addOption("db:" . $templateObj->getVar('template_id'), 'db:' . $templateObj->getVar('template_title'));
             }
         }
@@ -130,16 +130,16 @@ class XnewsletterLetter extends XoopsObject
         // letter_cats
         $gperm_handler  = xoops_gethandler('groupperm');
         $member_handler = xoops_gethandler('member');
-        $groups = $member_handler->getGroupsByUser($xoopsUser->uid());
-        $catCriteria = new CriteriaCompo();
+        $groups         = $member_handler->getGroupsByUser($GLOBALS['xoopsUser']->uid());
+        $catCriteria    = new CriteriaCompo();
         $catCriteria->setSort('cat_id');
         $catCriteria->setOrder('ASC');
         $letter_cats = explode('|', $this->getVar('letter_cats'));
-        $cat_select = new XoopsFormCheckBox(_AM_XNEWSLETTER_LETTER_CATS, 'letter_cats', $letter_cats);
-        $catObjs = $this->xnewsletter->getHandler('cat')->getAll($catCriteria);
+        $cat_select  = new XoopsFormCheckBox(_AM_XNEWSLETTER_LETTER_CATS, 'letter_cats', $letter_cats);
+        $catObjs     = $this->xnewsletter->getHandler('cat')->getAll($catCriteria);
         foreach ($catObjs as $cat_id => $catObj) {
             $cat_name = $catObj->getVar('cat_name');
-            $show = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid());
+            $show     = $gperm_handler->checkRight('newsletter_create_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid());
             if ($show == 1) {
                 $cat_select->addOption($cat_id, $cat_name);
             }
@@ -159,18 +159,18 @@ class XnewsletterLetter extends XoopsObject
             $attachmentCriteria->setOrder('ASC');
             $attachmentObjs = $this->xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
         }
-        $i = 1;
+        $i                      = 1;
         $remove_attachment_tray = array();
         foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
             $delete_attachment_tray = new XoopsFormElementTray('', '&nbsp;&nbsp;');
-                $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "existing_attachments_mode[{$attachment_id}]", $attachmentObj->getVar("attachment_mode"), '&nbsp;');
-                $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
-                $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
-                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
+            $mode_select            = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "existing_attachments_mode[{$attachment_id}]", $attachmentObj->getVar("attachment_mode"), '&nbsp;');
+            $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
+            $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
+            //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
             $delete_attachment_tray->addElement($mode_select);
             $delete_attachment_tray->addElement(new XoopsFormLabel('', $attachmentObj->getVar('attachment_name')));
-                $delete_button = new XoopsFormButton('', "delete_attachment_{$i}", _DELETE, 'submit');
-                $delete_button->setExtra("onclick='this.form.elements.op.value=\"delete_attachment\";this.form.elements.deleted_attachment_id.value=\"{$attachment_id}\";'");
+            $delete_button = new XoopsFormButton('', "delete_attachment_{$i}", _DELETE, 'submit');
+            $delete_button->setExtra("onclick='this.form.elements.op.value=\"delete_attachment\";this.form.elements.deleted_attachment_id.value=\"{$attachment_id}\";'");
             $delete_attachment_tray->addElement($delete_button);
             $attachment_tray->addElement($delete_attachment_tray);
             ++$i;
@@ -180,10 +180,10 @@ class XnewsletterLetter extends XoopsObject
         // new_attachments
         for ($j = $i; $j < ($this->xnewsletter->getConfig('xn_maxattachments') + 1); ++$j) {
             $add_attachment_tray = new XoopsFormElementTray('', '&nbsp;&nbsp;');
-                $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "new_attachments_mode[{$j}]", _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, '&nbsp;');
-                $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
-                $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
-                //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
+            $mode_select         = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, "new_attachments_mode[{$j}]", _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, '&nbsp;');
+            $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
+            $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
+            //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO); // for future features
             $add_attachment_tray->addElement($mode_select);
             $add_attachment_tray->addElement(new XoopsFormFile('', "new_attachment_index={$j}", $this->xnewsletter->getConfig('xn_maxsize')));
             $attachment_tray->addElement($add_attachment_tray);
@@ -202,9 +202,9 @@ class XnewsletterLetter extends XoopsObject
         $opt_tray->addElement($opt_nextaction);
 
         // letter_email_test
-        $letter_email_test = $this->isNew() ? $xoopsUser->email() : $this->getVar('letter_email_test');
+        $letter_email_test = $this->isNew() ? $GLOBALS['xoopsUser']->email() : $this->getVar('letter_email_test');
         if ($letter_email_test == '') {
-            $letter_email_test = $xoopsUser->email();
+            $letter_email_test = $GLOBALS['xoopsUser']->email();
         }
         $opt_tray->addElement(new XoopsFormText(_AM_XNEWSLETTER_LETTER_EMAIL_TEST . ':&nbsp;', 'letter_email_test', 50, 255, $letter_email_test), false);
         $form->addElement($opt_tray);
@@ -213,7 +213,7 @@ class XnewsletterLetter extends XoopsObject
         $accountsCriteria = new CriteriaCompo();
         $accountsCriteria->setSort('accounts_id');
         $accountsCriteria->setOrder('ASC');
-        $accountsCount = $this->xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
+        $accountsCount   = $this->xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
         $account_default = 0;
         if ($this->isNew()) {
             $accountsObjs = $this->xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
@@ -270,7 +270,7 @@ class XnewsletterLetter extends XoopsObject
 class XnewsletterLetterHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -281,6 +281,6 @@ class XnewsletterLetterHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, 'xnewsletter_letter', 'XnewsletterLetter', 'letter_id', 'letter_title');
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 }

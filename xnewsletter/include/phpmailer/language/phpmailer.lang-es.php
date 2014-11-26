@@ -1,8 +1,9 @@
 <?php
 /**
  * Spanish PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Matt Sturdy <matt.sturdy@gmail.com>
+ * @author  Matt Sturdy <matt.sturdy@gmail.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: No se pudo autentificar.';

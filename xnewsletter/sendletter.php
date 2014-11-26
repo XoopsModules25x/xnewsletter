@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Wed 2012/11/28 22:18:22 :  Exp $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/header.php';
+include_once __DIR__ . '/header.php';
 
 $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_empty.tpl";
 include_once XOOPS_ROOT_PATH . '/header.php';
@@ -40,12 +41,12 @@ $breadcrumb = new xnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-if (!$xoopsUser) {
+if (!$GLOBALS['xoopsUser']) {
     //Guest no Access !!!
     redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
-$op = xnewsletterRequest::getString('op', 'list');
+$op        = xnewsletterRequest::getString('op', 'list');
 $letter_id = xnewsletterRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
@@ -58,7 +59,7 @@ if (!$sendletter_perm['send']) {
     redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
-$start_sending = false;
+$start_sending    = false;
 $protocolCriteria = new CriteriaCompo();
 $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
 $protocolCriteria->add(new Criteria('protocol_subscriber_id', 0, '>'));
@@ -89,4 +90,4 @@ if ($start_sending == true) {
     redirect_header('letter.php', 3, $result_exec);
 }
 
-include_once dirname(__FILE__) . '/footer.php';
+include_once __DIR__ . '/footer.php';

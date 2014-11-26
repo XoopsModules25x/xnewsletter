@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * xnewsletterBreadcrumb Class
  *
@@ -16,7 +17,7 @@
  * @author      lucio <lucio.rota@gmail.com>
  * @package     xnewsletter
  * @since       1.3
- * @version     $Id: breadcrumb.php 12559 2014-06-02 08:10:39Z beckmi $
+ * @version     $Id: breadcrumb.php 12787 2014-09-17 10:58:25Z beckmi $
  *
  * Example:
  * $breadcrumb = new xnewsletterBreadcrumb();
@@ -25,49 +26,49 @@
  * $breadcrumb->addLink( 'bread 3', 'index3.php' );
  * echo $breadcrumb->render();
  */
-
 class xnewsletterBreadcrumb
 {
-    var $dirname;
-    var $_bread = array();
+    public $dirname;
+    private $bread = array();
 
     /**
      *
      */
     function __construct()
     {
-        $this->dirname =  basename(dirname(dirname(__FILE__)));
+        $this->dirname = basename(dirname(__DIR__));
     }
 
     /**
      * Add link to breadcrumb
      *
+     * @param string $title
+     * @param string $link
      */
     function addLink( $title='', $link='' )
     {
-        $this->_bread[] = array(
+        $this->bread[] = array(
             'link'  => $link,
             'title' => $title
             );
     }
-
-    /**
-     * Render xnewsletter BreadCrumb
-     *
-     */
-    function render()
-    {
-        if (!isset($GLOBALS['xoTheme']) || !is_object($GLOBALS['xoTheme'])) {
-            include_once $GLOBALS['xoops']->path('/class/theme.php');
-            $GLOBALS['xoTheme'] = new xos_opal_Theme();
-            }
-
-        require_once $GLOBALS['xoops']->path('class/template.php');
-        $breadcrumbTpl = new XoopsTpl();
-        $breadcrumbTpl->assign('breadcrumb', $this->_bread);
-        $html = $breadcrumbTpl->fetch("db:{$this->dirname}_common_breadcrumb.tpl");
-        unset($breadcrumbTpl);
-
-        return $html;
+/**
+ * Render xnewsletter BreadCrumb
+ *
+ */
+function render()
+{
+    if (!isset($GLOBALS['xoTheme']) || !is_object($GLOBALS['xoTheme'])) {
+        include_once $GLOBALS['xoops']->path('/class/theme.php');
+        $GLOBALS['xoTheme'] = new xos_opal_Theme();
     }
+
+    require_once $GLOBALS['xoops']->path('class/template.php');
+    $breadcrumbTpl = new XoopsTpl();
+    $breadcrumbTpl->assign('breadcrumb', $this->bread);
+    $html = $breadcrumbTpl->fetch("db:{$this->dirname}_common_breadcrumb.tpl");
+    unset($breadcrumbTpl);
+
+    return $html;
+}
 }

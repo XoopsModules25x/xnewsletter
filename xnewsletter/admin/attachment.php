@@ -17,22 +17,23 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GNU General Public License 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GNU General Public License 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = xnewsletterRequest::getString('op', 'list');
-$attachment_id 	= xnewsletterRequest::getInt('attachment_id', 0);
+$op            = xnewsletterRequest::getString('op', 'list');
+$attachment_id = xnewsletterRequest::getInt('attachment_id', 0);
 
 switch ($op) {
     case 'list':
@@ -40,12 +41,12 @@ switch ($op) {
         echo $indexAdmin->addNavigation($currentFile);
         echo $indexAdmin->renderButton();
         //
-        $limit = $xnewsletter->getConfig('adminperpage');
+        $limit              = $xnewsletter->getConfig('adminperpage');
         $attachmentCriteria = new CriteriaCompo();
         $attachmentCriteria->setSort('attachment_letter_id DESC, attachment_id');
         $attachmentCriteria->setOrder('DESC');
         $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start           = xnewsletterRequest::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentCriteria, true);
@@ -83,7 +84,7 @@ switch ($op) {
                 echo "</td>";
                 echo "<td>" . XoopsUser::getUnameFromId($attachmentObj->getVar('attachment_submitter'), 'S') . "</td>";
                 echo "<td>" . formatTimeStamp($attachmentObj->getVar('attachment_created'), 'S') . "</td>";
-                echo "<td>";
+                echo "<td class='center'>";
                 echo "    <a href='?op=edit_attachment&attachment_id={$attachment_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
                 echo "    &nbsp;";
                 echo "    <a href='?op=delete_attachment&attachment_id={$attachment_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
@@ -102,13 +103,13 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
-        $form = $attachmentObj->getForm();
+        $form          = $attachmentObj->getForm();
         $form->display();
         break;
 
     case 'save_attachment':
         if (!$GLOBALS['xoopsSecurity']->check()) {
-           redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+            redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         //
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
@@ -136,9 +137,13 @@ switch ($op) {
                 echo $attachmentObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array('ok' => true, 'attachment_id' => $attachment_id, 'op' => 'delete_attachment'), $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $attachmentObj->getVar('attachment_letter_id')));
+            xoops_confirm(
+                array('ok' => true, 'attachment_id' => $attachment_id, 'op' => 'delete_attachment'),
+                $_SERVER['REQUEST_URI'],
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $attachmentObj->getVar('attachment_letter_id'))
+            );
         }
-    break;
+        break;
 }
 
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

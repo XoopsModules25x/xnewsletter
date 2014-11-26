@@ -17,21 +17,22 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op     = xnewsletterRequest::getString('op', 'list');
 $cat_id = xnewsletterRequest::getInt('cat_id', 0);
 
 switch ($op) {
@@ -41,9 +42,9 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCAT, '?op=new_cat', 'add');
         echo $indexAdmin->renderButton();
         //
-        $start = xnewsletterRequest::getInt('start', 0);
-        $limit = $xnewsletter->getConfig('adminperpage');
-        $catsCount = $xnewsletter->getHandler('cat')->getCount();
+        $start       = xnewsletterRequest::getInt('start', 0);
+        $limit       = $xnewsletter->getConfig('adminperpage');
+        $catsCount   = $xnewsletter->getHandler('cat')->getCount();
         $catCriteria = new CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
@@ -61,7 +62,7 @@ switch ($op) {
         // View Table
         echo "<table class='outer width100' cellspacing='1'>";
         echo "<tr>";
-        echo "    <th>"._AM_XNEWSLETTER_CAT_ID . "</th>";
+        echo "    <th>" . _AM_XNEWSLETTER_CAT_ID . "</th>";
         echo "    <th>" . _AM_XNEWSLETTER_CAT_NAME . "</th>";
         echo "    <th>" . _AM_XNEWSLETTER_CAT_INFO . "</th>";
         echo "    <th>" . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN . "</th>";
@@ -75,8 +76,8 @@ switch ($op) {
         echo "</tr>";
 
         if (count($catObjs) > 0) {
-            $class = 'odd';
-            $groupNames = $member_handler->getGroupList();
+            $class         = 'odd';
+            $groupNames    = $member_handler->getGroupList();
             $gperm_handler = xoops_gethandler('groupperm');
             foreach ($catObjs as $cat_id => $catObj) {
                 echo "<tr class='{$class}'>";
@@ -86,7 +87,7 @@ switch ($op) {
                 echo "<td>{$catObj->getVar("cat_info")}&nbsp;</td>";
                 // cat_gperms_admin
                 $cat_gperms_admin_groupids = $gperm_handler->getGroupIds('newsletter_admin_cat', $cat_id, $xnewsletter->getModule()->mid());
-                sort ($cat_gperms_admin_groupids);
+                sort($cat_gperms_admin_groupids);
                 $cat_gperms_admin = '';
                 foreach ($cat_gperms_admin_groupids as $groupid) {
                     $cat_gperms_admin .= $groupNames[$groupid] . ' | ';
@@ -96,17 +97,17 @@ switch ($op) {
 
                 // cat_gperms_create
                 $cat_gperms_create_groupids = $gperm_handler->getGroupIds('newsletter_create_cat', $cat_id, $xnewsletter->getModule()->mid());
-                sort ($cat_gperms_create_groupids);
+                sort($cat_gperms_create_groupids);
                 $cat_gperms_create = '';
                 foreach ($cat_gperms_create_groupids as $groupid) {
-                    $cat_gperms_create .= $groupNames[$groupid]." | ";
+                    $cat_gperms_create .= $groupNames[$groupid] . " | ";
                 }
                 $cat_gperms_create = substr($cat_gperms_create, 0, -3);
                 echo "<td>" . $cat_gperms_create . "</td>";
 
                 // cat_gperms_list
                 $cat_gperms_list_groupids = $gperm_handler->getGroupIds('newsletter_list_cat', $cat_id, $xnewsletter->getModule()->mid());
-                sort ($cat_gperms_list_groupids);
+                sort($cat_gperms_list_groupids);
                 $cat_gperms_list = '';
                 foreach ($cat_gperms_list_groupids as $groupid) {
                     $cat_gperms_list .= $groupNames[$groupid] . " | ";
@@ -116,7 +117,7 @@ switch ($op) {
 
                 // cat_gperms_read
                 $cat_gperms_read_groupids = $gperm_handler->getGroupIds('newsletter_read_cat', $cat_id, $xnewsletter->getModule()->mid());
-                sort ($cat_gperms_read_groupids);
+                sort($cat_gperms_read_groupids);
                 $cat_gperms_read = '';
                 foreach ($cat_gperms_read_groupids as $groupid) {
                     $cat_gperms_read .= $groupNames[$groupid] . " | ";
@@ -127,7 +128,7 @@ switch ($op) {
                 if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {
                     echo "<td>" . $catObj->getVar("cat_mailinglist") . "</td>";
                 }
-                echo "<td nowrap='nowrap'>";
+                echo "<td class='center' nowrap='nowrap'>";
                 echo "<a href='?op=edit_cat&cat_id={$cat_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
                 echo "&nbsp;";
                 echo "<a href='?op=delete_cat&cat_id={$cat_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
@@ -147,19 +148,19 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $catObj = $xnewsletter->getHandler('cat')->create();
-        $form = $catObj->getForm();
+        $form   = $catObj->getForm();
         $form->display();
         break;
 
     case 'save_cat':
-        if ( !$GLOBALS['xoopsSecurity']->check() ) {
+        if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
         $catObj->setVar('cat_name', xnewsletterRequest::getString('cat_name', ''));
         $catObj->setVar('cat_info', $_REQUEST['cat_info']);
         $catObj->setVar('cat_mailinglist', xnewsletterRequest::getInt('cat_mailinglist', 0));
-        $catObj->setVar('cat_submitter', $xoopsUser->uid());
+        $catObj->setVar('cat_submitter', $GLOBALS['xoopsUser']->uid());
         $catObj->setVar('cat_created', time());
         $catObj->setVar('dohtml', isset($_REQUEST['dohtml']));
         $catObj->setVar('dosmiley', isset($_REQUEST['dosmiley']));
@@ -214,7 +215,7 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
-        $form = $catObj->getForm();
+        $form   = $catObj->getForm();
         $form->display();
         break;
 
@@ -234,4 +235,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

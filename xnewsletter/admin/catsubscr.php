@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -40,12 +41,12 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCATSUBSCR, '?op=new_catsubscr', 'add');
         echo $indexAdmin->renderButton();
         //
-        $limit = $xnewsletter->getConfig('adminperpage');
+        $limit       = $xnewsletter->getConfig('adminperpage');
         $catCriteria = new CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
         $catCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start    = xnewsletterRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -75,7 +76,8 @@ switch ($op) {
                 echo "<td>{$catObj->getVar('cat_info')}</td>";
                 $catCount = $xnewsletter->getHandler('catsubscr')->getCount(new Criteria('catsubscr_catid', $cat_id));
                 echo "<td>{$catCount}</td>";
-                echo "<td><a href='?op=list_cat&cat_id={$cat_id}'><img src='" . XNEWSLETTER_ICONS_URL . "/xn_details.png' alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a></td>";
+                echo "<td class='center'><a href='?op=list_cat&cat_id={$cat_id}'><img src='" . XNEWSLETTER_ICONS_URL . "/xn_details.png' alt='" . _AM_XNEWSLETTER_DETAILS . "' title='"
+                    . _AM_XNEWSLETTER_DETAILS . "'></a></td>";
                 echo "</tr>";
             }
         }
@@ -93,13 +95,13 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWCATSUBSCR, '?op=new_catsubscr', 'add');
         echo $indexAdmin->renderButton();
         //
-        $limit = $xnewsletter->getConfig('adminperpage');
+        $limit             = $xnewsletter->getConfig('adminperpage');
         $catsubscrCriteria = new CriteriaCompo();
         $catsubscrCriteria->add(new Criteria('catsubscr_catid', $cat_id));
         $catsubscrCriteria->setSort('catsubscr_id ASC, catsubscr_catid');
         $catsubscrCriteria->setOrder('ASC');
         $catCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start    = xnewsletterRequest::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -129,11 +131,11 @@ switch ($op) {
                 $class = ($class == 'even') ? 'odd' : 'even';
                 echo "<td>{$catsubscr_id}</td>";
 
-                $cat = $xnewsletter->getHandler('cat')->get($cat_id);
+                $cat      = $xnewsletter->getHandler('cat')->get($cat_id);
                 $cat_name = $cat->getVar('cat_name');
                 echo "<td>" . $cat_name . "</td>";
-                $subscr_id = $catsubscrObj->getVar('catsubscr_subscrid');
-                $subscr = $xnewsletter->getHandler('subscr')->get($subscr_id);
+                $subscr_id    = $catsubscrObj->getVar('catsubscr_subscrid');
+                $subscr       = $xnewsletter->getHandler('subscr')->get($subscr_id);
                 $subscr_email = ($subscr) ? $subscr->getVar("subscr_email") : "";
                 echo "<td>" . $subscr_email . "</td>";
                 if ($catsubscrObj->getVar('catsubscr_quited') > 0) {
@@ -145,9 +147,10 @@ switch ($op) {
                 echo "<td>" . XoopsUser::getUnameFromId($catsubscrObj->getVar('catsubscr_submitter'), 'S') . "</td>";
                 echo "<td>" . formatTimeStamp($catsubscrObj->getVar('catsubscr_created'), 'S') . "</td>";
 
-                echo "<td nowrap='nowrap'>
+                echo "<td class='center' nowrap='nowrap'>
                     <a href='?op=edit_catsubscr&catsubscr_id={$catsubscr_id}&cat_id={$cat_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>
-                    &nbsp;<a href='?op=delete_catsubscr&catsubscr_id={$catsubscr_id}&cat_id={$cat_id}&cat_name={$cat_name}&subscr_email={$subscr_email}&subscr_id={$subscr_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
+                    &nbsp;<a href='?op=delete_catsubscr&catsubscr_id={$catsubscr_id}&cat_id={$cat_id}&cat_name={$cat_name}&subscr_email={$subscr_email}&subscr_id={$subscr_id}'><img src="
+                    . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
                     </td>";
                 echo "</tr>";
             }
@@ -164,7 +167,7 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $catsubscrObj = $xnewsletter->getHandler('catsubscr')->create();
-        $form = $catsubscrObj->getForm();
+        $form         = $catsubscrObj->getForm();
         $form->display();
         break;
 
@@ -214,7 +217,7 @@ switch ($op) {
         echo $indexAdmin->renderButton();
         //
         $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($_REQUEST['catsubscr_id']);
-        $form = $catsubscrObj->getForm();
+        $form         = $catsubscrObj->getForm();
         $form->display();
         break;
 
@@ -226,10 +229,10 @@ switch ($op) {
             }
             if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj)) {
                 // remove subscriber from mailinglist
-                $subscr_id = $_REQUEST['subscr_id'];
+                $subscr_id        = $_REQUEST['subscr_id'];
                 $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST['cat_id']);
                 if ($catsubscrObj_cat->getVar('cat_mailinglist') > 0) {
-                    require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
+                    require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
                     subscribingMLHandler(0, $subscr_id, $catsubscrObj_cat->getVar('cat_mailinglist'));
                 }
                 redirect_header('catsubscr.php', 3, _AM_XNEWSLETTER_FORMDELOK);
@@ -244,4 +247,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

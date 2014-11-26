@@ -1,5 +1,8 @@
 Version 1.3     NOT RELEASED
 -------------------------------
+ - replaced "dirname(__FILE__)" with "__DIR__" (mamba)
+ - centered icons in tables (mamba)
+ - some English updates (mamba)
  - standardize code (mamba,luciorota)
  - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
  - update procedure: rename module's directory name to lowercase (luciorota)

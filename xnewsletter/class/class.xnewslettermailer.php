@@ -1,17 +1,44 @@
 <?php
 require XNEWSLETTER_ROOT_PATH . '/include/phpmailer/PHPMailerAutoload.php';
 
-class XnewsletterMailer extends PHPMailer {
-    public function GetMIMEHeader() {
+/**
+ * Class XnewsletterMailer
+ */
+class XnewsletterMailer extends PHPMailer
+{
+    /**
+     * @return string
+     * @throws Exception
+     * @throws phpmailerException
+     */
+    public function GetMIMEHeader()
+    {
         $this->PreSend();
+
         return $this->MIMEHeader;
     }
-    public function GetMIMEBody() {
+
+    /**
+     * @return string
+     * @throws Exception
+     * @throws phpmailerException
+     */
+    public function GetMIMEBody()
+    {
         $this->PreSend();
+
         return $this->MIMEBody;
     }
-    public function GetSize() {
-      $this->PreSend();
-      return strlen($this->MIMEHeader . $this->MIMEBody);
+
+    /**
+     * @return int
+     * @throws Exception
+     * @throws phpmailerException
+     */
+    public function GetSize()
+    {
+        $this->PreSend();
+
+        return strlen($this->MIMEHeader . $this->MIMEBody);
     }
 }

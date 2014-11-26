@@ -26,12 +26,14 @@
  * @internal param \the $html input HTML
  * @return the HTML converted, as best as possible, to text
  */
-function convert_html_to_text($html) {
+function convert_html_to_text($html)
+{
     $html = fix_newlines($html);
 
     $doc = new DOMDocument();
-    if (!$doc->loadHTML($html))
+    if (!$doc->loadHTML($html)) {
         throw new Html2TextException("Could not load HTML - badly formed?", $html);
+    }
 
     $output = iterate_over_node($doc);
 
@@ -50,9 +52,11 @@ function convert_html_to_text($html) {
  * all become \ns.
  *
  * @param text text with any number of \r, \r\n and \n combinations
+ *
  * @return the fixed text
  */
-function fix_newlines($text) {
+function fix_newlines($text)
+{
     // replace \r\n to \n
     $text = str_replace("\r\n", "\n", $text);
     // remove \rs
@@ -66,7 +70,8 @@ function fix_newlines($text) {
  *
  * @return null|string
  */
-function next_child_name($node) {
+function next_child_name($node)
+{
     // get the next child
     $nextNode = $node->nextSibling;
     while ($nextNode != null) {
@@ -88,7 +93,8 @@ function next_child_name($node) {
  *
  * @return null|string
  */
-function prev_child_name($node) {
+function prev_child_name($node)
+{
     // get the previous child
     $nextNode = $node->previousSibling;
     while ($nextNode != null) {
@@ -110,7 +116,8 @@ function prev_child_name($node) {
  *
  * @return string
  */
-function iterate_over_node($node) {
+function iterate_over_node($node)
+{
     if ($node instanceof DOMText) {
         return preg_replace("/\\s+/im", " ", $node->wholeText);
     }
@@ -192,14 +199,16 @@ function iterate_over_node($node) {
         case "p":
         case "br":
             // add one line
-            if ($nextName != "div")
+            if ($nextName != "div") {
                 $output .= "\n";
+            }
             break;
 
         case "div":
             // add one line only if the next child isn't a div
-            if ($nextName != "div" && $nextName != null)
+            if ($nextName != "div" && $nextName != null) {
                 $output .= "\n";
+            }
             break;
 
         case "a":
@@ -222,7 +231,12 @@ function iterate_over_node($node) {
 
             // does the next node require additional whitespace?
             switch ($nextName) {
-                case "h1": case "h2": case "h3": case "h4": case "h5": case "h6":
+                case "h1":
+                case "h2":
+                case "h3":
+                case "h4":
+                case "h5":
+                case "h6":
                     $output .= "\n";
                     break;
             }
@@ -237,14 +251,16 @@ function iterate_over_node($node) {
 /**
  * Class Html2TextException
  */
-class Html2TextException extends Exception {
+class Html2TextException extends Exception
+{
     var $more_info;
 
     /**
      * @param string $message
      * @param string $more_info
      */
-    public function __construct($message = "", $more_info = "") {
+    public function __construct($message = "", $more_info = "")
+    {
         parent::__construct($message);
         $this->more_info = $more_info;
     }

@@ -94,7 +94,7 @@ CREATE TABLE `xnewsletter_catsubscr` (
 CREATE TABLE `xnewsletter_letter` (
     `letter_id`                 int(8) NOT NULL  auto_increment,
     `letter_title`              varchar(100) NOT NULL default '',
-    `letter_content`            text NOT NULL default '',
+    `letter_content`            text NOT NULL ,
     `letter_template`           varchar(100) NOT NULL default '',
     `letter_cats`               varchar(100) NULL default '',
     `letter_account`            int(8) NOT NULL default '0',
@@ -119,7 +119,7 @@ CREATE TABLE `xnewsletter_protocol` (
     `protocol_submitter`        int(8) NOT NULL default '0',
     `protocol_created`          int(10) NOT NULL default '0',
     `protocol_success`          int(8) NOT NULL,
-    `protocol_status_str_id`    text NOT NULL default '',
+    `protocol_status_str_id`    int(8) NOT NULL default '0',
     `protocol_status_vars`      text,
     PRIMARY KEY (`protocol_id`),
     KEY `idx_protocol_letter_id` (`protocol_letter_id`)
@@ -224,8 +224,8 @@ CREATE TABLE `xnewsletter_task` (
 CREATE TABLE `xnewsletter_template` (
     `template_id`               int(8) NOT NULL  auto_increment,
     `template_title`            varchar(100) NOT NULL default '',
-    `template_description`      text NOT NULL default '',
-    `template_content`          text NOT NULL default '',
+    `template_description`      text NOT NULL ,
+    `template_content`          text NOT NULL ,
     `template_submitter`        int(8) NOT NULL default '0',
     `template_created`          int(10) NOT NULL default '0',
     PRIMARY KEY (`template_id`)

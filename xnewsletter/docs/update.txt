@@ -1,5 +1,11 @@
-Read Me First
-=============
-1. Delete old /modules/xNewsletter directory
-2. Copy this module in /modules directory
-3. Update this module
+Read Me First in case of module update
+======================================
+If installed xNewsletter module dirname is like xNewsletter, follow these steps;
+
+1. Rename old /modules/xNewsletter directory to /modules/xNewsletter.bak
+2. Copy new module in /modules directory
+3. Rename new module to /modules/xNewsletter
+4. Update module: update procedure will convert directory name to lowercase, and modules database record too
+5. An error sould occour in some systems: this is not a problem, this is because now module admin is in /modules/xnewsletter/admin/index.php ...
+6. Check if anything runs well
+7. Remove backup dir /modules/xNewsletter.bak

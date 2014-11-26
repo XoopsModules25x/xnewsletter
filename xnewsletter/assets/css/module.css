@@ -24,7 +24,7 @@
  *  Version : svn:$Id$
  * ****************************************************************************
  */
- 
+
 .box-header {
     margin: 2px;
     padding: 5px;
@@ -402,7 +402,9 @@ h4 {
     background-color: silver;
     width: 100%;
     position: relative;
-    float: bottom;
+    /*float: bottom;*/
+    /*change it to: clear:both; or clear:left;*/
+    clear:both;
 }
 
 .xnewsletter_single_userrev {

@@ -1,9 +1,10 @@
 <?php
 /**
  * Estonian PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Indrek Päri
- * @author Elan Ruusamäe <glen@delfi.ee>
+ * @author  Indrek Päri
+ * @author  Elan Ruusamäe <glen@delfi.ee>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Viga: Autoriseerimise viga.';
@@ -16,7 +17,7 @@ $PHPMAILER_LANG['file_access']          = 'Pole piisavalt õiguseid järgneva fa
 $PHPMAILER_LANG['file_open']            = 'Faili Viga: Faili avamine ebaõnnestus: ';
 $PHPMAILER_LANG['from_failed']          = 'Järgnev saatja e-posti aadress on vigane: ';
 $PHPMAILER_LANG['instantiate']          = 'mail funktiooni käivitamine ebaõnnestus.';
-$PHPMAILER_LANG['invalid_address']        = 'Saatmine peatatud, e-posti address vigane: ';
+$PHPMAILER_LANG['invalid_address']      = 'Saatmine peatatud, e-posti address vigane: ';
 $PHPMAILER_LANG['provide_address']      = 'Te peate määrama vähemalt ühe saaja e-posti aadressi.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' maileri tugi puudub.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Viga: Järgnevate saajate e-posti aadressid on vigased: ';

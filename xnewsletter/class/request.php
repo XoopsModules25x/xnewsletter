@@ -89,25 +89,25 @@ class xnewsletterRequest
         // Get the input hash
         switch ($hash) {
             case 'GET' :
-                $input = & $_GET;
+                $input = &$_GET;
                 break;
             case 'POST' :
-                $input = & $_POST;
+                $input = &$_POST;
                 break;
             case 'FILES' :
-                $input = & $_FILES;
+                $input = &$_FILES;
                 break;
             case 'COOKIE' :
-                $input = & $_COOKIE;
+                $input = &$_COOKIE;
                 break;
             case 'ENV'    :
-                $input = & $_ENV;
+                $input = &$_ENV;
                 break;
             case 'SERVER'    :
-                $input = & $_SERVER;
+                $input = &$_SERVER;
                 break;
             default:
-                $input = & $_REQUEST;
+                $input = &$_REQUEST;
                 $hash  = 'REQUEST';
                 break;
         }
@@ -241,7 +241,7 @@ class xnewsletterRequest
     static function getString($name, $default = '', $hash = 'default', $mask = 0)
     {
         // Cast to string, in case JREQUEST_ALLOWRAW was specified for mask
-        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
+        return (string)xnewsletterRequest::getVar($name, $default, $hash, 'string', $mask);
     }
 
     /**
@@ -265,7 +265,7 @@ class xnewsletterRequest
      */
     static function getText($name, $default = '', $hash = 'default')
     {
-        return (string) xnewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
+        return (string)xnewsletterRequest::getVar($name, $default, $hash, 'string', PUBLISHER_REQUEST_ALLOWRAW);
     }
 
     /**
@@ -361,10 +361,10 @@ class xnewsletterRequest
                 $input = $_COOKIE;
                 break;
             case 'ENV'    :
-                $input = & $_ENV;
+                $input = &$_ENV;
                 break;
             case 'SERVER'    :
-                $input = & $_SERVER;
+                $input = &$_SERVER;
                 break;
             default:
                 $input = $_REQUEST;
@@ -562,6 +562,7 @@ class xnewsletterFilterInput
             'xml'
         );
     var $attrBlacklist = array('action', 'background', 'codebase', 'dynsrc', 'lowsrc'); // also will strip ALL event handlers
+
     /**
      * Constructor for inputFilter class. Only first parameter is required.
      *
@@ -576,8 +577,8 @@ class xnewsletterFilterInput
     public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
     {
         // Make sure user defined arrays are in lowercase
-        $tagsArray = array_map('strtolower', (array) $tagsArray);
-        $attrArray = array_map('strtolower', (array) $attrArray);
+        $tagsArray = array_map('strtolower', (array)$tagsArray);
+        $attrArray = array_map('strtolower', (array)$attrArray);
         // Assign member variables
         $this->tagsArray  = $tagsArray;
         $this->attrArray  = $attrArray;
@@ -635,31 +636,31 @@ class xnewsletterFilterInput
             case 'INT' :
             case 'INTEGER' :
                 // Only use the first integer value
-                preg_match('/-?[0-9]+/', (string) $source, $matches);
-                $result = @ (int) $matches[0];
+                preg_match('/-?[0-9]+/', (string)$source, $matches);
+                $result = @ (int)$matches[0];
                 break;
             case 'FLOAT' :
             case 'DOUBLE' :
                 // Only use the first floating point value
-                preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
-                $result = @ (float) $matches[0];
+                preg_match('/-?[0-9]+(\.[0-9]+)?/', (string)$source, $matches);
+                $result = @ (float)$matches[0];
                 break;
             case 'BOOL' :
             case 'BOOLEAN' :
-                $result = (bool) $source;
+                $result = (bool)$source;
                 break;
             case 'WORD' :
-                $result = (string) preg_replace('/[^A-Z_]/i', '', $source);
+                $result = (string)preg_replace('/[^A-Z_]/i', '', $source);
                 break;
             case 'ALNUM' :
-                $result = (string) preg_replace('/[^A-Z0-9]/i', '', $source);
+                $result = (string)preg_replace('/[^A-Z0-9]/i', '', $source);
                 break;
             case 'CMD' :
-                $result = (string) preg_replace('/[^A-Z0-9_\.-]/i', '', $source);
+                $result = (string)preg_replace('/[^A-Z0-9_\.-]/i', '', $source);
                 $result = ltrim($result, '.');
                 break;
             case 'BASE64' :
-                $result = (string) preg_replace('/[^A-Z0-9\/+=]/i', '', $source);
+                $result = (string)preg_replace('/[^A-Z0-9\/+=]/i', '', $source);
                 break;
             case 'STRING' :
                 // Check for static usage and assign $filter the proper variable
@@ -668,19 +669,19 @@ class xnewsletterFilterInput
                 } else {
                     $filter = xnewsletterFilterInput::getInstance();
                 }
-                $result = (string) $filter->_remove($filter->_decode((string) $source));
+                $result = (string)$filter->_remove($filter->_decode((string)$source));
                 break;
             case 'ARRAY' :
                 // If $source is not an array
-                $result = (is_array($source)) ? (array) $source : array($source);
+                $result = (is_array($source)) ? (array)$source : array($source);
                 break;
             case 'PATH' :
                 $pattern = '/^[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-                preg_match($pattern, (string) $source, $matches);
-                $result = @ (string) $matches[0];
+                preg_match($pattern, (string)$source, $matches);
+                $result = @ (string)$matches[0];
                 break;
             case 'USERNAME' :
-                $result = (string) preg_replace('/[\x00-\x1F\x7F<>"\'%&]/', '', $source);
+                $result = (string)preg_replace('/[\x00-\x1F\x7F<>"\'%&]/', '', $source);
                 break;
             default :
                 // Check for static usage and assign $filter the proper variable

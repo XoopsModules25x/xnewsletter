@@ -56,30 +56,31 @@ class Html2Text
      * @type array
      * @see $replace
      */
-    protected $search = array(
-        "/\r/",                                  // Non-legal carriage return
-        "/[\n\t]+/",                             // Newlines and tabs
-        '/<head[^>]*>.*?<\/head>/i',             // <head>
-        '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
-        '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
-        '/<p[^>]*>/i',                           // <P>
-        '/<br[^>]*>/i',                          // <br>
-        '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
-        '/<em[^>]*>(.*?)<\/em>/i',               // <em>
-        '/(<ul[^>]*>|<\/ul>)/i',                 // <ul> and </ul>
-        '/(<ol[^>]*>|<\/ol>)/i',                 // <ol> and </ol>
-        '/(<dl[^>]*>|<\/dl>)/i',                 // <dl> and </dl>
-        '/<li[^>]*>(.*?)<\/li>/i',               // <li> and </li>
-        '/<dd[^>]*>(.*?)<\/dd>/i',               // <dd> and </dd>
-        '/<dt[^>]*>(.*?)<\/dt>/i',               // <dt> and </dt>
-        '/<li[^>]*>/i',                          // <li>
-        '/<hr[^>]*>/i',                          // <hr>
-        '/<div[^>]*>/i',                         // <div>
-        '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
-        '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
-        '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
-        '/<span class="_html2text_ignore">.+?<\/span>/i'  // <span class="_html2text_ignore">...</span>
-    );
+    protected $search
+        = array(
+            "/\r/",                                  // Non-legal carriage return
+            "/[\n\t]+/",                             // Newlines and tabs
+            '/<head[^>]*>.*?<\/head>/i',             // <head>
+            '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
+            '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
+            '/<p[^>]*>/i',                           // <P>
+            '/<br[^>]*>/i',                          // <br>
+            '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
+            '/<em[^>]*>(.*?)<\/em>/i',               // <em>
+            '/(<ul[^>]*>|<\/ul>)/i',                 // <ul> and </ul>
+            '/(<ol[^>]*>|<\/ol>)/i',                 // <ol> and </ol>
+            '/(<dl[^>]*>|<\/dl>)/i',                 // <dl> and </dl>
+            '/<li[^>]*>(.*?)<\/li>/i',               // <li> and </li>
+            '/<dd[^>]*>(.*?)<\/dd>/i',               // <dd> and </dd>
+            '/<dt[^>]*>(.*?)<\/dt>/i',               // <dt> and </dt>
+            '/<li[^>]*>/i',                          // <li>
+            '/<hr[^>]*>/i',                          // <hr>
+            '/<div[^>]*>/i',                         // <div>
+            '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
+            '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
+            '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
+            '/<span class="_html2text_ignore">.+?<\/span>/i'  // <span class="_html2text_ignore">...</span>
+        );
 
     /**
      * List of pattern replacements corresponding to patterns searched.
@@ -87,30 +88,31 @@ class Html2Text
      * @type array
      * @see $search
      */
-    protected $replace = array(
-        '',                                     // Non-legal carriage return
-        ' ',                                    // Newlines and tabs
-        '',                                     // <head>
-        '',                                     // <script>s -- which strip_tags supposedly has problems with
-        '',                                     // <style>s -- which strip_tags supposedly has problems with
-        "\n\n",                                 // <P>
-        "\n",                                   // <br>
-        '_\\1_',                                // <i>
-        '_\\1_',                                // <em>
-        "\n\n",                                 // <ul> and </ul>
-        "\n\n",                                 // <ol> and </ol>
-        "\n\n",                                 // <dl> and </dl>
-        "\t* \\1\n",                            // <li> and </li>
-        " \\1\n",                               // <dd> and </dd>
-        "\t* \\1",                              // <dt> and </dt>
-        "\n\t* ",                               // <li>
-        "\n-------------------------\n",        // <hr>
-        "<div>\n",                              // <div>
-        "\n\n",                                 // <table> and </table>
-        "\n",                                   // <tr> and </tr>
-        "\t\t\\1\n",                            // <td> and </td>
-        ""                                      // <span class="_html2text_ignore">...</span>
-    );
+    protected $replace
+        = array(
+            '',                                     // Non-legal carriage return
+            ' ',                                    // Newlines and tabs
+            '',                                     // <head>
+            '',                                     // <script>s -- which strip_tags supposedly has problems with
+            '',                                     // <style>s -- which strip_tags supposedly has problems with
+            "\n\n",                                 // <P>
+            "\n",                                   // <br>
+            '_\\1_',                                // <i>
+            '_\\1_',                                // <em>
+            "\n\n",                                 // <ul> and </ul>
+            "\n\n",                                 // <ol> and </ol>
+            "\n\n",                                 // <dl> and </dl>
+            "\t* \\1\n",                            // <li> and </li>
+            " \\1\n",                               // <dd> and </dd>
+            "\t* \\1",                              // <dt> and </dt>
+            "\n\t* ",                               // <li>
+            "\n-------------------------\n",        // <hr>
+            "<div>\n",                              // <div>
+            "\n\n",                                 // <table> and </table>
+            "\n",                                   // <tr> and </tr>
+            "\t\t\\1\n",                            // <td> and </td>
+            ""                                      // <span class="_html2text_ignore">...</span>
+        );
 
     /**
      * List of preg* regular expression patterns to search for,
@@ -119,24 +121,25 @@ class Html2Text
      * @type array
      * @see $ent_replace
      */
-    protected $ent_search = array(
-        '/&(nbsp|#160);/i',                      // Non-breaking space
-        '/&(quot|rdquo|ldquo|#8220|#8221|#147|#148);/i',
-        // Double quotes
-        '/&(apos|rsquo|lsquo|#8216|#8217);/i',   // Single quotes
-        '/&gt;/i',                               // Greater-than
-        '/&lt;/i',                               // Less-than
-        '/&(copy|#169);/i',                      // Copyright
-        '/&(trade|#8482|#153);/i',               // Trademark
-        '/&(reg|#174);/i',                       // Registered
-        '/&(mdash|#151|#8212);/i',               // mdash
-        '/&(ndash|minus|#8211|#8722);/i',        // ndash
-        '/&(bull|#149|#8226);/i',                // Bullet
-        '/&(pound|#163);/i',                     // Pound sign
-        '/&(euro|#8364);/i',                     // Euro sign
-        '/&(amp|#38);/i',                        // Ampersand: see _converter()
-        '/[ ]{2,}/',                             // Runs of spaces, post-handling
-    );
+    protected $ent_search
+        = array(
+            '/&(nbsp|#160);/i',                      // Non-breaking space
+            '/&(quot|rdquo|ldquo|#8220|#8221|#147|#148);/i',
+            // Double quotes
+            '/&(apos|rsquo|lsquo|#8216|#8217);/i',   // Single quotes
+            '/&gt;/i',                               // Greater-than
+            '/&lt;/i',                               // Less-than
+            '/&(copy|#169);/i',                      // Copyright
+            '/&(trade|#8482|#153);/i',               // Trademark
+            '/&(reg|#174);/i',                       // Registered
+            '/&(mdash|#151|#8212);/i',               // mdash
+            '/&(ndash|minus|#8211|#8722);/i',        // ndash
+            '/&(bull|#149|#8226);/i',                // Bullet
+            '/&(pound|#163);/i',                     // Pound sign
+            '/&(euro|#8364);/i',                     // Euro sign
+            '/&(amp|#38);/i',                        // Ampersand: see _converter()
+            '/[ ]{2,}/',                             // Runs of spaces, post-handling
+        );
 
     /**
      * List of pattern replacements corresponding to patterns searched.
@@ -144,23 +147,24 @@ class Html2Text
      * @type array
      * @see $ent_search
      */
-    protected $ent_replace = array(
-        ' ',                                    // Non-breaking space
-        '"',                                    // Double quotes
-        "'",                                    // Single quotes
-        '>',
-        '<',
-        '(c)',
-        '(tm)',
-        '(R)',
-        '--',
-        '-',
-        '*',
-        '£',
-        'EUR',                                  // Euro sign. € ?
-        '|+|amp|+|',                            // Ampersand: see _converter()
-        ' ',                                    // Runs of spaces, post-handling
-    );
+    protected $ent_replace
+        = array(
+            ' ',                                    // Non-breaking space
+            '"',                                    // Double quotes
+            "'",                                    // Single quotes
+            '>',
+            '<',
+            '(c)',
+            '(tm)',
+            '(R)',
+            '--',
+            '-',
+            '*',
+            '£',
+            'EUR',                                  // Euro sign. € ?
+            '|+|amp|+|',                            // Ampersand: see _converter()
+            ' ',                                    // Runs of spaces, post-handling
+        );
 
     /**
      * List of preg* regular expression patterns to search for
@@ -168,13 +172,14 @@ class Html2Text
      *
      * @type array
      */
-    protected $callback_search = array(
-        '/<(a) [^>]*href=("|\')([^"\']+)\2([^>]*)>(.*?)<\/a>/i', // <a href="">
-        '/<(h)[123456]( [^>]*)?>(.*?)<\/h[123456]>/i',           // h1 - h6
-        '/<(b)( [^>]*)?>(.*?)<\/b>/i',                           // <b>
-        '/<(strong)( [^>]*)?>(.*?)<\/strong>/i',                 // <strong>
-        '/<(th)( [^>]*)?>(.*?)<\/th>/i',                         // <th> and </th>
-    );
+    protected $callback_search
+        = array(
+            '/<(a) [^>]*href=("|\')([^"\']+)\2([^>]*)>(.*?)<\/a>/i', // <a href="">
+            '/<(h)[123456]( [^>]*)?>(.*?)<\/h[123456]>/i',           // h1 - h6
+            '/<(b)( [^>]*)?>(.*?)<\/b>/i',                           // <b>
+            '/<(strong)( [^>]*)?>(.*?)<\/strong>/i',                 // <strong>
+            '/<(th)( [^>]*)?>(.*?)<\/th>/i',                         // <th> and </th>
+        );
 
     /**
      * List of preg* regular expression patterns to search for in PRE body,
@@ -183,13 +188,14 @@ class Html2Text
      * @type array
      * @see $pre_replace
      */
-    protected $pre_search = array(
-        "/\n/",
-        "/\t/",
-        '/ /',
-        '/<pre[^>]*>/',
-        '/<\/pre>/'
-    );
+    protected $pre_search
+        = array(
+            "/\n/",
+            "/\t/",
+            '/ /',
+            '/<pre[^>]*>/',
+            '/<\/pre>/'
+        );
 
     /**
      * List of pattern replacements corresponding to patterns searched for PRE body.
@@ -197,13 +203,14 @@ class Html2Text
      * @type array
      * @see $pre_search
      */
-    protected $pre_replace = array(
-        '<br>',
-        '&nbsp;&nbsp;&nbsp;&nbsp;',
-        '&nbsp;',
-        '',
-        ''
-    );
+    protected $pre_replace
+        = array(
+            '<br>',
+            '&nbsp;&nbsp;&nbsp;&nbsp;',
+            '&nbsp;',
+            '',
+            ''
+        );
 
     /**
      * Temporary workspace used during PRE processing.
@@ -248,17 +255,18 @@ class Html2Text
      *
      * @type array
      */
-    protected $_options = array(
-        // 'none'
-        // 'inline' (show links inline)
-        // 'nextline' (show links on the next line)
-        // 'table' (if a table of link URLs should be listed after the text.
-        'do_links' => 'inline',
-        //  Maximum width of the formatted text, in columns.
-        //  Set this value to 0 (or less) to ignore word wrapping
-        //  and not constrain text to a fixed-width column.
-        'width' => 70,
-    );
+    protected $_options
+        = array(
+            // 'none'
+            // 'inline' (show links inline)
+            // 'nextline' (show links on the next line)
+            // 'table' (if a table of link URLs should be listed after the text.
+            'do_links' => 'inline',
+            //  Maximum width of the formatted text, in columns.
+            //  Set this value to 0 (or less) to ignore word wrapping
+            //  and not constrain text to a fixed-width column.
+            'width'    => 70,
+        );
 
     /**
      * Constructor.
@@ -267,9 +275,9 @@ class Html2Text
      * will instantiate with that source propagated, all that has
      * to be done it to call get_text().
      *
-     * @param string $source HTML content
+     * @param string  $source    HTML content
      * @param boolean $from_file Indicates $source is a file to pull content from
-     * @param array $options Set configuration options
+     * @param array   $options   Set configuration options
      */
     public function __construct($source = '', $from_file = false, $options = array())
     {
@@ -285,7 +293,7 @@ class Html2Text
     /**
      * Loads source HTML into memory, either from $source string or a file.
      *
-     * @param string $source HTML content
+     * @param string  $source    HTML content
      * @param boolean $from_file Indicates $source is a file to pull content from
      */
     public function set_html($source, $from_file = false)
@@ -335,6 +343,7 @@ class Html2Text
      * Sets the allowed HTML tags to pass through to the resulting text.
      *
      * Tags should be in the form "<p>", with no corresponding closing tag.
+     *
      * @param string $allowed_tags
      */
     public function set_allowed_tags($allowed_tags = '')
@@ -456,9 +465,10 @@ class Html2Text
      * appeared. Also makes an effort at identifying and handling absolute
      * and relative links.
      *
-     * @param string $link URL of the link
-     * @param string $display Part of the text to associate number with
-     * @param null $link_override
+     * @param string $link          URL of the link
+     * @param string $display       Part of the text to associate number with
+     * @param null   $link_override
+     *
      * @return string
      */
     protected function _build_link_list($link, $display, $link_override = null)
@@ -467,7 +477,6 @@ class Html2Text
         if ($link_method == 'none') {
             return $display;
         }
-
 
         // Ignored link types
         if (preg_match('!^(javascript:|mailto:|#)!i', $link)) {
@@ -486,7 +495,7 @@ class Html2Text
 
         if ($link_method == 'table') {
             if (($index = array_search($url, $this->_link_list)) === false) {
-                $index = count($this->_link_list);
+                $index              = count($this->_link_list);
                 $this->_link_list[] = $url;
             }
 
@@ -544,10 +553,10 @@ class Html2Text
     protected function _convert_blockquotes(&$text)
     {
         if (preg_match_all('/<\/*blockquote[^>]*>/i', $text, $matches, PREG_OFFSET_CAPTURE)) {
-            $start = 0;
+            $start  = 0;
             $taglen = 0;
-            $level = 0;
-            $diff = 0;
+            $level  = 0;
+            $diff   = 0;
             foreach ($matches[0] as $m) {
                 if ($m[0][0] == '<' && $m[0][1] == '/') {
                     $level--;
@@ -563,7 +572,9 @@ class Html2Text
 
                         // Set text width
                         $p_width = $this->_options['width'];
-                        if ($this->_options['width'] > 0) $this->_options['width'] -= 2;
+                        if ($this->_options['width'] > 0) {
+                            $this->_options['width'] -= 2;
+                        }
                         // Convert blockquote content
                         $body = trim($body);
                         $this->_converter($body);
@@ -573,15 +584,14 @@ class Html2Text
                         // Re-set text width
                         $this->_options['width'] = $p_width;
                         // Replace content
-                        $text = substr($text, 0, $start - $diff)
-                            . $body . substr($text, $end + strlen($m[0]) - $diff);
+                        $text = substr($text, 0, $start - $diff) . $body . substr($text, $end + strlen($m[0]) - $diff);
 
                         $diff = $len + $taglen + strlen($m[0]) - strlen($body);
                         unset($body);
                     }
                 } else {
                     if ($level == 0) {
-                        $start = $m[1];
+                        $start  = $m[1];
                         $taglen = strlen($m[0]);
                     }
                     $level++;
@@ -594,6 +604,7 @@ class Html2Text
      * Callback function for preg_replace_callback use.
      *
      * @param array $matches PREG matches
+     *
      * @return string
      */
     protected function _preg_callback($matches)
@@ -617,6 +628,7 @@ class Html2Text
 
                 return $this->_build_link_list($url, $matches[5], $link_override);
         }
+
         return '';
     }
 
@@ -624,12 +636,13 @@ class Html2Text
      * Callback function for preg_replace_callback use in PRE content handler.
      *
      * @param array $matches PREG matches
+     *
      * @return string
      */
     protected function _preg_pre_callback(
         /** @noinspection PhpUnusedParameterInspection */
-        $matches)
-    {
+        $matches
+    ) {
         return $this->pre_content;
     }
 
@@ -637,6 +650,7 @@ class Html2Text
      * Strtoupper function with HTML tags and entities handling.
      *
      * @param string $str Text to convert
+     *
      * @return string Converted text
      */
     private function _toupper($str)
@@ -659,16 +673,18 @@ class Html2Text
      * Forces mb_strtoupper-call to UTF-8.
      *
      * @param string $str Text to convert
+     *
      * @return string Converted text
      */
     private function _strtoupper($str)
     {
         $str = html_entity_decode($str, ENT_COMPAT);
 
-        if (function_exists('mb_strtoupper'))
+        if (function_exists('mb_strtoupper')) {
             $str = mb_strtoupper($str, 'UTF-8');
-        else
+        } else {
             $str = strtoupper($str);
+        }
 
         $str = htmlspecialchars($str, ENT_COMPAT);
 

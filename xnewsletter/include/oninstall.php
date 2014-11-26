@@ -17,18 +17,19 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
 
 defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
-include_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/common.php");
-@include_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/language/" . $xoopsConfig['language'] . "/admin.php");
+include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/common.php';
+@include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/admin.php';
 
 define('INDEX_FILE_PATH', XOOPS_UPLOAD_PATH . "/index.html");
 define('BLANK_FILE_PATH', XOOPS_UPLOAD_PATH . "/blank.gif");
@@ -52,63 +53,72 @@ function xoops_module_pre_install_xnewsletter(&$xoopsModule)
 function xoops_module_install_xnewsletter(&$xoopsModule)
 {
     // get module config values
-    $hModConfig = xoops_gethandler('config');
+    $hModConfig  = xoops_gethandler('config');
     $configArray = $hModConfig->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
     //Creation of folder "uploads" for the module to the site root
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file accounts in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/accounts";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file cat in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/cat";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file subscr in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/subscr";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file catsubscr in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/catsubscr";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file letter in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/letter";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the file protocol in uploads directory
     $path = XOOPS_ROOT_PATH . "/uploads/xnewsletter/protocol";
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
 
     //Creation of the folder letter_attachment in uploads directory for files
     $path = XOOPS_ROOT_PATH . "/uploads" . $configArray['xn_attachment_path'];
-    if(!is_dir($path))
+    if (!is_dir($path)) {
         mkdir($path, 0777, true);
+    }
     chmod($path, 0777);
     copy(INDEX_FILE_PATH, $path . "/index.html");
+
     return true;
 }

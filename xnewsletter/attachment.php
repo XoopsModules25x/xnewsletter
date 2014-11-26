@@ -1,22 +1,21 @@
 <?php
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/header.php';
+include_once __DIR__ . '/header.php';
 
 // We recovered the value of the argument op in the URL$
-$attachment_id 	= xnewsletterRequest::getInt('attachment_id', 0);
-if(!$attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id)) {
+$attachment_id = xnewsletterRequest::getInt('attachment_id', 0);
+if (!$attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id)) {
     redirect_header('index.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
     exit();
 }
 $letter_id = $attachmentObj->getVar('attachment_letter_id');
-if(!$letterObj = $xnewsletter->getHandler('letter')->get($letter_id)) {
+if (!$letterObj = $xnewsletter->getHandler('letter')->get($letter_id)) {
     redirect_header('index.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
     exit();
 }
 $userPermissions = xnewsletter_getUserPermissionsByLetter($letter_id);
-if (
-    ($userPermissions['read'] && $letterObj->getVar('letter_sent') > 0) ||
-    ($userPermissions['send'] == true)
+if (($userPermissions['read'] && $letterObj->getVar('letter_sent') > 0)
+    || ($userPermissions['send'] == true)
 ) {
     // download attachment
     if (ini_get('zlib.output_compression')) {
@@ -24,7 +23,7 @@ if (
     }
     // get file informations from filesystem
     $attachmentFilename = $attachmentObj->getVar('attachment_name');
-    $attachmentPath = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentFilename;
+    $attachmentPath     = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentFilename;
     $attachmentMimetype = ($attachmentObj->getVar('attachment_type') != '') ? $attachmentObj->getVar('attachment_type') : "application/octet-stream";
     $attachmentFilesize = $attachmentObj->getVar('attachment_size');
 
@@ -37,7 +36,7 @@ if (
     header("Pragma: public");
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header("Cache-Control: private", false);
-    header("Content-Length: " . (string) ($attachmentFilesize));
+    header("Content-Length: " . (string)($attachmentFilesize));
     header("Content-Transfer-Encoding: binary");
     header("Content-Type: {$attachmentMimetype}");
     header("Content-Disposition: attachment; filename={$headerFilename}");

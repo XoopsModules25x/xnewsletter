@@ -17,26 +17,27 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
-// count "total"
-$catCount = $xnewsletter->getHandler('cat')->getCount();
-$accountsCount = $xnewsletter->getHandler('accounts')->getCount();
-$subscrCount = $xnewsletter->getHandler('subscr')->getCount();
-$catsubscrCount = $xnewsletter->getHandler('catsubscr')->getCount();
-$letterCount = $xnewsletter->getHandler('letter')->getCount();
-$protocolCount = $xnewsletter->getHandler('protocol')->getCount();
+// count 'total'
+$catCount        = $xnewsletter->getHandler('cat')->getCount();
+$accountsCount   = $xnewsletter->getHandler('accounts')->getCount();
+$subscrCount     = $xnewsletter->getHandler('subscr')->getCount();
+$catsubscrCount  = $xnewsletter->getHandler('catsubscr')->getCount();
+$letterCount     = $xnewsletter->getHandler('letter')->getCount();
+$protocolCount   = $xnewsletter->getHandler('protocol')->getCount();
 $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
 if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {
     $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
@@ -77,4 +78,4 @@ if ($accountsCount < 1) {
 // Render
 echo $indexAdmin->renderIndex();
 
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

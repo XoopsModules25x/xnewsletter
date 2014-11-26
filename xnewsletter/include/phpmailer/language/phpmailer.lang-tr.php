@@ -1,11 +1,12 @@
 <?php
 /**
  * Turkish PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Elçin Özel
- * @author Can Yılmaz
- * @author Mehmet Benlioğlu
- * @author @yasinaydin
+ * @author  Elçin Özel
+ * @author  Can Yılmaz
+ * @author  Mehmet Benlioğlu
+ * @author  @yasinaydin
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Hatası: Oturum açılamadı.';

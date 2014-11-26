@@ -17,23 +17,24 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
-include_once dirname(dirname(dirname(dirname(__FILE__)))) . '/mainfile.php';
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 // Include xoops admin header
-include_once XOOPS_ROOT_PATH . "/include/cp_functions.php";
+include_once XOOPS_ROOT_PATH . '/include/cp_functions.php';
 
-$pathIcon16 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons16');
-$pathIcon32 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons32');
+$pathIcon16      = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons16');
+$pathIcon32      = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons32');
 $pathModuleAdmin = XOOPS_ROOT_PATH . '/' . $xnewsletter->getModule()->getInfo('dirmoduleadmin');
 require_once $pathModuleAdmin . '/moduleadmin/moduleadmin.php';
 
@@ -42,7 +43,7 @@ xoops_loadLanguage('admin', $xnewsletter->getModule()->dirname());
 xoops_loadLanguage('modinfo', $xnewsletter->getModule()->dirname());
 xoops_loadLanguage('main', $xnewsletter->getModule()->dirname());
 
-define('XNEWSLETTER_IMG_OK', "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='"._AM_XNEWSLETTER_OK . "' />&nbsp;&nbsp;");
+define('XNEWSLETTER_IMG_OK', "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='" . _AM_XNEWSLETTER_OK . "' />&nbsp;&nbsp;");
 define('XNEWSLETTER_IMG_FAILED', "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_failed.png' alt='" . _AM_XNEWSLETTER_FAILED . "' title='" . _AM_XNEWSLETTER_FAILED . "' />&nbsp;&nbsp;");
 
 if (!xnewsletter_checkModuleAdmin()) {
@@ -57,18 +58,18 @@ $indexAdmin = new ModuleAdmin();
 
 $myts = MyTextSanitizer::getInstance();
 
-if ($xoopsUser) {
+if ($GLOBALS['xoopsUser']) {
     $moduleperm_handler =& xoops_gethandler('groupperm');
-    if (!$moduleperm_handler->checkRight('module_admin', $xnewsletter->getModule()->mid(), $xoopsUser->getGroups())) {
+    if (!$moduleperm_handler->checkRight('module_admin', $xnewsletter->getModule()->mid(), $GLOBALS['xoopsUser']->getGroups())) {
         redirect_header(XOOPS_URL, 1, _NOPERM);
         exit();
     }
 } else {
-    redirect_header(XOOPS_URL . "/user.php", 1, _NOPERM);
+    redirect_header(XOOPS_URL . '/user.php', 1, _NOPERM);
     exit();
 }
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-    include_once(XOOPS_ROOT_PATH . "/class/template.php");
+    include_once XOOPS_ROOT_PATH . '/class/template.php';
     $xoopsTpl = new XoopsTpl();
 }

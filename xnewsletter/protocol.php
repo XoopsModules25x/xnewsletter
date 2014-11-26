@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: protocol.php 12491 2014-04-25 13:21:55Z beckmi $
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
+ *
+ *  Version : $Id: protocol.php 12787 2014-09-17 10:58:25Z beckmi $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/header.php';
+include_once __DIR__ . '/header.php';
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
 include_once XOOPS_ROOT_PATH . '/header.php';
@@ -57,10 +58,10 @@ if ($protocolCount > 0) {
     $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria, null, true, true);
     foreach ($protocolObjs as $protocol_id => $protocolObj) {
         $protocol_array = $protocolObj->toArray();
-        $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
+        $subscrObj      = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
         if (is_object($subscrObj)) {
-            $subscr_array = $subscrObj->toArray();
-            $protocol_array['subscr'] = $subscr_array;
+            $subscr_array                                = $subscrObj->toArray();
+            $protocol_array['subscr']                    = $subscr_array;
             $protocol_array['subscr']['subscriber_name'] = $subscrObj->getVar('subscr_uid') != 0 ? XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
         } else {
             $protocol_array['subscr'] = false;
@@ -70,4 +71,4 @@ if ($protocolCount > 0) {
     }
 }
 
-include_once dirname(__FILE__) . '/footer.php';
+include_once __DIR__ . '/footer.php';

@@ -27,7 +27,7 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterAccounts
@@ -42,8 +42,8 @@ class XnewsletterAccounts extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
-        $this->db = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
+        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('accounts_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('accounts_type', XOBJ_DTYPE_INT, _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL, false);
         $this->initVar('accounts_name', XOBJ_DTYPE_TXTBOX, null, false, 100);
@@ -75,8 +75,6 @@ class XnewsletterAccounts extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
@@ -178,7 +176,7 @@ class XnewsletterAccounts extends XoopsObject
             $form->addElement($formfield_inbox, false);
 
             //Hardbox
-            $hard_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . ' ' . _XNEWSLETTER_BOUNCETYPE_HARD, '<br>');
+            $hard_tray          = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . ' ' . _XNEWSLETTER_BOUNCETYPE_HARD, '<br>');
             $formfield_movehard = new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_MOVEHARD, 'accounts_movehard', $this->getVar('accounts_movehard'), _YES, _NO);
             $hard_tray->addElement($formfield_movehard, false);
             $formfield_hardbox = new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_HARDBOX, 'accounts_hardbox', 50, 255, $this->getVar('accounts_hardbox'));
@@ -187,7 +185,7 @@ class XnewsletterAccounts extends XoopsObject
             $form->addElement($hard_tray, false);
 
             //Softbox
-            $soft_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . ' ' . _XNEWSLETTER_BOUNCETYPE_SOFT, '<br>');
+            $soft_tray          = new XoopsFormElementTray(_AM_XNEWSLETTER_BOUNCETYPE . ' ' . _XNEWSLETTER_BOUNCETYPE_SOFT, '<br>');
             $formfield_movesoft = new XoopsFormRadioYN(_AM_XNEWSLETTER_ACCOUNTS_MOVESOFT, 'accounts_movesoft', $this->getVar('accounts_movesoft'), _YES, _NO);
             $soft_tray->addElement($formfield_movesoft, false);
             $formfield_softbox = new XoopsFormText(_AM_XNEWSLETTER_ACCOUNTS_SOFTBOX, 'accounts_softbox', 50, 255, $this->getVar('accounts_softbox'));
@@ -221,7 +219,7 @@ class XnewsletterAccounts extends XoopsObject
 class XnewsletterAccountsHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -232,6 +230,6 @@ class XnewsletterAccountsHandler extends XoopsPersistableObjectHandler
     public function __construct(&$db)
     {
         parent::__construct($db, 'xnewsletter_accounts', 'XnewsletterAccounts', 'accounts_id', 'accounts_name');
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 }

@@ -1,8 +1,9 @@
 <?php
 /**
  * Ukrainian PHPMailer language file: refer to English translation for definitive list
+ *
  * @package PHPMailer
- * @author Yuriy Rudyy <yrudyy@prs.net.ua>
+ * @author  Yuriy Rudyy <yrudyy@prs.net.ua>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Помилка SMTP: помилка авторизації.';
