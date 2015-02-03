@@ -32,7 +32,7 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op = XoopsRequest::getString('op', 'list');
 
 switch ($op) {
     case 'list':
@@ -149,7 +149,7 @@ switch ($op) {
         break;
 
     case 'del_import':
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $result = $GLOBALS['xoopsDB']->queryF("TRUNCATE TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_import')}`");
             $result = $GLOBALS['xoopsDB']->queryF("REPAIR TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_import')}`");
             $result = $GLOBALS['xoopsDB']->queryF("OPTIMIZE TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_import')}`");
@@ -188,7 +188,7 @@ switch ($op) {
             $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         }
 
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $deleted      = 0;
             $errors       = array();
             $subscrArrays = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria, array('subscr_id'), false, false);
@@ -255,7 +255,7 @@ switch ($op) {
         break;
 
     case 'del_oldprotocol':
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $result = $GLOBALS['xoopsDB']->queryF("TRUNCATE TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}`");
             $result = $GLOBALS['xoopsDB']->queryF("REPAIR TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}`");
             $result = $GLOBALS['xoopsDB']->queryF("OPTIMIZE TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}`");
@@ -282,7 +282,7 @@ switch ($op) {
 
     case 'del_invalid_catsubscr':
         //delete data in table catsubscr, if catsubscr_subscrid is no more existing in table subscr
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $number_ids = 0;
             $deleted    = 0;
             $errors     = array();
@@ -342,7 +342,7 @@ switch ($op) {
         break;
 
     case 'del_invalid_ml':
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $use_mailinglist = $GLOBALS['xoopsModuleConfig']['xn_use_mailinglist'];
             $number_ids      = 0;
             $update          = 0;
@@ -423,7 +423,7 @@ switch ($op) {
 
     case 'del_invalid_cat':
         //remove cat from letter_cats, if cat is missing (if someone deleted cat after creating letter)
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $update     = 0;
             $errors     = array();
             $number_ids = 0;

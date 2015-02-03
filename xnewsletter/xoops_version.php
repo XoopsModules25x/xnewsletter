@@ -29,57 +29,57 @@
 
 defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
 
-$modversion['name']                = _MI_XNEWSLETTER_NAME;
-$modversion['version']             = 1.3;
-$modversion['description']         = _MI_XNEWSLETTER_DESC;
-$modversion['author']              = 'Goffy, Alfred';
-$modversion['credits']             = '';
-$modversion['help']                = 'page=help';
+$modversion['name']             = _MI_XNEWSLETTER_NAME;
+$modversion['version']          = 1.3;
+$modversion['description']      = _MI_XNEWSLETTER_DESC;
+$modversion['author']           = 'Goffy, Alfred';
+$modversion['credits']          = '';
+$modversion['help']             = 'page=help';
 $modversion['license']          = 'GNU GPL 2.0 or later';
 $modversion['license_url']      = "http://www.gnu.org/licenses/gpl-2.0.html";
-$modversion['image']               = "assets/images/module_logo.png"; // Path and name of the module’s logo
+$modversion['image']            = "assets/images/module_logo.png"; // Path and name of the module’s logo
 $modversion['dirname']          = basename(dirname(__FILE__));
-$modversion['dirmoduleadmin'] = 'Frameworks/moduleclasses';
-$modversion['icons16']        = 'Frameworks/moduleclasses/icons/16';
-$modversion['icons32']        = 'Frameworks/moduleclasses/icons/32';
+$modversion['dirmoduleadmin']   = 'Frameworks/moduleclasses';
+$modversion['icons16']          = 'Frameworks/moduleclasses/icons/16';
+$modversion['icons32']          = 'Frameworks/moduleclasses/icons/32';
 
-$modversion['official']            = false;
+$modversion['official']             = false;
 
 include_once XOOPS_ROOT_PATH . '/modules/' . $modversion['dirname'] . '/include/constants.php';
 
 // About
-$modversion['module_status'] = 'Beta 1';
-$modversion['release_date']  = '2014/10/02';
-$modversion['module_website_url']  = 'wedega.com';
-$modversion['module_website_name'] = 'Webdesign Gabor';
-$modversion['min_php']     = '5.3.7';
-$modversion['min_xoops']   = '2.5.7';
-$modversion['min_admin']   = '1.1';
-$modversion['min_db']      = array(
+$modversion['module_status']        = 'RC 1';
+$modversion['release_date']         = '2015/02/03';
+$modversion['module_website_url']   = 'wedega.com';
+$modversion['module_website_name']  = 'Webdesign Gabor';
+$modversion['min_php']              = '5.3.7';
+$modversion['min_xoops']            = '2.5.7.1';
+$modversion['min_admin']            = '1.1';
+$modversion['min_db'] = array(
     'mysql'  => '5.0.7',
     'mysqli' => '5.0.7'
 );
 
-$modversion['author_mail']         = 'webmaster@wedega.com';
-$modversion['author_website_url']  = 'wedega.com';
-$modversion['author_website_name'] = 'Webdesign Gabor';
+$modversion['author_mail']          = 'webmaster@wedega.com';
+$modversion['author_website_url']   = 'wedega.com';
+$modversion['author_website_name']  = 'Webdesign Gabor';
 
 // Extra
-$modversion['demo_site_url']       = '';
-$modversion['demo_site_name']      = '';
-$modversion['forum_site_url']      = '';
-$modversion['forum_site_name']     = '';
-$modversion['release_info']        = '';
-$modversion['release_file']        = XOOPS_URL . '/modules/' . $modversion['dirname'] . '/docs/changelog.txt';
-$modversion['manual']      = 'xnewsletter.txt';
-$modversion['manual_file'] = XOOPS_URL . "/modules/" . $modversion['dirname'] . "/docs/";
+$modversion['demo_site_url']        = '';
+$modversion['demo_site_name']       = '';
+$modversion['forum_site_url']       = '';
+$modversion['forum_site_name']      = '';
+$modversion['release_info']         = '';
+$modversion['release_file']         = XOOPS_URL . '/modules/' . $modversion['dirname'] . '/docs/changelog.txt';
+$modversion['manual']               = 'xnewsletter.txt';
+$modversion['manual_file']          = XOOPS_URL . "/modules/" . $modversion['dirname'] . "/docs/";
 
 
 
 // Install, update, unistall
-$modversion['onInstall'] = 'include/oninstall.php';
-$modversion['onUpdate']  = 'include/onupdate.php';
-$modversion['onUninstall'] = 'include/onuninstall.php';
+$modversion['onInstall']            = 'include/oninstall.php';
+$modversion['onUpdate']             = 'include/onupdate.php';
+$modversion['onUninstall']          = 'include/onuninstall.php';
 
 
 
@@ -90,15 +90,17 @@ $modversion['helpsection'][$i]['link'] = 'page=help';
 ++$i;
 $modversion['helpsection'][$i]['name'] = 'Install';
 $modversion['helpsection'][$i]['link'] = 'page=help2';
-
+++$i;
+$modversion['helpsection'][$i]['name'] = 'Tutorial';
+$modversion['helpsection'][$i]['link'] = 'page=help3';
 
 
 // Admin things
-$modversion['hasAdmin'] = true;
-$modversion['adminindex']  = 'admin/index.php';
-$modversion['adminmenu']   = 'admin/menu.php';
+$modversion['hasAdmin']             = true;
+$modversion['adminindex']           = 'admin/index.php';
+$modversion['adminmenu']            = 'admin/menu.php';
 // Admin system menu
-$modversion['system_menu'] = true;
+$modversion['system_menu']          = true;
 
 
 
@@ -124,12 +126,12 @@ $modversion['tables'] = array(
 
 
 // Search
-$modversion['hasSearch'] = false;
+$modversion['hasSearch']            = false;
 
 
 
 // Menu
-$modversion['hasMain'] = true;
+$modversion['hasMain']              = true;
 
 $subcount          = 1;
 $modversion['sub'] = array();
@@ -146,13 +148,15 @@ $showEdit   = false;
 $showCreate = false;
 $showList   = false;
 
-if (is_object($xoopsModule)) {
-    $catHandler = xoops_getModuleHandler('cat', $modversion['dirname']);
+if (isset($xoopsModule) && is_object($xoopsModule) && $xoopsModule->dirname() == $modversion['dirname'] && $xoopsModule->isactive()) {
+    if (!isset($xnewsletter)) {
+        include_once __DIR__ . '/class/xnewsletter.php';
+        $xnewsletter = XnewsletterXnewsletter::getInstance();
+    }
     $catCriteria = new CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
-    $catObjs = $catHandler->getAll($catCriteria);
-
+    $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
     foreach ($catObjs as $catObj) {
         if ($gperm_handler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
             $showRead = true;
@@ -176,6 +180,7 @@ if ($showRead == true) {
     ++$subcount;
 }
 if ($showEdit == true) {
+    // NOP
 }
 if ($showCreate == true) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_CREATE;
@@ -303,9 +308,9 @@ $modversion['templates'][$i]['description'] = '';
 $modversion['templates'][$i]['file']        = $modversion['dirname'] . '_protocol.tpl';
 $modversion['templates'][$i]['description'] = '';
 // Common templates
-++$i;
-$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_common_breadcrumb.tpl';
-$modversion['templates'][$i]['description'] = '';
+
+
+
 // Admin templates
 ++$i;
 $modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_subscrs_list.tpl';
@@ -315,11 +320,51 @@ $modversion['templates'][$i]['description'] = '';
 $modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_letters_list.tpl';
 $modversion['templates'][$i]['type']        = 'admin';
 $modversion['templates'][$i]['description'] = '';
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_templates_list.tpl';
+$modversion['templates'][$i]['type']        = 'admin';
+$modversion['templates'][$i]['description'] = '';
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_attachments_list.tpl';
+$modversion['templates'][$i]['type']        = 'admin';
+$modversion['templates'][$i]['description'] = '';
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_cats_list.tpl';
+$modversion['templates'][$i]['type']        = 'admin';
+$modversion['templates'][$i]['description'] = '';
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_protocols_list.tpl';
+$modversion['templates'][$i]['type']        = 'admin';
+$modversion['templates'][$i]['description'] = '';
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_tasks_list.tpl';
+$modversion['templates'][$i]['type']        = 'admin';
+$modversion['templates'][$i]['description'] = '';
 unset($i);
 
 
 
 // Module config setting
+// Config categories
+$i                                      = 0;
+$modversion['configcat']['editor']['name'] = _MI_XNEWSLETTER_CONFCAT_EDITOR;
+$modversion['configcat']['editor']['description'] = _MI_XNEWSLETTER_CONFCAT_EDITOR_DESC;
+$i++;
+$modversion['configcat']['index']['name'] = _MI_XNEWSLETTER_CONFCAT_INDEX;
+$modversion['configcat']['index']['description'] = _MI_XNEWSLETTER_CONFCAT_INDEX_DESC;
+$i++;
+$modversion['configcat']['attachment']['name'] = _MI_XNEWSLETTER_CONFCAT_ATTACHMENT;
+$modversion['configcat']['attachment']['description'] = _MI_XNEWSLETTER_CONFCAT_ATTACHMENT_DESC;
+$i++;
+$modversion['configcat']['format']['name'] = _MI_XNEWSLETTER_CONFCAT_FORMAT;
+$modversion['configcat']['format']['description'] = _MI_XNEWSLETTER_CONFCAT_FORMAT_DESC;
+$i++;
+$modversion['configcat']['subscr']['name'] = _MI_XNEWSLETTER_CONFCAT_SUBSCR;
+$modversion['configcat']['subscr']['description'] = _MI_XNEWSLETTER_CONFCAT_SUBSCR_DESC;
+$i++;
+$modversion['configcat']['task']['name'] = _MI_XNEWSLETTER_CONFCAT_TASK;
+$modversion['configcat']['task']['description'] = _MI_XNEWSLETTER_CONFCAT_TASK_DESC;
+
 $i                                       = 0;
 ++$i;
 xoops_load('XoopsEditorHandler');
@@ -332,6 +377,7 @@ $modversion['config'][$i]['formtype']    = 'select';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = 'dhtmltextarea';
 $modversion['config'][$i]['options']     = $editorList;
+$modversion['config'][$i]['category']    = 'editor';
 ++$i;
 $modversion['config'][$i]['name']        = 'template_editor';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_TEMPLATE_EDITOR';
@@ -340,6 +386,8 @@ $modversion['config'][$i]['formtype']    = 'select';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = 'textarea';
 $modversion['config'][$i]['options']     = XoopsLists::getEditorList();
+$modversion['config'][$i]['category']    = 'editor';
+
 ++$i;
 $modversion['config'][$i]['name']        = 'keywords';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_KEYWORDS';
@@ -347,6 +395,8 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_KEYWORDS_DESC';
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = '';
+$modversion['config'][$i]['category']    = 'index';
+
 ++$i;
 //Uploads : max letter_attachments
 $modversion['config'][$i]['name']        = 'xn_maxattachments';
@@ -355,6 +405,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_MAXATTACHMENTS_DESC'
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '5';
+$modversion['config'][$i]['category']    = 'attachment';
 ++$i;
 //Uploads : size letter_attachment
 $modversion['config'][$i]['name']        = 'xn_maxsize';
@@ -363,6 +414,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_ATTACHMENT_MAXSIZE_D
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '10485760'; // 1MByte
+$modversion['config'][$i]['category']    = 'attachment';
 ++$i;
 //Uploads : mimetypes letter_attachment
 $modversion['config'][$i]['name']        = 'xn_mimetypes';
@@ -400,7 +452,7 @@ $modversion['config'][$i]['options']     = array(
     'txt'  => 'text/plain',
     'rtf'  => 'text/rtf'
 );
-
+$modversion['config'][$i]['category']    = 'attachment';
 ++$i;
 //Uploads : path attachments
 $modversion['config'][$i]['name']        = 'xn_attachment_path';
@@ -409,22 +461,30 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_ATTACHMENT_PATH_DESC
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = '/xnewsletter/attachments/';
+$modversion['config'][$i]['category']    = 'attachment';
+
 ++$i;
 $modversion['config'][$i]['name']        = 'adminperpage';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_ADMINPERPAGE';
 $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_ADMINPERPAGE_DESC';
+$modversion['config'][$i]['formtype']    = 'select';
+$modversion['config'][$i]['valuetype']   = 'int';
+$modversion['config'][$i]['default']     = 10;
+$modversion['config'][$i]['options']     = array(
+    '10' => 10,
+    '25' => 25,
+    '50' => 50,
+    '100' => 100);
+$modversion['config'][$i]['category']    = 'index';
+++$i;
+$modversion['config'][$i]['name']        = 'dateformat';
+$modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_DATEFORMAT';
+$modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_DATEFORMATDSC';
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'text';
-$modversion['config'][$i]['default']     = '15';
-++$i;
-$modversion['config'][$i] = array(
-    'name'        => 'dateformat',
-    'title'       => '_MI_XNEWSLETTER_DATEFORMAT',
-    'description' => '_MI_XNEWSLETTER_DATEFORMATDSC',
-    'formtype'    => 'textbox',
-    'valuetype'   => 'text',
-    'default'     => _DATESTRING
-); //'D, d-M-Y');
+$modversion['config'][$i]['default']     = _DATESTRING;
+$modversion['config'][$i]['category']    = 'format';
+
 ++$i;
 $modversion['config'][$i]['name']        = 'welcome_message';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_WELCOME_MESSAGE';
@@ -432,6 +492,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_WELCOME_MESSAGE_DESC
 $modversion['config'][$i]['formtype']    = 'textarea';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = _MI_XNEWSLETTER_WELCOME;
+$modversion['config'][$i]['category']    = 'index';
 ++$i;
 $modversion['config'][$i]['name']        = 'advertise';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_ADVERTISE';
@@ -439,6 +500,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_ADVERTISE_DESC';
 $modversion['config'][$i]['formtype']    = 'textarea';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = '';
+$modversion['config'][$i]['category']    = 'index';
 ++$i;
 $modversion['config'][$i]['name']        = 'social_active';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_SOCIALACTIVE';
@@ -446,6 +508,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SOCIALACTIVE_DESC';
 $modversion['config'][$i]['formtype']    = 'yesno';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = false;
+$modversion['config'][$i]['category']    = 'index';
 ++$i;
 $modversion['config'][$i]['name']        = 'social_code';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_SOCIALCODE';
@@ -453,6 +516,8 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SOCIALCODE_DESC';
 $modversion['config'][$i]['formtype']    = 'textarea';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = '';
+$modversion['config'][$i]['category']    = 'index';
+
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_use_mailinglist';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_USE_MAILINGLIST';
@@ -460,6 +525,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_USE_MAILINGLIST_DESC
 $modversion['config'][$i]['formtype']    = 'yesno';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = false;
+$modversion['config'][$i]['category']    = 'index';
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_use_salutation';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_USE_SALUTATION';
@@ -467,6 +533,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_USE_SALUTATION_DESC'
 $modversion['config'][$i]['formtype']    = 'yesno';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = true;
+$modversion['config'][$i]['category']    = 'subscr';
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_groups_without_actkey';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_GROUPS_WITHOUT_ACTKEY';
@@ -474,6 +541,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_GROUPS_WITHOUT_ACTKE
 $modversion['config'][$i]['formtype']    = 'group_multi';
 $modversion['config'][$i]['valuetype']   = 'array';
 $modversion['config'][$i]['default']     = '1';
+$modversion['config'][$i]['category']    = 'subscr';
 ++$i;
 $modversion['config'][$i]['name']        = 'confirmation_time';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_CONFIRMATION_TIME';
@@ -488,6 +556,7 @@ $modversion['config'][$i]['options']     = array(
     _MI_XNEWSLETTER_CONFIRMATION_TIME_24 => 24,
     _MI_XNEWSLETTER_CONFIRMATION_TIME_48 => 48
 );
+$modversion['config'][$i]['category']    = 'subscr';
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_groups_change_other';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_GROUPS_CHANGE_OTHER';
@@ -495,6 +564,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_GROUPS_CHANGE_OTHER_
 $modversion['config'][$i]['formtype']    = 'group_multi';
 $modversion['config'][$i]['valuetype']   = 'array';
 $modversion['config'][$i]['default']     = '1';
+$modversion['config'][$i]['category']    = 'index';
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_send_in_packages';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_SEND_IN_PACKAGES';
@@ -502,6 +572,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_DES
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '0';
+$modversion['config'][$i]['category']    = 'task';
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_send_in_packages_time';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_TIME';
@@ -509,6 +580,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_TIM
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '60';
+$modversion['config'][$i]['category']    = 'task';
 
 unset($i);
 

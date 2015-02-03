@@ -3,7 +3,7 @@
 <div style='clear:both;'></div>
 
 <h2><{$letter.letter_title}></h2>
-<div style='padding:10px;border:1px solid black;'>
+<div style='padding:0px; margin:0px; border:none;'>
     <{$letter.letter_content_templated}>
 </div>
 <div style='clear:both;'></div>

@@ -29,13 +29,13 @@
 
 $currentFile = basename(__FILE__);
 include_once __DIR__ . '/admin_header.php';
-xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = xnewsletterRequest::getString('op', 'list');
-$save_and_check = xnewsletterRequest::getString('save_and_check', 'none');
-$accounts_id    = xnewsletterRequest::getInt('accounts_id', 0);
-$post           = xnewsletterRequest::getString('post', '');
+$op             = XoopsRequest::getString('op', 'list');
+$accounts_id    = XoopsRequest::getInt('accounts_id', 0);
+$save_and_check = XoopsRequest::getString('save_and_check', 'none');
+$accounts_id    = XoopsRequest::getInt('accounts_id', 0);
+$post           = XoopsRequest::getString('post', '');
 
 if ($post == '' && $op == 'save_accounts' && $save_and_check == 'none') {
     $op = "edit_account";
@@ -43,6 +43,9 @@ if ($post == '' && $op == 'save_accounts' && $save_and_check == 'none') {
 
 switch ($op) {
     case 'check_account':
+        // render start here
+        xoops_cp_header();
+        // render submenu
         echo $indexAdmin->addNavigation($currentFile);
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
@@ -54,7 +57,7 @@ switch ($op) {
         }
 
         $mailhost = $accountObj->getVar('accounts_server_in');
-        $port     = $accountObj->getVar('accounts_port_in');
+        $port = $accountObj->getVar('accounts_port_in');
         switch ($accountObj->getVar('accounts_type')) {
             case _XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3:
                 $service = 'pop3';
@@ -92,8 +95,7 @@ switch ($op) {
         echo "    <th>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK . "</th>";
         echo "    <th>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO . "</th>";
         echo "</tr>";
-
-        $mbox = @imap_open("{" . $command . "}", $accounts_username, $accounts_password); // or die ("can't connect: " . imap_last_error());
+        $mbox = @imap_open('{' . $command . '}', $accounts_username, $accounts_password); // or die ("can't connect: " . imap_last_error());
         if ($mbox === false) {
             echo "<tr>";
             echo "<td>" . XNEWSLETTER_IMG_FAILED . "</td>";
@@ -107,7 +109,7 @@ switch ($op) {
             echo "<td></td>";
             echo "</tr>";
 
-            $folders = imap_listmailbox($mbox, "{" . $command . "}", "*");
+            $folders = imap_listmailbox($mbox, '{' . $command . '}', '*');
             if ($folders == false) {
                 echo "<tr>";
                 echo "<td>" . XNEWSLETTER_IMG_FAILED . "</td>";
@@ -125,17 +127,17 @@ switch ($op) {
                     $foldercreated = 0;
                     while (list($key, $val) = each($folders)) {
                         echo "($key) ";
-                        echo imap_utf7_decode(str_replace("{" . $command . "}", '', $val)) . "<br>\n";
-                        if ("{" . $command . "}" . $accounts_inbox == $val) {
+                        echo imap_utf7_decode(str_replace('{' . $command . '}', '', $val)) . "<br>\n";
+                        if ('{' . $command . '}' . $accounts_inbox == $val) {
                             $accounts_inbox_ok = true;
                         }
-                        if ("{" . $command . "}" . $accounts_hardbox == $val) {
+                        if ('{' . $command . '}' . $accounts_hardbox == $val) {
                             $accounts_hardbox_ok = true;
                         } else {
                             @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_hardbox));
                             $foldercreated = 1;
                         }
-                        if ("{" . $command . "}" . $accounts_softbox == $val) {
+                        if ('{' . $command . '}' . $accounts_softbox == $val) {
                             $accounts_softbox_ok = true;
                         } else {
                             @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_softbox));
@@ -143,12 +145,12 @@ switch ($op) {
                         }
                     }
                     if ($foldercreated == 1) {
-                        $folders_recheck = imap_listmailbox($mbox, "{" . $command . "}", "*");
+                        $folders_recheck = imap_listmailbox($mbox, '{' . $command . '}', '*');
                         while (list($key, $val) = each($folders_recheck)) {
-                            if ("{" . $command . "}" . $accounts_hardbox == $val) {
+                            if ('{' . $command . '}' . $accounts_hardbox == $val) {
                                 $accounts_hardbox_ok = true;
                             }
-                            if ("{" . $command . "}" . $accounts_softbox == $val) {
+                            if ('{' . $command . '}' . $accounts_softbox == $val) {
                                 $accounts_softbox_ok = true;
                             }
                         }
@@ -203,27 +205,31 @@ switch ($op) {
     case 'list':
     case 'list_accounts':
     default:
+        // render start here
+        xoops_cp_header();
+        // render submenu
         echo $indexAdmin->addNavigation($currentFile);
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, '?op=new_account', 'add');
         echo $indexAdmin->renderButton();
         //
-        $limit            = $xnewsletter->getConfig('adminperpage');
         $accountsCriteria = new CriteriaCompo();
-        $accountsCriteria->setSort("accounts_id ASC, accounts_type");
-        $accountsCriteria->setOrder("ASC");
+        $accountsCriteria->setSort('accounts_id ASC, accounts_type');
+        $accountsCriteria->setOrder('ASC');
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount();
-        $start         = xnewsletterRequest::getInt('start', 0);
+        //
+        $start = XoopsRequest::getInt('start', 0);
+        $limit = $xnewsletter->getConfig('adminperpage');
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
+        //
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
         if ($accountsCount > $limit) {
-            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+            xoops_load('xoopspagenav');
             $pagenav = new XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
         }
-
         // View Table
         echo "<table class='outer width100' cellspacing='1'>";
         echo "<tr>";
@@ -235,7 +241,6 @@ switch ($op) {
         echo "    <th>" . _AM_XNEWSLETTER_ACCOUNTS_DEFAULT . "</th>";
         echo "    <th>" . _AM_XNEWSLETTER_FORMACTION . "</th>";
         echo "</tr>";
-
         if ($accountsCount > 0) {
             $class = 'odd';
             foreach ($accountsObjs as $accounts_id => $accountsObj) {
@@ -255,7 +260,6 @@ switch ($op) {
                 echo "<td>{$accountsObj->getVar('accounts_yourmail')}</td>";
                 $verif_accounts_default = ($accountsObj->getVar('accounts_default') == 1) ? _YES : _NO;
                 echo "<td class='center'>{$verif_accounts_default}</td>";
-
                 echo "<td class='center'>";
                 echo "    <a href='?op=edit_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
                 echo "    <a href='?op=delete_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
@@ -271,28 +275,41 @@ switch ($op) {
         echo "<br />";
         echo "<div>{$pagenav}</div>";
         echo "<br />";
+        include_once __DIR__ . '/admin_footer.php';
         break;
 
     case 'new_account':
+    case 'edit_account':
+        // render start here
+        xoops_cp_header();
+        // render submenu
         echo $indexAdmin->addNavigation($currentFile);
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
         //
-        $accountObj = $xnewsletter->getHandler('accounts')->create();
-        $accountObj = xnewsletter_setPost($accountObj, $_POST);
-        $form       = $accountObj->getForm();
+        if ($accounts_id == 0) {
+            $accountObj = $xnewsletter->getHandler('accounts')->create();
+            $accountObj = xnewsletter_setPost($accountObj, $_POST);
+        } else {
+            $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
+            if (!empty($_POST)) {
+                xnewsletter_setPost($accountObj, $_POST);
+            }
+        }
+        //
+        $form = $accountObj->getForm();
         $form->display();
+        include_once __DIR__ . '/admin_footer.php';
         break;
 
     case 'save_accounts':
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-
-        $accountObj           = $xnewsletter->getHandler('accounts')->get($accounts_id);
+        $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
         $_POST['accounts_id'] = $accounts_id;
-        $accountObj           = xnewsletter_setPost($accountObj, $_POST);
-
+        $accountObj = xnewsletter_setPost($accountObj, $_POST);
+        //
         $accountsCriteria = new CriteriaCompo();
         $accountsCriteria->add(new Criteria('accounts_default', 1));
         $count_accounts_default = $xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
@@ -321,29 +338,22 @@ switch ($op) {
         } else {
             $accountObj->setErrors(_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
         }
-
-        echo $accountObj->getHtmlErrors();
-        $form = $accountObj->getForm();
-        $form->display();
-        break;
-
-    case 'edit_account':
+        // render start here
+        xoops_cp_header();
+        // render submenu
         echo $indexAdmin->addNavigation($currentFile);
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, '?op=new_account', 'add');
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
         echo $indexAdmin->renderButton();
         //
-        $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
-        if (!empty($_POST)) {
-            xnewsletter_setPost($accountObj, $_POST);
-        }
+        echo $accountObj->getHtmlErrors();
         $form = $accountObj->getForm();
         $form->display();
+        include_once __DIR__ . '/admin_footer.php';
         break;
 
     case 'delete_account':
         $accountObj = $xnewsletter->getHandler('accounts')->get($accounts_id);
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -353,8 +363,15 @@ switch ($op) {
                 echo $accountObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array('ok' => true, 'accounts_id' => $accounts_id, 'op' => 'delete_account'), $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));
+            // render start here
+            xoops_cp_header();
+            // render submenu
+            xoops_confirm(
+                array('ok' => true, 'accounts_id' => $accounts_id, 'op' => 'delete_account'),
+                $currentFile,
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name'))
+            );
+            include_once __DIR__ . '/admin_footer.php';
         }
         break;
 }
-include_once __DIR__ . '/admin_footer.php';

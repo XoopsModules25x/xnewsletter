@@ -30,7 +30,7 @@
 $currentFile = basename(__FILE__);
 include_once __DIR__ . '/header.php';
 
-$op = xnewsletterRequest::getString('op', 'welcome');
+$op = XoopsRequest::getString('op', 'welcome');
 
 switch ($op) {
     case 'welcome':
@@ -43,7 +43,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 

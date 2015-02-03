@@ -54,9 +54,9 @@ CREATE TABLE `xnewsletter_cat` (
 #
 CREATE TABLE `xnewsletter_subscr` (
     `subscr_id`                 int(8) NOT NULL  auto_increment,
-    `subscr_email`              varchar(100) NOT NULL default '',
-    `subscr_firstname`          varchar(100) NOT NULL default '',
-    `subscr_lastname`           varchar(100) NOT NULL default '',
+    `subscr_email`              varchar(255) NOT NULL default '',
+    `subscr_firstname`          varchar(255) NOT NULL default '',
+    `subscr_lastname`           varchar(255) NOT NULL default '',
     `subscr_uid`                int(8) NOT NULL default '0',
     `subscr_sex`                varchar (100) NULL default '',
     `subscr_submitter`          int(8) NOT NULL default '0',
@@ -93,12 +93,12 @@ CREATE TABLE `xnewsletter_catsubscr` (
 #
 CREATE TABLE `xnewsletter_letter` (
     `letter_id`                 int(8) NOT NULL  auto_increment,
-    `letter_title`              varchar(100) NOT NULL default '',
+    `letter_title`              varchar(255) NOT NULL default '',
     `letter_content`            text NOT NULL ,
     `letter_template`           varchar(100) NOT NULL default '',
     `letter_cats`               varchar(100) NULL default '',
     `letter_account`            int(8) NOT NULL default '0',
-    `letter_email_test`         varchar(100) NULL default '',
+    `letter_email_test`         varchar(512) NULL default '',
     `letter_submitter`          int(8) NOT NULL default '0',
     `letter_created`            int(10) NOT NULL default '0',
     `letter_sender`             int(8) NOT NULL default '0',
@@ -133,7 +133,7 @@ CREATE TABLE `xnewsletter_protocol` (
 CREATE TABLE `xnewsletter_attachment` (
     `attachment_id`             int(8) NOT NULL  auto_increment,
     `attachment_letter_id`      int(8) NOT NULL default '0',
-    `attachment_name`           varchar(200) NULL default '',
+    `attachment_name`           varchar(255) NULL default '',
     `attachment_type`           varchar(100) NULL default '',
     `attachment_submitter`      int(8) NOT NULL default '0',
     `attachment_created`        int(10) NOT NULL default '0',
@@ -187,9 +187,9 @@ CREATE TABLE `xnewsletter_bmh` (
 #
 CREATE TABLE `xnewsletter_import` (
     `import_id`                 int(8) NOT NULL  auto_increment,
-    `import_email`              varchar(100) NOT NULL default '',
-    `import_firstname`          varchar(100) NULL default '',
-    `import_lastname`           varchar(100) NULL default '',
+    `import_email`              varchar(255) NOT NULL default '',
+    `import_firstname`          varchar(255) NULL default '',
+    `import_lastname`           varchar(255) NULL default '',
     `import_sex`                varchar(100) NULL default '',
     `import_cat_id`             int(8) NOT NULL default '0',
     `import_subscr_id`          int(8) NOT NULL default '0',
@@ -223,7 +223,7 @@ CREATE TABLE `xnewsletter_task` (
 #
 CREATE TABLE `xnewsletter_template` (
     `template_id`               int(8) NOT NULL  auto_increment,
-    `template_title`            varchar(100) NOT NULL default '',
+    `template_title`            varchar(255) NOT NULL default '',
     `template_description`      text NOT NULL ,
     `template_content`          text NOT NULL ,
     `template_submitter`        int(8) NOT NULL default '0',

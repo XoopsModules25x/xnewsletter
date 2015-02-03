@@ -45,14 +45,14 @@ class XnewsletterImport extends XoopsObject
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('import_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('import_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar('import_firstname', XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar('import_lastname', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('import_email', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('import_firstname', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('import_lastname', XOBJ_DTYPE_TXTBOX, null, false, 255);
         $this->initVar('import_sex', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('import_cat_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('import_subscr_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('import_catsubscr_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('import_status', XOBJ_DTYPE_INT, false, false); // boolean
+        $this->initVar('import_status', XOBJ_DTYPE_INT, false, _XNEWSLETTER_IMPORT_STATUS_TOCHECK);
     }
 
     /**
@@ -116,6 +116,7 @@ class XnewsletterImport extends XoopsObject
 
         //option, whether data should be shown for check or directly imported
         $check_after = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_AFTER_READ, 'action_after_read', $action_after_read, '<br />');
+        $check_after->setDescription(_AM_XNEWSLETTER_IMPORT_AFTER_READ_DESC);
         $check_after->addOption(0, _AM_XNEWSLETTER_IMPORT_READ_IMPORT);
         $check_after->addOption(1, _AM_XNEWSLETTER_IMPORT_READ_CHECK);
         $check_after->setextra('onclick="document.forms.form_select_import.submit()"');
@@ -140,7 +141,7 @@ class XnewsletterImport extends XoopsObject
             $sel_limitcheck->addOption(10000, 10000);
             $sel_limitcheck->addOption(25000, 25000);
         } else {
-            $limitOptions = array(25, 50, 100, 200, 400);
+            $limitOptions = array(10, 25, 50, 100, 200, 400);
             foreach ($limitOptions as $limitOption) {
                 // check if limit options are compatible with php.ini 'max_input_vars' setting
                 if ((ini_get('max_input_vars') == 0) || ((($limitOption * 7) + 4) < ini_get('max_input_vars'))) {

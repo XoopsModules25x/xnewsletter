@@ -39,6 +39,7 @@ $catsubscrCount  = $xnewsletter->getHandler('catsubscr')->getCount();
 $letterCount     = $xnewsletter->getHandler('letter')->getCount();
 $protocolCount   = $xnewsletter->getHandler('protocol')->getCount();
 $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
+$templateCount = $xnewsletter->getHandler('template')->getCount();
 if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {
     $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
 }
@@ -60,6 +61,7 @@ $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CAT
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_SUBSCR, $subscrCount, ($subscrCount == 0) ? _RED : _GREEN);
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CATSUBSCR, $catsubscrCount, ($catsubscrCount == 0) ? _RED : _GREEN);
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_LETTER, $letterCount, ($letterCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_TEMPLATE, $templateCount, ($templateCount == 0) ? _RED : _GREEN);
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ATTACHMENT, $attachmentCount, ($attachmentCount == 0) ? _RED : _GREEN);
 $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_PROTOCOL, $protocolCount, ($protocolCount == 0) ? _RED : _GREEN);
 if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {

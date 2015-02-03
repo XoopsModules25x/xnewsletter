@@ -61,37 +61,54 @@ class XnewsletterAttachment extends XoopsObject
      */
     public function getForm($action = false)
     {
+        global $xoopsUser;
+        //
+        xoops_load('XoopsFormLoader');
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ATTACHMENT_ADD) : sprintf(_AM_XNEWSLETTER_ATTACHMENT_EDIT);
-
-        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        //
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
-
+        // attachment: attachment_name
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_NAME, $this->getVar('attachment_name')));
-
+        // attachment: attachment_size
         $form->addElement(
             new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SIZE, "<span title='" . $this->getVar('attachment_size') . " B'>" . xnewsletter_bytesToSize1024($this->getVar('attachment_size')) . "</span>")
         );
-
+        // attachment: attachment_type
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_TYPE, $this->getVar('attachment_type')));
-
-        // attachment_mode
+        // attachment: attachment_mode
         $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, 'attachment_mode', $this->getVar('attachment_mode'));
         $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
         $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
         //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO);  // for future features
         $form->addElement($mode_select);
-
+        // attachment: extra info
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_CREATED, formatTimestamp($time, 's')));
 
-        $form->addElement(new XoopsFormHidden('op', 'save_attachment'));
-        $form->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
-
+        // form: button tray
+        $button_tray = new XoopsFormElementTray('', '');
+        $button_tray->addElement(new XoopsFormHidden('op', 'save_attachment'));
+        //
+        $button_submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
+        $button_tray->addElement($button_submit);
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
+        $form->addElement($button_tray);
+        //
         return $form;
     }
 }

@@ -37,7 +37,7 @@ $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 // breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
+$breadcrumb = new XnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -46,8 +46,8 @@ if (!$GLOBALS['xoopsUser']) {
     redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
-$op        = xnewsletterRequest::getString('op', 'list');
-$letter_id = xnewsletterRequest::getInt('letter_id', 0);
+$op        = XoopsRequest::getString('op', 'list');
+$letter_id = XoopsRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
     redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
@@ -66,7 +66,7 @@ $protocolCriteria->add(new Criteria('protocol_subscriber_id', 0, '>'));
 $protocolCriteria->setLimit(1);
 $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
 if ($protocolCount > 0) {
-    if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+    if (XoopsRequest::getBool('ok', false, 'POST') == true) {
         $start_sending = true;
     } else {
         xoops_confirm(array('ok' => true, 'op' => $op, 'letter_id' => $letter_id), $_SERVER['REQUEST_URI'], _AM_XNEWSLETTER_SEND_SURE_SENT);
@@ -82,7 +82,7 @@ if ($start_sending == true) {
     } else {
         $xn_send_in_packages_time = 0;
     }
-    include XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
+    include XOOPS_ROOT_PATH . '/modules/xnewsletter/include/functions.task.php';
     // create tasks
     $result_create = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
     // execute tasks

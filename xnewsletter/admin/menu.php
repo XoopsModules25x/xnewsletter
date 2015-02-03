@@ -64,17 +64,20 @@ $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_attachment.png';
 $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU8;
 $adminmenu[$i]['link']  = 'admin/protocol.php';
 $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_protocol.png';
+++$i;
+if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
+    $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU13;
+} else {
+    $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU13;
+}
+$adminmenu[$i]['link']  = 'admin/task.php';
+$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_task.png';
+
 if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
     ++$i;
     $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU9;
     $adminmenu[$i]['link']  = 'admin/mailinglist.php';
     $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_mailinglist.png';
-}
-if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    ++$i;
-    $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU13;
-    $adminmenu[$i]['link']  = 'admin/task.php';
-    $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_task.png';
 }
 ++$i;
 $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU10;

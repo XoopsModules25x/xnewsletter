@@ -38,7 +38,7 @@ $xoopsLogger->activated = false;
 $GLOBALS['xoopsTpl']->assign('xoops_pagetitle', _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW);
 
 // get letter_id
-$letter_id = xnewsletterRequest::getString('letter_id', 'list');
+$letter_id = XoopsRequest::getString('letter_id', 'list');
 // check letter_id
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
@@ -56,6 +56,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $xoopsTpl->assign('subscr_email', _AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW);
     $xoopsTpl->assign('email', _AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW); // new from v1.3
     // letter data
+    $xoopsTpl->assign('letter_id', $letter_id); // new from v1.3
     $xoopsTpl->assign('title', $letterObj->getVar('letter_title', 'n')); // new from v1.3
     $xoopsTpl->assign('content', $letterObj->getVar('letter_content', 'n'));
     // extra

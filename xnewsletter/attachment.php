@@ -3,7 +3,7 @@ $currentFile = basename(__FILE__);
 include_once __DIR__ . '/header.php';
 
 // We recovered the value of the argument op in the URL$
-$attachment_id = xnewsletterRequest::getInt('attachment_id', 0);
+$attachment_id = XoopsRequest::getInt('attachment_id', 0);
 if (!$attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id)) {
     redirect_header('index.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
     exit();

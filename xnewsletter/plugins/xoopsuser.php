@@ -48,49 +48,41 @@ function xnewsletter_plugin_getinfo_xoopsuser()
 
 /**
  * @param $cat_id
- * @param $action_after_read
- * @param $limitcheck
+ * @param $checkSubscrsAfterRead
+ * @param $checkLimit
  * @param $skipCatsubscrExist
  * @param $arr_groups
  *
  * @return int
  */
-function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limitcheck, $skipCatsubscrExist, $arr_groups)
+function xnewsletter_plugin_getdata_xoopsuser($cat_id, $checkSubscrsAfterRead, $checkLimit, $skipCatsubscrExist, $arr_groups)
 {
     $xnewsletter = XnewsletterXnewsletter::getInstance();
-
-    //$table_import = $GLOBALS['xoopsDB']->prefix('xnewsletter_import');
-    $import_status = $action_after_read == 0 ? true : false;
-    $i             = 0;
-    $j             = 0;
-
+    //
+    $import_status = ($checkSubscrsAfterRead === false) ? _XNEWSLETTER_IMPORT_STATUS_IMPORTABLE : _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
     $sql = "SELECT `email`, `name`,`uname` FROM {$GLOBALS['xoopsDB']->prefix('groups_users_link')}";
     $sql .= " INNER JOIN {$GLOBALS['xoopsDB']->prefix('users')} ON {$GLOBALS['xoopsDB']->prefix('groups_users_link')}.uid = {$GLOBALS['xoopsDB']->prefix('users')}.uid";
     $sql .= " WHERE ({$GLOBALS['xoopsDB']->prefix('groups_users_link')}.groupid IN (" . implode(',', $arr_groups) . "))";
     $sql .= " GROUP BY `email`, `name`, `uname`";
-
     if (!$result_users = $GLOBALS['xoopsDB']->query($sql)) {
         die ('MySQL-Error: ' . mysql_error());
     }
+    $j = 0;
+    $line = 0;
     while ($lineArray = mysql_fetch_array($result_users)) {
         ++$i;
-        $email     = $lineArray[0];
-        $sex       = '';
-        $firstname = '';
-        $lastname  = ($lineArray[1] == '') ? $lineArray[2] : $lineArray[1];
-
+        $email  = $lineArray[0];
         $subscr_id    = xnewsletter_pluginCheckEmail($email);
         $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
-
-        if ($skipCatsubscrExist == 1 && $catsubscr_id > 0) {
+        if ($skipCatsubscrExist === true && $catsubscr_id > 0) {
             //skip existing subscriptions
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
             $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
-            $importObj->setVar('import_sex', $sex);
-            $importObj->setVar('import_firstname', $firstname);
-            $importObj->setVar('import_lastname', $lastname);
+            $importObj->setVar('import_sex', '');
+            $importObj->setVar('import_firstname', '');
+            $importObj->setVar('import_lastname', ($lineArray[1] == '') ? $lineArray[2] : $lineArray[1]);
             $importObj->setVar('import_cat_id', $currcatid);
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
@@ -99,34 +91,29 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
                 echo $importObj->getHtmlErrors();
                 exit();
             }
-//            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
-//            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $GLOBALS['xoopsDB']->query($sql) || die ("MySQL-Error: " . mysql_error());
             ++$j;
         }
-        ++$i;
         if ($j == 100000) {
             break;
         } //maximum number of processing to avoid cache overflow
-        if ($limitCheck > 0 && $j == $limitCheck) {
-            $import_status = false;
+        if ($checkLimit > 0 && $j == $checkLimit) {
+            $import_status = _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
         }
     }
-
     return $j;
 }
 
 /**
  * @param $cat_id
- * @param $action_after_read
- * @param $limitCheck
+ * @param $checkSubscrsAfterRead
+ * @param $checkLimit
  * @param $skipCatsubscrExist
  *
  * @return XoopsThemeForm
  */
-function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist)
+function xnewsletter_plugin_getform_xoopsuser($cat_id, $checkSubscrsAfterRead = true, $checkLimit, $skipCatsubscrExist = true)
 {
-    $xnewsletter    = XnewsletterXnewsletter::getInstance();
+    $xnewsletter = XnewsletterXnewsletter::getInstance();
     $member_handler = xoops_gethandler('member');
 
     $userGroups = $member_handler->getGroupList();
@@ -154,14 +141,12 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
         }
     }
     $form->addElement($select_groups, true);
-
     $form->addElement(new XoopsFormHidden('plugin', 'xoopsuser'));
     $form->addElement(new XoopsFormHidden('cat_id', $cat_id));
-    $form->addElement(new XoopsFormHidden('action_after_read', $action_after_read));
-    $form->addElement(new XoopsFormHidden('limitcheck', $limitCheck));
+    $form->addElement(new XoopsFormHidden('checkSubscrsAfterRead', $checkSubscrsAfterRead));
+    $form->addElement(new XoopsFormHidden('checkLimit', $checkLimit));
     $form->addElement(new XoopsFormHidden('skipcatsubscrexist', $skipCatsubscrExist));
     $form->addElement(new XoopsFormHidden('op', 'searchdata'));
     $form->addElement(new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit'));
-
     return $form;
 }

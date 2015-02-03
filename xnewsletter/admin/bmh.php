@@ -32,14 +32,14 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op          = xnewsletterRequest::getString('op', 'list');
-$bmh_id      = xnewsletterRequest::getInt('bmh_id', 0);
-$bmh_measure = xnewsletterRequest::getInt('bmh_measure', 0);
-$filter      = xnewsletterRequest::getInt('bmh_measure_filter', _XNEWSLETTER_BMH_MEASURE_VAL_ALL);
+$op          = XoopsRequest::getString('op', 'list');
+$bmh_id      = XoopsRequest::getInt('bmh_id', 0);
+$bmh_measure = XoopsRequest::getInt('bmh_measure', 0);
+$filter      = XoopsRequest::getInt('bmh_measure_filter', _XNEWSLETTER_BMH_MEASURE_VAL_ALL);
 
 switch ($op) {
     case 'bmh_delsubscr':
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             $count_err = 0;
 
             $bmhObj    = $xnewsletter->getHandler('bmh')->get($bmh_id);
@@ -223,12 +223,12 @@ switch ($op) {
         $bhmCriteria->setSort('bmh_id');
         $bhmCriteria->setOrder('DESC');
         $bhmCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
-        $start    = xnewsletterRequest::getInt('start', 0);
+        $start    = XoopsRequest::getInt('start', 0);
         $bhmCriteria->setStart($start);
         $bhmCriteria->setLimit($limit);
         $bhmObjs = $xnewsletter->getHandler('bmh')->getAll($bhmCriteria);
         if ($bhmCount > $limit) {
-            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+            xoops_load('xoopspagenav');
             $pagenav = new XoopsPageNav($bhmCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
@@ -323,18 +323,18 @@ switch ($op) {
         }
 
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
-        $bmhObj->setVar('bmh_rule_no', xnewsletterRequest::getString('bmh_rule_no', ''));
-        $bmhObj->setVar('bmh_rule_cat', xnewsletterRequest::getString('bmh_rule_cat', ''));
-        $bmhObj->setVar('bmh_bouncetype', xnewsletterRequest::getString('bmh_bouncetype', ''));
-        $bmhObj->setVar('bmh_remove', xnewsletterRequest::getString('bmh_remove', ''));
-        $bmh_email = xnewsletterRequest::getString('bmh_email', '');
+        $bmhObj->setVar('bmh_rule_no', XoopsRequest::getString('bmh_rule_no', ''));
+        $bmhObj->setVar('bmh_rule_cat', XoopsRequest::getString('bmh_rule_cat', ''));
+        $bmhObj->setVar('bmh_bouncetype', XoopsRequest::getString('bmh_bouncetype', ''));
+        $bmhObj->setVar('bmh_remove', XoopsRequest::getString('bmh_remove', ''));
+        $bmh_email = XoopsRequest::getString('bmh_email', '');
         $bmh_email = filter_var($bmh_email, FILTER_SANITIZE_EMAIL);
         $bmh_email = xnewsletter_checkEmail($bmh_email);
         $bmhObj->setVar('bmh_email', $bmh_email);
-        $bmhObj->setVar('bmh_subject', xnewsletterRequest::getString('bmh_subject', ''));
-        $bmhObj->setVar('bmh_measure', xnewsletterRequest::getInt('bmh_measure', 0));
-        $bmhObj->setVar('bmh_submitter', xnewsletterRequest::getInt('bmh_submitter', 0));
-        $bmhObj->setVar('bmh_created', xnewsletterRequest::getInt('bmh_created', 0));
+        $bmhObj->setVar('bmh_subject', XoopsRequest::getString('bmh_subject', ''));
+        $bmhObj->setVar('bmh_measure', XoopsRequest::getInt('bmh_measure', 0));
+        $bmhObj->setVar('bmh_submitter', XoopsRequest::getInt('bmh_submitter', 0));
+        $bmhObj->setVar('bmh_created', XoopsRequest::getInt('bmh_created', 0));
 
         if ($xnewsletter->getHandler('bmh')->insert($bmhObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
@@ -356,7 +356,7 @@ switch ($op) {
 
     case 'delete_bmh':
         $bmhObj = $xnewsletter->getHandler('bmh')->get($bmh_id);
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

@@ -29,6 +29,19 @@
 
 include_once __DIR__ . '/common.php';
 
+/*
+ * @param int       $amount is… how much of $what you want.
+ * @param string    $what is either paras, words, bytes or lists.
+ * @param int       $start is whether or not to start the result with ‘Lorem ipsum dolor sit amet…‘
+ *
+ * @return string
+ */
+function xnewsletter_randomLipsum($amount = 1, $what = 'paras', $start = 0) {
+    //$ret = file_get_contents('http://loripsum.net/api')
+    $ret = simplexml_load_file("http://www.lipsum.com/feed/xml?amount=$amount&what=$what&start=$start")->lipsum;
+    return $ret;
+}
+
 /**
  * @param $cats
  *
@@ -72,19 +85,16 @@ function xnewsletter_checkModuleAdmin()
 function xnewsletter_userIsAdmin()
 {
     $xnewsletter = XnewsletterXnewsletter::getInstance();
-
     static $xnewsletter_isAdmin;
-
+    //
     if (isset($xnewsletter_isAdmin)) {
         return $xnewsletter_isAdmin;
     }
-
     if (!$GLOBALS['xoopsUser']) {
         $xnewsletter_isAdmin = false;
     } else {
         $xnewsletter_isAdmin = $GLOBALS['xoopsUser']->isAdmin($xnewsletter->getModule()->mid());
     }
-
     return $xnewsletter_isAdmin;
 }
 
@@ -97,7 +107,7 @@ function xnewsletter_userIsAdmin()
 function xnewsletter_checkEmail($email, $antispam = false)
 {
     include_once XOOPS_ROOT_PATH . '/include/functions.php';
-
+    //
     return checkEmail($email, $antispam);
 }
 
@@ -110,7 +120,7 @@ function xnewsletter_checkEmail($email, $antispam = false)
 function xnewsletter_html2text($html)
 {
     include_once XNEWSLETTER_ROOT_PATH . '/include/html2text/html2text.php';
-
+    //
     return convert_html_to_text($html);
 }
 
@@ -126,7 +136,7 @@ function xnewsletter_html2text($html)
 function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $notset = false)
 {
     include_once XOOPS_ROOT_PATH . '/include/functions.php';
-
+    //
     switch ($type) {
         case 'string':
             $ret = (isset($global[$key])) ? filter_var($global[$key], FILTER_SANITIZE_MAGIC_QUOTES) : $default;
@@ -455,13 +465,10 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  */
 function xnewsletter_emailSize($letter_id = 0)
 {
-    include_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
-
     $xnewsletter = XnewsletterXnewsletter::getInstance();
-
-    include_once XOOPS_ROOT_PATH . '/class/template.php';
-    $xoopsTpl = new XoopsTpl();
-
+    include_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
+    require_once $GLOBALS['xoops']->path('/class/template.php');
+    //
     // get template path
     $template_path = XNEWSLETTER_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
     if (!is_dir($template_path)) {
@@ -470,19 +477,17 @@ function xnewsletter_emailSize($letter_id = 0)
     if (!is_dir($template_path)) {
         return str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH);
     }
-
+    // get letter
     $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
     if (count($letterObj) == 0) {
         return false;
     }
-
     // read categories
     $letter_cats = $letterObj->getVar('letter_cats');
     if ($letter_cats == '') {
         //no cats
         return false;
     }
-
     // read data of account
     $letter_account = $letterObj->getVar('letter_account');
     if ($letter_account == '' && $letter_account == 0) {
@@ -504,6 +509,7 @@ function xnewsletter_emailSize($letter_id = 0)
 
     $letterTpl = new XoopsTpl();
     // letter data
+    $letterTpl->assign('letter_id', $letter_id); // new from v1.3
     $letterTpl->assign('content', $letter_content);
     $letterTpl->assign('title', $letter_title); // new from v1.3
     // letter attachments as link
@@ -513,11 +519,12 @@ function xnewsletter_emailSize($letter_id = 0)
     $attachmentAslinkCriteria->setSort('attachment_id');
     $attachmentAslinkCriteria->setOrder('ASC');
     $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
+    $letterTpl->assign('attachments', array());
     foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
-        $attachment_array                    = $attachmentObj->toArray();
-        $attachment_array['attachment_url']  = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
-        $attachment_array['attachment_link'] = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
-        $letterTpl->append('attachments', $attachment_array);
+        $attachment = $attachmentObj->toArray();
+        $attachment['attachment_url']  = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
+        $attachment['attachment_link'] = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
+        $letterTpl->append('attachments', $attachment);
     }
     // extra data
     $letterTpl->assign('date', time()); // new from v1.3
@@ -534,10 +541,10 @@ function xnewsletter_emailSize($letter_id = 0)
     $letterTpl->assign('unsubscribe_link', 'Test');
     $letterTpl->assign('unsubscribe_url', 'Test'); // new from v1.3
 
-    preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+    preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
     if (isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
         // get template from database
-        $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+        $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
     } else {
         // get template from filesystem
         $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
@@ -551,12 +558,12 @@ function xnewsletter_emailSize($letter_id = 0)
     //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
 
     // get letter attachments as attachment
-    $attachmentAsattachmentCriteria = new CriteriaCompo();
-    $attachmentAsattachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-    $attachmentAsattachmentCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
-    $attachmentAsattachmentCriteria->setSort('attachment_id');
-    $attachmentAsattachmentCriteria->setOrder('ASC');
-    $attachmentObjs  = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsattachmentCriteria, true);
+    $attachmentAsAttachmentCriteria = new CriteriaCompo();
+    $attachmentAsAttachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
+    $attachmentAsAttachmentCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
+    $attachmentAsAttachmentCriteria->setSort('attachment_id');
+    $attachmentAsAttachmentCriteria->setOrder('ASC');
+    $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsAttachmentCriteria, true);
     $attachmentsPath = array();
     foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
         $attachmentsPath[] = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');

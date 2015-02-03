@@ -1,5 +1,5 @@
-<div class="xnewsletter_headertable">
-    <div class="xnewsletter_breadcrumb">
+<div class="module_skeleton_headertable">
+    <div class="module_skeleton_breadcrumb">
         <{foreach item=bread from=$breadcrumb name=bcloop}>
     <span class="bread">
     <{if ($bread.link)}>

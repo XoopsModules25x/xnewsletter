@@ -28,3 +28,11 @@
  */
 // Common
 define('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS', "Warning: insufficient permissions!");
+
+// warnings
+define('_CO_XNEWSLETTER_WARNING_NOSUBSCRS', "Warning: no subscribers!");
+define('_CO_XNEWSLETTER_WARNING_NOTEMPLATES', "Warning: no templates!");
+define('_CO_XNEWSLETTER_WARNING_NOATTACHMENTS', "Warning: no attachments!");
+define('_CO_XNEWSLETTER_WARNING_NOCATS', "Warning: no categories!");
+define('_CO_XNEWSLETTER_WARNING_NOTASKS', "Warning: no tasks!");
+define('_CO_XNEWSLETTER_WARNING_NOPROTOCOLS', "Warning: no protocols!");

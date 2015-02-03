@@ -9,6 +9,7 @@ Version 1.3     NOT RELEASED
  - templatize user side (luciorota)
  - added: send attachment as email attachment or as link (luciorota)
  - added: possibility to choose the maximum number of attachments (luciorota)
+ - added: possibility to send test letter to multiple emails (luciorota)
  - added: calculate email and attachments size (luciorota)
  - added: possibility to store templates also in database (luciorota)
  - added: html2txt function for non-HTML mail clients (luciorota)

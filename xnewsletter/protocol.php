@@ -37,13 +37,13 @@ $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 // breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
+$breadcrumb = new XnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
 $breadcrumb->addLink(_MD_XNEWSLETTER_PROTOCOL, '');
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-$letter_id = xnewsletterRequest::getInt('letter_id', 0);
+$letter_id = XoopsRequest::getInt('letter_id', 0);
 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 

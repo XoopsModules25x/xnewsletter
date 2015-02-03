@@ -29,10 +29,10 @@
 
 $currentFile = basename(__FILE__);
 include_once __DIR__ . '/header.php';
-$op            = xnewsletterRequest::getString('op', 'search_subscription');
-$activationKey = xnewsletterRequest::getString('actkey', '');
-$subscr_id     = xnewsletterRequest::getInt('subscr_id', 0);
-$subscr_email  = xnewsletterRequest::getString('subscr_email', '');
+$op            = XoopsRequest::getString('op', 'search_subscription');
+$activationKey = XoopsRequest::getString('actkey', '');
+$subscr_id     = XoopsRequest::getInt('subscr_id', 0);
+$subscr_email  = XoopsRequest::getString('subscr_email', '');
 
 if (isset($_REQUEST['addnew'])) {
     $op = 'addnew_subscription';
@@ -41,10 +41,10 @@ if ($activationKey != '' && $op != 'unsub') {
     $op = 'save_subscription';
 }
 if ($op == 'unsub') {
-    $subscr_email = xnewsletterRequest::getString('email', '');
+    $subscr_email = XoopsRequest::getString('email', '');
     $op           = 'delete_subscription';
     //$xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-    $_SESSION['redirect_mail'] = xnewsletterRequest::getString('email', '');
+    $_SESSION['redirect_mail'] = XoopsRequest::getString('email', '');
     $_SESSION['unsub']         = '1';
 } else {
     $_SESSION['redirect_mail'] = '';
@@ -74,7 +74,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -103,7 +103,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -120,7 +120,7 @@ switch ($op) {
             $_SESSION['redirect_mail'] = $subscr_email;
         } else {
             // if anonymous subscriber get subscr_email from search form
-            $subscr_email = xnewsletterRequest::getString('subscr_email', '');
+            $subscr_email = XoopsRequest::getString('subscr_email', '');
             if ($subscr_email != '') {
                 // check captcha
                 xoops_load('xoopscaptcha');
@@ -220,7 +220,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
         // init vars
@@ -229,7 +229,7 @@ switch ($op) {
         $actionProts_error   = array();
 
         // check if subscr exists
-        $subscr_id      = xnewsletterRequest::getInt('subscr_id', 0);
+        $subscr_id      = XoopsRequest::getInt('subscr_id', 0);
         $subscrCriteria = new Criteria('subscr_id', $subscr_id);
         $subscrCount    = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         if ($subscrCount == 0) {
@@ -280,7 +280,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -310,14 +310,14 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, XNEWSLETTER_URL . '/subscription.php?op=list_subscriptions');
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIPTION_EDIT, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get edit subscr form
-        $subscr_id = xnewsletterRequest::getInt('subscr_id', 0);
+        $subscr_id = XoopsRequest::getInt('subscr_id', 0);
         if ($subscr_id <= 0) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
@@ -334,7 +334,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
         // init vars
@@ -382,9 +382,9 @@ switch ($op) {
                 $subscrObj = $xnewsletter->getHandler('subscr')->create();
                 $saveType  = 'addnew';
             }
-            $subscrObj->setVar('subscr_sex', xnewsletterRequest::getString('subscr_sex', ''));
-            $subscrObj->setVar('subscr_firstname', xnewsletterRequest::getString('subscr_firstname', ''));
-            $subscrObj->setVar('subscr_lastname', xnewsletterRequest::getString('subscr_lastname', ''));
+            $subscrObj->setVar('subscr_sex', XoopsRequest::getString('subscr_sex', ''));
+            $subscrObj->setVar('subscr_firstname', XoopsRequest::getString('subscr_firstname', ''));
+            $subscrObj->setVar('subscr_lastname', XoopsRequest::getString('subscr_lastname', ''));
             // insert subscr
             if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
@@ -407,8 +407,8 @@ switch ($op) {
                 $selection      = array();
                 $selection[0]   = $cat_id;
                 $selection[1]   = in_array($cat_id, $_REQUEST["cats"]) ? '1' : '0';//isset($_REQUEST["cats_{$cat_id}"]);
-                $selection[2]   = xnewsletterRequest::getInt("existing_catsubcr_id_{$cat_id}", 0);
-                $selection[3]   = xnewsletterRequest::getInt("existing_catsubscr_quited_{$cat_id}", 0);
+                $selection[2]   = XoopsRequest::getInt("existing_catsubcr_id_{$cat_id}", 0);
+                $selection[3]   = XoopsRequest::getInt("existing_catsubscr_quited_{$cat_id}", 0);
                 $code_selection = implode('-', $selection);
                 $selections[]   = $code_selection;
                 unset($selection);
@@ -433,9 +433,9 @@ switch ($op) {
                     exit();
                 }
                 // get subscr fields from form
-                $subscr_firstname = xnewsletterRequest::getString('subscr_firstname', '');
-                $subscr_lastname  = xnewsletterRequest::getString('subscr_lastname', '');
-                $subscr_sex       = xnewsletterRequest::getString('subscr_sex', '');
+                $subscr_firstname = XoopsRequest::getString('subscr_firstname', '');
+                $subscr_lastname  = XoopsRequest::getString('subscr_lastname', '');
+                $subscr_sex       = XoopsRequest::getString('subscr_sex', '');
                 // create $code_selections string
                 $catCriteria = new CriteriaCompo();
                 $catCriteria->setSort('cat_id');
@@ -446,9 +446,9 @@ switch ($op) {
                     // create selections: $cat_id-$cat_selected-$old_catsubcr_id-$old_catsubscr_quited
                     $selection      = array();
                     $selection[0]   = $cat_id;
-                    $selection[1]   = in_array($cat_id, xnewsletterRequest::getArray('cats')) ? '1' : '0';//isset($_REQUEST["cats_{$cat_id}"]);
-                    $selection[2]   = xnewsletterRequest::getInt("existing_catsubcr_id_{$cat_id}", 0);
-                    $selection[3]   = xnewsletterRequest::getInt("existing_catsubscr_quited_{$cat_id}", 0);
+                    $selection[1]   = in_array($cat_id, XoopsRequest::getArray('cats')) ? '1' : '0';//isset($_REQUEST["cats_{$cat_id}"]);
+                    $selection[2]   = XoopsRequest::getInt("existing_catsubcr_id_{$cat_id}", 0);
+                    $selection[3]   = XoopsRequest::getInt("existing_catsubscr_quited_{$cat_id}", 0);
                     $code_selection = implode('-', $selection);
                     $selections[]   = $code_selection;
                     unset($selection);
@@ -763,7 +763,7 @@ switch ($op) {
         }
 // IN PROGRESS
 
-        if (xnewsletterRequest::getBool('ok', false, 'POST') || $activationKey != '') {
+        if (XoopsRequest::getBool('ok', false, 'POST') || $activationKey != '') {
             $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
             include_once XOOPS_ROOT_PATH . '/header.php';
             //
@@ -771,7 +771,7 @@ switch ($op) {
             $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
             $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
             // breadcrumb
-            $breadcrumb = new xnewsletterBreadcrumb();
+            $breadcrumb = new XnewsletterBreadcrumb();
             $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
             $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, XNEWSLETTER_URL . '/subscription.php?op=list_subscriptions');
             $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIPTION_DELETE, '');
@@ -904,7 +904,7 @@ switch ($op) {
             $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
             $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
             // breadcrumb
-            $breadcrumb = new xnewsletterBreadcrumb();
+            $breadcrumb = new XnewsletterBreadcrumb();
             $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
             $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, XNEWSLETTER_URL . '/subscription.php?op=list_subscriptions');
             $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIPTION_DELETE, '');

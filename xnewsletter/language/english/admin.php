@@ -375,7 +375,15 @@ define('_AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN', "Error: required file 'plugins/
 define('_AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION', "Error: required function 'xnewsletter_plugin_getdata_%f' doesn't exist!");
 //version 1.3
 //General
+define('_AM_XNEWSLETTER_GROUPS_EDIT','Edit group');
+//
+define('_AM_XNEWSLETTER_THEREARE_TEMPLATE',"There are <span class='bold'>%s</span> Templates in the Database");
+//
+define('_AM_XNEWSLETTER_IMPORT_END', "End");
+define('_AM_XNEWSLETTER_IMPORT_AFTER_READ_DESC','');
+//
 define('_AM_XNEWSLETTER_LETTER_CONTENT_DESC', 'Html format');
+define('_AM_XNEWSLETTER_LETTER_EMAIL_TEST_DESC', 'One or more e-mails separated by semicolon &#39;;&#39;');
 //
 define('_AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW', 'Mr.');
 define('_AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW', 'John');
@@ -397,14 +405,15 @@ define('_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC', '
     <br /><br />
     Available smarty-vars are:
     <ul>
-    <li>&lt;{$salutation}&gt; or &lt;{$sex}&gt;: the subscriber Salutation field</li>
-    <li>&lt;{$firstname}&gt;: the subscriber First name field</li>
-    <li>&lt;{$lastname}&gt;: the subscriber Last name field</li>
-    <li>&lt;{$email}&gt; or &lt;{$subscr_email}&gt;: the subscriber Email field</li>
+    <li>&lt;{$salutation}&gt; or &lt;{$sex}&gt;: the subscriber &quot;Salutation&quot; (subscr_sex) field</li>
+    <li>&lt;{$firstname}&gt;: the subscriber &quot;First name&quot; (subscr_firstname) field</li>
+    <li>&lt;{$lastname}&gt;: the subscriber &quot;Last name&quot; (subscr_lastname) field</li>
+    <li>&lt;{$email}&gt; or &lt;{$subscr_email}&gt;: the subscriber &quot;Email&quot; (subscr_email) field</li>
     </ul>
     <ul>
-    <li>&lt;{$title}&gt;: the newsletter Title field</li>
-    <li>&lt;{$content}&gt;: the newsletter Content field</li>
+    <li>&lt;{$letter_id}&gt;: the newsletter &quot;id&quot; (letter_id) field</li>
+    <li>&lt;{$title}&gt;: the newsletter &quot;Title&quot; (letter_title) field</li>
+    <li>&lt;{$content}&gt;: the newsletter &quot;Content&quot; (letter_content) field</li>
     <li>&lt;{$attachments}&gt;: attachments array
         <br />
         <span style="font-size:0.9em">
@@ -489,6 +498,24 @@ define('_AM_XNEWSLETTER_PROTOCOL_STATUS_SKIP_IMPORT', "Import email addresses %s
 define('_AM_XNEWSLETTER_PROTOCOL_STATUS_ERROR_IMPORT', "Import email addresses %subscr_email failed");
 define('_AM_XNEWSLETTER_PROTOCOL_STATUS_OK_IMPORT', "%result_text Subscription to category successful");
 define('_AM_XNEWSLETTER_PROTOCOL_STATUS_EXIST_IMPORT', "%result_text Subscription already exist");
+
+define('_AM_XNEWSLETTER_PROTOCOL_CREATED_FILTER_FROM', "Protocol created form date");
+define('_AM_XNEWSLETTER_PROTOCOL_CREATED_FILTER_TO', "Protocol created to date");
+define('_AM_XNEWSLETTER_PROTOCOLLIST_BY_LETTER', "List by letter");
+define('_AM_XNEWSLETTER_PROTOCOL_SHOW_ALL', "Show all");
+define('_AM_XNEWSLETTER_PROTOCOL_DELETE_ALL', "Delete all protocols");
+
+define('_AM_XNEWSLETTER_TASK_CREATED_FILTER_FORM', "Task created form date");
+define('_AM_XNEWSLETTER_TASK_CREATED_FILTER_TO', "Task created to date");
+define('_AM_XNEWSLETTER_TASK_STARTTIME_FILTER_FROM', "Task starttime form date");
+define('_AM_XNEWSLETTER_TASK_STARTTIME_FILTER_TO', "Task starttime to date");
+define('_AM_XNEWSLETTER_TASK_ACTIONS_EXECUTE', "Execute now");
+define('_AM_XNEWSLETTER_TASK_SHOW_ALL', "Show all");
+define('_AM_XNEWSLETTER_TASK_CONFIGS', "Config &quot;Send in pakages&quot;");
+define('_AM_XNEWSLETTER_TASK_DELETE_ALL', "Delete all tasks");
+define('_AM_XNEWSLETTER_TASK_RUN_CRON_NOW', "Execute now &quot;cron.php&quot;");
+define('_AM_XNEWSLETTER_FORMSURERUNCRONNOW', "Are you sure you want to execute: <span class='bold red'>&quot;cron.php&quot;</span>");
+
 
 //Buttons
 define('_AM_XNEWSLETTER_NEWTEMPLATE', "Add New Template");

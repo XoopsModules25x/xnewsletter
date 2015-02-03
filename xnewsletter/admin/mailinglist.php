@@ -32,7 +32,7 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = xnewsletterRequest::getString('op', 'list');
+$op = XoopsRequest::getString('op', 'list');
 
 switch ($op) {
     case 'list':
@@ -45,12 +45,12 @@ switch ($op) {
         $mailinglistCriteria->setSort('mailinglist_id ASC, mailinglist_email');
         $mailinglistCriteria->setOrder('ASC');
         $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
-        $start            = xnewsletterRequest::getInt('start', 0);
+        $start            = XoopsRequest::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
         $mailinglistObjs = $xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
         if ($mailinglistCount > $limit) {
-            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+            xoops_load('xoopspagenav');
             $pagenav = new XoopsPageNav($mailinglistCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
@@ -146,7 +146,7 @@ switch ($op) {
 
     case 'delete_mailinglist':
         $mailinglistObj = $xnewsletter->getHandler('mailinglist')->get($_REQUEST['mailinglist_id']);
-        if (xnewsletterRequest::getBool('ok', false, 'POST') == true) {
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

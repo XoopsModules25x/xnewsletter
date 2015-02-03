@@ -45,13 +45,13 @@ class XnewsletterLetter extends XoopsObject
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('letter_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_title', XOBJ_DTYPE_TXTBOX, null, true, 100);
+        $this->initVar('letter_title', XOBJ_DTYPE_TXTBOX, null, true, 255);
         $this->initVar('letter_content', XOBJ_DTYPE_TXTAREA, null, true);
         $this->initVar('letter_template', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('letter_cats', XOBJ_DTYPE_TXTBOX, null, false, 100); // IN PROGRESS: AN ARRAY SHOULD BE BETTER
         $this->initVar('letter_attachment', XOBJ_DTYPE_TXTBOX, null, false, 200);
         $this->initVar('letter_account', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_email_test', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('letter_email_test', XOBJ_DTYPE_TXTBOX, null, false, 512);
         $this->initVar('letter_submitter', XOBJ_DTYPE_INT, null, false);
         $this->initVar('letter_created', XOBJ_DTYPE_INT, time(), false); // timestamp
         $this->initVar('letter_sender', XOBJ_DTYPE_INT, null, false);
@@ -66,20 +66,24 @@ class XnewsletterLetter extends XoopsObject
      */
     public function getForm($action = false, $admin_aerea = false)
     {
+        global $xoopsUser;
+        //
+        xoops_load('XoopsFormLoader');
+        //
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_LETTER_ADD) : sprintf(_AM_XNEWSLETTER_LETTER_EDIT);
-
-        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        //
         $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
-
-        // letter_title
+        // letter: letter_title
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_LETTER_TITLE, 'letter_title', 50, 255, $this->getVar('letter_title', 'e')), true);
-
-        // letter_content
+        // letter: letter_content
         $editor_configs           = array();
         $editor_configs['name']   = 'letter_content';
         $editor_configs['value']  = $this->getVar('letter_content', 'e');
@@ -91,8 +95,7 @@ class XnewsletterLetter extends XoopsObject
         $letter_content_editor    = new XoopsFormEditor(_AM_XNEWSLETTER_LETTER_CONTENT, 'letter_content', $editor_configs);
         $letter_content_editor->setDescription(_AM_XNEWSLETTER_LETTER_CONTENT_DESC);
         $form->addElement($letter_content_editor, true);
-
-        // letter_template
+        // letter: letter_template
         $letter_template = $this->getVar('letter_template') == '' ? 'basic' : $this->getVar('letter_template');
         $template_select = new XoopsFormSelect(_AM_XNEWSLETTER_LETTER_TEMPLATE, 'letter_template', $letter_template);
         // get template files in /modules/xnewsletter/language/{language}/templates/ directory
@@ -126,8 +129,7 @@ class XnewsletterLetter extends XoopsObject
             }
         }
         $form->addElement($template_select, false);
-
-        // letter_cats
+        // letter: letter_cats
         $gperm_handler  = xoops_gethandler('groupperm');
         $member_handler = xoops_gethandler('member');
         $groups         = $member_handler->getGroupsByUser($GLOBALS['xoopsUser']->uid());
@@ -145,8 +147,7 @@ class XnewsletterLetter extends XoopsObject
             }
         }
         $form->addElement($cat_select, true);
-
-        // attachments
+        // letter: attachments
         $attachment_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_LETTER_ATTACHMENT, '<br>');
         $attachment_tray->addElement(new XoopsFormHidden('deleted_attachment_id', ''));
         // existing_attachments
@@ -191,8 +192,15 @@ class XnewsletterLetter extends XoopsObject
             unset($add_attachment_tray);
         }
         $form->addElement($attachment_tray);
-
-        // letter_action
+        // letter: letter_email_test
+        $letter_email_test = $this->isNew() ? $GLOBALS['xoopsUser']->email() : $this->getVar('letter_email_test');
+        if ($letter_email_test == '') {
+            $letter_email_test = $GLOBALS['xoopsUser']->email();
+        }
+        $letter_email_test_text = new XoopsFormText(_AM_XNEWSLETTER_LETTER_EMAIL_TEST . ':&nbsp;', 'letter_email_test', 50, 255, $letter_email_test);
+        $letter_email_test_text->setDescription(_AM_XNEWSLETTER_LETTER_EMAIL_TEST_DESC);
+        $form->addElement($letter_email_test_text, false);
+        // letter: letter_action
         $opt_nextaction = new XoopsFormRadio('', 'letter_action', _AM_XNEWSLETTER_LETTER_ACTION_NO, '<br />');
         $opt_nextaction->addOption(_XNEWSLETTER_LETTER_ACTION_VAL_NO, _AM_XNEWSLETTER_LETTER_ACTION_NO);
         $opt_nextaction->addOption(_XNEWSLETTER_LETTER_ACTION_VAL_PREVIEW, _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW);
@@ -200,16 +208,8 @@ class XnewsletterLetter extends XoopsObject
         $opt_nextaction->addOption(_XNEWSLETTER_LETTER_ACTION_VAL_SENDTEST, _AM_XNEWSLETTER_LETTER_ACTION_SENDTEST);
         $opt_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_LETTER_ACTION, '<br/>');
         $opt_tray->addElement($opt_nextaction);
-
-        // letter_email_test
-        $letter_email_test = $this->isNew() ? $GLOBALS['xoopsUser']->email() : $this->getVar('letter_email_test');
-        if ($letter_email_test == '') {
-            $letter_email_test = $GLOBALS['xoopsUser']->email();
-        }
-        $opt_tray->addElement(new XoopsFormText(_AM_XNEWSLETTER_LETTER_EMAIL_TEST . ':&nbsp;', 'letter_email_test', 50, 255, $letter_email_test), false);
         $form->addElement($opt_tray);
-
-        // letter_account
+        // letter: letter_account
         $accountsCriteria = new CriteriaCompo();
         $accountsCriteria->setSort('accounts_id');
         $accountsCriteria->setOrder('ASC');
@@ -239,7 +239,7 @@ class XnewsletterLetter extends XoopsObject
                 $form->addElement(new XoopsFormHidden('letter_account', $account_default));
             }
         }
-
+        //
         if ($this->isNew()) {
             $time           = time();
             $submitter_uid  = $GLOBALS['xoopsUser']->uid();
@@ -250,16 +250,26 @@ class XnewsletterLetter extends XoopsObject
             xoops_load('xoopsuserutility');
             $submitter_name = XoopsUserUtility::getUnameFromId($submitter_uid);
         }
-
         $form->addElement(new XoopsFormHidden('letter_submitter', $submitter_uid));
         $form->addElement(new XoopsFormHidden('letter_created', $time));
-
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_LETTER_SUBMITTER, $submitter_name));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_LETTER_CREATED, formatTimestamp($time, 's')));
-
-        $form->addElement(new XoopsFormHidden('op', 'save_letter'));
-        $form->addElement(new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SAVE, 'submit'));
-
+        // form: button tray
+        $button_tray = new XoopsFormElementTray('', '');
+        $button_tray->addElement(new XoopsFormHidden('op', 'save_letter'));
+        //
+        $button_submit = new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SAVE, 'submit');
+        $button_tray->addElement($button_submit);
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
+        $form->addElement($button_tray);
+        //
         return $form;
     }
 }

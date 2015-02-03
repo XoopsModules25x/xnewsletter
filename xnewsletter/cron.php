@@ -32,30 +32,11 @@ include_once __DIR__ . '/header.php';
 
 echo '<br/>start cron job<br/>';
 
-include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
+include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/functions.task.php';
 // execute all pending tasks
 $result_exec = xnewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_packages'), 0);
 
 if ($result_exec != '') {
-    $newsletter->getHandler('protocol')->protocol(0, 0, 'Cron: ' . $result_exec, _XNEWSLETTER_PROTOCOL_STATUS_CRON, array('%result_exec' => $result_exec), true);
-/*
-    // you can enable the block for creating protocol for cron
-    $protocolObj = $xnewsletter->getHandler('protocol')->create();
-    $protocolObj->setVar('protocol_letter_id', 0);
-    $protocolObj->setVar('protocol_subscriber_id', 0);
-    $protocolObj->setVar('protocol_status', 'Cron: ' . $result_exec); // old style
-    $protocolObj->setVar('protocol_status_str_id', _XNEWSLETTER_PROTOCOL_STATUS_CRON); // new from v1.3
-    $protocolObj->setVar('protocol_status_vars', array('%result_exec' => $result_exec)); // new from v1.3
-    $protocolObj->setVar('protocol_success', true);
-    $protocolObj->setVar('protocol_submitter', 0);
-    $protocolObj->setVar('protocol_created', time());
-
-    if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
-        // create protocol is ok
-        // NOP
-    } else {
-        echo $protocolObj->getHtmlErrors();
-    }
-*/
+    $protocolObj = $xnewsletter->getHandler('protocol')->protocol(0, 0, 'Cron: ' . $result_exec, _XNEWSLETTER_PROTOCOL_STATUS_CRON, array('%result_exec' => $result_exec), true);
 }
 echo "<br/>result cron: {$result_exec}";

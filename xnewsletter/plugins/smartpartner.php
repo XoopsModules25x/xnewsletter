@@ -26,7 +26,7 @@
  *  Version : $Id $
  * ****************************************************************************
  */
-// defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
+
 include_once dirname(__DIR__) . '/include/common.php';
 
 /**
@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
  */
 function xnewsletter_plugin_getinfo_smartpartner()
 {
-    $pluginInfo         = array();
+    $pluginInfo = array();
     $pluginInfo['name'] = 'smartpartner';
     if (file_exists(XOOPS_URL . '/modules/smartpartner/images/module_logo.gif')) {
         $pluginInfo['icon'] = XOOPS_URL . '/modules/smartpartner/images/module_logo.gif';
@@ -43,54 +43,48 @@ function xnewsletter_plugin_getinfo_smartpartner()
     }
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . '/modules/smartpartner/xoops_version.php';
     $pluginInfo['tables'][0] = $GLOBALS['xoopsDB']->prefix('smartpartner_partner');
-    $pluginInfo['descr']     = 'Import from Smartpartner';
-    $pluginInfo['hasform']   = 0;
+    $pluginInfo['descr'] = 'Import from Smartpartner';
+    $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
 }
 
 /**
  * @param $cat_id
- * @param $action_after_read
- * @param $limitcheck
- * @param $skipcatsubscrexist
+ * @param $checkSubscrsAfterRead
+ * @param $checkLimit
+ * @param $skipCatsubscrExist
  *
  * @return int
  */
-function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist)
+function xnewsletter_plugin_getdata_smartpartner($cat_id, $checkSubscrsAfterRead = true, $checkLimit, $skipCatsubscrExist = true)
 {
     $xnewsletter = XnewsletterXnewsletter::getInstance();
-
-    //$table_import = $GLOBALS['xoopsDB']->prefix('xnewsletter_import');
-    $import_status = $action_after_read == 0 ? true : false;
-    $i             = 0;
-    $j             = 0;
-
+    //
+    $import_status = ($checkSubscrsAfterRead === false) ? _XNEWSLETTER_IMPORT_STATUS_IMPORTABLE : _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
     $sql = "SELECT `contact_email`, `contact_name`";
-    $sql .= " FROM " . $GLOBALS['xoopsDB']->prefix('smartpartner_partner');
+    $sql .= " FROM {$GLOBALS['xoopsDB']->prefix('smartpartner_partner')}";
     $sql .= " WHERE (`contact_email` is not null and not(`contact_email`=''))";
     if (!$result_users = $GLOBALS['xoopsDB']->query($sql)) {
         die ('MySQL-Error: ' . mysql_error());
     }
+    $j = 0;
+    $line = 0;
     while ($lineArray = mysql_fetch_array($result_users)) {
-        ++$i;
-        $email     = $lineArray[0];
-        $sex       = '';
-        $firstname = '';
-        $lastname  = $lineArray[1];
-
-        $subscr_id    = xnewsletter_pluginCheckEmail($email);
+        ++$line;
+        $email = $lineArray[0];
+        $subscr_id = xnewsletter_pluginCheckEmail($email);
         $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
-
-        if ($skipcatsubscrexist == 1 && $catsubscr_id > 0) {
-            //skip existing subscriptions
+        if ($skipCatsubscrExist === true && $catsubscr_id > 0) {
+            // skip existing subscriptions
+            // NOP
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
             $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
-            $importObj->setVar('import_sex', $sex);
-            $importObj->setVar('import_firstname', $firstname);
-            $importObj->setVar('import_lastname', $lastname);
+            $importObj->setVar('import_sex', '');
+            $importObj->setVar('import_firstname', '');
+            $importObj->setVar('import_lastname', $lineArray[1]);
             $importObj->setVar('import_cat_id', $currcatid);
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
@@ -99,19 +93,14 @@ function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $l
                 echo $importObj->getHtmlErrors();
                 exit();
             }
-//            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
-//            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $GLOBALS['xoopsDB']->query($sql) || die ("MySQL-Error: " . mysql_error());
             ++$j;
         }
-        ++$i;
         if ($j == 100000) {
             break;
-        } //maximum number of processing to avoid cache overflow
-        if ($limitcheck > 0 && $j == $limitcheck) {
-            $import_status = false;
+        } // maximum number of processing to avoid cache overflow
+        if ($checkLimit > 0 && $j == $checkLimit) {
+            $import_status = _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
         }
     }
-
     return $j;
 }

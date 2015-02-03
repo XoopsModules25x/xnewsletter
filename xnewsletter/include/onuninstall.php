@@ -23,17 +23,28 @@
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
+ *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__DIR__)) . '/mainfile.php';
-include_once __DIR__ . '/include/common.php';
+defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
+include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/common.php';
+@include_once XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/admin.php';
 
-xoops_load('xoopspagenav');
-include_once XOOPS_ROOT_PATH . '/include/functions.php';
+/**
+ * @param object            $xoopsModule
+ * @return bool             FALSE if failed
+ */
+function xoops_module_pre_uninstall_xnewsletter(&$xoopsModule) {
+    // NOP
+    return true;
+}
 
-//Load languages
-xoops_loadLanguage('admin', $xnewsletter->getModule()->dirname());
-xoops_loadLanguage('modinfo', $xnewsletter->getModule()->dirname());
-xoops_loadLanguage('main', $xnewsletter->getModule()->dirname());
+/**
+ * @param object            $xoopsModule
+ * @return bool             FALSE if failed
+ */
+function xoops_module_uninstall_xnewsletter(&$xoopsModule) {
+	// NOP
+	return true;
+}

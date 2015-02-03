@@ -75,13 +75,20 @@ class XnewsletterAccounts extends XoopsObject
      */
     public function getForm($action = false)
     {
+        global $xoopsUser;
+        $gperm_handler = xoops_gethandler('groupperm');
+        //
+        xoops_load('XoopsFormLoader');
+        //
         if ($action === false) {
             $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ACCOUNTS_ADD) : sprintf(_AM_XNEWSLETTER_ACCOUNTS_EDIT);
-
-        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        //
         $form = new XoopsThemeForm($title, $this->xnewsletter->getModule()->getVar('dirname') . '_form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -199,14 +206,24 @@ class XnewsletterAccounts extends XoopsObject
 
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
-
+        // form: button tray
         $button_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
         $button_tray->addElement(new XoopsFormHidden('op', 'save_accounts'));
-        $button_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        //
+        $button_submit = new XoopsFormButton('', 'post', _SUBMIT, 'submit');
+        $button_tray->addElement($button_submit);
         if ($dis_accounts_button_check == false) {
             $button_check = new XoopsFormButton('', 'save_and_check', _AM_XNEWSLETTER_SAVE_AND_CHECK, 'submit');
             $button_tray->addElement($button_check);
         }
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
         $form->addElement($button_tray, false);
 
         return $form;
