@@ -555,7 +555,7 @@ function xnewsletter_emailSize($letter_id = 0)
         $htmlBody = $letterTpl->fetch($template);
     }
     $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
-    //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
+    $textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
 
     // get letter attachments as attachment
     $attachmentAsAttachmentCriteria = new CriteriaCompo();
@@ -591,7 +591,7 @@ function xnewsletter_emailSize($letter_id = 0)
     $mail->Subject = html_entity_decode($letter_title, ENT_QUOTES);
 
     $mail->AddAddress($letterObj->getVar('letter_email_test'), _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW . " " . _AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW);
-    $mail->MsgHTML($htmlBody); // $mail->Body = $htmlBody;
+    $mail->Body = $htmlBody;
     $mail->AltBody = $textBody;
 
     foreach ($attachmentsPath as $attachmentPath) {

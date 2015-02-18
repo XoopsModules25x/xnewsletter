@@ -87,7 +87,7 @@ switch ($op) {
         echo $htmlBody;
         echo "</div>";
         echo "<div style='padding:10px;border:1px solid black; font-family: monospace;'>";
-        echo nl2br(utf8_encode($textBody));
+        echo nl2br(utf8_decode($textBody));
         echo "</div>";
         echo "</div>";
         include_once __DIR__ . '/admin_footer.php';

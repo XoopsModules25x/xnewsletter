@@ -177,7 +177,7 @@ switch ($op) {
 
         $letter_array['letter_content_templated']      = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
-        $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
+        $letter_array['letter_content_templated_text'] = nl2br(utf8_decode($textBody)); // new from v1.3
         $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
         $letter_array['letter_submitter_name']         = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
         $xoopsTpl->assign('letter', $letter_array);

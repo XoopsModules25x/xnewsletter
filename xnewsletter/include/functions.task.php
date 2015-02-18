@@ -373,10 +373,10 @@ function xnewsletter_executeTasks($xn_send_in_packages = 0, $letter_id = 0)
                     $htmlBody = $letterTpl->fetch($template);
                 }
                 $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
-                //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
+                $textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
 
                 $mail->AddAddress($recipient['address'], $recipient['firstname'] . ' ' . $recipient['lastname']);
-                $mail->MsgHTML($htmlBody); // $mail->Body = $htmlBody;
+                $mail->Body = $htmlBody;
                 $mail->AltBody = $textBody;
 
                 foreach ($attachmentsPath as $attachmentPath) {

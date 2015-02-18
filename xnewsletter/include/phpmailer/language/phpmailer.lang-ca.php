@@ -1,9 +1,8 @@
 <?php
 /**
  * Catalan PHPMailer language file: refer to English translation for definitive list
- *
  * @package PHPMailer
- * @author  Ivan <web AT microstudi DOT com>
+ * @author Ivan <web AT microstudi DOT com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: No s’ha pogut autenticar.';

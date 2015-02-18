@@ -200,6 +200,7 @@ switch ($op) {
             imap_close($mbox);
         }
         echo "</table>";
+        include_once __DIR__ . '/admin_footer.php';
         break;
 
     case 'list':

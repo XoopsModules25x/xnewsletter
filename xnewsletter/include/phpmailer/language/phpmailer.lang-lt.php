@@ -1,9 +1,8 @@
 <?php
 /**
  * Lithuanian PHPMailer language file: refer to English translation for definitive list
- *
  * @package PHPMailer
- * @author  Dainius Kaupaitis <dk@sum.lt>
+ * @author Dainius Kaupaitis <dk@sum.lt>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP klaida: autentifikacija nepavyko.';

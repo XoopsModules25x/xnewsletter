@@ -49,7 +49,7 @@ include_once XOOPS_ROOT_PATH . '/modules/' . $modversion['dirname'] . '/include/
 
 // About
 $modversion['module_status']        = 'RC 1';
-$modversion['release_date']         = '2015/02/03';
+$modversion['release_date']         = '2015/02/16';
 $modversion['module_website_url']   = 'wedega.com';
 $modversion['module_website_name']  = 'Webdesign Gabor';
 $modversion['min_php']              = '5.3.7';
@@ -308,9 +308,9 @@ $modversion['templates'][$i]['description'] = '';
 $modversion['templates'][$i]['file']        = $modversion['dirname'] . '_protocol.tpl';
 $modversion['templates'][$i]['description'] = '';
 // Common templates
-
-
-
+++$i;
+$modversion['templates'][$i]['file']        = $modversion['dirname'] . '_co_breadcrumb.tpl';
+$modversion['templates'][$i]['description'] = '';
 // Admin templates
 ++$i;
 $modversion['templates'][$i]['file']        = $modversion['dirname'] . '_admin_subscrs_list.tpl';
