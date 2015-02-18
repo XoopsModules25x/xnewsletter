@@ -17,74 +17,70 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @return array
  */
-function xnewsletter_plugin_getinfo_evennews() {
-    global $xoopsDB;
-
+function xnewsletter_plugin_getinfo_evennews()
+{
     $pluginInfo = array();
-    $pluginInfo['name'] = "evennews";
-    $pluginInfo['icon'] = XOOPS_URL . "/modules/evennews/images/logo.png";
-    //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/evennews/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("evennews_members");
-    $pluginInfo['descr'] = "Import from evennews";
-    $pluginInfo['hasform'] = 0;
+    $pluginInfo['name'] = 'evennews';
+    $pluginInfo['icon'] = XOOPS_URL . '/modules/evennews/images/logo.png';
+    //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . '/modules/evennews/xoops_version.php';
+    $pluginInfo['tables'][0] = $GLOBALS['xoopsDB']->prefix('evennews_members');
+    $pluginInfo['descr'] = 'Import from evennews';
+    $pluginInfo['hasform'] = false;
 
     return $pluginInfo;
 }
 
 /**
  * @param $cat_id
- * @param $action_after_read
- * @param $limitcheck
- * @param $skipcatsubscrexist
+ * @param $checkSubscrsAfterRead
+ * @param $checkLimit
+ * @param $skipCatsubscrExist
  *
  * @return int
  */
-function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist) {
-    global $xoopsDB;
-    $xnewsletter = xnewsletterxnewsletter::getInstance();
-
-    //$table_import = $xoopsDB->prefix('xnewsletter_import');
-    $import_status = $action_after_read == 0 ? 1 : 0;
-    $i = 0;
-    $j = 0;
-
+function xnewsletter_plugin_getdata_evennews($cat_id, $checkSubscrsAfterRead = true, $checkLimit, $skipCatsubscrExist = true)
+{
+    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    //
+    $import_status = ($checkSubscrsAfterRead === false) ? _XNEWSLETTER_IMPORT_STATUS_IMPORTABLE : _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
     $sql = "SELECT `user_email`, `user_name`, `user_nick`";
-    $sql .= " FROM {$xoopsDB->prefix("evennews_members")}";
+    $sql .= " FROM {$GLOBALS['xoopsDB']->prefix('evennews_members')}";
     $sql .= " WHERE (`user_email` is not null and not(`user_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
+    if (!$result_users = $GLOBALS['xoopsDB']->query($sql)) {
+        die ('MySQL-Error: ' . mysql_error());
+    }
+    $j = 0;
+    $line = 0;
     while ($lineArray = mysql_fetch_array($result_users)) {
-        ++$i;
-        $email     = $lineArray[0];
-        $sex       = "";
-        $firstname = $lineArray[1];
-        $lastname  = $lineArray[2];
-
+        ++$line;
+        $email = $lineArray[0];
         $subscr_id = xnewsletter_pluginCheckEmail($email);
         $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
-
-        if ($skipcatsubscrexist == 1 && $catsubscr_id > 0) {
-            //skip existing subscriptions
+        if ($skipCatsubscrExist === true && $catsubscr_id > 0) {
+            // skip existing subscriptions
+            // NOP
         } else {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
             $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
-            $importObj->setVar('import_sex', $sex);
-            $importObj->setVar('import_firstname', $firstname);
-            $importObj->setVar('import_lastname', $lastname);
+            $importObj->setVar('import_sex', '');
+            $importObj->setVar('import_firstname', $lineArray[1]);
+            $importObj->setVar('import_lastname', $lineArray[2]);
             $importObj->setVar('import_cat_id', $currcatid);
             $importObj->setVar('import_subscr_id', $subscr_id);
             $importObj->setVar('import_catsubscr_id', $catsubscr_id);
@@ -93,15 +89,14 @@ function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limit
                 echo $importObj->getHtmlErrors();
                 exit();
             }
-//            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
-//            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
             ++$j;
         }
-    ++$i;
-    if ($j == 100000) break; //maximum number of processing to avoid cache overflow
-    if ($limitcheck > 0 && $j == $limitcheck) $import_status = 0;
+        if ($j == 100000) {
+            break;
+        } //maximum number of processing to avoid cache overflow
+        if ($checkLimit > 0 && $j == $checkLimit) {
+            $import_status = _XNEWSLETTER_IMPORT_STATUS_TOCHECK;
+        }
     }
-
     return $j;
 }

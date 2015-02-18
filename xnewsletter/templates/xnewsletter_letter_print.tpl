@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<{$smarty.const._LANGCODE}>" lang="<{$smarty.const._LANGCODE}>">
 
     <head>
-        <title>' . $xoopsConfig['sitename'] . '</title>
+        <title><{$xoopsConfig.sitename}></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="AUTHOR" content="<{$xoopsConfig.sitename}>" />
         <meta name="keywords" content="<{$xoops_meta_keywords}>" />

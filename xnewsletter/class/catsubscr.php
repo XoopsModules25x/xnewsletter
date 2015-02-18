@@ -27,8 +27,7 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterCatsubscr
@@ -43,14 +42,14 @@ class XnewsletterCatsubscr extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("catsubscr_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("catsubscr_catid", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("catsubscr_subscrid", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("catsubscr_quited", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("catsubscr_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("catsubscr_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('catsubscr_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('catsubscr_catid', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('catsubscr_subscrid', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('catsubscr_quited', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('catsubscr_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('catsubscr_created', XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -60,55 +59,74 @@ class XnewsletterCatsubscr extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
+        global $xoopsUser;
+        //
+        xoops_load('XoopsFormLoader');
+        //
         if ($action === false) {
-            $action = $_SERVER["REQUEST_URI"];
+            $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_CATSUBSCR_ADD) : sprintf(_AM_XNEWSLETTER_CATSUBSCR_EDIT);
-
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        //
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
-
-        $criteria = new CriteriaCompo();
-        $criteria->setSort('cat_id ASC, cat_name');
-        $criteria->setOrder('ASC');
-        $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_CATID, "catsubscr_catid", $this->getVar("catsubscr_catid"));
-        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
-        $form->addElement($cat_select, true);
-
+        // catsubsr: catsubscr_subscrid
         $subscrCriteria = new CriteriaCompo();
         $subscrCriteria->setSort('subscr_email ');
         $subscrCriteria->setOrder('ASC');
-        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID, "catsubscr_subscrid", $this->getVar("catsubscr_subscrid"));
+        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_SUBSCRID, 'catsubscr_subscrid', $this->getVar('catsubscr_subscrid'));
         $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
-
-        $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, "&nbsp;");
-
-        $quit_now = new XoopsFormRadio("", "catsubscr_quit_now", 0);
-        $quit_now->addOption(0, _AM_XNEWSLETTER_CATSUBSCR_QUIT_NONE);
-        $quit_now->addOption(1, _AM_XNEWSLETTER_CATSUBSCR_QUIT_NOW);
-        $quit_now->addOption(2, _AM_XNEWSLETTER_CATSUBSCR_QUIT_REMOVE);
+        // catsubsr: catsubscr_catid
+        $criteria = new CriteriaCompo();
+        $criteria->setSort('cat_id ASC, cat_name');
+        $criteria->setOrder('ASC');
+        $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_CATSUBSCR_CATID, 'catsubscr_catid', $this->getVar('catsubscr_catid'));
+        $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList());
+        $form->addElement($cat_select, true);
+        // form: catsubscr_quit_now
+        $quited_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CATSUBSCR_QUITED, '&nbsp;');
+        $quit_now = new XoopsFormRadio('', 'catsubscr_quit_now', _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE);
+        $quit_now->addOptionArray(
+            array(
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE   => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NONE,
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NOW    => _AM_XNEWSLETTER_CATSUBSCR_QUIT_NOW,
+                _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_REMOVE => _AM_XNEWSLETTER_CATSUBSCR_QUIT_REMOVE
+            )
+        );
         $quited_tray->addElement($quit_now, false);
-        $quited_tray->addElement(new XoopsFormLabel("", $this->getVar("catsubscr_quited")));
+        $quited_tray->addElement(new XoopsFormLabel('', $this->getVar('catsubscr_quited')));
         $form->addElement($quited_tray, false);
-
-        $time = ($this->isNew()) ? time() : $this->getVar("catsubscr_created");
-        $form->addElement(new XoopsFormHidden("catsubscr_submitter", $GLOBALS['xoopsUser']->uid()));
-        $form->addElement(new XoopsFormHidden("catsubscr_created", $time));
-
+        //
+        $time = ($this->isNew()) ? time() : $this->getVar('catsubscr_created');
+        $form->addElement(new XoopsFormHidden('catsubscr_submitter', $GLOBALS['xoopsUser']->uid()));
+        $form->addElement(new XoopsFormHidden('catsubscr_created', $time));
+        //
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_CATSUBSCR_CREATED, formatTimestamp($time, 's')));
-
-        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER, "catsubscr_submitter", false, $this->getVar("catsubscr_submitter"), 1, false), true);
-        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_CATSUBSCR_CREATED, "catsubscr_created", "", $this->getVar("catsubscr_created")));
-
-        $form->addElement(new XoopsFormHidden("op", "save_catsubscr"));
-        $form->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
-
+        //
+        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER, 'catsubscr_submitter', false, $this->getVar('catsubscr_submitter'), 1, false), true);
+        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_CATSUBSCR_CREATED, 'catsubscr_created', '', $this->getVar('catsubscr_created')));
+        // form: button tray
+        $button_tray = new XoopsFormElementTray('', '');
+        $button_tray->addElement(new XoopsFormHidden('op', 'save_catsubscr'));
+        //
+        $button_submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
+        $button_tray->addElement($button_submit);
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
+        $form->addElement($button_tray);
+        //
         return $form;
     }
 }
@@ -119,7 +137,7 @@ class XnewsletterCatsubscr extends XoopsObject
 class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -129,7 +147,7 @@ class XnewsletterCatsubscrHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_catsubscr", "XnewsletterCatsubscr", "catsubscr_id", "catsubscr_catid");
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        parent::__construct($db, 'xnewsletter_catsubscr', 'XnewsletterCatsubscr', 'catsubscr_id', 'catsubscr_catid');
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 }

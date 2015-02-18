@@ -27,8 +27,7 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterTemplate
@@ -43,14 +42,14 @@ class XnewsletterTemplate extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("template_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("template_title", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("template_description", XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar("template_content", XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar("template_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("template_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('template_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('template_title', XOBJ_DTYPE_TXTBOX, '', true, 255);
+        $this->initVar('template_description', XOBJ_DTYPE_TXTAREA, '', false);
+        $this->initVar('template_content', XOBJ_DTYPE_TXTAREA, '', true);
+        $this->initVar('template_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('template_created', XOBJ_DTYPE_INT, time(), false);
     }
 
     /**
@@ -60,57 +59,64 @@ class XnewsletterTemplate extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
+        global $xoopsUser;
+        //
+        xoops_load('XoopsFormLoader');
+        //
         if ($action === false) {
-            $action = $_SERVER["REQUEST_URI"];
+            $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_TEMPLATE_ADD) : sprintf(_AM_XNEWSLETTER_TEMPLATE_EDIT);
-
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        //
+        $form  = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
-
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, "template_title", 50, 255, $this->getVar("template_title", 'e')), true);
-
+        // template: template_title
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, 'template_title', 50, 255, $this->getVar('template_title', 'e')), true);
+        // template: template_description
+        $template_description_textarea = new XoopsFormTextArea(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION, 'template_description', $this->getVar('template_description', 'e'), 5, 50);
+        $template_description_textarea->setDescription(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC);
+        $form->addElement($template_description_textarea, false);
+        // template: template_content
         $editor_configs           = array();
-        $editor_configs["name"]   = "template_description";
-        $editor_configs["value"]  = $this->getVar("template_description", "e");
-        $editor_configs["rows"]   = 10;
-        $editor_configs["cols"]   = 80;
-        $editor_configs["width"]  = "100%";
-        $editor_configs["height"] = "400px";
-        $editor_configs["editor"] = $this->xnewsletter->getConfig('xnewsletter_editor');
-        $template_description_editor = new XoopsFormEditor(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION, "template_description", $editor_configs);
-        $template_description_editor->setDescription(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC);
-        $form->addElement($template_description_editor, false);
-
-        $editor_configs           = array();
-        $editor_configs["name"]   = "template_content";
-        $editor_configs["value"]  = $this->getVar("template_content", "e");
-        $editor_configs["rows"]   = 10;
-        $editor_configs["cols"]   = 80;
-        $editor_configs["width"]  = "100%";
-        $editor_configs["height"] = "400px";
-        $editor_configs["editor"] = $this->xnewsletter->getConfig('template_editor');
-        $template_content_editor = new XoopsFormEditor(_AM_XNEWSLETTER_TEMPLATE_CONTENT, "template_content", $editor_configs);
+        $editor_configs['name']   = 'template_content';
+        $editor_configs['value']  = $this->getVar('template_content', 'e');
+        $editor_configs['rows']   = 40;
+        $editor_configs['cols']   = 80;
+        $editor_configs['width']  = '100%';
+        $editor_configs['height'] = '800px';
+        $editor_configs['editor'] = $this->xnewsletter->getConfig('template_editor');
+        $template_content_editor  = new XoopsFormEditor(_AM_XNEWSLETTER_TEMPLATE_CONTENT, 'template_content', $editor_configs);
         $template_content_editor->setDescription(_AM_XNEWSLETTER_TEMPLATE_CONTENT_DESC);
         $form->addElement($template_content_editor, true);
-
-        $time = ($this->isNew()) ? time() : $this->getVar("template_created");
-        $form->addElement(new XoopsFormHidden("template_submitter", $GLOBALS['xoopsUser']->uid()));
-        $form->addElement(new XoopsFormHidden("template_created", $time));
-
+        // template: extra info
+        $time = ($this->isNew()) ? time() : $this->getVar('template_created');
+        $form->addElement(new XoopsFormHidden('template_submitter', $GLOBALS['xoopsUser']->uid()));
+        $form->addElement(new XoopsFormHidden('template_created', $time));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_TEMPLATE_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_TEMPLATE_CREATED, formatTimestamp($time, 's')));
-
-        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_TEMPLATE_SUBMITTER, "template_submitter", false, $this->getVar("template_submitter"), 1, false), true);
-        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TEMPLATE_CREATED, "template_created", "", $this->getVar("template_created")));
-
-        $form->addElement(new XoopsFormHidden("op", "save_template"));
-        $form->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
-
+        //
+        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_TEMPLATE_SUBMITTER, 'template_submitter', false, $this->getVar('template_submitter'), 1, false), true);
+        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TEMPLATE_CREATED, 'template_created', '', $this->getVar('template_created')));
+        // form: button tray
+        $button_tray = new XoopsFormElementTray('', '');
+        $button_tray->addElement(new XoopsFormHidden('op', 'save_template'));
+        //
+        $button_submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
+        $button_tray->addElement($button_submit);
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
+        $form->addElement($button_tray);
+        //
         return $form;
     }
 }
@@ -121,7 +127,7 @@ class XnewsletterTemplate extends XoopsObject
 class XnewsletterTemplateHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -131,7 +137,7 @@ class XnewsletterTemplateHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_template", "XnewsletterTemplate", "template_id", "template_title");
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        parent::__construct($db, 'xnewsletter_template', 'XnewsletterTemplate', 'template_id', 'template_title');
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
     }
 }

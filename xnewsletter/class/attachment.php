@@ -27,8 +27,7 @@
  * ****************************************************************************
  */
 
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterAttachment
@@ -43,14 +42,16 @@ class XnewsletterAttachment extends XoopsObject
      */
     public function __construct()
     {
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("attachment_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("attachment_letter_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("attachment_name", XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar("attachment_type", XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar("attachment_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("attachment_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('attachment_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('attachment_letter_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('attachment_name', XOBJ_DTYPE_TXTBOX, null, false, 200);
+        $this->initVar('attachment_type', XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('attachment_submitter', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('attachment_created', XOBJ_DTYPE_INT, time(), false);
+        $this->initVar('attachment_size', XOBJ_DTYPE_INT, 0, false);
+        $this->initVar('attachment_mode', XOBJ_DTYPE_INT, _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, false);
     }
 
     /**
@@ -60,42 +61,54 @@ class XnewsletterAttachment extends XoopsObject
      */
     public function getForm($action = false)
     {
-        global $xoopsDB;
-
+        global $xoopsUser;
+        //
+        xoops_load('XoopsFormLoader');
         if ($action === false) {
-            $action = $_SERVER["REQUEST_URI"];
+            $action = $_SERVER['REQUEST_URI'];
         }
-
+        //
+        $isAdmin = xnewsletter_userIsAdmin();
+        $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+        //
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ATTACHMENT_ADD) : sprintf(_AM_XNEWSLETTER_ATTACHMENT_EDIT);
-
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        //
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
-
-        $letterCriteria = new CriteriaCompo();
-        $letterCriteria->setSort('letter_id');
-        $letterCriteria->setOrder('DESC');
-        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "attachment_letter_id", $this->getVar("attachment_letter_id"));
-        $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($letterCriteria));
-        $form->addElement($letter_select, true);
-
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_NAME, "attachment_name", 50, 255, $this->getVar("attachment_name")), true);
-
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_ATTACHMENT_TYPE, "attachment_type", 50, 255, $this->getVar("attachment_type")), false);
-
-        $time = ($this->isNew()) ? time() : $this->getVar("attachment_created");
-        $form->addElement(new XoopsFormHidden("attachment_submitter", $GLOBALS['xoopsUser']->uid()));
-        $form->addElement(new XoopsFormHidden("attachment_created", $time));
-
+        // attachment: attachment_name
+        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_NAME, $this->getVar('attachment_name')));
+        // attachment: attachment_size
+        $form->addElement(
+            new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SIZE, "<span title='" . $this->getVar('attachment_size') . " B'>" . xnewsletter_bytesToSize1024($this->getVar('attachment_size')) . "</span>")
+        );
+        // attachment: attachment_type
+        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_TYPE, $this->getVar('attachment_type')));
+        // attachment: attachment_mode
+        $mode_select = new XoopsFormRadio(_AM_XNEWSLETTER_ATTACHMENT_MODE, 'attachment_mode', $this->getVar('attachment_mode'));
+        $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT);
+        $mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_ASLINK, _AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK);
+        //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO);  // for future features
+        $form->addElement($mode_select);
+        // attachment: extra info
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_CREATED, formatTimestamp($time, 's')));
 
-        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, "attachment_submitter", false, $this->getVar("attachment_submitter"), 1, false), true);
-        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_ATTACHMENT_CREATED, "attachment_created", "", $this->getVar("attachment_created")));
-
-        $form->addElement(new XoopsFormHidden("op", "save_attachment"));
-        $form->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
-
+        // form: button tray
+        $button_tray = new XoopsFormElementTray('', '');
+        $button_tray->addElement(new XoopsFormHidden('op', 'save_attachment'));
+        //
+        $button_submit = new XoopsFormButton('', 'submit', _SUBMIT, 'submit');
+        $button_tray->addElement($button_submit);
+        //
+        $button_reset = new XoopsFormButton('', '', _RESET, 'reset');
+        $button_tray->addElement($button_reset);
+        //
+        $button_cancel = new XoopsFormButton('', '', _CANCEL, 'button');
+        $button_cancel->setExtra('onclick="history.go(-1)"');
+        $button_tray->addElement($button_cancel);
+        //
+        $form->addElement($button_tray);
+        //
         return $form;
     }
 }
@@ -106,7 +119,7 @@ class XnewsletterAttachment extends XoopsObject
 class XnewsletterAttachmentHandler extends XoopsPersistableObjectHandler
 {
     /**
-     * @var xnewsletterxnewsletter
+     * @var XnewsletterXnewsletter
      * @access public
      */
     public $xnewsletter = null;
@@ -116,7 +129,30 @@ class XnewsletterAttachmentHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_attachment", "XnewsletterAttachment", "attachment_id", "attachment_letter_id");
-        $this->xnewsletter = xnewsletterxnewsletter::getInstance();
+        parent::__construct($db, 'xnewsletter_attachment', 'XnewsletterAttachment', 'attachment_id', 'attachment_letter_id');
+        $this->xnewsletter = XnewsletterXnewsletter::getInstance();
+    }
+
+    /**
+     * Delete attachment ({@link attachment} object) and file from filesystem
+     *
+     * @param object $attachmentObj
+     * @param bool   $force
+     *
+     * @internal param object $object
+     * @return bool
+     */
+    public function delete($attachmentObj, $force = false)
+    {
+        $res                  = true;
+        $attachment_letter_id = (int)$attachmentObj->getVar('attachment_letter_id');
+        $attachment_name      = (string)$attachmentObj->getVar('attachment_name');
+        //
+        if ($res = parent::delete($attachmentObj, $force)) {
+            // delete file from filesystem
+            @unlink(XOOPS_UPLOAD_PATH . $this->xnewsletter->getConfig('xn_attachment_path') . $attachment_letter_id . '/' . $attachment_name);
+        }
+
+        return $res;
     }
 }

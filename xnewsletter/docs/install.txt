@@ -1,3 +1,4 @@
 Read Me First
 =============
-Install this module usually in /modules
+1. Copy this module in /modules directory
+2. Install this module as usually

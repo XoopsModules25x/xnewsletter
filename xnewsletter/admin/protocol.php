@@ -17,279 +17,203 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
-xoops_cp_header();
+include_once __DIR__ . '/admin_header.php';
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
-
-$protocolAdmin = new ModuleAdmin();
-$letterAdmin = new ModuleAdmin();
-
+$op = XoopsRequest::getString('op', 'list_protocols');
 switch ($op) {
-    case "list":
-        echo $letterAdmin->addNavigation($currentFile);
-        //
-        $limit = $xnewsletter->getConfig('adminperpage');
-        $letterCriteria = new CriteriaCompo();
-        $letterCriteria->setSort("letter_id");
-        $letterCriteria->setOrder("DESC");
-        $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
-        $letterCriteria->setStart($start);
-        $letterCriteria->setLimit($limit);
-        $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
-        if ($lettersCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-          $pagenav = new XoopsPageNav($lettersCount, $limit, $start, 'start', 'op=list');
-          $pagenav = $pagenav->renderNav(4);
-        } else {
-          $pagenav = '';
+    case 'list':
+    case 'list_protocols':
+    default:
+        $apply_filter = XoopsRequest::getBool('apply_filter', false);
+        // render start here
+        xoops_cp_header();
+        // render submenu
+        $protocolAdmin = new ModuleAdmin();
+        echo $protocolAdmin->addNavigation($currentFile);
+        if ($apply_filter == true) {
+            $protocolAdmin->addItemButton(_AM_XNEWSLETTER_PROTOCOL_SHOW_ALL, '?op=list_protocols', 'view_detailed');
         }
-
-        // View Table
-        if ($lettersCount > 0) {
-            echo "
-                <table class='outer width100' cellspacing='1'>
-                    <tr>
-                        <th class='center width2'>" . _AM_XNEWSLETTER_LETTER_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_TITLE . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_LAST_STATUS . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_CREATED . "</th>
-                        <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                    </tr>";
-
-            $class = "odd";
-
-            //first show misc protocol items
-            echo "<tr class='" . $class . "'>";
-            $class = ($class == "even") ? "odd" : "even";
-            echo "<td class='center'> - </td>";
-            echo "<td class='center'>" . _AM_XNEWSLETTER_PROTOCOL_MISC . "</td>";
-
+        $protocolCount = $xnewsletter->getHandler('protocol')->getCount();
+        if ($protocolCount > 0) {
+            $protocolAdmin->addItemButton(_AM_XNEWSLETTER_PROTOCOL_DELETE_ALL, '?op=delete_protocols', 'delete');
+        }
+        echo $protocolAdmin->renderButton();
+        //
+        $protocolCount = $xnewsletter->getHandler('protocol')->getCount();
+        $GLOBALS['xoopsTpl']->assign('protocolCount', $protocolCount);
+        if ($protocolCount > 0) {
             $protocolCriteria = new CriteriaCompo();
-            $protocolCriteria->add(new Criteria('protocol_letter_id', '0'));
-            $protocolCriteria->setSort("protocol_id");
-            $protocolCriteria->setOrder("DESC");
-            $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-            $protocolCriteria->setLimit(2);
-            $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
-            $protocol_status = "";
-            $protocol_created = "";
-            $p = 0;
-            foreach ($protocolObjs as $protocol_id => $protocolObj) {
-                ++$p;
-                if (count($protocolObjs)>1) $protocol_status .="($p) ";
-                $protocol_status .= $protocolObj->getVar("protocol_status") . "<br/>";
-                $protocol_created .= formatTimeStamp($protocolObj->getVar("protocol_created"),"M") . "<br/>";
+            // get filter parameters
+            $filter_protocol_letter_ids = XoopsRequest::getArray('filter_protocol_letter_ids', array());
+            //
+            $filter_protocol_success = XoopsRequest::getInt('filter_protocol_success', 2); // all
+            //
+            if (isset($_REQUEST['filter_protocol_created_from']['date'])) {
+                $dateTimeObj = DateTime::createFromFormat(_SHORTDATESTRING, $_REQUEST['filter_protocol_created_from']['date']);
+                $dateTimeObj->setTime(0, 0, 0);
+                $filter_protocol_created_from = (int) ($dateTimeObj->getTimestamp() + $_REQUEST['filter_protocol_created_from']['time']);
+                unset($dateTimeObj);
+            } else {
+                $filter_protocol_created_from = 3600;
             }
-            if ($protocolsCount > 2) $protocol_status .= "...";
-            echo "
-                    <td class='center'>
-                        <a href='?op=list_letter&letter_id=0'>" . $protocol_status . "</a>
-                    </td>
-                    <td class='center'>" . $protocol_created . "</td>
-                    <td class='center width5'>
-                        <a href='?op=list_letter&letter_id=0'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "' /></a>
-                    </td>
-                </tr>";
-
-            foreach (array_keys($letterObjs) as $i) {
-                $protocolCriteria = new CriteriaCompo();
-                $protocolCriteria->add(new Criteria('protocol_letter_id', $letterObjs[$i]->getVar("letter_id")));
-                $protocolCriteria->setSort("protocol_id");
-                $protocolCriteria->setOrder("DESC");
-                $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-                if ($protocolsCount > 0) {
-                    $protocolCriteria->setLimit(2);
-                    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
-                    $protocol_status = "";
-                    $protocol_created = "";
-
-                    echo "<tr class='" . $class. "'>";
-                    $class = ($class == "even") ? "odd" : "even";
-                    echo "<td class='center'>" . $i . "</td>";
-                    echo "<td class='center'>" . $letterObjs[$i]->getVar("letter_title") . "</td>";
-
-                    $p = 0;
-                    foreach ($protocolObjs as $protocol) {
-                        ++$p;
-                        if (count($protocolObjs)>1) $protocol_status .="($p) ";
-                        $protocol_status .= $protocol->getVar("protocol_status") . "<br/>";
-                        $protocol_created .= formatTimeStamp($protocol->getVar("protocol_created"),"M")."<br/>";
-                    }
-                    if ($protocolsCount > 2) $protocol_status .= "...";
-                    echo "
-                            <td class='center'>
-                                <a href='?op=list_letter&letter_id=" . $i . "'>" . $protocol_status . "</a>
-                            </td>
-                            <td class='center'>" . $protocol_created . "</td>
-                            <td class='center width5'>
-                                <a href='?op=list_letter&letter_id=" . $i . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "' /></a>
-                            </td>
-                        </tr>";
+            if (isset($_REQUEST['filter_protocol_created_to']['date'])) {
+                $dateTimeObj = DateTime::createFromFormat(_SHORTDATESTRING, $_REQUEST['filter_protocol_created_to']['date']);
+                $dateTimeObj->setTime(0, 0, 0);
+                $filter_protocol_created_to = (int) ($dateTimeObj->getTimestamp() + $_REQUEST['filter_protocol_created_to']['time']);
+                unset($dateTimeObj);
+            } else {
+                $filter_protocol_created_to = time();
+            }
+            if ($apply_filter == true) {
+                // apply filter
+                if (count($filter_protocol_letter_ids) > 0) {
+                    $protocolCriteria->add(new Criteria('protocol_letter_id', '(' . implode(',', $filter_protocol_letter_ids) . ')', 'IN'));
+                }
+                //
+                if ($filter_protocol_success == 0 or $filter_protocol_success == 1) {
+                    $protocolCriteria->add(new Criteria('protocol_success', $filter_protocol_success));
+                }
+                //
+                if ($filter_protocol_created_from != 0) {
+                    $protocolCriteria->add(new Criteria('protocol_created', $filter_protocol_created_from, '>='));
+                }
+                if ($filter_protocol_created_to != 0) {
+                    $protocolCriteria->add(new Criteria('protocol_created', $filter_protocol_created_to, '<='));
                 }
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
-        } else {
-            echo "
-                <table class='outer width100' cellspacing='1'>
-                    <tr>
-                        <th class='center width2'>" . _AM_XNEWSLETTER_LETTER_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_LETTER_TITLE . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_LAST_STATUS . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_CREATED . "</th>
-                        <th class='center width5'>"._AM_XNEWSLETTER_FORMACTION . "</th>
-                    </tr>
-                </table><br /><br />";
-        }
-    break;
-    case "list_letter":
-        $letter_id = isset($_REQUEST["letter_id"]) ? $_REQUEST["letter_id"] :'0';
-        echo $protocolAdmin->addNavigation($currentFile);
-        $protocolAdmin->addItemButton(_AM_XNEWSLETTER_PROTOCOLLIST, '?op=list', 'list');
-        //
-        if ($letter_id > '0') $protocolAdmin->addItemButton(_AM_XNEWSLETTER_LETTER_DELETE_ALL, '?op=delete_protocol_list&letter_id=' . $letter_id, 'delete');
-        echo $protocolAdmin->renderButton();
-        $limit = $xnewsletter->getConfig('adminperpage');
-
-        $protocolCriteria = new CriteriaCompo();
-        $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
-        $protocolCriteria->setSort("protocol_id");
-        $protocolCriteria->setOrder("DESC");
-        $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
-        $protocolCriteria->setStart($start);
-        $protocolCriteria->setLimit($limit);
-        $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
-        if ($protocolsCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
-            $pagenav = new XoopsPageNav($protocolsCount, $limit, $start, 'start', 'op=list_letter&letter_id=' . $letter_id);
-            $pagenav = $pagenav->renderNav(4);
-        } else {
-            $pagenav = '';
-        }
-
-        // View Table
-        if ($protocolsCount > 0) {
-            $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
-            echo "<h2 style='text-align:center'>" . $letterObj->getVar("letter_title") . "</h2>";
-            echo "
-                <table class='outer width100' cellspacing='1'>
-                    <tr>
-                        <th class='center width2'>" . _AM_XNEWSLETTER_PROTOCOL_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_STATUS . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_SUCCESS . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_SUBMITTER . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_CREATED . "</th>
-                        <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                    </tr>";
-
-            $class = "odd";
-            foreach ($protocolObjs as $protocol_id => $protocolObj) {
-                echo "<tr class='" . $class . "'>";
-                $class = ($class == "even") ? "odd" : "even";
-                echo "<td class='center'>" . $protocol_id . "</td>";
-                $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar("protocol_subscriber_id"));
-                $subscriber = ($subscrObj) ? $subscrObj->getVar("subscr_email") : _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
-                if ($subscriber == "") $subscriber = "-";
-                $success = ($protocolObj->getVar("protocol_success") == 1) ? XNEWSLETTER_IMG_OK : XNEWSLETTER_IMG_FAILED;
-                echo "<td class='center'>" . $subscriber . "</td>";
-                echo "<td class='center'>" . $protocolObj->getVar("protocol_status") . "</td>";
-                echo "<td class='center'>" . $success . "</td>";
-                echo "<td class='center'>" . XoopsUser::getUnameFromId($protocolObj->getVar("protocol_submitter"), "S") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($protocolObj->getVar("protocol_created"), "L") . "</td>";
-
-                echo "
-                    <td class='center width5'>
-                        <a href='?op=delete_protocol&protocol_id=" . $protocol_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>
-                    </td>";
-                echo "</tr>";
+            $GLOBALS['xoopsTpl']->assign('apply_filter', $apply_filter);
+            $protocolFilterCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
+            $GLOBALS['xoopsTpl']->assign('protocolFilterCount', $protocolFilterCount);
+            //
+            $protocolCriteria->setSort('protocol_id');
+            $protocolCriteria->setOrder('DESC');
+            //
+            $start = XoopsRequest::getInt('start', 0);
+            $limit = $xnewsletter->getConfig('adminperpage');
+            $protocolCriteria->setStart($start);
+            $protocolCriteria->setLimit($limit);
+            //
+            $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
+            $protocols = $xnewsletter->getHandler('protocol')->getObjects($protocolCriteria, true, false); // as array
+            //
+            $letterCriteria = new CriteriaCompo();
+            $letterCriteria->setSort('letter_created');
+            $letterCriteria->setOrder('DESC');
+            //$letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
+            $letters = $xnewsletter->getHandler('letter')->getObjects($letterCriteria, true, false);
+            //
+            if ($protocolFilterCount > $limit) {
+                xoops_load('xoopspagenav');
+                $linklist = "op={$op}";
+                foreach ($filter_protocol_letter_ids as $filter_protocol_letter_id) {
+                    $linklist .= "&filter_protocol_letter_ids[]={$filter_protocol_letter_id}";
+                }
+                $linklist .= "&filter_protocol_success={$filter_protocol_success}";
+                $linklist .= "&filter_protocol_created_from[date]={$_REQUEST['filter_protocol_created_from']['date']}";
+                $linklist .= "&filter_protocol_created_from[time]={$_REQUEST['filter_protocol_created_from']['time']}";
+                $linklist .= "&filter_protocol_created_to[date]={$_REQUEST['filter_protocol_created_to']['date']}";
+                $linklist .= "&filter_protocol_created_to[time]={$_REQUEST['filter_protocol_created_to']['time']}";
+                $pagenav = new XoopsPageNav($protocolFilterCount, $limit, $start, 'start', $linklist);
+                $pagenav = $pagenav->renderNav(4);
+            } else {
+                $pagenav = '';
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
+            $GLOBALS['xoopsTpl']->assign('protocols_pagenav', $pagenav);
+            //
+            $filter_protocol_letter_ids_select = new XoopsFormSelect(_AM_XNEWSLETTER_LETTER_TITLE, 'filter_protocol_letter_ids', $filter_protocol_letter_ids, 1, true);
+            $filter_protocol_letter_ids_select->addOption(0, _AM_XNEWSLETTER_PROTOCOL_MISC);
+            foreach ($letters as $letter) {
+                $filter_protocol_letter_ids_select->addOption($letter['letter_id'], $letter['letter_title']);
+            }
+            $GLOBALS['xoopsTpl']->assign('filter_protocol_letter_ids_select', $filter_protocol_letter_ids_select->render());
+            //
+            $filter_protocol_success_radio = new XoopsFormRadio(_AM_XNEWSLETTER_PROTOCOL_STATUS, 'filter_protocol_success', $filter_protocol_success, '&nbsp;');
+            $filter_protocol_success_radio->addOption(0, _AM_XNEWSLETTER_FAILED);
+            $filter_protocol_success_radio->addOption(1, _AM_XNEWSLETTER_OK);
+            $filter_protocol_success_radio->addOption(2, _ALL);
+            $GLOBALS['xoopsTpl']->assign('filter_protocol_success_radio', $filter_protocol_success_radio->render());
+            //
+            $filter_protocol_created_from_datetime = new XoopsFormDateTime(_AM_XNEWSLETTER_PROTOCOL_CREATED_FILTER_FROM, 'filter_protocol_created_from', 15, $filter_protocol_created_from, true);
+            $GLOBALS['xoopsTpl']->assign('filter_protocol_created_from_datetime', $filter_protocol_created_from_datetime->render());
+            //
+            $filter_protocol_created_to_datetime = new XoopsFormDateTime(_AM_XNEWSLETTER_PROTOCOL_CREATED_FILTER_TO, 'filter_protocol_created_to', 15, $filter_protocol_created_to, true);
+            $GLOBALS['xoopsTpl']->assign('filter_protocol_created_to_datetime', $filter_protocol_created_to_datetime->render());
+            //
+            $GLOBALS['xoopsTpl']->assign('token', $GLOBALS['xoopsSecurity']->getTokenHTML());
+            // fill protocols array
+            foreach ($protocols as $protocol_id => $protocol) {
+                $protocol['protocol_created_formatted'] = formatTimestamp($protocol['protocol_created'], $xnewsletter->getConfig('dateformat'));
+                $protocol['protocol_submitter_uname'] = XoopsUser::getUnameFromId($protocol['protocol_submitter'], 'S');
+
+                if (isset($letters[$protocol['protocol_letter_id']])) {
+                    $protocol['protocol_letter_title'] = $letters[$protocol['protocol_letter_id']]['letter_title'];
+                } else {
+                    $protocol['protocol_letter_title'] = _AM_XNEWSLETTER_PROTOCOL_MISC;
+                }
+                if ($subscrObj = $xnewsletter->getHandler('subscr')->get($protocol['protocol_subscriber_id'])) {
+                    $protocol['protocol_subscriber_email'] = $subscrObj->getVar('subscr_email');
+                } else {
+                    $protocol['protocol_subscriber_email'] = _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
+                }
+                $GLOBALS['xoopsTpl']->append('protocols', $protocol);
+            }
+            //
+            $GLOBALS['xoopsTpl']->display("db:{$xnewsletter->getModule()->dirname()}_admin_protocols_list.tpl");
         } else {
-            echo "
-                <table class='outer width100' cellspacing='1'>
-                    <tr>
-                        <th class='center width2'>" . _AM_XNEWSLETTER_PROTOCOL_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_LETTER_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_STATUS . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_SUBMITTER . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_PROTOCOL_CREATED . "</th>
-                        <th class='center width5'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                    </tr>
-                </table>
-                <br />
-                <br />";
+            echo _CO_XNEWSLETTER_WARNING_NOPROTOCOLS;
         }
-    break;
+        include_once __DIR__ . '/admin_footer.php';
+        break;
 
-    case "new_protocol":
-        echo $protocolAdmin->addNavigation($currentFile);
-        $protocolAdmin->addItemButton(_AM_XNEWSLETTER_PROTOCOLLIST, '?op=list', 'list');
-        echo $protocolAdmin->renderButton();
-        //
-        $protocolObj = $xnewsletter->getHandler('protocol')->create();
-        $form = $protocolObj->getForm();
-        $form->display();
-    break;
-
-    case "save_protocol":
-        if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-           redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+    case 'apply_actions':
+        $action = XoopsRequest::getString('actions_action');
+        $protocol_ids = XoopsRequest::getArray('protocol_ids', unserialize(XoopsRequest::getString('serialize_protocol_ids')));
+        $protocolCriteria = new Criteria('protocol_id', '(' . implode(',', $protocol_ids) . ')', 'IN');
+        switch ($action) {
+            case 'delete':
+                if (XoopsRequest::getBool('ok', false, 'POST') == true) {
+                    // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
+                    if ($xnewsletter->getHandler('protocol')->deleteAll($protocolCriteria, true, true)) {
+                        redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
+                    } else {
+                        echo $subscrObj->getHtmlErrors();
+                    }
+                } else {
+                    // render start here
+                    xoops_cp_header();
+                    // render confirm form
+                    xoops_confirm(
+                        array('ok' => true, 'op' => 'apply_actions', 'actions_action' => $action, 'serialize_protocol_ids' => serialize($protocol_ids)),
+                        $_SERVER['REQUEST_URI'],
+                        sprintf(_AM_XNEWSLETTER_FORMSUREDEL, implode(', ', $protocol_ids))
+                    );
+                    include_once __DIR__ . '/admin_footer.php';
+                }
+                break;
+            default:
+                // NOP
+                break;
         }
-        if (isset($_REQUEST["protocol_id"])) {
-           $protocolObj = $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
-        } else {
-           $protocolObj = $xnewsletter->getHandler('protocol')->create();
-        }
+        break;
 
-        $protocolObj->setVar("protocol_letter_id", $_REQUEST["protocol_letter_id"]);
-        $protocolObj->setVar("protocol_subscriber_id", $_REQUEST["protocol_subscriber_id"]);
-        $protocolObj->setVar("protocol_status", $_REQUEST["protocol_status"]);
-        $protocolObj->setVar("protocol_success", $_REQUEST["protocol_success"]);
-        $protocolObj->setVar("protocol_submitter", $_REQUEST["protocol_submitter"]);
-        $protocolObj->setVar("protocol_created", strtotime($_REQUEST["protocol_created"]));
-
-        if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
-            redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
-        }
-
-        echo $protocolObj->getHtmlErrors();
-        $form = $protocolObj->getForm();
-        $form->display();
-    break;
-
-    case "edit_protocol":
-        echo $protocolAdmin->addNavigation($currentFile);
-        $protocolAdmin->addItemButton(_AM_XNEWSLETTER_NEWPROTOCOL, '?op=new_protocol', 'add');
-        $protocolAdmin->addItemButton(_AM_XNEWSLETTER_PROTOCOLLIST, '?op=list', 'list');
-        echo $protocolAdmin->renderButton();
-        //
-        $protocolObj = $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
-        $form = $protocolObj->getForm();
-        $form->display();
-    break;
-
-    case "delete_protocol":
-        $protocolObj =& $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
-        if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
-            if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+    case 'delete_protocol':
+        $protocol_id = XoopsRequest::getInt('protocol_id', 0);
+        $protocolObj = $xnewsletter->getHandler('protocol')->get($protocol_id);
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
+            if (!$GLOBALS['xoopsSecurity']->check()) {
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             if ($xnewsletter->getHandler('protocol')->delete($protocolObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
@@ -297,29 +221,65 @@ switch ($op) {
                 echo $protocolObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "protocol_id" => $_REQUEST["protocol_id"], "op" => "delete_protocol"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar("protocol_id")));
+            // render start here
+            xoops_cp_header();
+            // render confirm form
+            xoops_confirm(
+                array('ok' => true, 'protocol_id' => $protocol_id, 'op' => 'delete_protocol'),
+                $_SERVER['REQUEST_URI'],
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar('protocol_id'))
+            );
+            include_once __DIR__ . '/admin_footer.php';
         }
-    break;
+        break;
 
-    case "delete_protocol_list":
-        $letter_id = isset($_REQUEST["letter_id"]) ? $_REQUEST["letter_id"] : 0;
-        if ($letter_id > 0) {
-            $letterObj = $xnewsletter->getHandler('letter')->get($_REQUEST["letter_id"]);
-            if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
-                if ( !$GLOBALS["xoopsSecurity"]->check() ) {
-                    redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
-                }
-                $sql = "DELETE FROM `".$xoopsDB->prefix("xnewsletter_protocol")."` WHERE `protocol_letter_id`=$letter_id;";
-                $result = $xoopsDB->query($sql);
-                if ($result) {
-                    redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
-                } else {
-                    redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELNOTOK);
-                }
-            } else {
-                xoops_confirm(array("ok" => 1, "letter_id" => $letter_id, "op" => "delete_protocol_list"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar("letter_title")));
-            }
+    case 'delete_protocols':
+        $field = XoopsRequest::getString('field', '');
+        $value = XoopsRequest::getInt('value', 0);
+        switch ($field) {
+            case 'letter_id':
+            case 'protocol_letter_id':
+                $sql = "DELETE FROM `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}` WHERE `protocol_letter_id` = {$value}";
+                $letterObj = $xnewsletter->getHandler('letter')->get($value);
+                $title = $letterObj->getVar('letter_title');
+                break;
+            case 'subscr_id':
+            case 'protocol_subscriber_id':
+                $sql = "DELETE FROM `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}` WHERE `protocol_subscriber_id` = {$value}";
+                $subscrObj = $xnewsletter->getHandler('subscr')->get($value);
+                $title = $letterObj->getVar('subscr_email');
+                break;
+            case 'success':
+            case 'protocol_success':
+                $sql = "DELETE FROM `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}` WHERE `protocol_success` = {$value}";
+                $title = ($value) ? XNEWSLETTER_IMG_OK : XNEWSLETTER_IMG_FAILED;
+                break;
+            default:
+                $sql = "TRUNCATE TABLE `{$GLOBALS['xoopsDB']->prefix('xnewsletter_protocol')}`";
+                $title = _AM_XNEWSLETTER_PROTOCOL_DELETE_ALL;
+                break;
         }
-    break;
+        if (XoopsRequest::getBool('ok', false, 'POST') == true) {
+            if (!$GLOBALS['xoopsSecurity']->check()) {
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
+            }
+            $result = $GLOBALS['xoopsDB']->query($sql);
+            if ($result) {
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
+            } else {
+                redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELNOTOK);
+            }
+        } else {
+            // render start here
+            xoops_cp_header();
+            // render confirm form
+            xoops_confirm(
+                array('ok' => true, 'op' => 'delete_protocols', 'field' => $field, 'value' => $value),
+                $_SERVER['REQUEST_URI'],
+                sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $title)
+            );
+            include_once __DIR__ . '/admin_footer.php';
+        }
+        break;
+
 }
-include_once dirname(__FILE__) . '/admin_footer.php';

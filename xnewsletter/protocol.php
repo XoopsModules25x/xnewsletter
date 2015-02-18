@@ -17,31 +17,33 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: protocol.php 12491 2014-04-25 13:21:55Z beckmi $
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
+ *
+ *  Version : $Id: protocol.php 12787 2014-09-17 10:58:25Z beckmi $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once __DIR__ . '/header.php';
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
-include_once XOOPS_ROOT_PATH . "/header.php";
-
+include_once XOOPS_ROOT_PATH . '/header.php';
+//
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
-
-// Breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
+// breadcrumb
+$breadcrumb = new XnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+$breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
+$breadcrumb->addLink(_MD_XNEWSLETTER_PROTOCOL, '');
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-$letter_id = XnewsletterRequest::getInt('letter_id', 0);
+$letter_id = XoopsRequest::getInt('letter_id', 0);
 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 
@@ -53,20 +55,20 @@ $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteri
 
 // protocol table
 if ($protocolCount > 0) {
-    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
+    $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria, null, true, true);
     foreach ($protocolObjs as $protocol_id => $protocolObj) {
         $protocol_array = $protocolObj->toArray();
-        $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
+        $subscrObj      = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
         if (is_object($subscrObj)) {
-            $subscr_array = $subscrObj->toArray();
-            $protocol_array['subscr'] = $subscr_array;
+            $subscr_array                                = $subscrObj->toArray();
+            $protocol_array['subscr']                    = $subscr_array;
+            $protocol_array['subscr']['subscriber_name'] = $subscrObj->getVar('subscr_uid') != 0 ? XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
+        } else {
+            $protocol_array['subscr'] = false;
         }
-        $protocol_array['protocol_subscriber'] = $subscriber;
-        $protocol_array['protocol_created_timestamp'] = formatTimestamp($protocolObj->getVar('protocol_created'), $xnewsletter->getConfig('dateformat'));
+        $protocol_array['protocol_created_formatted'] = formatTimestamp($protocolObj->getVar('protocol_created'), $xnewsletter->getConfig('dateformat'));
         $xoopsTpl->append('protocols', $protocol_array);
     }
 }
 
-$xoopsTpl->assign('protocols', $protocols);
-
-include 'footer.php';
+include_once __DIR__ . '/footer.php';

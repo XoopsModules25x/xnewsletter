@@ -18,7 +18,7 @@
  *  Version : $Id $
  */
 
-require_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . 'admin_header.php';
 
 /**
  * @param      $msgnum
@@ -33,32 +33,23 @@ require_once dirname(__FILE__) . '/admin_header.php';
  *
  * @return bool
  */
-function callbackAction ($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no = false, $rule_cat = false, $totalFetched = 0) {
-    global $xoopsUser;
-    $xnewsletter = xnewsletterxnewsletter::getInstance();
+function callbackAction($msgnum, $bounce_type, $email, $subject, $xheader, $remove, $rule_no = false, $rule_cat = false, $totalFetched = 0)
+{
+    $xnewsletter = XnewsletterXnewsletter::getInstance();
 
-    if ($rule_no != "0000") {
+    if ($rule_no != '0000') {
         $bmhObj = $xnewsletter->getHandler('bmh')->create();
-        //Form bmh_rule_no
-        $bmhObj->setVar("bmh_rule_no", $rule_no);
-        //Form bmh_rule_cat
-        $bmhObj->setVar("bmh_rule_cat", $rule_cat);
-        //Form bmh_bouncetype
-        $bmhObj->setVar("bmh_bouncetype", $bounce_type);
-        //Form bmh_remove
-        //$verif_bmh_remove = ($remove == true || $remove == '1') ? "1" : "0";
-        $bmhObj->setVar("bmh_remove", $remove);
-        //Form bmh_email
-        $bmhObj->setVar("bmh_email", $email);
-        //Form bmh_subject
-        $bmhObj->setVar("bmh_subject", $subject);
-        //Form bmh_measure
-        $bmhObj->setVar("bmh_measure", "0");
-        //Form bmh_submitter
-        $bmhObj->setVar("bmh_submitter", $xoopsUser->uid());
-        //Form bmh_created
-        $bmhObj->setVar("bmh_created", time());
-
+        $bmhObj->setVar('bmh_rule_no', $rule_no);
+        $bmhObj->setVar('bmh_rule_cat', $rule_cat);
+        $bmhObj->setVar('bmh_bouncetype', $bounce_type);
+        //$verif_bmh_remove = ($remove == true || $remove == '1') ? '1' : '0';
+        $bmhObj->setVar('bmh_remove', $remove);
+        $bmhObj->setVar('bmh_email', $email);
+        $bmhObj->setVar('bmh_subject', $subject);
+        $bmhObj->setVar('bmh_measure', '0');
+        $bmhObj->setVar('bmh_submitter', $GLOBALS['xoopsUser']->uid());
+        $bmhObj->setVar('bmh_created', time());
+        //
         if (!$xnewsletter->getHandler('bmh')->insert($bmhObj)) {
             echo $bmhObj->getHtmlErrors();
 

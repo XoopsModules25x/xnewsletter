@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- *  xnewsletterxnewsletter class
+ *  XnewsletterXnewsletter class
  *
  * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -20,28 +20,28 @@
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
-class xnewsletterxnewsletter
+class XnewsletterXnewsletter
 {
-    var $dirname;
-    var $module;
-    var $handler;
-    var $config;
-    var $debug;
-    var $debugArray = array();
+    protected $dirname;
+    protected $module;
+    protected $handler;
+    protected $config;
+    protected $debug;
+    protected $debugArray = array();
 
     /**
      * @param $debug
      */
     protected function __construct($debug)
     {
-        $this->debug = $debug;
-        $this->dirname =  basename(dirname(dirname(__FILE__)));
+        $this->debug   = $debug;
+        $this->dirname = basename(dirname(__DIR__));
     }
 
     /**
      * @param bool $debug
      *
-     * @return xnewsletterxnewsletter
+     * @return XnewsletterXnewsletter
      */
     static function &getInstance($debug = false)
     {
@@ -49,6 +49,7 @@ class xnewsletterxnewsletter
         if (!$instance) {
             $instance = new self($debug);
         }
+
         return $instance;
     }
 
@@ -124,7 +125,7 @@ class xnewsletterxnewsletter
         if (isset($xoopsModule) && is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $this->dirname) {
             $this->module = $xoopsModule;
         } else {
-            $hModule = xoops_gethandler('module');
+            $hModule      = xoops_gethandler('module');
             $this->module = $hModule->getByDirname($this->dirname);
         }
         $this->addLog('INIT MODULE');
@@ -133,7 +134,7 @@ class xnewsletterxnewsletter
     function initConfig()
     {
         $this->addLog('INIT CONFIG');
-        $hModConfig = xoops_gethandler('config');
+        $hModConfig   = xoops_gethandler('config');
         $this->config = $hModConfig->getConfigsByCat(0, $this->getModule()->getVar('mid'));
     }
 

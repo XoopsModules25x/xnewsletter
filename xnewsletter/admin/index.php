@@ -17,60 +17,67 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : $Id $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
-//count "total"
-$catsCount = $xnewsletter->getHandler('cat')->getCount();
-$accountssCount = $xnewsletter->getHandler('accounts')->getCount();
-
-$subscrsCount = $xnewsletter->getHandler('subscr')->getCount();
-$catsubscrsCount = $xnewsletter->getHandler('catsubscr')->getCount();
-$lettersCount = $xnewsletter->getHandler('letter')->getCount();
-$protocolsCount = $xnewsletter->getHandler('protocol')->getCount();
-$attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
-if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
-    $count_mailinglist = $xnewsletter->getHandler('mailinglist')->getCount();
+// count 'total'
+$catCount        = $xnewsletter->getHandler('cat')->getCount();
+$accountsCount   = $xnewsletter->getHandler('accounts')->getCount();
+$subscrCount     = $xnewsletter->getHandler('subscr')->getCount();
+$catsubscrCount  = $xnewsletter->getHandler('catsubscr')->getCount();
+$letterCount     = $xnewsletter->getHandler('letter')->getCount();
+$protocolCount   = $xnewsletter->getHandler('protocol')->getCount();
+$attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
+$templateCount = $xnewsletter->getHandler('template')->getCount();
+if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {
+    $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
 }
-$count_bmh = $xnewsletter->getHandler('bmh')->getCount();
+$bmhCount = $xnewsletter->getHandler('bmh')->getCount();
 if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    $count_task = $xnewsletter->getHandler('task')->getCount();
+    $taskCount = $xnewsletter->getHandler('task')->getCount();
 }
 
 define('_RED', '#FF0000'); // red color
 define('_GREEN', '#00AA00'); // green color
 
+// Navigation
+echo $indexAdmin->addNavigation($currentFile);
+
+// Info box
 $indexAdmin->addInfoBox(_AM_XNEWSLETTER_LETTER);
-
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ACCOUNTS, $accountssCount, ($accountssCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CAT, $catsCount, ($catsCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_SUBSCR, $subscrsCount, ($subscrsCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CATSUBSCR, $catsubscrsCount, ($catsubscrsCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_LETTER, $lettersCount, ($lettersCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ATTACHMENT, $attachmentsCount, ($attachmentsCount == 0) ? _RED : _GREEN);
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_PROTOCOL, $protocolsCount, ($protocolsCount == 0) ? _RED : _GREEN);
-
-if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
-    $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_MAILINGLIST, $count_mailinglist, ($count_mailinglist == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ACCOUNTS, $accountsCount, ($accountsCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CAT, $catCount, ($catCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_SUBSCR, $subscrCount, ($subscrCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_CATSUBSCR, $catsubscrCount, ($catsubscrCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_LETTER, $letterCount, ($letterCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_TEMPLATE, $templateCount, ($templateCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_ATTACHMENT, $attachmentCount, ($attachmentCount == 0) ? _RED : _GREEN);
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_PROTOCOL, $protocolCount, ($protocolCount == 0) ? _RED : _GREEN);
+if ($xnewsletter->getConfig('xn_use_mailinglist') == true) {
+    $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_MAILINGLIST, $mailinglistCount, ($mailinglistCount == 0) ? _RED : _GREEN);
 }
-
 if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_TASK, $count_task, ($count_task == 0) ? _RED : _GREEN);
+    $indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_TASK, $taskCount, ($taskCount == 0) ? _RED : _GREEN);
+}
+$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_BMH, $bmhCount, ($bmhCount == 0) ? _RED : _GREEN);
+
+// Config box
+if ($accountsCount < 1) {
+    $indexAdmin->addConfigBoxLine(_AM_XNEWSLETTER_THEREARE_NOT_ACCOUNTS);
 }
 
-$indexAdmin->addInfoBoxLine(_AM_XNEWSLETTER_LETTER, _AM_XNEWSLETTER_THEREARE_BMH, $count_bmh, ($count_bmh == 0) ? _RED : _GREEN);
-
-echo $indexAdmin->addNavigation($currentFile) ;
+// Render
 echo $indexAdmin->renderIndex();
 
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

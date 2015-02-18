@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- *  xnewsletterSession class
+ *  XnewsletterSession class
  *
  * @copyright       The XUUPS Project http://sourceforge.net/projects/xuups/
  * @license         http://www.fsf.org/copyleft/gpl.html GNU public license
@@ -19,14 +19,14 @@
  * @author          Harry Fuecks (PHP Anthology Volume II)
  * @version         svn:$id$
  */
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
+defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(dirname(__DIR__)) . '/include/common.php';
 
 /**
- * Class xnewsletterSession
+ * Class XnewsletterSession
  */
-class xnewsletterSession
+class XnewsletterSession
 {
     /**
      * Session constructor<br />
@@ -96,13 +96,13 @@ class xnewsletterSession
     }
 
     /**
-     * @return xnewsletterSession
+     * @return XnewsletterSession
      */
     public static function &getInstance()
     {
         static $_sess;
         if (!isset($_sess)) {
-            $_sess = new xnewsletterSession();
+            $_sess = new XnewsletterSession();
         }
 
         return $_sess;

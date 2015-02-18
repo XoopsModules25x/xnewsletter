@@ -17,29 +17,31 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
-// defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+// defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @param $options
  *
  * @return array
  */
-function b_xnewsletter_subscrinfo($options) {
+function b_xnewsletter_subscrinfo($options)
+{
     xoops_loadLanguage('modinfo', 'xnewsletter');
-    $unique_id = uniqid(mt_rand());
-    $subscrinfo = array();
-    $subscrinfo['formname'] = "formsubscrinfo_{$unique_id}";
+    $unique_id                = uniqid(mt_rand());
+    $subscrinfo               = array();
+    $subscrinfo['formname']   = "formsubscrinfo_{$unique_id}";
     $subscrinfo['formaction'] = XOOPS_URL . '/modules/xnewsletter/subscription.php';
-    $subscrinfo['infotext'] = _MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK;
+    $subscrinfo['infotext']   = _MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK;
     $subscrinfo['buttontext'] = _MI_XNEWSLETTER_SUBSCRIBE;
 
     return $subscrinfo;
