@@ -36,7 +36,7 @@ include_once dirname(dirname(__FILE__)) . '/include/common.php';
 class XnewsletterCat extends XoopsObject
 {
     /**
-     * @var WfdownloadsWfdownloads
+     * @var xnewsletter
      * @access public
      */
     public $xnewsletter = null;

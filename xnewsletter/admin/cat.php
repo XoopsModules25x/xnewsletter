@@ -164,8 +164,11 @@ switch ($op) {
 
     case "new_cat" :
         echo $indexAdmin->addNavigation($currentFile);
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
-        echo $indexAdmin->renderButton();
+        $catsCount = $xnewsletter->getHandler('cat')->getCount();
+        if (!empty($catsCount)) {
+            $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
+            echo $indexAdmin->renderButton();
+        }
         //
         $catObj = $xnewsletter->getHandler('cat')->create();
         $form = $catObj->getForm();
