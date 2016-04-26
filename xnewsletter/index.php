@@ -141,6 +141,7 @@ break;
             $letters_array = array();
             foreach ($letterObjs as $letterObj) {
                 $letter_array = $letterObj->toArray();
+                $letter_array['letter_content'] = $myts->undoHtmlSpecialChars($letterObj->getVar('letter_content')); //needed when using GUI editors (e.g. tinymce)
                 $letter_array['letter_created_timestamp'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
                 $letter_array['letter_submitter_name'] = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
                 $catsAvailableCount = 0;

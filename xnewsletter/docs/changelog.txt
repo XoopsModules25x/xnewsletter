@@ -16,6 +16,7 @@ Version 1.3     NOT RELEASED
  - added: breadcrumb class (luciorota)
  - added: updating to XOOPS 2.5.7 Multi-page help (luciorota)
  - fixed: when there is an apostrophe in the title, a backslash is obtained on reading the email (luciorota)
+ - fixed: display of html encoded chars in ./index.php?op=list_letters in content (zyspec)
  - moved /css and /images to /assets (mamba)
  - renamed template extensions from .html to .tpl (mamba)
  - reversed "mod_" prefix on tables (mamba)
