@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once __DIR__ . "/header.php";
 
 $op            = XoopsRequest::getString('op', 'list_subscriptions');
 $activationKey = XoopsRequest::getString('actkey', '');
@@ -78,7 +78,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -127,7 +127,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -391,7 +391,7 @@ switch ($op) {
                         }
                         //handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                            require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                             subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -404,7 +404,7 @@ switch ($op) {
                     if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                         //handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                            require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                             subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -500,7 +500,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -533,7 +533,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, XNEWSLETTER_URL . '/subscription.php?op=list_subscriptions');
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIPTION_EDIT, '');
@@ -559,7 +559,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, XNEWSLETTER_URL . '/subscription.php?op=list_subscriptions');
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIPTION_DELETE, '');
@@ -658,7 +658,7 @@ switch ($op) {
                             if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                                 //handle mailinglists
                                 if ($cat_mailinglist > 0) {
-                                    require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                                    require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                                     subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                                 }
                             } else {
@@ -731,7 +731,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_SUBSCRIBE, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -829,4 +829,4 @@ switch ($op) {
         break;
 }
 
-include 'footer.php';
+include __DIR__ . '/footer.php';

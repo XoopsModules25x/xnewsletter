@@ -59,7 +59,7 @@ switch ($op) {
         $importObjs = $xnewsletter->getHandler('import')->getAll($importCriteria);
 
         if ($importsCount > 0) {
-            include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+            include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 
             $action = $_SERVER["REQUEST_URI"];
             $unique_id = uniqid(mt_rand());
@@ -324,7 +324,7 @@ switch ($op) {
                             unset($cat_mls);
 
                             if ($cat_mailinglist > 0) {
-                                require_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                                require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                                 subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                             }
                         } else {
@@ -386,7 +386,7 @@ switch ($op) {
             echo str_replace("%p", $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
             break;
         }
-        require_once($pluginFile);
+        require_once $pluginFile;
 
         $function = 'xnewsletter_plugin_getdata_' . $plugin;
         if (!function_exists($function)) {
@@ -440,7 +440,7 @@ switch ($op) {
             echo str_replace("%p", $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
             break;
         }
-        require_once($pluginFile);
+        require_once $pluginFile;
 
         $function = "xnewsletter_plugin_getform_{$plugin}";
         if (!function_exists($function)) {

@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 /**
- * xnewsletterBreadcrumb Class
+ * XnewsletterBreadcrumb Class
  *
  * @copyright   The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license     http://www.fsf.org/copyleft/gpl.html GNU public license
@@ -19,7 +19,7 @@
  * @version     $Id: breadcrumb.php 12559 2014-06-02 08:10:39Z beckmi $
  *
  * Example:
- * $breadcrumb = new xnewsletterBreadcrumb();
+ * $breadcrumb = new XnewsletterBreadcrumb();
  * $breadcrumb->addLink( 'bread 1', 'index1.php' );
  * $breadcrumb->addLink( 'bread 2', '' );
  * $breadcrumb->addLink( 'bread 3', 'index3.php' );
@@ -27,7 +27,7 @@
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
-class xnewsletterBreadcrumb
+class XnewsletterBreadcrumb
 {
     var $dirname;
     var $_bread = array();

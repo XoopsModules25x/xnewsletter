@@ -233,7 +233,7 @@ switch ($op) {
             //add subscriber to mailinglist
             $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["catsubscr_catid"]);
             if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
-                require_once( XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php" );
+                require_once XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php";
                 subscribingMLHandler(1, $catsubscr_subscrid, $catsubscrObj_cat->getVar("cat_mailinglist"));
             }
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
@@ -268,7 +268,7 @@ switch ($op) {
         $subscr_id = $_REQUEST["subscr_id"];
         $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["cat_id"]);
         if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
-          require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
+          require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
           subscribingMLHandler(0, $subscr_id, $catsubscrObj_cat->getVar("cat_mailinglist"));
         }
                 redirect_header("catsubscr.php", 3, _AM_XNEWSLETTER_FORMDELOK);

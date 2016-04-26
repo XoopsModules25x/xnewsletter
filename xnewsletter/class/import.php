@@ -74,7 +74,7 @@ class XnewsletterImport extends XoopsObject
 
         $title = _AM_XNEWSLETTER_IMPORT_SEARCH;
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form_select_import", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -95,7 +95,7 @@ class XnewsletterImport extends XoopsObject
                 $pluginName = str_replace('.php', '', $file);
                 $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/" . $pluginName . '.php';
                 if (file_exists($pluginFile)) {
-                    require_once($pluginFile);
+                    require_once $pluginFile;
                     $function    = 'xnewsletter_plugin_getinfo_' . $pluginName;
                     $arrPlugin   = $function();
                     $show_plugin = $this->tableExists($arrPlugin['tables'][0]);

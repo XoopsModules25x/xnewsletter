@@ -32,7 +32,7 @@ xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
 $op             = XoopsRequest::getString('op', 'list');
-$attachment_id     = XoopsRequest::getInt('attachment_id', 0);
+$attachment_id  = XoopsRequest::getInt('attachment_id', 0);
 
 switch ($op) {
     case "list" :

@@ -160,7 +160,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-        include_once(XOOPS_ROOT_PATH . "/class/template.php");
+        include_once XOOPS_ROOT_PATH . "/class/template.php";
         $xoopsTpl = new XoopsTpl();
     }
     //get template path
@@ -210,7 +210,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         $account_securetype_out = $accountObj->getVar('accounts_securetype_out');
 
         // create basic mail body
-        $letter_title 	= $letterObj->getVar('letter_title');
+        $letter_title     = $letterObj->getVar('letter_title');
         $letter_content = $letterObj->getVar('letter_content', 'n');
 
         $letterTpl = new XoopsTpl();
@@ -304,7 +304,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
             $mail->CharSet = _CHARSET; //use xoops default character set
 
             if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
-                //$mail->IsSendmail();	Fix Error
+                //$mail->IsSendmail();    Fix Error
             }
 
             $mail->Username = $account_username; // SMTP account username

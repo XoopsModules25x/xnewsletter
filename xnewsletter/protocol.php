@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once __DIR__ . "/header.php";
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
 include_once XOOPS_ROOT_PATH . "/header.php";
@@ -37,7 +37,7 @@ $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // k
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
 // Breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
+$breadcrumb = new XnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -69,4 +69,4 @@ if ($protocolCount > 0) {
 
 $xoopsTpl->assign('protocols', $protocols);
 
-include 'footer.php';
+include __DIR__ . '/footer.php';

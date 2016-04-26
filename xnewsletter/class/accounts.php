@@ -84,7 +84,7 @@ class XnewsletterAccounts extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_ACCOUNTS_ADD) : sprintf(_AM_XNEWSLETTER_ACCOUNTS_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, $this->xnewsletter->getModule()->getVar('dirname') . "_form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 

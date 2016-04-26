@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include "admin_header.php";
+include __DIR__ . "/admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -167,4 +167,4 @@ switch ($op) {
         }
     break;
 }
-include "admin_footer.php";
+include __DIR__ . "/admin_footer.php";

@@ -80,7 +80,7 @@ switch ($op) {
                     if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                         //handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
+                            require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                             subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -133,8 +133,8 @@ switch ($op) {
     break;
 
     case "run_bmh":
-        require_once('bmh_callback_database.php');
-        require_once(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php');
+        require_once __DIR__ . '/bmh_callback_database.php';
+        require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php';
 
         $accountCriteria = new CriteriaCompo();
         $accountCriteria->add(new Criteria("accounts_use_bmh", "1"));

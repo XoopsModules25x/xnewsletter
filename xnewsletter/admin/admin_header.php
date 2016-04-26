@@ -69,6 +69,6 @@ if ($xoopsUser) {
 }
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-    include_once(XOOPS_ROOT_PATH . "/class/template.php");
+    include_once XOOPS_ROOT_PATH . "/class/template.php";
     $xoopsTpl = new XoopsTpl();
 }

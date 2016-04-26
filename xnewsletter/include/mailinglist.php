@@ -57,9 +57,9 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     echo "<br />action_code: {$action_code}";
     echo "<br />";
 */
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php");
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.pop3.php");
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php");
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php";
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.pop3.php";
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php";
 
     //get emails of subscribers
     $recipients = array();
