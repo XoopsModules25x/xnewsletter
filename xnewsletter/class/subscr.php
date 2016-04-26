@@ -126,8 +126,11 @@ class XnewsletterSubscr extends XoopsObject
         if ($this->xnewsletter->getConfig('xn_use_salutation') == 1) {
             $select_subscr_sex = new XoopsFormSelect(_AM_XNEWSLETTER_SUBSCR_SEX, "subscr_sex", $this->getVar("subscr_sex"));
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY, _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_GIRL);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_BOY);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE, _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
             $form->addElement($select_subscr_sex);
@@ -235,8 +238,11 @@ class XnewsletterSubscr extends XoopsObject
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, "subscr_email", 50, 255, $this->getVar("subscr_email")), true);
         $select_subscr_sex = new XoopsFormSelect(_AM_XNEWSLETTER_SUBSCR_SEX, "subscr_sex", $this->getVar("subscr_sex"));
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY, _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_GIRL, _AM_XNEWSLETTER_SUBSCR_SEX_GIRL);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_BOY, _AM_XNEWSLETTER_SUBSCR_SEX_BOY);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE, _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR, _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
         $form->addElement($select_subscr_sex);

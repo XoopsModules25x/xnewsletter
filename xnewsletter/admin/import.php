@@ -121,14 +121,26 @@ switch ($op) {
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY)
                     $form .= " selected=\"selected\"";
                 $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_GIRL . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_GIRL)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_GIRL . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE)
                     $form .= " selected=\"selected\"";
                 $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_BOY . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_BOY)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_BOY . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_MALE . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_MALE)
                     $form .= " selected=\"selected\"";
                 $form .= ">"._AM_XNEWSLETTER_SUBSCR_SEX_MALE . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_COMP . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_COMP)
                     $form .= " selected=\"selected\"";
@@ -237,8 +249,8 @@ switch ($op) {
 
         $importCriteria = new CriteriaCompo();
         $importCriteria->add(new Criteria('import_status', '1'));
-        $numrows_total 	= $xnewsletter->getHandler('import')->getCount();
-        $numrows_act 	= $xnewsletter->getHandler('import')->getCount($importCriteria);
+        $numrows_total     = $xnewsletter->getHandler('import')->getCount();
+        $numrows_act     = $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";

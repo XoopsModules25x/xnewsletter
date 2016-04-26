@@ -1,10 +1,11 @@
 Version 1.3     NOT RELEASED
 -------------------------------
- - only display link to list categories in ./admin/cat.php if categories exist
+ - only display link to list categories in ./admin/cat.php if categories exist (zyspec)
  - standardize code (mamba,luciorota)
  - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
  - templatize user side (luciorota)
  - standardize code (luciorota)
+ - added: additional salutations (Ms, Mstr, Dr) (zyspec)
  - added: possibility to store templates also in database (luciorota)
  - added: html2txt function for non-HTML mail clients (luciorota)
  - added: breadcrumb class (luciorota)
