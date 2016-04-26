@@ -48,8 +48,8 @@ if (!$xoopsUser) {
     redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
 }
 
-$op = XnewsletterRequest::getString('op', 'list');
-$letter_id = XnewsletterRequest::getInt('letter_id', 0);
+$op        = XoopsRequest::getString('op', 'list');
+$letter_id = XoopsRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);

@@ -31,8 +31,8 @@ include "admin_header.php";
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op          = xnewsletterRequest::getString('op', 'list');
-$template_id = xnewsletterRequest::getInt('template_id', 0);
+$op          = XoopsRequest::getString('op', 'list');
+$template_id = XoopsRequest::getInt('template_id', 0);
 
 switch ($op) {
     case "list" :
@@ -47,7 +47,7 @@ switch ($op) {
         $templateCriteria->setSort("template_title DESC, template_id");
         $templateCriteria->setOrder("DESC");
         $templatesCount = $xnewsletter->getHandler('template')->getCount();
-        $start = xnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $templateCriteria->setStart($start);
         $templateCriteria->setLimit($limit);
         $templateObjs = $xnewsletter->getHandler('template')->getAll($templateCriteria);
@@ -125,11 +125,11 @@ switch ($op) {
         }
 
         $templateObj = $xnewsletter->getHandler('template')->get($template_id);
-        $templateObj->setVar("template_title",        xnewsletterRequest::getString('template_title', ''));
-        $templateObj->setVar("template_description",  xnewsletterRequest::getString('template_description', ''));
-        $templateObj->setVar("template_content",      xnewsletterRequest::getString('template_content', ''));
-        $templateObj->setVar("template_submitter",    xnewsletterRequest::getInt('template_submitter', 0));
-        $templateObj->setVar("template_created",      xnewsletterRequest::getInt('template_created', time()));
+        $templateObj->setVar("template_title",       XoopsRequest::getString('template_title', ''));
+        $templateObj->setVar("template_description", XoopsRequest::getString('template_description', ''));
+        $templateObj->setVar("template_content",     XoopsRequest::getString('template_content', ''));
+        $templateObj->setVar("template_submitter",   XoopsRequest::getInt('template_submitter', 0));
+        $templateObj->setVar("template_created",     XoopsRequest::getInt('template_created', time()));
 
         if ($xnewsletter->getHandler('template')->insert($templateObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);

@@ -31,8 +31,8 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op     = XnewsletterRequest::getString('op', 'list');
-$cat_id = XnewsletterRequest::getInt('cat_id', 0);
+$op     = XoopsRequest::getString('op', 'list');
+$cat_id = XoopsRequest::getInt('cat_id', 0);
 
 switch ($op) {
     case "list" :
@@ -46,7 +46,7 @@ switch ($op) {
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);

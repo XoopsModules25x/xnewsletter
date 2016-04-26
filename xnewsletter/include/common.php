@@ -35,10 +35,11 @@ include_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 include_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
 include_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class
 include_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // xnewsletterxnewsletter class
-include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
+//include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
 include_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // xnewsletterBreadcrumb class
 
 xoops_load('XoopsUserUtility');
+xoops_load('xoopsrequest');
 // MyTextSanitizer object
 $myts = MyTextSanitizer::getInstance();
 

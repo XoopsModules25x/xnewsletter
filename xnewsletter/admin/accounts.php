@@ -31,10 +31,10 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = XnewsletterRequest::getString('op', 'list');
-$save_and_check = XnewsletterRequest::getString('save_and_check', 'none');
-$accounts_id    = XnewsletterRequest::getInt('accounts_id', 0);
-$post           = XnewsletterRequest::getString('post', '');
+$op             = XoopsRequest::getString('op', 'list');
+$save_and_check = XoopsRequest::getString('save_and_check', 'none');
+$accounts_id    = XoopsRequest::getInt('accounts_id', 0);
+$post           = XoopsRequest::getString('post', '');
 
 if ($post == "" &&  $op == "save_accounts" && $save_and_check =="none" ) $op = "edit_account";
 
@@ -195,7 +195,7 @@ switch ($op) {
         $accountsCriteria->setSort("accounts_id ASC, accounts_type");
         $accountsCriteria->setOrder("ASC");
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);

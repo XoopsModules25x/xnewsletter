@@ -29,7 +29,7 @@
 $currentFile = basename(__FILE__);
 include_once "header.php";
 
-$op = XnewsletterRequest::getString('op', 'welcome');
+$op = XoopsRequest::getString('op', 'welcome');
 
 switch ($op) {
     case "welcome" :
@@ -67,7 +67,7 @@ switch ($op) {
         $xoopsTpl->assign('welcome_message', $xnewsletter->getConfig('welcome_message'));
 
         // get letter_id
-        $letter_id = XnewsletterRequest::getInt('letter_id', 0);
+        $letter_id = XoopsRequest::getInt('letter_id', 0);
         // get letter object
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data

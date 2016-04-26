@@ -25,7 +25,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = XoopsRequest::getString('op', 'list');
 switch ($op) {
     case "list":
     default:
