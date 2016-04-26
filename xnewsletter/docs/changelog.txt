@@ -1,6 +1,7 @@
 Version 1.3     NOT RELEASED
 -------------------------------
  - only display link to list categories in ./admin/cat.php if categories exist (zyspec)
+ - only display link to list subscribers in ./admin/cat.php if subscribers exist (zyspec)
  - standardize code (mamba,luciorota)
  - import procedure: check if limit options are compatible with php.ini 'max_input_vars' setting (luciorota)
  - templatize user side (luciorota)

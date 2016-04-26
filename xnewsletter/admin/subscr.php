@@ -204,9 +204,9 @@ switch ($op) {
                 echo formatTimestamp($subscrObj->getVar("subscr_created"), $xnewsletter->getConfig('dateformat')) . " [" . $subscrObj->getVar("subscr_ip") . "]&nbsp;</td>";
 
                 echo "<td class='center width5' nowrap='nowrap'>";
-                echo "	<a href='?op=edit_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
-                echo "	&nbsp;<a href='?op=delete_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
-                echo "	&nbsp;<a href='?op=show_catsubscr&subscr_id=" . $subscr_id;
+                echo "    <a href='?op=edit_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "    &nbsp;<a href='?op=delete_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "    &nbsp;<a href='?op=show_catsubscr&subscr_id=" . $subscr_id;
                 echo "&filter_subscr=$filter_subscr";
                 echo "&filter_subscr_firstname=$filter_subscr_firstname";
                 echo "&filter_subscr_lastname=$filter_subscr_lastname";
@@ -247,8 +247,11 @@ switch ($op) {
 
     case "new_subscr":
         echo $subscrAdmin->addNavigation($currentFile);
-        $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
-        echo $subscrAdmin->renderButton();
+        $subscrCount = $xnewsletter->getHandler('subscr')->getCount();
+        if (!empty($subscrCount)) {
+            $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
+            echo $subscrAdmin->renderButton();
+        }
         //
         $subscrObj = $xnewsletter->getHandler('subscr')->create();
         $form = $subscrObj->getFormAdmin();
