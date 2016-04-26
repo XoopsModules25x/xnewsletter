@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
@@ -240,10 +240,10 @@ switch ($op) {
                 echo "<td class='center'>" . $verif_accounts_default . "</td>";
 
                 echo "<td class='center width5'>";
-                echo "	<a href='?op=edit_account&accounts_id=" . $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='"._EDIT . "' /></a>";
-                echo "	<a href='?op=delete_account&accounts_id=" . $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "    <a href='?op=edit_account&accounts_id=" . $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='"._EDIT . "' /></a>";
+                echo "    <a href='?op=delete_account&accounts_id=" . $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
                 if ($accountsObj->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accountsObj->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
-                    echo "	<a href='?op=check_account&accounts_id=". $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_check.png alt='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' title='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' /></a>";
+                    echo "    <a href='?op=check_account&accounts_id=". $accounts_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_check.png alt='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' title='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' /></a>";
                 }
                 echo "</td>";
                 echo "</tr>";
@@ -358,4 +358,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

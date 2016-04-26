@@ -35,7 +35,7 @@ class xnewsletterxnewsletter
     protected function __construct($debug)
     {
         $this->debug = $debug;
-        $this->dirname =  basename(dirname(dirname(__FILE__)));
+        $this->dirname =  basename(dirname(__DIR__));
     }
 
     /**

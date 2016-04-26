@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(__FILE__) . '/common.php';
+include_once __DIR__ . '/common.php';
 
 /**
  * @param $cats

@@ -37,7 +37,7 @@ class xnewsletterBreadcrumb
      */
     function __construct()
     {
-        $this->dirname =  basename(dirname(dirname(__FILE__)));
+        $this->dirname =  basename(dirname(__DIR__));
     }
 
     /**
