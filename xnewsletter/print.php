@@ -108,11 +108,11 @@ xnewsletter_printPage($content);
  */
 function xnewsletter_printPage($content) {
     global $xoopsConfig, $xoops_meta_keywords, $xoops_meta_description;
-    $myts =& MyTextSanitizer::getInstance();
-?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo _LANGCODE; ?>" lang="<?php echo _LANGCODE; ?>">
-<?php
+    $myts = MyTextSanitizer::getInstance();
+
+    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+       . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" . _LANGCODE . "\" lang=\"" . _LANGCODE . "\">\n";
+
     echo "<head>\n";
     echo '<title>' . $xoopsConfig['sitename'] . '</title>\n';
     echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />\n';

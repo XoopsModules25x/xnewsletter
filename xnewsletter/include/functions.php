@@ -297,9 +297,9 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0) {
     //if a cat is defined, than only check for this cat, otherwise check whether there is minimum one cat with right create
 
     global $xoopsUser;
-    $gperm_handler =& xoops_gethandler('groupperm');
-    $member_handler =& xoops_gethandler('member');
-    $xnewsletter = xnewsletterxnewsletter::getInstance();
+    $gperm_handler  = xoops_gethandler('groupperm');
+    $member_handler = xoops_gethandler('member');
+    $xnewsletter    = xnewsletterxnewsletter::getInstance();
 
     $allowedit = 0;
     $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;

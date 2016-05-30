@@ -80,7 +80,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     foreach ($recipients as $recipient) {
         $subscriber_id = $recipient["subscriber_id"];
         try {
-            $xoopsMailer =& xoops_getMailer();
+            $xoopsMailer = xoops_getMailer();
             $xoopsMailer->reset();
             //$xoopsMailer->setTemplateDir();
             $xoopsMailer->useMail();

@@ -371,7 +371,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
 // IN PROGRESS FROM HERE
-        $letterObj =& $xnewsletter->getHandler('letter')->create();
+        $letterObj = $xnewsletter->getHandler('letter')->create();
         $form = $letterObj->getForm();
         $content = $form->render();
         $xoopsTpl->assign('content', $content);
@@ -395,8 +395,8 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
 
 // IN PROGRESS FROM HERE
 
-        $letterObj_old =& $xnewsletter->getHandler('letter')->get($letter_id);
-        $letterObj_new =& $xnewsletter->getHandler('letter')->create();
+        $letterObj_old = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj_new = $xnewsletter->getHandler('letter')->create();
 
         $letterObj_new->setVar("letter_title", $letterObj_old->getVar("letter_title"));
         $letterObj_new->setVar("letter_content", $letterObj_old->getVar("letter_content","n"));
@@ -429,7 +429,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
         if ( !$GLOBALS["xoopsSecurity"]->check() ) {
             redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
         }
-        $letterObj =& $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 
         //Form letter_title
         $letterObj->setVar("letter_title", $_REQUEST['letter_title']);
@@ -496,7 +496,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
 
             // create items in attachments
             foreach ($uploaded_files as $file) {
-                $attachmentObj =& $xnewsletter->getHandler('attachment')->create();
+                $attachmentObj = $xnewsletter->getHandler('attachment')->create();
                 //Form attachment_letter_id
                 $attachmentObj->setVar("attachment_letter_id", $letter_id);
                 //Form attachment_name
@@ -584,7 +584,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
 
 // IN PROGRESS FROM HERE
 
-        $letterObj =& $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));

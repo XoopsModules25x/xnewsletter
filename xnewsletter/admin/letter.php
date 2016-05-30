@@ -377,7 +377,7 @@ switch ($op) {
 
             //create items in attachments
             foreach ($uploaded_files as $file) {
-                $attachmentObj =& $xnewsletter->getHandler('attachment')->create();
+                $attachmentObj = $xnewsletter->getHandler('attachment')->create();
                 //Form attachment_letter_id
                 $attachmentObj->setVar("attachment_letter_id", $letter_id);
                 //Form attachment_name
@@ -392,7 +392,7 @@ switch ($op) {
                 $xnewsletter->getHandler('attachment')->insert($attachmentObj);
             }
             //create item in protocol
-            $protocolObj =& $xnewsletter->getHandler('protocol')->create();
+            $protocolObj = $xnewsletter->getHandler('protocol')->create();
             $protocolObj->setVar("protocol_letter_id", $letter_id);
             $protocolObj->setVar("protocol_subscriber_id", '0');
             $action = "";

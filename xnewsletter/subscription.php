@@ -253,7 +253,7 @@ switch ($op) {
                     $cat_selections = explode('|', $code_selections);
                 } else {
                     $isValid = false;
-                    $xoopsMailer =& xoops_getMailer();
+                    $xoopsMailer = xoops_getMailer();
                     $xoopsMailer->reset();
                     $xoopsMailer->setTemplateDir();
                     $xoopsMailer->useMail();
@@ -448,7 +448,7 @@ switch ($op) {
                 $subscr_firstname = $subscrObj->getVar('subscr_firstname');
                 $subscr_lastname = $subscrObj->getVar('subscr_lastname');
             }
-            $xoopsMailer =& xoops_getMailer();
+            $xoopsMailer = xoops_getMailer();
             $xoopsMailer->reset();
             $xoopsMailer->setTemplateDir();
             $xoopsMailer->useMail();
@@ -689,7 +689,7 @@ switch ($op) {
                     redirect_header($currentFile, 2, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
                 }
                 if (!$allowedWithoutActivationKey) {
-                    $xoopsMailer =& xoops_getMailer();
+                    $xoopsMailer = xoops_getMailer();
                     $xoopsMailer->reset();
                     $xoopsMailer->setTemplateDir();
                     $xoopsMailer->useMail();
@@ -718,8 +718,6 @@ switch ($op) {
             xoops_confirm(array('ok' => true, 'subscr_id' => $subscr_id, 'subscr_email' => $subscr_email, 'op' => 'delete_subscription'), $currentFile, sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE));
         }
         break;
-
-
 
     case "list_subscriptions" :
     default :

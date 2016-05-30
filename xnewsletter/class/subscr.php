@@ -145,8 +145,8 @@ class XnewsletterSubscr extends XoopsObject
         $opt_tray = new XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . "</span>", "<br />");
 
         //get newsletters available for current user
-        $gperm_handler  =& xoops_gethandler('groupperm');
-        $member_handler =& xoops_gethandler('member');
+        $gperm_handler  = xoops_gethandler('groupperm');
+        $member_handler = xoops_gethandler('member');
         $currentuid     = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         if ($currentuid == 0) {
             $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);

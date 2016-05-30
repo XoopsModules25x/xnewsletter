@@ -57,8 +57,8 @@ if (is_object($xnewsletter->getModule())) {
 $xoopsModule = $xnewsletter->getModule();
 
 // Load Xoops handlers
-$module_handler = xoops_gethandler('module');
-$member_handler = xoops_gethandler('member');
-$notification_handler = &xoops_gethandler('notification');
-$gperm_handler = xoops_gethandler('groupperm');
-$config_handler = xoops_gethandler('config');
+$module_handler       = xoops_gethandler('module');
+$member_handler       = xoops_gethandler('member');
+$notification_handler = xoops_gethandler('notification');
+$gperm_handler        = xoops_gethandler('groupperm');
+$config_handler       = xoops_gethandler('config');

@@ -135,7 +135,7 @@ break;
 
         if ($xnewsletter->getHandler('letter')->getCount() > 0) {
             // get newsletters available for current user
-            $gperm_handler =& xoops_gethandler('groupperm');
+            $gperm_handler = xoops_gethandler('groupperm');
             $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
 
             $letters_array = array();

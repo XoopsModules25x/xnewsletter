@@ -286,7 +286,7 @@ switch ($op) {
     break;
 
     case "delete_protocol":
-        $protocolObj =& $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
+        $protocolObj = $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));

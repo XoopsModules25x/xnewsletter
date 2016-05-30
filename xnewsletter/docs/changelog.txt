@@ -2,6 +2,7 @@ Version 1.3     NOT RELEASED
 -------------------------------
  - only display link to list categories in ./admin/cat.php if categories exist (zyspec)
  - only display link to list subscribers in ./admin/cat.php if subscribers exist (zyspec)
+ - changed: remove pass-by-reference for non-vars (zyspec)
  - changed: dirname(__FILE__) to __DIR__ (zyspec)
  - changed: licence.txt to license.txt (US english spelling) to match documentation (zyspec)
  - changed: xnewsletterBreadcrumb to XnewsletterBreadcrumb for naming consistency (zyspec)

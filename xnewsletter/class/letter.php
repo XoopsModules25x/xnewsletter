@@ -125,8 +125,8 @@ class XnewsletterLetter extends XoopsObject
         }
         $form->addElement($template_select, false);
 
-        $gperm_handler  =& xoops_gethandler('groupperm');
-        $member_handler =& xoops_gethandler('member');
+        $gperm_handler  = xoops_gethandler('groupperm');
+        $member_handler = xoops_gethandler('member');
         $my_group_ids   = $member_handler->getGroupsByUser($xoopsUser->uid());
 
         $catCriteria = new CriteriaCompo();

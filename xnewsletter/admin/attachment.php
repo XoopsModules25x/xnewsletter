@@ -80,7 +80,7 @@ switch ($op) {
                 $class = ($class == "even") ? "odd" : "even";
                 echo "<td class='center'>" . $attachment_id . "</td>";
 
-                $letter =& $xnewsletter->getHandler('letter')->get($attachmentObj->getVar("attachment_letter_id"));
+                $letter = $xnewsletter->getHandler('letter')->get($attachmentObj->getVar("attachment_letter_id"));
                 $title_letter = $letter->getVar("letter_title");
                 echo "<td class='center'>" . $title_letter . "</td>";
                 echo "<td class='center'>" . $attachmentObj->getVar("attachment_name") . "</td>";
