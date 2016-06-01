@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @return array
@@ -131,7 +131,7 @@ function xnewsletter_plugin_getform_csv( $cat_id, $action_after_read, $limitChec
 
     $title = _AM_XNEWSLETTER_IMPORT_CSV_OPT;
 
-    include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+    include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
     $form = new XoopsThemeForm($title, "form_add_csv", $action, "post", true);
     $form->setExtra('enctype="multipart/form-data"');
 

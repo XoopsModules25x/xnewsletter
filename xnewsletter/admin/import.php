@@ -27,20 +27,20 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED', 100);
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_AT_ONCE', 10);
 
-$op                 = XnewsletterRequest::getString('op', 'default');
-$plugin             = XnewsletterRequest::getString('plugin', 'csv');
-$cat_id             = XnewsletterRequest::getInt('cat_id', 0, 'int');
-$action_after_read  = XnewsletterRequest::getInt('action_after_read', 1);
-$start              = XnewsletterRequest::getInt('start', 0);
-$limitcheck         = XnewsletterRequest::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
-$skipcatsubscrexist = XnewsletterRequest::getInt('skipcatsubscrexist', 1);
-$check_import       = XnewsletterRequest::getInt('check_import', 0);
+$op                 = XoopsRequest::getString('op', 'default');
+$plugin             = XoopsRequest::getString('plugin', 'csv');
+$cat_id             = XoopsRequest::getInt('cat_id', 0, 'int');
+$action_after_read  = XoopsRequest::getInt('action_after_read', 1);
+$start              = XoopsRequest::getInt('start', 0);
+$limitcheck         = XoopsRequest::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
+$skipcatsubscrexist = XoopsRequest::getInt('skipcatsubscrexist', 1);
+$check_import       = XoopsRequest::getInt('check_import', 0);
 
 echo $indexAdmin->addNavigation($currentFile);
 
@@ -59,7 +59,7 @@ switch ($op) {
         $importObjs = $xnewsletter->getHandler('import')->getAll($importCriteria);
 
         if ($importsCount > 0) {
-            include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+            include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
 
             $action = $_SERVER["REQUEST_URI"];
             $unique_id = uniqid(mt_rand());
@@ -121,14 +121,26 @@ switch ($op) {
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY)
                     $form .= " selected=\"selected\"";
                 $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_GIRL . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_GIRL)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_GIRL . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE)
                     $form .= " selected=\"selected\"";
                 $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_BOY . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_BOY)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_BOY . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_MALE . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_MALE)
                     $form .= " selected=\"selected\"";
                 $form .= ">"._AM_XNEWSLETTER_SUBSCR_SEX_MALE . "</option>";
+                $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR . "\"";
+                if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR)
+                    $form .= " selected=\"selected\"";
+                $form .= ">" . _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR . "</option>";
                 $form .= "<option value=\"" . _AM_XNEWSLETTER_SUBSCR_SEX_COMP . "\"";
                 if ($sex == _AM_XNEWSLETTER_SUBSCR_SEX_COMP)
                     $form .= " selected=\"selected\"";
@@ -196,14 +208,14 @@ switch ($op) {
 
     case "apply_import_form":
         //update xnewsletter with settings form_import
-        $counter = XnewsletterRequest::getInt('counter', 0);
+        $counter = XoopsRequest::getInt('counter', 0);
 
         for ($i=1; $i < ($counter + 1); ++$i) {
-            $import_id        = XnewsletterRequest::getString("import_id_{$i}", 'default');
-            $subscr_firstname = XnewsletterRequest::getString("firstname_{$i}", '');
-            $subscr_lastname  = XnewsletterRequest::getString("lastname_{$i}", '');
-            $subscr_sex       = XnewsletterRequest::getString("sex_{$i}", '');
-            $cat_id           = XnewsletterRequest::getInt("cat_id_{$i}", 0);
+            $import_id        = XoopsRequest::getString("import_id_{$i}", 'default');
+            $subscr_firstname = XoopsRequest::getString("firstname_{$i}", '');
+            $subscr_lastname  = XoopsRequest::getString("lastname_{$i}", '');
+            $subscr_sex       = XoopsRequest::getString("sex_{$i}", '');
+            $cat_id           = XoopsRequest::getInt("cat_id_{$i}", 0);
 
             if ($cat_id > 0) {
                 if ($subscr_id == 0) {
@@ -237,8 +249,8 @@ switch ($op) {
 
         $importCriteria = new CriteriaCompo();
         $importCriteria->add(new Criteria('import_status', '1'));
-        $numrows_total 	= $xnewsletter->getHandler('import')->getCount();
-        $numrows_act 	= $xnewsletter->getHandler('import')->getCount($importCriteria);
+        $numrows_total     = $xnewsletter->getHandler('import')->getCount();
+        $numrows_act     = $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_import")}";
@@ -312,7 +324,7 @@ switch ($op) {
                             unset($cat_mls);
 
                             if ($cat_mailinglist > 0) {
-                                require_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php");
+                                require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
                                 subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                             }
                         } else {
@@ -374,7 +386,7 @@ switch ($op) {
             echo str_replace("%p", $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
             break;
         }
-        require_once($pluginFile);
+        require_once $pluginFile;
 
         $function = 'xnewsletter_plugin_getdata_' . $plugin;
         if (!function_exists($function)) {
@@ -390,8 +402,8 @@ switch ($op) {
         //import data into xnewsletter_import with plugin
         if ($plugin == 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
-            $csv_header    = XnewsletterRequest::getInt('csv_header', 0);
-            $csv_delimiter = XnewsletterRequest::getString('csv_delimiter', ',');
+            $csv_header    = XoopsRequest::getInt('csv_header', 0);
+            $csv_delimiter = XoopsRequest::getString('csv_delimiter', ',');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
         } else if ($plugin == 'xoopsuser') {
@@ -428,7 +440,7 @@ switch ($op) {
             echo str_replace("%p", $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
             break;
         }
-        require_once($pluginFile);
+        require_once $pluginFile;
 
         $function = "xnewsletter_plugin_getform_{$plugin}";
         if (!function_exists($function)) {
@@ -450,7 +462,7 @@ switch ($op) {
         $form->display();
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';
 
 /**
  * @param $prot_text

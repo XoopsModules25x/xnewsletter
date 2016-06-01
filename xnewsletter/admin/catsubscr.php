@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = XoopsRequest::getString('op', 'list');
 
 switch ($op) {
     case "list":
@@ -45,7 +45,7 @@ switch ($op) {
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -120,7 +120,7 @@ switch ($op) {
         $catsubscrCriteria->setSort("catsubscr_id ASC, catsubscr_catid");
         $catsubscrCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -218,7 +218,7 @@ switch ($op) {
         $catsubscr_subscrid = $_REQUEST["catsubscr_subscrid"];
         $catsubscrObj->setVar("catsubscr_subscrid", $catsubscr_subscrid);
         //Form catsubscr_quited
-        $catsubscr_quit_now = XnewsletterRequest::getInt('catsubscr_quit_now', 0);
+        $catsubscr_quit_now = XoopsRequest::getInt('catsubscr_quit_now', 0);
         if ($catsubscr_quit_now == 1) {
             $catsubscrObj->setVar("catsubscr_quited",  time());
         } elseif ($catsubscr_quit_now == 2) {
@@ -233,7 +233,7 @@ switch ($op) {
             //add subscriber to mailinglist
             $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["catsubscr_catid"]);
             if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
-                require_once( XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php" );
+                require_once XOOPS_ROOT_PATH."/modules/xnewsletter/include/mailinglist.php";
                 subscribingMLHandler(1, $catsubscr_subscrid, $catsubscrObj_cat->getVar("cat_mailinglist"));
             }
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
@@ -268,7 +268,7 @@ switch ($op) {
         $subscr_id = $_REQUEST["subscr_id"];
         $catsubscrObj_cat = $xnewsletter->getHandler('cat')->get($_REQUEST["cat_id"]);
         if ($catsubscrObj_cat->getVar("cat_mailinglist") > 0) {
-          require_once( XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php" );
+          require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
           subscribingMLHandler(0, $subscr_id, $catsubscrObj_cat->getVar("cat_mailinglist"));
         }
                 redirect_header("catsubscr.php", 3, _AM_XNEWSLETTER_FORMDELOK);
@@ -284,4 +284,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

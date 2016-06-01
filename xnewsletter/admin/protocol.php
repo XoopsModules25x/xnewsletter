@@ -27,11 +27,11 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = XnewsletterRequest::getString('op', 'list');
+$op = XoopsRequest::getString('op', 'list');
 
 $protocolAdmin = new ModuleAdmin();
 $letterAdmin = new ModuleAdmin();
@@ -45,7 +45,7 @@ switch ($op) {
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -169,7 +169,7 @@ switch ($op) {
         $protocolCriteria->setSort("protocol_id");
         $protocolCriteria->setOrder("DESC");
         $protocolsCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $protocolCriteria->setStart($start);
         $protocolCriteria->setLimit($limit);
         $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
@@ -286,7 +286,7 @@ switch ($op) {
     break;
 
     case "delete_protocol":
-        $protocolObj =& $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
+        $protocolObj = $xnewsletter->getHandler('protocol')->get($_REQUEST["protocol_id"]);
         if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == 1) {
             if ( !$GLOBALS["xoopsSecurity"]->check() ) {
                 redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
@@ -322,4 +322,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

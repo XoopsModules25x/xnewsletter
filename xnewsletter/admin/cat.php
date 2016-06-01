@@ -27,12 +27,12 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op     = XnewsletterRequest::getString('op', 'list');
-$cat_id = XnewsletterRequest::getInt('cat_id', 0);
+$op     = XoopsRequest::getString('op', 'list');
+$cat_id = XoopsRequest::getInt('cat_id', 0);
 
 switch ($op) {
     case "list" :
@@ -46,7 +46,7 @@ switch ($op) {
         $catCriteria->setSort("cat_id ASC, cat_name");
         $catCriteria->setOrder("ASC");
         $catsCount = $xnewsletter->getHandler('cat')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -77,7 +77,7 @@ switch ($op) {
 
             $class = "odd";
 
-            $member_handler =& xoops_gethandler('member');
+            $member_handler = xoops_gethandler('member');
             $grouplist = $member_handler->getGroupList();
 
             $gperm_handler = xoops_gethandler('groupperm');
@@ -92,7 +92,7 @@ switch ($op) {
                 // cat_gperms_admin;
                 $arr_cat_gperms_admin = "";
                 $cat_gperms_admin = "";
-                $arr_cat_gperms_admin =& $gperm_handler->getGroupIds('newsletter_admin_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $arr_cat_gperms_admin = $gperm_handler->getGroupIds('newsletter_admin_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort ( $arr_cat_gperms_admin );
                 foreach ($arr_cat_gperms_admin as $groupid_admin) {
                     $cat_gperms_admin .= $grouplist[$groupid_admin] . " | ";
@@ -102,8 +102,8 @@ switch ($op) {
 
                 // cat_gperms_create
                 $arr_cat_gperms_create = "";
-                $cat_gperms_create = "";
-                $arr_cat_gperms_create =& $gperm_handler->getGroupIds('newsletter_create_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $cat_gperms_create     = "";
+                $arr_cat_gperms_create = $gperm_handler->getGroupIds('newsletter_create_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort ( $arr_cat_gperms_create );
                 foreach ($arr_cat_gperms_create as $groupid_create) {
                     $cat_gperms_create .= $grouplist[$groupid_create]." | ";
@@ -114,7 +114,7 @@ switch ($op) {
                 // cat_gperms_list
                 $cat_gperms_list = "";
                 $arr_cat_gperms_list = "";
-                $arr_cat_gperms_list = & $gperm_handler->getGroupIds('newsletter_list_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $arr_cat_gperms_list = $gperm_handler->getGroupIds('newsletter_list_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort ( $arr_cat_gperms_list );
                 foreach ($arr_cat_gperms_list as $groupid_list) {
                     $cat_gperms_list .= $grouplist[$groupid_list] . " | ";
@@ -125,7 +125,7 @@ switch ($op) {
                 // cat_gperms_read
                 $cat_gperms_read = "";
                 $arr_cat_groupperms = "";
-                $arr_cat_groupperms = & $gperm_handler->getGroupIds('newsletter_read_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $arr_cat_groupperms = $gperm_handler->getGroupIds('newsletter_read_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort ( $arr_cat_groupperms );
                 foreach ($arr_cat_groupperms as $groupid_read) {
                     $cat_gperms_read .= $grouplist[$groupid_read] . " | ";
@@ -164,8 +164,11 @@ switch ($op) {
 
     case "new_cat" :
         echo $indexAdmin->addNavigation($currentFile);
-        $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
-        echo $indexAdmin->renderButton();
+        $catsCount = $xnewsletter->getHandler('cat')->getCount();
+        if (!empty($catsCount)) {
+            $indexAdmin->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
+            echo $indexAdmin->renderButton();
+        }
         //
         $catObj = $xnewsletter->getHandler('cat')->create();
         $form = $catObj->getForm();
@@ -205,7 +208,7 @@ switch ($op) {
                 $xoopsDB->query($sql);
             }
             //admin
-            $gperm =& $gperm_handler->create();
+            $gperm = $gperm_handler->create();
             $gperm->setVar('gperm_groupid', XOOPS_GROUP_ADMIN);
             $gperm->setVar('gperm_name', 'newsletter_admin_cat');
             $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -213,7 +216,7 @@ switch ($op) {
             $gperm_handler->insert($gperm);
             unset($gperm);
             foreach ($arr_cat_gperms_create as $key => $cat_groupperm) {
-                $gperm =& $gperm_handler->create();
+                $gperm = $gperm_handler->create();
                 $gperm->setVar('gperm_groupid', $cat_groupperm);
                 $gperm->setVar('gperm_name', 'newsletter_admin_cat');
                 $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -230,7 +233,7 @@ switch ($op) {
                 $xoopsDB->query($sql);
             }
             //admin
-            $gperm =& $gperm_handler->create();
+            $gperm = $gperm_handler->create();
             $gperm->setVar('gperm_groupid', XOOPS_GROUP_ADMIN);
             $gperm->setVar('gperm_name', 'newsletter_create_cat');
             $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -238,7 +241,7 @@ switch ($op) {
             $gperm_handler->insert($gperm);
             unset($gperm);
             foreach ($arr_cat_gperms_create as $key => $cat_groupperm) {
-                $gperm =& $gperm_handler->create();
+                $gperm = $gperm_handler->create();
                 $gperm->setVar('gperm_groupid', $cat_groupperm);
                 $gperm->setVar('gperm_name', 'newsletter_create_cat');
                 $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -255,7 +258,7 @@ switch ($op) {
                 $xoopsDB->query($sql);
             }
             //admin
-            $gperm =& $gperm_handler->create();
+            $gperm = $gperm_handler->create();
             $gperm->setVar('gperm_groupid', XOOPS_GROUP_ADMIN);
             $gperm->setVar('gperm_name', 'newsletter_read_cat');
             $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -263,7 +266,7 @@ switch ($op) {
             $gperm_handler->insert($gperm);
             unset($gperm);
             foreach ($arr_cat_gperms_read as $key => $cat_groupperm) {
-                $gperm =& $gperm_handler->create();
+                $gperm = $gperm_handler->create();
                 $gperm->setVar('gperm_groupid', $cat_groupperm);
                 $gperm->setVar('gperm_name', 'newsletter_read_cat');
                 $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -280,7 +283,7 @@ switch ($op) {
                 $xoopsDB->query($sql);
             }
             //admin
-            $gperm =& $gperm_handler->create();
+            $gperm = $gperm_handler->create();
             $gperm->setVar('gperm_groupid', XOOPS_GROUP_ADMIN);
             $gperm->setVar('gperm_name', 'newsletter_list_cat');
             $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -288,7 +291,7 @@ switch ($op) {
             $gperm_handler->insert($gperm);
             unset($gperm);
             foreach ($arr_cat_gperms_list as $key => $cat_groupperm) {
-                $gperm =& $gperm_handler->create();
+                $gperm = $gperm_handler->create();
                 $gperm->setVar('gperm_groupid', $cat_groupperm);
                 $gperm->setVar('gperm_name', 'newsletter_list_cat');
                 $gperm->setVar('gperm_modid', $xnewsletter->getModule()->mid());
@@ -332,4 +335,4 @@ switch ($op) {
         }
         break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

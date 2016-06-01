@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * ****************************************************************************
  *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
  * ****************************************************************************
@@ -17,7 +17,9 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
+ */
+ /**
+ * ****************************************************************************
  * @copyright  Goffy ( wedega.com )
  * @license    GNU General Public License 2.0
  * @package    xnewsletter
@@ -28,18 +30,21 @@
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterTemplate
  */
 class XnewsletterTemplate extends XoopsObject
 {
-    public $xnewsletter = null;
-
-    //Constructor
     /**
      *
+     * @var object xnewsletterxnewsletter
+     */
+    public $xnewsletter = null;
+
+    /**
+     * Class constructor
      */
     public function __construct()
     {
@@ -68,7 +73,7 @@ class XnewsletterTemplate extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_TEMPLATE_ADD) : sprintf(_AM_XNEWSLETTER_TEMPLATE_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 

@@ -27,8 +27,12 @@
  */
 
 defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
-include_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/include/common.php");
-@include_once(XOOPS_ROOT_PATH . "/modules/xnewsletter/language/" . $xoopsConfig['language'] . "/admin.php");
+include_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/common.php";
+if (file_exists(XOOPS_ROOT_PATH . "/modules/xnewsletter/language/" . $xoopsConfig['language'] . "/admin.php")) {
+    include_once XOOPS_ROOT_PATH . "/modules/xnewsletter/language/" . $xoopsConfig['language'] . "/admin.php";
+} else {
+    include_once XOOPS_ROOT_PATH . "/modules/xnewsletter/language/english/admin.php";
+}
 
 define('INDEX_FILE_PATH', XOOPS_UPLOAD_PATH . "/index.html");
 define('BLANK_FILE_PATH', XOOPS_UPLOAD_PATH . "/blank.gif");

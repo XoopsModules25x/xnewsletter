@@ -27,12 +27,12 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = XnewsletterRequest::getString('op', 'list');
-$attachment_id 	= XnewsletterRequest::getInt('attachment_id', 0);
+$op             = XoopsRequest::getString('op', 'list');
+$attachment_id  = XoopsRequest::getInt('attachment_id', 0);
 
 switch ($op) {
     case "list" :
@@ -46,7 +46,7 @@ switch ($op) {
         $attachmentCriteria->setSort("attachment_letter_id DESC, attachment_id");
         $attachmentCriteria->setOrder("DESC");
         $attachmentsCount = $xnewsletter->getHandler('attachment')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
@@ -80,7 +80,7 @@ switch ($op) {
                 $class = ($class == "even") ? "odd" : "even";
                 echo "<td class='center'>" . $attachment_id . "</td>";
 
-                $letter =& $xnewsletter->getHandler('letter')->get($attachmentObj->getVar("attachment_letter_id"));
+                $letter = $xnewsletter->getHandler('letter')->get($attachmentObj->getVar("attachment_letter_id"));
                 $title_letter = $letter->getVar("letter_title");
                 echo "<td class='center'>" . $title_letter . "</td>";
                 echo "<td class='center'>" . $attachmentObj->getVar("attachment_name") . "</td>";
@@ -132,11 +132,11 @@ switch ($op) {
         }
 
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
-        $attachmentObj->setVar("attachment_letter_id", XnewsletterRequest::getInt('attachment_letter_id', 0));
-        $attachmentObj->setVar("attachment_name",      XnewsletterRequest::getString('attachment_name', ''));
-        $attachmentObj->setVar("attachment_type",      XnewsletterRequest::getInt('attachment_type', 0));
-        $attachmentObj->setVar("attachment_submitter", XnewsletterRequest::getInt('attachment_submitter', 0));
-        $attachmentObj->setVar("attachment_created",   XnewsletterRequest::getInt('attachment_created', time()));
+        $attachmentObj->setVar("attachment_letter_id", XoopsRequest::getInt('attachment_letter_id', 0));
+        $attachmentObj->setVar("attachment_name",      XoopsRequest::getString('attachment_name', ''));
+        $attachmentObj->setVar("attachment_type",      XoopsRequest::getInt('attachment_type', 0));
+        $attachmentObj->setVar("attachment_submitter", XoopsRequest::getInt('attachment_submitter', 0));
+        $attachmentObj->setVar("attachment_created",   XoopsRequest::getInt('attachment_created', time()));
 
         if ($xnewsletter->getHandler('attachment')->insert($attachmentObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
@@ -174,4 +174,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

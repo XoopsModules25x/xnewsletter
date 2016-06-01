@@ -28,7 +28,7 @@
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterSubscr
@@ -72,7 +72,7 @@ class XnewsletterSubscr extends XoopsObject
             $action = $_SERVER["REQUEST_URI"];
         }
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm(_MA_XNEWSLETTER_SUBSCRIPTION_SEARCH, "formsearch", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -111,7 +111,7 @@ class XnewsletterSubscr extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_ADD) : sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -126,8 +126,11 @@ class XnewsletterSubscr extends XoopsObject
         if ($this->xnewsletter->getConfig('xn_use_salutation') == 1) {
             $select_subscr_sex = new XoopsFormSelect(_AM_XNEWSLETTER_SUBSCR_SEX, "subscr_sex", $this->getVar("subscr_sex"));
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY, _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_GIRL);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_BOY);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE, _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
+            $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
             $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
             $form->addElement($select_subscr_sex);
@@ -142,8 +145,8 @@ class XnewsletterSubscr extends XoopsObject
         $opt_tray = new XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . "</span>", "<br />");
 
         //get newsletters available for current user
-        $gperm_handler  =& xoops_gethandler('groupperm');
-        $member_handler =& xoops_gethandler('member');
+        $gperm_handler  = xoops_gethandler('groupperm');
+        $member_handler = xoops_gethandler('member');
         $currentuid     = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         if ($currentuid == 0) {
             $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);
@@ -228,15 +231,18 @@ class XnewsletterSubscr extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_SUBSCR_ADD) : sprintf(_AM_XNEWSLETTER_SUBSCR_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, "subscr_email", 50, 255, $this->getVar("subscr_email")), true);
         $select_subscr_sex = new XoopsFormSelect(_AM_XNEWSLETTER_SUBSCR_SEX, "subscr_sex", $this->getVar("subscr_sex"));
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_EMPTY, _AM_XNEWSLETTER_SUBSCR_SEX_EMPTY);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_GIRL, _AM_XNEWSLETTER_SUBSCR_SEX_GIRL);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FEMALE, _AM_XNEWSLETTER_SUBSCR_SEX_FEMALE);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_BOY, _AM_XNEWSLETTER_SUBSCR_SEX_BOY);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_MALE, _AM_XNEWSLETTER_SUBSCR_SEX_MALE);
+        $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR, _AM_XNEWSLETTER_SUBSCR_SEX_DOCTOR);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
         $form->addElement($select_subscr_sex);

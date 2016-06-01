@@ -21,7 +21,7 @@
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // This must contain the name of the folder in which reside xnewsletter
-define("XNEWSLETTER_DIRNAME", basename(dirname(dirname(__FILE__))));
+define("XNEWSLETTER_DIRNAME", basename(dirname(__DIR__)));
 define("XNEWSLETTER_URL", XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
 define("XNEWSLETTER_ROOT_PATH", XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
 define("XNEWSLETTER_IMAGES_URL", XNEWSLETTER_URL . '/assets/images');
@@ -35,10 +35,11 @@ include_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 include_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
 include_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class
 include_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // xnewsletterxnewsletter class
-include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
-include_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // xnewsletterBreadcrumb class
+//include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
+include_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // XnewsletterBreadcrumb class
 
 xoops_load('XoopsUserUtility');
+xoops_load('xoopsrequest');
 // MyTextSanitizer object
 $myts = MyTextSanitizer::getInstance();
 
@@ -56,8 +57,8 @@ if (is_object($xnewsletter->getModule())) {
 $xoopsModule = $xnewsletter->getModule();
 
 // Load Xoops handlers
-$module_handler = xoops_gethandler('module');
-$member_handler = xoops_gethandler('member');
-$notification_handler = &xoops_gethandler('notification');
-$gperm_handler = xoops_gethandler('groupperm');
-$config_handler = xoops_gethandler('config');
+$module_handler       = xoops_gethandler('module');
+$member_handler       = xoops_gethandler('member');
+$notification_handler = xoops_gethandler('notification');
+$gperm_handler        = xoops_gethandler('groupperm');
+$config_handler       = xoops_gethandler('config');

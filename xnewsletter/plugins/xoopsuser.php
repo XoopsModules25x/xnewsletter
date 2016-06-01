@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @return array
@@ -127,7 +127,7 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
 
     $title = _AM_XNEWSLETTER_IMPORT_XOOPSUSER;
 
-    include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+    include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
     $form = new XoopsThemeForm($title, "form_add_xoopsuser", "import.php", "post", true);
     $form->setExtra('enctype="multipart/form-data"');
 

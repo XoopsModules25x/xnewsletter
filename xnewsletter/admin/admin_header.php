@@ -26,8 +26,8 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(dirname(dirname(__FILE__)))) . '/mainfile.php';
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 // Include xoops admin header
 include_once XOOPS_ROOT_PATH . "/include/cp_functions.php";
@@ -58,7 +58,7 @@ $indexAdmin = new ModuleAdmin();
 $myts = MyTextSanitizer::getInstance();
 
 if ($xoopsUser) {
-    $moduleperm_handler =& xoops_gethandler('groupperm');
+    $moduleperm_handler = xoops_gethandler('groupperm');
     if (!$moduleperm_handler->checkRight('module_admin', $xnewsletter->getModule()->mid(), $xoopsUser->getGroups())) {
         redirect_header(XOOPS_URL, 1, _NOPERM);
         exit();
@@ -69,6 +69,6 @@ if ($xoopsUser) {
 }
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-    include_once(XOOPS_ROOT_PATH . "/class/template.php");
+    include_once XOOPS_ROOT_PATH . "/class/template.php";
     $xoopsTpl = new XoopsTpl();
 }

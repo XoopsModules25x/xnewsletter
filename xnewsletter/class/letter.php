@@ -28,7 +28,7 @@
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterLetter
@@ -74,7 +74,7 @@ class XnewsletterLetter extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_LETTER_ADD) : sprintf(_AM_XNEWSLETTER_LETTER_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 
@@ -125,8 +125,8 @@ class XnewsletterLetter extends XoopsObject
         }
         $form->addElement($template_select, false);
 
-        $gperm_handler  =& xoops_gethandler('groupperm');
-        $member_handler =& xoops_gethandler('member');
+        $gperm_handler  = xoops_gethandler('groupperm');
+        $member_handler = xoops_gethandler('member');
         $my_group_ids   = $member_handler->getGroupsByUser($xoopsUser->uid());
 
         $catCriteria = new CriteriaCompo();

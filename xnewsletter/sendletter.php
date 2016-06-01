@@ -27,7 +27,7 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once __DIR__ . "/header.php";
 
 $xoopsOption['template_main'] = 'xnewsletter_letter.tpl';
 include_once XOOPS_ROOT_PATH . "/header.php";
@@ -37,7 +37,7 @@ $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // k
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
 // Breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
+$breadcrumb = new XnewsletterBreadcrumb();
 $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -48,8 +48,8 @@ if (!$xoopsUser) {
     redirect_header(XOOPS_URL . "/modules/" . $xnewsletter->getModule()->dirname() . "/index.php", 3, _NOPERM);
 }
 
-$op = XnewsletterRequest::getString('op', 'list');
-$letter_id = XnewsletterRequest::getInt('letter_id', 0);
+$op        = XoopsRequest::getString('op', 'list');
+$letter_id = XoopsRequest::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
     redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
@@ -89,4 +89,4 @@ if ($start_sending == true) {
     redirect_header('letter.php', 3, $result_exec);
 }
 
-include 'footer.php';
+include __DIR__ . '/footer.php';

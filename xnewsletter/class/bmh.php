@@ -28,7 +28,7 @@
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterBmh
@@ -72,7 +72,7 @@ class XnewsletterBmh extends XoopsObject
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_BMH_ADD) : sprintf(_AM_XNEWSLETTER_BMH_EDIT);
 
-        include_once(XOOPS_ROOT_PATH . "/class/xoopsformloader.php");
+        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
         $form = new XoopsThemeForm($title, "form", $action, "post", true);
         $form->setExtra('enctype="multipart/form-data"');
 

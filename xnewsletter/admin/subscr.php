@@ -27,17 +27,17 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op                      = XnewsletterRequest::getString('op', 'list');
-$subscr_id               = XnewsletterRequest::getInt('subscr_id', 0);
+$op                      = XoopsRequest::getString('op', 'list');
+$subscr_id               = XoopsRequest::getInt('subscr_id', 0);
 
-$filter_subscr           = XnewsletterRequest::getString('filter_subscr', '=');
-$filter_subscr_firstname = XnewsletterRequest::getString('filter_subscr_firstname', '');
-$filter_subscr_lastname  = XnewsletterRequest::getString('filter_subscr_lastname', '');
-$filter_subscr_email     = XnewsletterRequest::getString('filter_subscr_email', '');
+$filter_subscr           = XoopsRequest::getString('filter_subscr', '=');
+$filter_subscr_firstname = XoopsRequest::getString('filter_subscr_firstname', '');
+$filter_subscr_lastname  = XoopsRequest::getString('filter_subscr_lastname', '');
+$filter_subscr_email     = XoopsRequest::getString('filter_subscr_email', '');
 
 if ($op == 'apply_filter') {
     if ($filter_subscr == "LIKE" && !$filter_subscr_firstname=='') $filter_subscr_firstname = "%".$filter_subscr_firstname."%";
@@ -50,7 +50,7 @@ $subscrAdmin = new ModuleAdmin();
 switch ($op) {
     case "show_catsubscr":
         echo $subscrAdmin->addNavigation($currentFile);
-        $apply_filter = XnewsletterRequest::getString('apply_filter', 'list');
+        $apply_filter = XoopsRequest::getString('apply_filter', 'list');
         $linklist = "?op=$apply_filter&filter_subscr=$filter_subscr";
         $linklist .= "&filter_subscr_firstname=$filter_subscr_firstname";
         $linklist .= "&filter_subscr_lastname=$filter_subscr_lastname";
@@ -116,7 +116,7 @@ switch ($op) {
         $subscrCriteria->setSort("subscr_id");
         $subscrCriteria->setOrder("DESC");
         $subscrsCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $subscrCriteria->setStart($start);
         $subscrCriteria->setLimit($limit);
         $subscrObjs = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria);
@@ -204,9 +204,9 @@ switch ($op) {
                 echo formatTimestamp($subscrObj->getVar("subscr_created"), $xnewsletter->getConfig('dateformat')) . " [" . $subscrObj->getVar("subscr_ip") . "]&nbsp;</td>";
 
                 echo "<td class='center width5' nowrap='nowrap'>";
-                echo "	<a href='?op=edit_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
-                echo "	&nbsp;<a href='?op=delete_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
-                echo "	&nbsp;<a href='?op=show_catsubscr&subscr_id=" . $subscr_id;
+                echo "    <a href='?op=edit_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>";
+                echo "    &nbsp;<a href='?op=delete_subscr&subscr_id=" . $subscr_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
+                echo "    &nbsp;<a href='?op=show_catsubscr&subscr_id=" . $subscr_id;
                 echo "&filter_subscr=$filter_subscr";
                 echo "&filter_subscr_firstname=$filter_subscr_firstname";
                 echo "&filter_subscr_lastname=$filter_subscr_lastname";
@@ -218,10 +218,10 @@ switch ($op) {
                 echo "  </td>";
                 echo "</tr>";
 
-                $filter_subscr           = XnewsletterRequest::getString('filter_subscr', '=');
-                $filter_subscr_firstname = XnewsletterRequest::getString('filter_subscr_firstname', '');
-                $filter_subscr_lastname  = XnewsletterRequest::getString('filter_subscr_lastname', '');
-                $filter_subscr_email     = XnewsletterRequest::getString('filter_subscr_email', '');
+                $filter_subscr           = XoopsRequest::getString('filter_subscr', '=');
+                $filter_subscr_firstname = XoopsRequest::getString('filter_subscr_firstname', '');
+                $filter_subscr_lastname  = XoopsRequest::getString('filter_subscr_lastname', '');
+                $filter_subscr_email     = XoopsRequest::getString('filter_subscr_email', '');
 
             }
             echo "</table><br /><br />";
@@ -247,8 +247,11 @@ switch ($op) {
 
     case "new_subscr":
         echo $subscrAdmin->addNavigation($currentFile);
-        $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
-        echo $subscrAdmin->renderButton();
+        $subscrCount = $xnewsletter->getHandler('subscr')->getCount();
+        if (!empty($subscrCount)) {
+            $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
+            echo $subscrAdmin->renderButton();
+        }
         //
         $subscrObj = $xnewsletter->getHandler('subscr')->create();
         $form = $subscrObj->getFormAdmin();
@@ -272,7 +275,7 @@ switch ($op) {
         $subscrObj->setVar("subscr_created", $_REQUEST["subscr_created"]);
         $subscrObj->setVar("subscr_ip", $_REQUEST["subscr_ip"]);
         $subscrObj->setVar("subscr_actkey", $_REQUEST["subscr_actkey"]);
-        $subscrObj->setVar("subscr_activated", XnewsletterRequest::getInt('subscr_activated', 0));
+        $subscrObj->setVar("subscr_activated", XoopsRequest::getInt('subscr_activated', 0));
 
         if ($xnewsletter->getHandler('subscr')->insert($subscrObj)) {
             redirect_header("?op=list", 2, _AM_XNEWSLETTER_FORMOK);
@@ -317,4 +320,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

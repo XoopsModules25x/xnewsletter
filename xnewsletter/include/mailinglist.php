@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(__FILE__) . '/common.php';
+include_once __DIR__ . '/common.php';
 
 /**
  * @param $type
@@ -57,9 +57,9 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     echo "<br />action_code: {$action_code}";
     echo "<br />";
 */
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php");
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.pop3.php");
-    require_once(XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php");
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.phpmailer.php";
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.pop3.php";
+    require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php";
 
     //get emails of subscribers
     $recipients = array();
@@ -80,7 +80,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     foreach ($recipients as $recipient) {
         $subscriber_id = $recipient["subscriber_id"];
         try {
-            $xoopsMailer =& xoops_getMailer();
+            $xoopsMailer = xoops_getMailer();
             $xoopsMailer->reset();
             //$xoopsMailer->setTemplateDir();
             $xoopsMailer->useMail();

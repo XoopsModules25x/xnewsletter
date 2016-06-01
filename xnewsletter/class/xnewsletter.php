@@ -34,8 +34,8 @@ class xnewsletterxnewsletter
      */
     protected function __construct($debug)
     {
-        $this->debug = $debug;
-        $this->dirname =  basename(dirname(dirname(__FILE__)));
+        $this->debug   = $debug;
+        $this->dirname =  basename(dirname(__DIR__));
     }
 
     /**
@@ -43,7 +43,7 @@ class xnewsletterxnewsletter
      *
      * @return xnewsletterxnewsletter
      */
-    static function &getInstance($debug = false)
+    public static function &getInstance($debug = false)
     {
         static $instance = false;
         if (!$instance) {
@@ -52,7 +52,7 @@ class xnewsletterxnewsletter
         return $instance;
     }
 
-    function &getModule()
+    public function &getModule()
     {
         if ($this->module == null) {
             $this->initModule();
@@ -66,7 +66,7 @@ class xnewsletterxnewsletter
      *
      * @return null
      */
-    function getConfig($name = null)
+    public function getConfig($name = null)
     {
         if ($this->config == null) {
             $this->initConfig();
@@ -92,7 +92,7 @@ class xnewsletterxnewsletter
      *
      * @return mixed
      */
-    function setConfig($name = null, $value = null)
+    public function setConfig($name = null, $value = null)
     {
         if ($this->config == null) {
             $this->initConfig();
@@ -108,7 +108,7 @@ class xnewsletterxnewsletter
      *
      * @return mixed
      */
-    function &getHandler($name)
+    public function &getHandler($name)
     {
         if (!isset($this->handler[$name . '_handler'])) {
             $this->initHandler($name);
@@ -118,7 +118,7 @@ class xnewsletterxnewsletter
         return $this->handler[$name . '_handler'];
     }
 
-    function initModule()
+    public function initModule()
     {
         global $xoopsModule;
         if (isset($xoopsModule) && is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $this->dirname) {
@@ -130,7 +130,7 @@ class xnewsletterxnewsletter
         $this->addLog('INIT MODULE');
     }
 
-    function initConfig()
+    public function initConfig()
     {
         $this->addLog('INIT CONFIG');
         $hModConfig = xoops_gethandler('config');
@@ -140,7 +140,7 @@ class xnewsletterxnewsletter
     /**
      * @param $name
      */
-    function initHandler($name)
+    public function initHandler($name)
     {
         $this->addLog('INIT ' . $name . ' HANDLER');
         $this->handler[$name . '_handler'] = xoops_getModuleHandler($name, $this->dirname);
@@ -149,7 +149,7 @@ class xnewsletterxnewsletter
     /**
      * @param $log
      */
-    function addLog($log)
+    public function addLog($log)
     {
         if ($this->debug) {
             if (is_object($GLOBALS['xoopsLogger'])) {

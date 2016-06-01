@@ -42,7 +42,7 @@ $modversion['official']            = false;
 $modversion['author_mail']         = "webmaster@wedega.com";
 $modversion['author_website_url']  = "wedega.com";
 $modversion['author_website_name'] = "Webdesign Gabor";
-$modversion['dirname']             = basename(dirname(__FILE__));
+$modversion['dirname']             = basename(__DIR__);
 
 $modversion['license']     = 'GNU GPL 2.0 see Licence';
 $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";

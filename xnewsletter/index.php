@@ -27,9 +27,9 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once "header.php";
+include_once __DIR__ . "/header.php";
 
-$op = XnewsletterRequest::getString('op', 'welcome');
+$op = XoopsRequest::getString('op', 'welcome');
 
 switch ($op) {
     case "welcome" :
@@ -42,7 +42,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -60,14 +60,14 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         $xoopsTpl->assign('welcome_message', $xnewsletter->getConfig('welcome_message'));
 
         // get letter_id
-        $letter_id = XnewsletterRequest::getInt('letter_id', 0);
+        $letter_id = XoopsRequest::getInt('letter_id', 0);
         // get letter object
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data
@@ -120,7 +120,7 @@ break;
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // Breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
+        $breadcrumb = new XnewsletterBreadcrumb();
         $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -135,12 +135,13 @@ break;
 
         if ($xnewsletter->getHandler('letter')->getCount() > 0) {
             // get newsletters available for current user
-            $gperm_handler =& xoops_gethandler('groupperm');
+            $gperm_handler = xoops_gethandler('groupperm');
             $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
 
             $letters_array = array();
             foreach ($letterObjs as $letterObj) {
                 $letter_array = $letterObj->toArray();
+                $letter_array['letter_content'] = $myts->undoHtmlSpecialChars($letterObj->getVar('letter_content')); //needed when using GUI editors (e.g. tinymce)
                 $letter_array['letter_created_timestamp'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
                 $letter_array['letter_submitter_name'] = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
                 $catsAvailableCount = 0;
@@ -169,4 +170,4 @@ break;
         break;
 }
 
-include 'footer.php';
+include __DIR__ . '/footer.php';

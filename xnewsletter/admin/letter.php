@@ -27,18 +27,18 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once dirname(__FILE__) . '/admin_header.php';
+include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op           = XnewsletterRequest::getString('op', 'list');
-$letter_id    = XnewsletterRequest::getInt('letter_id', 0);
+$op           = XoopsRequest::getString('op', 'list');
+$letter_id    = XoopsRequest::getInt('letter_id', 0);
 
-$delete_att_1 = XnewsletterRequest::getString('delete_attachment_1', 'none');
-$delete_att_2 = XnewsletterRequest::getString('delete_attachment_2', 'none');
-$delete_att_3 = XnewsletterRequest::getString('delete_attachment_3', 'none');
-$delete_att_4 = XnewsletterRequest::getString('delete_attachment_4', 'none');
-$delete_att_5 = XnewsletterRequest::getString('delete_attachment_5', 'none');
+$delete_att_1 = XoopsRequest::getString('delete_attachment_1', 'none');
+$delete_att_2 = XoopsRequest::getString('delete_attachment_2', 'none');
+$delete_att_3 = XoopsRequest::getString('delete_attachment_3', 'none');
+$delete_att_4 = XoopsRequest::getString('delete_attachment_4', 'none');
+$delete_att_5 = XoopsRequest::getString('delete_attachment_5', 'none');
 
 
 
@@ -63,7 +63,7 @@ if ($delete_att_1 != 'none') {
 
 switch ($op) {
     case "delete_attachment":
-        $attachment_id = XnewsletterRequest::getString("attachment_{$id_del}", 'none');
+        $attachment_id = XoopsRequest::getString("attachment_{$id_del}", 'none');
         if ($attachment_id == 'none') redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $attachment_name = $attachmentObj->getVar("attachment_name");
@@ -148,7 +148,7 @@ switch ($op) {
         $letterCriteria->setSort("letter_id");
         $letterCriteria->setOrder("DESC");
         $lettersCount = $xnewsletter->getHandler('letter')->getCount();
-        $start = XnewsletterRequest::getInt('start', 0);
+        $start = XoopsRequest::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
@@ -341,9 +341,9 @@ switch ($op) {
         //Form letter_email_test
         $letterObj->setVar("letter_email_test", $_REQUEST["letter_email_test"]);
         //Form letter_submitter
-        $letterObj->setVar("letter_submitter", XnewsletterRequest::getInt('letter_submitter', 0));
+        $letterObj->setVar("letter_submitter", XoopsRequest::getInt('letter_submitter', 0));
         //Form letter_created
-        $letterObj->setVar("letter_created", XnewsletterRequest::getInt('letter_created', time()));
+        $letterObj->setVar("letter_created", XoopsRequest::getInt('letter_created', time()));
 
         if ($xnewsletter->getHandler('letter')->insert($letterObj)) {
 
@@ -377,7 +377,7 @@ switch ($op) {
 
             //create items in attachments
             foreach ($uploaded_files as $file) {
-                $attachmentObj =& $xnewsletter->getHandler('attachment')->create();
+                $attachmentObj = $xnewsletter->getHandler('attachment')->create();
                 //Form attachment_letter_id
                 $attachmentObj->setVar("attachment_letter_id", $letter_id);
                 //Form attachment_name
@@ -392,7 +392,7 @@ switch ($op) {
                 $xnewsletter->getHandler('attachment')->insert($attachmentObj);
             }
             //create item in protocol
-            $protocolObj =& $xnewsletter->getHandler('protocol')->create();
+            $protocolObj = $xnewsletter->getHandler('protocol')->create();
             $protocolObj->setVar("protocol_letter_id", $letter_id);
             $protocolObj->setVar("protocol_subscriber_id", '0');
             $action = "";
@@ -484,4 +484,4 @@ switch ($op) {
         }
     break;
 }
-include_once dirname(__FILE__) . '/admin_footer.php';
+include_once __DIR__ . '/admin_footer.php';

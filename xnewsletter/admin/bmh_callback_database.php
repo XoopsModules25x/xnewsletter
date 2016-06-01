@@ -18,7 +18,7 @@
  *  Version : $Id $
  */
 
-require_once dirname(__FILE__) . '/admin_header.php';
+require_once __DIR__ . '/admin_header.php';
 
 /**
  * @param      $msgnum

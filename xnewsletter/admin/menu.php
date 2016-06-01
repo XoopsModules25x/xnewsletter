@@ -26,7 +26,7 @@
  * ****************************************************************************
  */
 
-include_once dirname(dirname(__FILE__)) . '/include/common.php';
+include_once dirname(__DIR__) . '/include/common.php';
 $xnewsletter = xnewsletterxnewsletter::getInstance();
 $pathImageAdmin = 'assets/images/icons';
 
