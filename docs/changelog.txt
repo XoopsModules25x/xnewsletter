@@ -1,5 +1,6 @@
 Version 1.3     NOT RELEASED
 -------------------------------
+ - changed: MySQL install to remove setting defaults on text columns (zyspec)
  - only display link to list categories in ./admin/cat.php if categories exist (zyspec)
  - only display link to list subscribers in ./admin/cat.php if subscribers exist (zyspec)
  - changed: remove pass-by-reference for non-vars (zyspec)

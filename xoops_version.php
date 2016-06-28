@@ -48,8 +48,8 @@ $modversion['license']     = 'GNU GPL 2.0 see Licence';
 $modversion['license_url'] = "www.gnu.org/licenses/gpl-2.0.html/";
 
 //About
-$modversion['module_status']       = "Alpha 1";
-$modversion['release_date']        = "2014/06/13";
+$modversion['module_status']       = "Alpha 2";
+$modversion['release_date']        = "2016/06/28";
 //$modversion['release']           = "1.3";
 $modversion['demo_site_url']       = "";
 $modversion['demo_site_name']      = "";
