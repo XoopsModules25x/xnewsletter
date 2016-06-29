@@ -173,14 +173,14 @@ switch ($op) {
                 $form .=  "</td>";
                 $form .=  "<td align=\"center\">";
 
-                $curr_cat_id =$importObj->getVar("import_cat_id");
+                $curr_cat_id = $importObj->getVar("import_cat_id");
                 $form .= "<select size=\"1\" name=\"cat_id_" . $counter . "\" id=\"cat_id_" . $counter . "\" title=\"cat\" ";
                 $form .= "value=\"" . $curr_cat_id . "\">";
                 $cat_select = "<option value=\"0\"";
                 $cat_select .= ">" . _AM_XNEWSLETTER_IMPORT_NOIMPORT . "</option>";
                 foreach ($catObjs as $cat_id => $catObj) {
                     $cat_select .= "<option value=\"" . $cat_id . "\"";
-                    if ($curr_cat_id == $j) $cat_select .= " selected=\"selected\"";
+                    if ($curr_cat_id == $cat_id) $cat_select .= " selected=\"selected\"";
                     $cat_select .= ">" . $catObj->getVar("cat_name") . "</option>";
                 }
 
@@ -249,7 +249,7 @@ switch ($op) {
 
         $importCriteria = new CriteriaCompo();
         $importCriteria->add(new Criteria('import_status', '1'));
-        $numrows_total     = $xnewsletter->getHandler('import')->getCount();
+        $numrows_total   = $xnewsletter->getHandler('import')->getCount();
         $numrows_act     = $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
             $sql = "SELECT *";
@@ -257,8 +257,8 @@ switch ($op) {
             $sql .= " WHERE ((import_status)=1)";
             $sql .= " ORDER BY `import_id` ASC";
             $counter = 0;
-            if(!$users_import = $xoopsDB->queryF($sql)) die ("MySQL-Error: " . mysql_error());
-            while ($user_import = mysql_fetch_assoc($users_import)) {
+            if(!$users_import = $xoopsDB->queryF($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+            while ($user_import = $xoopsDB->fetchArray($users_import)) {
                 $import_id = $user_import["import_id"];
                 $subscr_email = $user_import["import_email"];
                 $subscr_firstname = $user_import["import_firstname"];
@@ -279,7 +279,7 @@ switch ($op) {
                         $sql .= " FROM {$xoopsDB->prefix('users')}";
                         $sql .= " WHERE (`email`='{$subscr_email}') LIMIT 1";
                         if ($user = $xoopsDB->queryF($sql)) {
-                            $row_user = mysql_fetch_array($user);
+                            $row_user = $xoopsDB->fetchBoth($user);
                             $subscr_uid = $row_user[0];
                         }
                         unset($row_user);
@@ -317,7 +317,7 @@ switch ($op) {
                             $sql .= " FROM {$xoopsDB->prefix("xnewsletter_cat")}";
                             $sql .= " WHERE (`cat_id`={$cat_id}) LIMIT 1";
                             if ($cat_mls = $xoopsDB->queryF($sql)) {
-                                $cat_ml = mysql_fetch_array($cat_mls);
+                                $cat_ml = $xoopsDB->fetchRow($cat_mls);
                                 $cat_mailinglist = $cat_ml[0];
                             }
                             unset($cat_ml);
@@ -347,7 +347,7 @@ switch ($op) {
             echo XNEWSLETTER_IMG_OK . $resulttext;
             echo "</div>";
 
-            $numrows_pend = $xnewsletter->getHandler('xnewsletter_import')->getCount();
+            $numrows_pend = $xnewsletter->getHandler('import')->getCount();
             if ($numrows_pend > 0) {
                 $form_continue = "<form id='form_continue' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_continue'>";
                 $form_continue .= "<input id='submit' class='formButton' type='submit' title='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' value='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' name='submit'>";
@@ -474,5 +474,5 @@ function createProtocol($prot_text, $success, $submitter) {
     $sql = "INSERT INTO `{$xoopsDB->prefix('xnewsletter_protocol')}`";
     $sql .= " (`protocol_letter_id`, `protocol_subscriber_id`, `protocol_status`, `protocol_success`, `protocol_submitter`, `protocol_created`)";
     $sql .= " VALUES (0,0,'{$prot_text}', {$success}, {$submitter}, " . time() . ")";
-    if(!$xoopsDB->queryF($sql)) die ("MySQL-Error: " . mysql_error());
+    if(!$xoopsDB->queryF($sql)) die ("MySQL-Error: " . $xoopsDB->error());
 }

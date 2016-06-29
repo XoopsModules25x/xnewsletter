@@ -64,13 +64,15 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `email`, `name`,`uname` FROM {$xoopsDB->prefix("groups_users_link")}";
-    $sql .= " INNER JOIN {$xoopsDB->prefix("users")} ON {$xoopsDB->prefix("groups_users_link")}.uid = {$xoopsDB->prefix("users")}.uid";
+//    $sql = "SELECT `email`, `name`,`uname` FROM {$xoopsDB->prefix("groups_users_link")}";
+    $sql = "SELECT `email`, `name`,`uname` FROM {$xoopsDB->prefix("users")}";
+    $sql .= " INNER JOIN {$xoopsDB->prefix("groups_users_link")} ON {$xoopsDB->prefix("groups_users_link")}.uid = {$xoopsDB->prefix("users")}.uid";
     $sql .= " WHERE ({$xoopsDB->prefix("groups_users_link")}.groupid IN (" . implode(',', $arr_groups) . "))";
     $sql .= " GROUP BY `email`, `name`, `uname`";
 
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
-    while ($lineArray = mysql_fetch_array($result_users)) {
+    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
+//    while ($lineArray = mysql_fetch_array($result_users)) {
         ++$i;
         $email     = $lineArray[0];
         $sex       = "";
@@ -99,7 +101,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
             }
 //            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
 //            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . $xoopsDB->error());
             ++$j;
         }
         ++$i;
