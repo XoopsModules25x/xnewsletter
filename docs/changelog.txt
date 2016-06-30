@@ -1,5 +1,6 @@
 Version 1.3     NOT RELEASED
 -------------------------------
+ - added: user import script for simplenewsletter (zyspec)
  - fixed: bug in XoopsUser import utility when retrieving data from database (zyspec)
  - fixed: bug in CSV import utility where class was called incorrectly (zyspec)
  - fixed: bug in import utility where category wasn't being preselected (zyspec)
