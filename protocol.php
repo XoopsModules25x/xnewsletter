@@ -49,8 +49,8 @@ $letter_id = Request::getInt('letter_id', 0);
 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 
-$protocolCriteria = new CriteriaCompo();
-$protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+$protocolCriteria = new \CriteriaCompo();
+$protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
 $protocolCriteria->setSort('protocol_id');
 $protocolCriteria->setOrder('DESC');
 $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);

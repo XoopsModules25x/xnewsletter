@@ -30,7 +30,7 @@
 require_once __DIR__ . '/../../../include/cp_header.php';
 //require_once $GLOBALS['xoops']->path('www/class/xoopsformloader.php');
 
-//require_once __DIR__ . '/../class/Utility.php';
+// require_once __DIR__ . '/../class/Utility.php';
 require_once __DIR__ . '/../include/common.php';
 
 $moduleDirName = basename(dirname(__DIR__));
@@ -69,5 +69,5 @@ if ($xoopsUser) {
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
     require_once XOOPS_ROOT_PATH . '/class/template.php';
-    $xoopsTpl = new XoopsTpl();
+    $xoopsTpl = new \XoopsTpl();
 }

@@ -45,7 +45,7 @@ switch ($op) {
         echo $letterAdmin->displayNavigation($currentFile);
         //
         $limit          = $xnewsletter->getConfig('adminperpage');
-        $letterCriteria = new CriteriaCompo();
+        $letterCriteria = new \CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letterCount = $xnewsletter->getHandler('letter')->getCount();
@@ -55,7 +55,7 @@ switch ($op) {
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
         if ($letterCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($letterCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($letterCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -75,12 +75,12 @@ switch ($op) {
             $class = 'odd';
             //first show misc protocol items
             echo "<tr class='{$class}'>";
-            $class = ('even' == $class) ? 'odd' : 'even';
+            $class = ('even' === $class) ? 'odd' : 'even';
             echo '<td> - </td>';
             echo '<td>' . _AM_XNEWSLETTER_PROTOCOL_MISC . '</td>';
 
-            $protocolCriteria = new CriteriaCompo();
-            $protocolCriteria->add(new Criteria('protocol_letter_id', '0'));
+            $protocolCriteria = new \CriteriaCompo();
+            $protocolCriteria->add(new \Criteria('protocol_letter_id', '0'));
             $protocolCriteria->setSort('protocol_id');
             $protocolCriteria->setOrder('DESC');
             $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
@@ -112,8 +112,8 @@ switch ($op) {
                 </tr>";
 
             foreach (array_keys($letterObjs) as $i) {
-                $protocolCriteria = new CriteriaCompo();
-                $protocolCriteria->add(new Criteria('protocol_letter_id', $letterObjs[$i]->getVar('letter_id')));
+                $protocolCriteria = new \CriteriaCompo();
+                $protocolCriteria->add(new \Criteria('protocol_letter_id', $letterObjs[$i]->getVar('letter_id')));
                 $protocolCriteria->setSort('protocol_id');
                 $protocolCriteria->setOrder('DESC');
                 $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
@@ -124,7 +124,7 @@ switch ($op) {
                     $protocol_created = '';
 
                     echo "<tr class='{$class}'>";
-                    $class = ('even' == $class) ? 'odd' : 'even';
+                    $class = ('even' === $class) ? 'odd' : 'even';
                     echo '<td>' . $i . '</td>';
                     echo '<td>' . $letterObjs[$i]->getVar('letter_title') . '</td>';
 
@@ -169,8 +169,8 @@ switch ($op) {
         $adminObject->displayButton('left');
         $limit = $xnewsletter->getConfig('adminperpage');
 
-        $protocolCriteria = new CriteriaCompo();
-        $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
+        $protocolCriteria = new \CriteriaCompo();
+        $protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
         $protocolCriteria->setSort('protocol_id');
         $protocolCriteria->setOrder('DESC');
         $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
@@ -180,7 +180,7 @@ switch ($op) {
         $protocolObjs = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
         if ($protocolCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($protocolCount, $limit, $start, 'start', 'op=list_letter&letter_id=' . $letter_id);
+            $pagenav = new \XoopsPageNav($protocolCount, $limit, $start, 'start', 'op=list_letter&letter_id=' . $letter_id);
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -204,7 +204,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($protocolObjs as $protocol_id => $protocolObj) {
                 echo "<tr class='{$class}'>";
-                $class = ('even' == $class) ? 'odd' : 'even';
+                $class = ('even' === $class) ? 'odd' : 'even';
                 echo '<td>' . $protocol_id . '</td>';
                 $subscrObj  = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
                 $subscriber = $subscrObj ? $subscrObj->getVar('subscr_email') : _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;

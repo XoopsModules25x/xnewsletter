@@ -43,7 +43,7 @@ switch ($op) {
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWMAILINGLIST, '?op=new_mailinglist', 'add');
         $adminObject->displayButton('left');
         $limit               = $xnewsletter->getConfig('adminperpage');
-        $mailinglistCriteria = new CriteriaCompo();
+        $mailinglistCriteria = new \CriteriaCompo();
         $mailinglistCriteria->setSort('mailinglist_id ASC, mailinglist_email');
         $mailinglistCriteria->setOrder('ASC');
         $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
@@ -53,7 +53,7 @@ switch ($op) {
         $mailinglistObjs = $xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
         if ($mailinglistCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($mailinglistCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($mailinglistCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -77,7 +77,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
                 echo "<tr class='{$class}'>";
-                $class = ('even' == $class) ? 'odd' : 'even';
+                $class = ('even' === $class) ? 'odd' : 'even';
                 echo '<td>' . $mailinglist_id . '</td>';
                 echo '<td>' . $mailinglistObj->getVar('mailinglist_name') . '</td>';
                 echo '<td>' . $mailinglistObj->getVar('mailinglist_email') . '</td>';

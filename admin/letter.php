@@ -46,7 +46,7 @@ switch ($op) {
         $adminObject->addItemButton(_AM_XNEWSLETTER_LETTERLIST, '?op=list', 'list');
         $adminObject->displayButton('left');
         //
-        $letterTpl = new XoopsTpl();
+        $letterTpl = new \XoopsTpl();
 
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         // subscr data
@@ -60,9 +60,9 @@ switch ($op) {
         $letterTpl->assign('title', $letterObj->getVar('letter_title', 'n')); // new from v1.3
         $letterTpl->assign('content', $letterObj->getVar('letter_content', 'n'));
         // letter attachments as link
-        $attachmentAslinkCriteria = new CriteriaCompo();
-        $attachmentAslinkCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-        $attachmentAslinkCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
+        $attachmentAslinkCriteria = new \CriteriaCompo();
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
         $attachmentAslinkCriteria->setSort('attachment_id');
         $attachmentAslinkCriteria->setOrder('ASC');
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
@@ -110,7 +110,7 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit          = $xnewsletter->getConfig('adminperpage');
-        $letterCriteria = new CriteriaCompo();
+        $letterCriteria = new \CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letterCount = $xnewsletter->getHandler('letter')->getCount();
@@ -121,7 +121,7 @@ switch ($op) {
 
         // pagenav
         require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-        $pagenav = new XoopsPageNav($letterCount, $limit, $start, 'start', 'op=list');
+        $pagenav = new \XoopsPageNav($letterCount, $limit, $start, 'start', 'op=list');
         $pagenav = $pagenav->renderNav();
 
         // View Table
@@ -143,7 +143,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($letterObjs as $letter_id => $letterObj) {
                 echo "<tr class='{$class}'>";
-                $class = ('even' == $class) ? 'odd' : 'even';
+                $class = ('even' === $class) ? 'odd' : 'even';
 
                 echo "<td>{$letter_id}</td>";
 
@@ -185,8 +185,8 @@ switch ($op) {
                 }
                 echo '</td>';
 
-                $attachmentCriteria = new CriteriaCompo();
-                $attachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
+                $attachmentCriteria = new \CriteriaCompo();
+                $attachmentCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
                 $attachmentCount = $xnewsletter->getHandler('attachment')->getCount($attachmentCriteria);
                 $attachmentObjs  = $xnewsletter->getHandler('attachment')->getObjects($attachmentCriteria, true);
                 echo "<td style='white-space: nowrap'>";
@@ -208,7 +208,7 @@ switch ($op) {
                 echo _AM_XNEWSLETTER_LETTER_EMAIL_SIZE . ": <span title='" . $emailSize . ' Bytes (' . _AM_XNEWSLETTER_LETTER_EMAIL_SIZE_DESC . ")'>" . xnewsletter_bytesToSize1024($emailSize) . '</span>';
                 echo '</td>';
 
-                $accountCriteria = new CriteriaCompo();
+                $accountCriteria = new \CriteriaCompo();
                 $accountCriteria->setSort('accounts_id');
                 $accountCriteria->setOrder('ASC');
                 $accountObj     = $xnewsletter->getHandler('accounts')->get($letterObj->getVar('letter_account'));
@@ -218,9 +218,9 @@ switch ($op) {
                 echo "<td>{$letterObj->getVar('letter_email_test')}&nbsp;</td>";
 
                 // take last item protocol_subscriber_id=0 from table protocol as actual status
-                $protocolCriteria = new CriteriaCompo();
-                $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
-                $protocolCriteria->add(new Criteria('protocol_subscriber_id', '0'));
+                $protocolCriteria = new \CriteriaCompo();
+                $protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
+                $protocolCriteria->add(new \Criteria('protocol_subscriber_id', '0'));
                 $protocolCriteria->setSort('protocol_id');
                 $protocolCriteria->setOrder('DESC');
                 $protocolCriteria->setLimit(1);
@@ -349,7 +349,7 @@ switch ($op) {
             }
             $new_attachments_mode = Request::getArray('new_attachments_mode', []);
             for ($upl = 0; $upl < $xnewsletter->getConfig('xn_maxattachments'); ++$upl) {
-                $uploader = new XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
+                $uploader = new \XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
                 if ($uploader->fetchMedia(@$_POST['xoops_upload_file'][$upl])) {
                     //$uploader->setPrefix("xn_") ; keep original name
                     $uploader->fetchMedia($_POST['xoops_upload_file'][$upl]);
@@ -448,7 +448,7 @@ switch ($op) {
                     die('MySQL-Error: ' . $GLOBALS['xoopsDB']->error());
                 }
                 // delete attachments
-                $attachmentCriteria = new Criteria('attachment_letter_id', $letter_id);
+                $attachmentCriteria = new \Criteria('attachment_letter_id', $letter_id);
                 $xnewsletter->getHandler('attachment')->deleteAll($attachmentCriteria, true, true);
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {

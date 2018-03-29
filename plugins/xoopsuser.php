@@ -143,20 +143,20 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
     $title = _AM_XNEWSLETTER_IMPORT_XOOPSUSER;
 
     require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-    $form = new XoopsThemeForm($title, 'form_add_xoopsuser', 'import.php', 'post', true);
+    $form = new \XoopsThemeForm($title, 'form_add_xoopsuser', 'import.php', 'post', true);
     $form->setExtra('enctype="multipart/form-data"');
 
-    $form->addElement(new XoopsFormLabel('Info', _AM_XNEWSLETTER_IMPORT_INFO));
+    $form->addElement(new \XoopsFormLabel('Info', _AM_XNEWSLETTER_IMPORT_INFO));
 
-    $catCriteria = new CriteriaCompo();
+    $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id ASC, cat_name');
     $catCriteria->setOrder('ASC');
-    $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, 'cat_id', $cat_id);
+    $cat_select = new \XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, 'cat_id', $cat_id);
     $cat_select->addOptionArray($xnewsletter->getHandler('cat')->getList($catCriteria));
     $form->addElement($cat_select, false);
 
     // checkboxes other groups
-    $select_groups = new XoopsFormCheckBox(_AM_XNEWSLETTER_IMPORT_XOOPSUSER_GROUPS, 'xoopsuser_group', 0);
+    $select_groups = new \XoopsFormCheckBox(_AM_XNEWSLETTER_IMPORT_XOOPSUSER_GROUPS, 'xoopsuser_group', 0);
     foreach ($userGroups as $group_id => $group_name) {
         if (XOOPS_GROUP_ANONYMOUS != $group_id) {
             $select_groups->addOption($group_id, $group_name);
@@ -164,13 +164,13 @@ function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limi
     }
     $form->addElement($select_groups, true);
 
-    $form->addElement(new XoopsFormHidden('plugin', 'xoopsuser'));
-    $form->addElement(new XoopsFormHidden('cat_id', $cat_id));
-    $form->addElement(new XoopsFormHidden('action_after_read', $action_after_read));
-    $form->addElement(new XoopsFormHidden('limitcheck', $limitCheck));
-    $form->addElement(new XoopsFormHidden('skipcatsubscrexist', $skipCatsubscrExist));
-    $form->addElement(new XoopsFormHidden('op', 'searchdata'));
-    $form->addElement(new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit'));
+    $form->addElement(new \XoopsFormHidden('plugin', 'xoopsuser'));
+    $form->addElement(new \XoopsFormHidden('cat_id', $cat_id));
+    $form->addElement(new \XoopsFormHidden('action_after_read', $action_after_read));
+    $form->addElement(new \XoopsFormHidden('limitcheck', $limitCheck));
+    $form->addElement(new \XoopsFormHidden('skipcatsubscrexist', $skipCatsubscrExist));
+    $form->addElement(new \XoopsFormHidden('op', 'searchdata'));
+    $form->addElement(new \XoopsFormButton('', 'submit', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit'));
 
     return $form;
 }

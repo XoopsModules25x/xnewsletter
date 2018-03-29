@@ -33,7 +33,7 @@ switch ($op) {
     default:
         $adminObject->displayNavigation($currentFile);
         //
-        $taskCriteria = new CriteriaCompo();
+        $taskCriteria = new \CriteriaCompo();
         $taskCriteria->setSort('task_id');
         $taskCriteria->setOrder('ASC');
         $taskCounts = $xnewsletter->getHandler('task')->getCount();
@@ -55,7 +55,7 @@ switch ($op) {
             foreach ($taskObjs as $task_id => $taskObj) {
                 if (0 == $taskObj->getVar('task_pid')) {
                     echo "<tr class='{$class}'>";
-                    $class = ('even' == $class) ? 'odd' : 'even';
+                    $class = ('even' === $class) ? 'odd' : 'even';
 
                     $letterObj    = $xnewsletter->getHandler('letter')->get($taskObj->getVar('task_letter_id'));
                     $title_letter = $letterObj->getVar('letter_title');

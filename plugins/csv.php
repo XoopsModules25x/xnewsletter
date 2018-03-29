@@ -152,23 +152,23 @@ function xnewsletter_plugin_getform_csv(
     $title = _AM_XNEWSLETTER_IMPORT_CSV_OPT;
 
     require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-    $form = new XoopsThemeForm($title, 'form_add_csv', $action, 'post', true);
+    $form = new \XoopsThemeForm($title, 'form_add_csv', $action, 'post', true);
     $form->setExtra('enctype="multipart/form-data"');
 
-    $form->addElement(new XoopsFormLabel('Info', _AM_XNEWSLETTER_IMPORT_CSV));
+    $form->addElement(new \XoopsFormLabel('Info', _AM_XNEWSLETTER_IMPORT_CSV));
 
     //limit file size 16 MB
-    $form->addElement(new XoopsFormFile(_AM_XNEWSLETTER_IMPORT_CSV_FILE, 'csv_file', '16777216'), true);
-    $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_IMPORT_CSV_DELIMITER, 'csv_delimiter', 10, 1, ','), true);
-    $form->addElement(new XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_CSV_HEADER, 'csv_header', 1, _YES, _NO), false);
+    $form->addElement(new \XoopsFormFile(_AM_XNEWSLETTER_IMPORT_CSV_FILE, 'csv_file', '16777216'), true);
+    $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_IMPORT_CSV_DELIMITER, 'csv_delimiter', 10, 1, ','), true);
+    $form->addElement(new \XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_CSV_HEADER, 'csv_header', 1, _YES, _NO), false);
 
-    $form->addElement(new XoopsFormHidden('plugin', 'csv'));
-    $form->addElement(new XoopsFormHidden('cat_id', $cat_id));
-    $form->addElement(new XoopsFormHidden('action_after_read', $action_after_read));
-    $form->addElement(new XoopsFormHidden('limitcheck', $limitCheck));
-    $form->addElement(new XoopsFormHidden('skipcatsubscrexist', $skipCatsubscrExist));
-    $form->addElement(new XoopsFormHidden('op', 'searchdata'));
-    $form->addElement(new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit'));
+    $form->addElement(new \XoopsFormHidden('plugin', 'csv'));
+    $form->addElement(new \XoopsFormHidden('cat_id', $cat_id));
+    $form->addElement(new \XoopsFormHidden('action_after_read', $action_after_read));
+    $form->addElement(new \XoopsFormHidden('limitcheck', $limitCheck));
+    $form->addElement(new \XoopsFormHidden('skipcatsubscrexist', $skipCatsubscrExist));
+    $form->addElement(new \XoopsFormHidden('op', 'searchdata'));
+    $form->addElement(new \XoopsFormButton('', 'submit', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit'));
 
     return $form;
 }

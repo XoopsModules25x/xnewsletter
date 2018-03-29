@@ -51,7 +51,7 @@ switch ($op) {
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         $adminObject->displayButton('left');
         //
-        $importCriteria = new CriteriaCompo();
+        $importCriteria = new \CriteriaCompo();
         $importCriteria->setSort('import_id');
         $importCriteria->setOrder('ASC');
         $importsCount = $xnewsletter->getHandler('import')->getCount($importCriteria);
@@ -99,7 +99,7 @@ switch ($op) {
             $counter = 0;
 
             //get data for dropdown with cats
-            $catCriteria = new CriteriaCompo();
+            $catCriteria = new \CriteriaCompo();
             $catCriteria->setSort('cat_id ASC, cat_name');
             $catCriteria->setOrder('ASC');
             $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -241,8 +241,8 @@ switch ($op) {
         $ip        = xoops_getenv('REMOTE_ADDR');
         $submitter = $xoopsUser->uid();
 
-        $importCriteria = new CriteriaCompo();
-        $importCriteria->add(new Criteria('import_status', true));
+        $importCriteria = new \CriteriaCompo();
+        $importCriteria->add(new \Criteria('import_status', true));
         $numrows_total = $xnewsletter->getHandler('import')->getCount();
         $numrows_act   = $xnewsletter->getHandler('import')->getCount($importCriteria);
         if ($numrows_act > 0) {
@@ -284,7 +284,7 @@ switch ($op) {
                         $sql = 'INSERT';
                         $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_subscr')}`";
                         $sql .= ' (`subscr_email`, `subscr_firstname`, `subscr_lastname`, `subscr_uid`, `subscr_sex`, `subscr_submitter`, `subscr_created`, `subscr_ip`, `subscr_activated`, `subscr_actoptions`)';
-                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . (int)$subscr_uid . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', 1, '')";
+                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . $subscr_uid . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', 1, '')";
                         if (!$xoopsDB->queryF($sql)) {
                             createProtocol(str_replace('%e', $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), false, $submitter);
                         } else {

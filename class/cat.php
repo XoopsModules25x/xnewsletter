@@ -48,7 +48,7 @@ class XnewsletterCat extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cat_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('cat_name', XOBJ_DTYPE_TXTBOX, '', false, 100);
         $this->initVar('cat_info', XOBJ_DTYPE_TXTAREA, '', false);
@@ -80,33 +80,33 @@ class XnewsletterCat extends XoopsObject
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_CAT_ADD) : sprintf(_AM_XNEWSLETTER_CAT_EDIT);
 
         require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
+        $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         // cat_name
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_CAT_NAME, 'cat_name', 50, 255, $this->getVar('cat_name', 'e')), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_CAT_NAME, 'cat_name', 50, 255, $this->getVar('cat_name', 'e')), true);
 
         // cat_info
-        $cat_info_dhtemtextarea = new XoopsFormDhtmlTextArea(_AM_XNEWSLETTER_CAT_INFO, 'cat_info', $this->getVar('cat_info', 'e'), 10, 50);
+        $cat_info_dhtemtextarea = new \XoopsFormDhtmlTextArea(_AM_XNEWSLETTER_CAT_INFO, 'cat_info', $this->getVar('cat_info', 'e'), 10, 50);
         $cat_info_dhtemtextarea->setDescription(_AM_XNEWSLETTER_CAT_INFO_DESC);
         $form->addElement($cat_info_dhtemtextarea, false);
 
         // category: dohtml, dosmiley, doxcode, doimage, dobr
-        $options_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_TEXTOPTIONS, ' ');
+        $options_tray = new \XoopsFormElementTray(_AM_XNEWSLETTER_TEXTOPTIONS, ' ');
         $options_tray->setDescription(_AM_XNEWSLETTER_TEXTOPTIONS_DESC);
-        $html_checkbox = new XoopsFormCheckBox('', 'dohtml', $this->getVar('dohtml'));
+        $html_checkbox = new \XoopsFormCheckBox('', 'dohtml', $this->getVar('dohtml'));
         $html_checkbox->addOption(1, _AM_XNEWSLETTER_ALLOWHTML);
         $options_tray->addElement($html_checkbox);
-        $smiley_checkbox = new XoopsFormCheckBox('', 'dosmiley', $this->getVar('dosmiley'));
+        $smiley_checkbox = new \XoopsFormCheckBox('', 'dosmiley', $this->getVar('dosmiley'));
         $smiley_checkbox->addOption(1, _AM_XNEWSLETTER_ALLOWSMILEY);
         $options_tray->addElement($smiley_checkbox);
-        $xcodes_checkbox = new XoopsFormCheckBox('', 'doxcode', $this->getVar('doxcode'));
+        $xcodes_checkbox = new \XoopsFormCheckBox('', 'doxcode', $this->getVar('doxcode'));
         $xcodes_checkbox->addOption(1, _AM_XNEWSLETTER_ALLOWXCODE);
         $options_tray->addElement($xcodes_checkbox);
-        $noimages_checkbox = new XoopsFormCheckBox('', 'doimage', $this->getVar('doimage'));
+        $noimages_checkbox = new \XoopsFormCheckBox('', 'doimage', $this->getVar('doimage'));
         $noimages_checkbox->addOption(1, _AM_XNEWSLETTER_ALLOWIMAGES);
         $options_tray->addElement($noimages_checkbox);
-        $breaks_checkbox = new XoopsFormCheckBox('', 'dobr', $this->getVar('dobr'));
+        $breaks_checkbox = new \XoopsFormCheckBox('', 'dobr', $this->getVar('dobr'));
         $breaks_checkbox->addOption(1, _AM_XNEWSLETTER_ALLOWBREAK);
         $options_tray->addElement($breaks_checkbox);
         $form->addElement($options_tray);
@@ -121,18 +121,18 @@ class XnewsletterCat extends XoopsObject
                 $group_name_admin = $group_name;
             }
         }
-        $select_perm_admin = new XoopsFormCheckBox('', 'admin', XOOPS_GROUP_ADMIN);
+        $select_perm_admin = new \XoopsFormCheckBox('', 'admin', XOOPS_GROUP_ADMIN);
         $select_perm_admin->addOption($group_id_admin, $group_name_admin);
         $select_perm_admin->setExtra("disabled='disabled'");
 
         // permission read cat
         $cat_gperms_read     = $gpermHandler->getGroupIds('newsletter_read_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_read = $this->isNew() ? '0' : $cat_gperms_read;
-        $perms_tray          = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ, '');
+        $perms_tray          = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
-        $select_perm = new XoopsFormCheckBox('', 'cat_gperms_read', $arr_cat_gperms_read);
+        $select_perm = new \XoopsFormCheckBox('', 'cat_gperms_read', $arr_cat_gperms_read);
         foreach ($userGroups as $group_id => $group_name) {
             if (XOOPS_GROUP_ADMIN != $group_id) {
                 $select_perm->addOption($group_id, $group_name);
@@ -146,11 +146,11 @@ class XnewsletterCat extends XoopsObject
         // permission create cat
         $cat_gperms_create     = $gpermHandler->getGroupIds('newsletter_create_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_create = $this->isNew() ? '0' : $cat_gperms_create;
-        $perms_tray            = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE . _AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC, '');
+        $perms_tray            = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE . _AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
-        $select_perm = new XoopsFormCheckBox('', 'cat_gperms_create', $arr_cat_gperms_create);
+        $select_perm = new \XoopsFormCheckBox('', 'cat_gperms_create', $arr_cat_gperms_create);
         foreach ($userGroups as $group_id => $group_name) {
             if (XOOPS_GROUP_ADMIN != $group_id && XOOPS_GROUP_ANONYMOUS != $group_id) {
                 $select_perm->addOption($group_id, $group_name);
@@ -164,11 +164,11 @@ class XnewsletterCat extends XoopsObject
         // permission admin cat
         $cat_gperms_admin     = $gpermHandler->getGroupIds('newsletter_admin_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? '0' : $cat_gperms_admin;
-        $perms_tray           = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC, '');
+        $perms_tray           = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
-        $select_perm = new XoopsFormCheckBox('', 'cat_gperms_admin', $arr_cat_gperms_admin);
+        $select_perm = new \XoopsFormCheckBox('', 'cat_gperms_admin', $arr_cat_gperms_admin);
         foreach ($userGroups as $group_id => $group_name) {
             if (XOOPS_GROUP_ADMIN != $group_id && XOOPS_GROUP_ANONYMOUS != $group_id) {
                 $select_perm->addOption($group_id, $group_name);
@@ -183,11 +183,11 @@ class XnewsletterCat extends XoopsObject
         $cat_gperms_list      = $gpermHandler->getGroupIds('newsletter_list_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? '0' : $cat_gperms_list;
 
-        $perms_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST, '');
+        $perms_tray = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST, '');
         // checkbox webmaster
         $perms_tray->addElement($select_perm_admin, false);
         // checkboxes other groups
-        $select_perm = new XoopsFormCheckBox('', 'cat_gperms_list', $arr_cat_gperms_admin);
+        $select_perm = new \XoopsFormCheckBox('', 'cat_gperms_list', $arr_cat_gperms_admin);
         foreach ($userGroups as $group_id => $group_name) {
             if (XOOPS_GROUP_ADMIN != $group_id && XOOPS_GROUP_ANONYMOUS != $group_id) {
                 $select_perm->addOption($group_id, $group_name);
@@ -200,12 +200,12 @@ class XnewsletterCat extends XoopsObject
 
         // cat_mailinglist
         $cat_mailinglist     = $this->isNew() ? '0' : $this->getVar('cat_mailinglist');
-        $mailinglistCriteria = new CriteriaCompo();
+        $mailinglistCriteria = new \CriteriaCompo();
         $mailinglistCriteria->setSort('mailinglist_id');
         $mailinglistCriteria->setOrder('ASC');
         $numrows_mailinglist = $this->xnewsletter->getHandler('mailinglist')->getCount();
         if ($numrows_mailinglist > 0) {
-            $opt_mailinglist = new XoopsFormRadio(_AM_XNEWSLETTER_LETTER_MAILINGLIST, 'cat_mailinglist', $cat_mailinglist);
+            $opt_mailinglist = new \XoopsFormRadio(_AM_XNEWSLETTER_LETTER_MAILINGLIST, 'cat_mailinglist', $cat_mailinglist);
             $opt_mailinglist->addOption('0', _AM_XNEWSLETTER_LETTER_MAILINGLIST_NO);
             $mailinglistObjs = $this->xnewsletter->getHandler('mailinglist')->getAll($mailinglistCriteria);
             foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
@@ -215,11 +215,11 @@ class XnewsletterCat extends XoopsObject
         }
 
         $time = $this->isNew() ? time() : $this->getVar('cat_created');
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
 
-        $form->addElement(new XoopsFormHidden('op', 'save_cat'));
-        $form->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormHidden('op', 'save_cat'));
+        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
 
         return $form;
     }
@@ -237,9 +237,9 @@ class XnewsletterCatHandler extends XoopsPersistableObjectHandler
     public $xnewsletter = null;
 
     /**
-     * @param null|object|XoopsDatabase $db
+     * @param null|object|\XoopsDatabase $db
      */
-    public function __construct(XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db)
     {
         parent::__construct($db, 'xnewsletter_cat', 'XnewsletterCat', 'cat_id', 'cat_name');
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();

@@ -39,7 +39,7 @@ define('BLANK_FILE_PATH', XOOPS_UPLOAD_PATH . '/blank.gif');
  *
  * @return bool
  */
-function xoops_module_pre_install_xnewsletter(XoopsModule $module)
+function xoops_module_pre_install_xnewsletter(\XoopsModule $module)
 {
     // NOP
     return true;
@@ -50,7 +50,7 @@ function xoops_module_pre_install_xnewsletter(XoopsModule $module)
  *
  * @return bool
  */
-function xoops_module_install_xnewsletter(XoopsModule $module)
+function xoops_module_install_xnewsletter(\XoopsModule $module)
 {
     // get module config values
     $hModConfig  = xoops_getHandler('config');

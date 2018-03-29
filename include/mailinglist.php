@@ -102,7 +102,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
             $protocol_status = str_replace('%a', $action_code, _AM_XNEWSLETTER_SEND_SUCCESS_ML_DETAIL);
             $xoopsMailer->reset();
             $protocol_success = true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $protocol_status  = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $xoopsMailer->getErrors(); //error messages
             $protocol_success = false;
         }

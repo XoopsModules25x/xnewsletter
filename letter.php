@@ -65,16 +65,16 @@ switch ($op) {
         // get search subscriber form
         if ($permissionChangeOthersSubscriptions) {
             require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-            $form = new XoopsThemeForm(_AM_XNEWSLETTER_FORMSEARCH_SUBSCR_EXIST, 'form_search', 'subscription.php', 'post', true);
+            $form = new \XoopsThemeForm(_AM_XNEWSLETTER_FORMSEARCH_SUBSCR_EXIST, 'form_search', 'subscription.php', 'post', true);
             $form->setExtra('enctype="multipart/form-data"');
-            $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, 'subscr_email', 60, 255, '', true));
-            $form->addElement(new XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SEARCH, 'submit'));
+            $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, 'subscr_email', 60, 255, '', true));
+            $form->addElement(new \XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SEARCH, 'submit'));
             $xoopsTpl->assign('searchSubscriberForm', $form->render());
         } else {
             $xoopsTpl->assign('searchSubscriberForm', '');
         }
         // get cat objects
-        $catCriteria = new CriteriaCompo();
+        $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id');
         $catCriteria->setOrder('ASC');
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria, null, true, true);
@@ -83,8 +83,8 @@ switch ($op) {
             $permissionShowCats[$cat_id] = $gpermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
             if (true === $permissionShowCats[$cat_id]) {
                 $cat_array         = $catObj->toArray();
-                $catsubscrCriteria = new CriteriaCompo();
-                $catsubscrCriteria->add(new Criteria('catsubscr_catid', $cat_id));
+                $catsubscrCriteria = new \CriteriaCompo();
+                $catsubscrCriteria->add(new \Criteria('catsubscr_catid', $cat_id));
                 $cat_array['catsubscrCount'] = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
                 $xoopsTpl->append('cats', $cat_array);
             }
@@ -141,9 +141,9 @@ switch ($op) {
         $xoopsTpl->assign('title', $letterObj->getVar('letter_title', 'n')); // new from v1.3
         $xoopsTpl->assign('content', $letterObj->getVar('letter_content', 'n'));
         // letter attachments as link
-        $attachmentAslinkCriteria = new CriteriaCompo();
-        $attachmentAslinkCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-        $attachmentAslinkCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
+        $attachmentAslinkCriteria = new \CriteriaCompo();
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
         $attachmentAslinkCriteria->setSort('attachment_id');
         $attachmentAslinkCriteria->setOrder('ASC');
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
@@ -250,7 +250,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get letters array
-        $letterCriteria = new CriteriaCompo();
+        $letterCriteria = new \CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letterCount = $xnewsletter->getHandler('letter')->getCount();
@@ -261,7 +261,7 @@ switch ($op) {
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria, null, true, true);
 
         // pagenav
-        $pagenav = new XoopsPageNav($letterCount, $limit, $start, 'start', "op={$op}");
+        $pagenav = new \XoopsPageNav($letterCount, $limit, $start, 'start', "op={$op}");
         $xoopsTpl->assign('pagenav', $pagenav->renderNav());
 
         // letters table
@@ -305,15 +305,15 @@ switch ($op) {
                         $letters_array[] = $letter_array;
                     }
                     // count letter attachements
-                    $attachmentCriteria = new CriteriaCompo();
-                    $attachmentCriteria->add(new Criteria('attachment_letter_id', $letterObj->getVar('letter_id')));
+                    $attachmentCriteria = new \CriteriaCompo();
+                    $attachmentCriteria->add(new \Criteria('attachment_letter_id', $letterObj->getVar('letter_id')));
                     $letter_array['attachmentCount'] = $xnewsletter->getHandler('attachment')->getCount($attachmentCriteria);
                     // get protocols
                     if ($userPermissions['edit']) {
                         // take last item protocol_subscriber_id=0 from table protocol as actual status
-                        $protocolCriteria = new CriteriaCompo();
-                        $protocolCriteria->add(new Criteria('protocol_letter_id', $letterObj->getVar('letter_id')));
-                        //$criteria->add(new Criteria('protocol_subscriber_id', '0'));
+                        $protocolCriteria = new \CriteriaCompo();
+                        $protocolCriteria->add(new \Criteria('protocol_letter_id', $letterObj->getVar('letter_id')));
+                        //$criteria->add(new \Criteria('protocol_subscriber_id', '0'));
                         $protocolCriteria->setSort('protocol_id');
                         $protocolCriteria->setOrder('DESC');
                         $protocolCriteria->setLimit(1);
@@ -475,7 +475,7 @@ switch ($op) {
             }
             $new_attachments_mode = Request::getArray('new_attachments_mode', []);
             for ($upl = 0; $upl < $xnewsletter->getConfig('xn_maxattachments'); ++$upl) {
-                $uploader = new XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
+                $uploader = new \XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
                 if ($uploader->fetchMedia(@$_POST['xoops_upload_file'][$upl])) {
                     //$uploader->setPrefix("xn_") ; keep original name
                     $uploader->fetchMedia($_POST['xoops_upload_file'][$upl]);
@@ -604,7 +604,7 @@ switch ($op) {
                     die('MySQL-Error: ' . $GLOBALS['xoopsDB']->error());
                 }
                 // delete attachments
-                $attachmentCriteria = new Criteria('attachment_letter_id', $letter_id);
+                $attachmentCriteria = new \Criteria('attachment_letter_id', $letter_id);
                 $xnewsletter->getHandler('attachment')->deleteAll($attachmentCriteria, true, true);
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {

@@ -141,7 +141,7 @@ $showList   = false;
 
 if (is_object($xoopsModule)) {
     $catHandler  = xoops_getModuleHandler('cat', 'xnewsletter');
-    $catCriteria = new CriteriaCompo();
+    $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
     $catObjs = $catHandler->getAll($catCriteria);

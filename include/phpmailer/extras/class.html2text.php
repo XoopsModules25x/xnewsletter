@@ -482,7 +482,7 @@ class Html2Text
             if ('/' !== substr($link, 0, 1)) {
                 $url .= '/';
             }
-            $url .= "$link";
+            $url .= (string)$link;
         }
 
         if ('table' === $link_method) {
@@ -560,7 +560,7 @@ class Html2Text
                         $this->_converter($body);
                         // Add citation markers and create PRE block
                         $body = preg_replace('/((^|\n)>*)/', '\\1> ', trim($body));
-                        $body = '<pre>' . htmlspecialchars($body) . '</pre>';
+                        $body = '<pre>' . htmlspecialchars($body, ENT_QUOTES | ENT_HTML5) . '</pre>';
                         // Re-set text width
                         $this->_options['width'] = $p_width;
                         // Replace content

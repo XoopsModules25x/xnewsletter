@@ -53,44 +53,44 @@ switch ($op) {
 
         // delete protocols
         echo "   <tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo '            <td>protocol</td>';
         echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL . '</td>';
         echo '            <td>&nbsp;</td>';
-        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden('op', 'del_oldprotocol'));
-        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_oldprotocol'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo "            <td class='center'>" . $cal_tray->render() . '</td>';
         echo '        </form>';
         echo '    </tr>';
 
         // delete unconfirmed registrations
         echo "   <tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo '            <td>subscr</td>';
         echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETEDATE . '</td>';
-        $cal = new XoopsFormTextDateSelect('', 'del_date', 15, time() - (84600 * 10));
+        $cal = new \XoopsFormTextDateSelect('', 'del_date', 15, time() - (84600 * 10));
         echo '            <td>' . $cal->render() . '</td>';
-        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden('op', 'del_oldsubscr'));
-        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_oldsubscr'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo "            <td class='center'>" . $cal_tray->render() . '</td>';
         echo '        </form>';
         echo '    </tr>';
 
         // delete invalid catsubscr
         echo "   <tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo '            <td>catsubscr</td>';
         echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR . '</td>';
         echo '            <td>&nbsp;</td>';
         echo "            <td class='center'>";
-        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_catsubscr'));
-        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_invalid_catsubscr'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo '            </td>';
         echo '        </form>';
@@ -100,15 +100,15 @@ switch ($op) {
 
         if (1 == $xnewsletter->getConfig('xn_use_mailinglist')) {
             echo "   <tr class='{$class}'>";
-            $class = ('even' == $class) ? 'odd' : 'even';
+            $class = ('even' === $class) ? 'odd' : 'even';
             echo "        <form action='{$currentFile}' method='post'>";
             echo '            <td>ml</td>';
             echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML . '</td>';
             echo '            <td>&nbsp;</td>';
             echo "            <td class='center'>";
-            $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-            $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_ml'));
-            $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+            $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+            $cal_tray->addElement(new \XoopsFormHidden('op', 'del_invalid_ml'));
+            $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
             echo $cal_tray->render();
             echo '            </td>';
             echo '        </form>';
@@ -117,15 +117,15 @@ switch ($op) {
 
         // delete invalid cat
         echo "   <tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo '            <td>cat</td>';
         echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL . '</td>';
         echo '            <td>&nbsp;</td>';
         echo "            <td class='center'>";
-        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden('op', 'del_invalid_cat'));
-        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_invalid_cat'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo '            </td>';
         echo '        </form>';
@@ -133,15 +133,15 @@ switch ($op) {
 
         // delete import
         echo "   <tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo '            <td>import</td>';
         echo '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT . '</td>';
         echo '            <td>&nbsp;</td>';
         echo "            <td class='center'>";
-        $cal_tray = new XoopsFormElementTray(' ', '&nbsp;&nbsp;');
-        $cal_tray->addElement(new XoopsFormHidden('op', 'del_import'));
-        $cal_tray->addElement(new XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_import'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
         echo $cal_tray->render();
         echo '            </td>';
         echo '        </form>';
@@ -179,9 +179,9 @@ switch ($op) {
         if ($time >= time() || 0 == $time) {
             $subscrCount = -1; // for error
         } else {
-            $subscrCriteria = new CriteriaCompo();
-            $subscrCriteria->add(new Criteria('subscr_activated', 0));
-            $subscrCriteria->add(new Criteria('subscr_created', $time, '<'));
+            $subscrCriteria = new \CriteriaCompo();
+            $subscrCriteria->add(new \Criteria('subscr_activated', 0));
+            $subscrCriteria->add(new \Criteria('subscr_created', $time, '<'));
             $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         }
 
@@ -417,8 +417,8 @@ switch ($op) {
 
                 foreach ($letter_cats as $cat_id) {
                     // check each cat and create new string 'letter_cats'
-                    $catCriteria = new CriteriaCompo();
-                    $catCriteria->add(new Criteria('cat_id', $cat_id));
+                    $catCriteria = new \CriteriaCompo();
+                    $catCriteria->add(new \Criteria('cat_id', $cat_id));
                     $catCount = $xnewsletter->getHandler('cat')->getCount($catCriteria);
                     if ($catCount > 0) {
                         $letter_cats_new .= $cat_id . '|';

@@ -44,7 +44,7 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit       = $xnewsletter->getConfig('adminperpage');
-        $catCriteria = new CriteriaCompo();
+        $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
         $catCount = $xnewsletter->getHandler('cat')->getCount();
@@ -54,7 +54,7 @@ switch ($op) {
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         if ($catCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($catCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($catCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -76,7 +76,7 @@ switch ($op) {
                 echo "<td>{$cat_id}</td>";
                 echo "<td><a href='?op=list_cat&cat_id={$cat_id}'>{$catObj->getVar('cat_name')}</a></td>";
                 echo "<td>{$catObj->getVar('cat_info')}</td>";
-                $catCount = $xnewsletter->getHandler('catsubscr')->getCount(new Criteria('catsubscr_catid', $cat_id));
+                $catCount = $xnewsletter->getHandler('catsubscr')->getCount(new \Criteria('catsubscr_catid', $cat_id));
                 echo "<td>{$catCount}</td>";
                 echo "<td class='center'><a href='?op=list_cat&cat_id={$cat_id}'><img src='" . XNEWSLETTER_ICONS_URL . "/xn_details.png' alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a></td>";
                 echo '</tr>';
@@ -97,8 +97,8 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit             = $xnewsletter->getConfig('adminperpage');
-        $catsubscrCriteria = new CriteriaCompo();
-        $catsubscrCriteria->add(new Criteria('catsubscr_catid', $cat_id));
+        $catsubscrCriteria = new \CriteriaCompo();
+        $catsubscrCriteria->add(new \Criteria('catsubscr_catid', $cat_id));
         $catsubscrCriteria->setSort('catsubscr_id ASC, catsubscr_catid');
         $catsubscrCriteria->setOrder('ASC');
         $catCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
@@ -108,7 +108,7 @@ switch ($op) {
         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
         if ($catCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($catCount, $limit, $start, 'start', 'op=list_cat&cat_id=' . $cat_id);
+            $pagenav = new \XoopsPageNav($catCount, $limit, $start, 'start', 'op=list_cat&cat_id=' . $cat_id);
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';

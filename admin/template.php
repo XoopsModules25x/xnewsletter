@@ -46,7 +46,7 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit            = $xnewsletter->getConfig('adminperpage');
-        $templateCriteria = new CriteriaCompo();
+        $templateCriteria = new \CriteriaCompo();
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder('DESC');
         $templatesCount = $xnewsletter->getHandler('template')->getCount();
@@ -56,7 +56,7 @@ switch ($op) {
         $templateObjs = $xnewsletter->getHandler('template')->getAll($templateCriteria);
         if ($templatesCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($templatesCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($templatesCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -77,7 +77,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($templateObjs as $template_id => $templateObj) {
                 echo "<tr class='{$class}'>";
-                $class = ('even' == $class) ? 'odd' : 'even';
+                $class = ('even' === $class) ? 'odd' : 'even';
                 echo '<td>' . $template_id . '</td>';
                 echo '<td>' . $templateObj->getVar('template_title') . '</td>';
                 echo '<td>' . $templateObj->getVar('template_description') . '</td>';

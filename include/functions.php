@@ -374,7 +374,7 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0)
         $catObj    = $xnewsletter->getHandler('cat')->get($cat_id);
         $allowedit = $gpermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
     } else {
-        $catCriteria = new CriteriaCompo();
+        $catCriteria = new \CriteriaCompo();
         $catObjs     = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         foreach ($catObjs as $i => $catObj) {
             $cat_id    = $catObj->getVar('cat_id');
@@ -466,7 +466,7 @@ function xnewsletter_emailSize($letter_id = 0)
 
     if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
         require_once XOOPS_ROOT_PATH . '/class/template.php';
-        $xoopsTpl = new XoopsTpl();
+        $xoopsTpl = new \XoopsTpl();
     }
     // get template path
     $template_path = XNEWSLETTER_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
@@ -508,14 +508,14 @@ function xnewsletter_emailSize($letter_id = 0)
     $letter_title   = $letterObj->getVar('letter_title');
     $letter_content = $letterObj->getVar('letter_content', 'n');
 
-    $letterTpl = new XoopsTpl();
+    $letterTpl = new \XoopsTpl();
     // letter data
     $letterTpl->assign('content', $letter_content);
     $letterTpl->assign('title', $letter_title); // new from v1.3
     // letter attachments as link
-    $attachmentAslinkCriteria = new CriteriaCompo();
-    $attachmentAslinkCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-    $attachmentAslinkCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
+    $attachmentAslinkCriteria = new \CriteriaCompo();
+    $attachmentAslinkCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+    $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
     $attachmentAslinkCriteria->setSort('attachment_id');
     $attachmentAslinkCriteria->setOrder('ASC');
     $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
@@ -557,9 +557,9 @@ function xnewsletter_emailSize($letter_id = 0)
     //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
 
     // get letter attachments as attachment
-    $attachmentAsattachmentCriteria = new CriteriaCompo();
-    $attachmentAsattachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-    $attachmentAsattachmentCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
+    $attachmentAsattachmentCriteria = new \CriteriaCompo();
+    $attachmentAsattachmentCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+    $attachmentAsattachmentCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
     $attachmentAsattachmentCriteria->setSort('attachment_id');
     $attachmentAsattachmentCriteria->setOrder('ASC');
     $attachmentObjs  = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsattachmentCriteria, true);

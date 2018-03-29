@@ -49,7 +49,7 @@ function b_xnewsletter_catsubscr($options)
     array_shift($options);
     array_shift($options);
 
-    $catsubscrCriteria = new CriteriaCompo();
+    $catsubscrCriteria = new \CriteriaCompo();
     switch ($type_block) {
         // For the block: catsubscr recents
         case 'recent':
@@ -58,8 +58,8 @@ function b_xnewsletter_catsubscr($options)
             break;
         // For the block: catsubscr of today
         case 'day':
-            $catsubscrCriteria->add(new Criteria('catsubscr_created', strtotime(date('Y/m/d')), '>='));
-            $catsubscrCriteria->add(new Criteria('catsubscr_created', strtotime(date('Y/m/d')) + 86400, '<='));
+            $catsubscrCriteria->add(new \Criteria('catsubscr_created', strtotime(date('Y/m/d')), '>='));
+            $catsubscrCriteria->add(new \Criteria('catsubscr_created', strtotime(date('Y/m/d')) + 86400, '<='));
             $catsubscrCriteria->setSort('catsubscr_created');
             $catsubscrCriteria->setOrder('ASC');
             break;
@@ -111,7 +111,7 @@ function b_xnewsletter_catsubscr_edit($options)
     $form .= '' . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . '<br><select name="options[]" multiple="multiple" size="5">';
     $form .= '<option value="0" ' . (false === array_search(0, $options) ? '' : 'selected="selected"') . '>' . _MB_XNEWSLETTER_CATSUBSCR_ALLCAT . '</option>';
 
-    $catCriteria = new CriteriaCompo();
+    $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
     $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);

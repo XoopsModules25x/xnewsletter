@@ -117,7 +117,7 @@ class xnewsletterRequest
             // Get the variable from the input hash and clean it
             $var = Request::_cleanVar($input[$name], $mask, $type);
             // Handle magic quotes compatability
-            if (get_magic_quotes_gpc() && ($var != $default) && ('FILES' != $hash)) {
+            if (get_magic_quotes_gpc() && ($var != $default) && ('FILES' !== $hash)) {
                 $var = Request::_stripSlashesRecursive($var);
             }
         } elseif (null !== $default) {
@@ -374,7 +374,7 @@ class xnewsletterRequest
         }
         $result = Request::_cleanVar($input, $mask);
         // Handle magic quotes compatability
-        if (get_magic_quotes_gpc() && ('FILES' != $hash)) {
+        if (get_magic_quotes_gpc() && ('FILES' !== $hash)) {
             $result = Request::_stripSlashesRecursive($result);
         }
 
@@ -423,7 +423,7 @@ class xnewsletterRequest
             $SESSION = $_SESSION;
         }
         foreach ($GLOBALS as $key => $value) {
-            if ('GLOBALS' != $key) {
+            if ('GLOBALS' !== $key) {
                 unset($GLOBALS[$key]);
             }
         }
@@ -684,7 +684,7 @@ class xnewsletterFilterInput
                 if (isset($this) && is_a($this, 'xnewsletterFilterInput')) {
                     $filter =& $this;
                 } else {
-                    $filter = xnewsletterFilterInput::getInstance();
+                    $filter = self::getInstance();
                 }
                 $result = (string)$filter->_remove($filter->_decode((string)$source));
                 break;
@@ -702,10 +702,10 @@ class xnewsletterFilterInput
                 break;
             default:
                 // Check for static usage and assign $filter the proper variable
-                if (is_object($this) && 'xnewsletterFilterInput' == get_class($this)) {
+                if (is_object($this) && 'xnewsletterFilterInput' === get_class($this)) {
                     $filter =& $this;
                 } else {
-                    $filter = xnewsletterFilterInput::getInstance();
+                    $filter = self::getInstance();
                 }
                 // Are we dealing with an array?
                 if (is_array($source)) {
@@ -746,7 +746,7 @@ class xnewsletterFilterInput
         $attrSubSet[0] = strtolower($attrSubSet[0]);
         $attrSubSet[1] = strtolower($attrSubSet[1]);
 
-        return (((false !== strpos($attrSubSet[1], 'expression')) && 'style' == $attrSubSet[0])
+        return (((false !== strpos($attrSubSet[1], 'expression')) && 'style' === $attrSubSet[0])
                 || (false !== strpos($attrSubSet[1], 'javascript:'))
                 || (false !== strpos($attrSubSet[1], 'behaviour:'))
                 || (false !== strpos($attrSubSet[1], 'vbscript:'))
@@ -821,7 +821,7 @@ class xnewsletterFilterInput
             $attrSet      = [];
             $currentSpace = strpos($tagLeft, ' ');
             // Are we an open tag or a close tag?
-            if ('/' == substr($currentTag, 0, 1)) {
+            if ('/' === substr($currentTag, 0, 1)) {
                 // Close Tag
                 $isCloseTag = true;
                 list($tagName) = explode(' ', $currentTag);
@@ -870,12 +870,12 @@ class xnewsletterFilterInput
                      * No more equal signs so add any extra text in the tag into
                      * the attribute array [eg. checked]
                      */
-                    if ('/' != $fromSpace) {
+                    if ('/' !== $fromSpace) {
                         $attr = substr($fromSpace, 0, $nextSpace);
                     }
                 }
                 // Last Attribute Pair
-                if (!$attr && '/' != $fromSpace) {
+                if (!$attr && '/' !== $fromSpace) {
                     $attr = $fromSpace;
                 }
                 // Add attribute pair to the attribute array
@@ -912,7 +912,7 @@ class xnewsletterFilterInput
             $tagOpen_start = strpos($postTag, '<');
         }
         // Append any code after the end of tags and return
-        if ('<' != $postTag) {
+        if ('<' !== $postTag) {
             $preTag .= $postTag;
         }
 
@@ -948,7 +948,7 @@ class xnewsletterFilterInput
             if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
                 || ($this->xssAuto
                     && (in_array(strtolower($attrSubSet[0]), $this->attrBlacklist)
-                        || ('on' == substr($attrSubSet[0], 0, 2))))) {
+                        || ('on' === substr($attrSubSet[0], 0, 2))))) {
                 continue;
             }
             // XSS attribute value filtering
@@ -960,15 +960,15 @@ class xnewsletterFilterInput
                 // strip double quotes
                 $attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
                 // convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr value)
-                if (("'" == substr($attrSubSet[1], 0, 1))
-                    && ("'" == substr($attrSubSet[1], strlen($attrSubSet[1]) - 1, 1))) {
+                if (("'" === substr($attrSubSet[1], 0, 1))
+                    && ("'" === substr($attrSubSet[1], strlen($attrSubSet[1]) - 1, 1))) {
                     $attrSubSet[1] = substr($attrSubSet[1], 1, strlen($attrSubSet[1]) - 2);
                 }
                 // strip slashes
                 $attrSubSet[1] = stripslashes($attrSubSet[1]);
             }
             // Autostrip script tags
-            if (xnewsletterFilterInput::checkAttribute($attrSubSet)) {
+            if (self::checkAttribute($attrSubSet)) {
                 continue;
             }
             // Is our attribute in the user input array?

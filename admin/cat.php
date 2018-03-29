@@ -47,7 +47,7 @@ switch ($op) {
         $start       = Request::getInt('start', 0);
         $limit       = $xnewsletter->getConfig('adminperpage');
         $catsCount   = $xnewsletter->getHandler('cat')->getCount();
-        $catCriteria = new CriteriaCompo();
+        $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
         $catCriteria->setStart($start);
@@ -55,7 +55,7 @@ switch ($op) {
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         if ($catsCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($catsCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($catsCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';

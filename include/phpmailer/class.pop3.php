@@ -162,7 +162,7 @@ class POP3
         $password = '',
         $debug_level = 0
     ) {
-        $pop = new POP3;
+        $pop = new self;
 
         return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
     }
@@ -338,7 +338,7 @@ class POP3
         //So ignore errors here
         try {
             @fclose($this->pop_conn);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //Do nothing
         }
     }

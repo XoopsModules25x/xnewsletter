@@ -560,7 +560,7 @@ class SMTP
             // Send the lines to the server
             foreach ($lines_out as $line_out) {
                 //RFC2821 section 4.5.2
-                if (!empty($line_out) and '.' == $line_out[0]) {
+                if (!empty($line_out) and '.' === $line_out[0]) {
                     $line_out = '.' . $line_out;
                 }
                 $this->client_send($line_out . self::CRLF);
@@ -867,7 +867,7 @@ class SMTP
                 $this->edebug("SMTP -> get_lines(): \$data is \"$data\"");
             }
             // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
-            if (isset($str[3]) and ' ' == $str[3]) {
+            if (isset($str[3]) and ' ' === $str[3]) {
                 break;
             }
             // Timed-out? Log and break

@@ -37,10 +37,10 @@ $subscr_email  = Request::getString('subscr_email', '');
 if (isset($_REQUEST['addnew'])) {
     $op = 'addnew_subscription';
 }
-if ('' != $activationKey && 'unsub' != $op) {
+if ('' != $activationKey && 'unsub' !== $op) {
     $op = 'save_subscription';
 }
-if ('unsub' == $op) {
+if ('unsub' === $op) {
     $subscr_email = Request::getString('email', '');
     $op           = 'delete_subscription';
     //$GLOBALS['xoopsOption']['template_main'] = 'xnewsletter_subscription.tpl';
@@ -134,7 +134,7 @@ switch ($op) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
                 }
                 // check if a Xoops user has $subscr_email
-                if (0 != count($memberHandler->getUsers(new Criteria('email', $subscr_email)))) {
+                if (0 != count($memberHandler->getUsers(new \Criteria('email', $subscr_email)))) {
                     $actionProts_warning[] = sprintf(_MA_XNEWSLETTER_PLEASE_LOGIN, $subscr_email);
                     //
                     $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
@@ -160,8 +160,8 @@ switch ($op) {
         */
 
         // look for existing subscriptions
-        $subscrCriteria = new CriteriaCompo();
-        $subscrCriteria->add(new Criteria('subscr_email', $subscr_email));
+        $subscrCriteria = new \CriteriaCompo();
+        $subscrCriteria->add(new \Criteria('subscr_email', $subscr_email));
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
         $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
@@ -177,8 +177,8 @@ switch ($op) {
                 if (0 == $subscr_array['subscr_activated']) {
                     $actionProts_warning[] = str_replace('%link', "?op=resend_subscription&subscr_id={$subscr_array['subscr_id']}", _MA_XNEWSLETTER_SUBSCRIPTION_UNFINISHED);
                 }
-                $catsubscrCriteria = new CriteriaCompo();
-                $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_array['subscr_id']));
+                $catsubscrCriteria = new \CriteriaCompo();
+                $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_array['subscr_id']));
                 $catsubscrCriteria->setSort('catsubscr_id');
                 $catsubscrCriteria->setOrder('ASC');
                 $catsubscrCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
@@ -227,7 +227,7 @@ switch ($op) {
 
         // check if subscr exists
         $subscr_id      = Request::getInt('subscr_id', 0);
-        $subscrCriteria = new Criteria('subscr_id', $subscr_id);
+        $subscrCriteria = new \Criteria('subscr_id', $subscr_id);
         $subscrCount    = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
         if (0 == $subscrCount) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
@@ -392,7 +392,7 @@ switch ($op) {
             }
             $subscr_id = $subscrObj->getVar('subscr_id');
             // create $code_selections string
-            $catCriteria = new CriteriaCompo();
+            $catCriteria = new \CriteriaCompo();
             $catCriteria->setSort('cat_id');
             $catCriteria->setOrder('ASC');
             $catObjs    = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -430,7 +430,7 @@ switch ($op) {
                 $subscr_lastname  = Request::getString('subscr_lastname', '');
                 $subscr_sex       = Request::getString('subscr_sex', '');
                 // create $code_selections string
-                $catCriteria = new CriteriaCompo();
+                $catCriteria = new \CriteriaCompo();
                 $catCriteria->setSort('cat_id');
                 $catCriteria->setOrder('ASC');
                 $catObjs    = $xnewsletter->getHandler('cat')->getAll($catCriteria);
@@ -469,7 +469,7 @@ switch ($op) {
                         $row_user   = $xoopsDB->fetchRow($user);
                         $subscr_uid = $row_user[0];
                     }
-                    $subscrObj->setVar('subscr_uid', (int)$subscr_uid);
+                    $subscrObj->setVar('subscr_uid', $subscr_uid);
                     // form subscr_submitter
                     $subscrObj->setVar('subscr_submitter', $uid);
                 }
@@ -503,7 +503,7 @@ switch ($op) {
                 $xoopsMailer->reset();
                 $xoopsMailer->setTemplateDir();
                 $xoopsMailer->useMail();
-                $xoopsMailer->setTemplate(('update' == $saveType) ? 'update.tpl' : 'activate.tpl');
+                $xoopsMailer->setTemplate(('update' === $saveType) ? 'update.tpl' : 'activate.tpl');
                 $xoopsMailer->setToEmails($subscr_email);
                 if (isset($xoopsConfig['adminmail'])) {
                     $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
@@ -549,9 +549,9 @@ switch ($op) {
                 $subscr_id     = (int)$activationKey_array[2];
                 $subscr_actkey = trim($activationKey_array[3]);
                 // check given data with table subscr
-                $subscrCriteria = new CriteriaCompo();
-                $subscrCriteria->add(new Criteria('subscr_id', $subscr_id));
-                $subscrCriteria->add(new Criteria('subscr_actkey', $subscr_actkey));
+                $subscrCriteria = new \CriteriaCompo();
+                $subscrCriteria->add(new \Criteria('subscr_id', $subscr_id));
+                $subscrCriteria->add(new \Criteria('subscr_actkey', $subscr_actkey));
                 $subscrCriteria->setLimit(1);
                 $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
                 if (0 == $subscrCount) {
@@ -717,7 +717,7 @@ switch ($op) {
                 }
             }
             if (0 == $count_err) {
-                if ('addnew' == $saveType) {
+                if ('addnew' === $saveType) {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_CLOSED;
                 } else {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_UPDATE_CLOSED;
@@ -737,8 +737,8 @@ switch ($op) {
         }
         // IN PROGRESS
         if ('1' == $_SESSION['unsub']) {
-            $subscrCriteria = new CriteriaCompo();
-            $subscrCriteria->add(new Criteria('subscr_email', $subscr_email));
+            $subscrCriteria = new \CriteriaCompo();
+            $subscrCriteria->add(new \Criteria('subscr_email', $subscr_email));
             $subscrCriteria->setLimit(1);
             $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);
             if (0 == $subscrCount) {
@@ -792,9 +792,9 @@ switch ($op) {
                 // 1st case: unsubscribe WITHOUT confirmation
                 // 2nd case: unsubscribe WITH confirmation & activation key EXISTS
                 // check given data with table subscr
-                $subscrCriteria = new CriteriaCompo();
-                $subscrCriteria->add(new Criteria('subscr_email', $subscr_email));
-                $subscrCriteria->add(new Criteria('subscr_id', $subscr_id));
+                $subscrCriteria = new \CriteriaCompo();
+                $subscrCriteria->add(new \Criteria('subscr_email', $subscr_email));
+                $subscrCriteria->add(new \Criteria('subscr_id', $subscr_id));
                 // got actkey or user is allowed to delete without actkey
                 if ('' != $activationKey) {
                     // check activation key
@@ -809,7 +809,7 @@ switch ($op) {
                     } else {
                         redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_INVALIDKEY);
                     }
-                    $subscrCriteria->add(new Criteria('subscr_actkey', $subscr_actkey));
+                    $subscrCriteria->add(new \Criteria('subscr_actkey', $subscr_actkey));
                 }
                 $subscrCriteria->setLimit(1);
                 $subscrCount = $xnewsletter->getHandler('subscr')->getCount($subscrCriteria);

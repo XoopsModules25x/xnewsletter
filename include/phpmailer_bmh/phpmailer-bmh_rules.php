@@ -467,15 +467,15 @@ function bmhDSNRules($dsn_msg, $dsn_report, $debug_mode = false)
     // get the recipient email
     if (preg_match('/Original-Recipient: rfc822;(.*)/i', $dsn_report, $match)) {
         $email_arr = imap_rfc822_parse_adrlist($match[1], 'default.domain.name');
-        if (isset($email_arr[0]->host) && '.SYNTAX-ERROR.' != $email_arr[0]->host
-            && 'default.domain.name' != $email_arr[0]->host) {
+        if (isset($email_arr[0]->host) && '.SYNTAX-ERROR.' !== $email_arr[0]->host
+            && 'default.domain.name' !== $email_arr[0]->host) {
             $result['email'] = $email_arr[0]->mailbox . '@' . $email_arr[0]->host;
         }
     } else {
         if (preg_match('/Final-Recipient: rfc822;(.*)/i', $dsn_report, $match)) {
             $email_arr = imap_rfc822_parse_adrlist($match[1], 'default.domain.name');
-            if (isset($email_arr[0]->host) && '.SYNTAX-ERROR.' != $email_arr[0]->host
-                && 'default.domain.name' != $email_arr[0]->host) {
+            if (isset($email_arr[0]->host) && '.SYNTAX-ERROR.' !== $email_arr[0]->host
+                && 'default.domain.name' !== $email_arr[0]->host) {
                 $result['email'] = $email_arr[0]->mailbox . '@' . $email_arr[0]->host;
             }
         }

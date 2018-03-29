@@ -32,7 +32,7 @@
  * @return bool
  */
 
-function xoops_module_update_xnewsletter(XoopsObject $xoopsModule, $oldversion = null)
+function xoops_module_update_xnewsletter(\XoopsObject $xoopsModule, $oldversion = null)
 {
     if (100 == $oldversion) {
         xoops_module_update_xnewsletter_101();
@@ -142,8 +142,8 @@ function xoops_module_update_xnewsletter_130()
     $templateDirectory = XOOPS_ROOT_PATH . '/modules/' . $dirname . '/templates/';
     $template_list     = array_diff(scandir($templateDirectory, SCANDIR_SORT_NONE), ['..', '.']);
     foreach ($template_list as $k => $v) {
-        $fileinfo = new SplFileInfo($templateDirectory . $v);
-        if ('html' == $fileinfo->getExtension() && 'index.html' != $fileinfo->getFilename()) {
+        $fileinfo = new \SplFileInfo($templateDirectory . $v);
+        if ('html' === $fileinfo->getExtension() && 'index.html' !== $fileinfo->getFilename()) {
             @unlink($templateDirectory . $v);
         }
     }

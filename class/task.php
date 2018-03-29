@@ -37,7 +37,7 @@ class XnewsletterTask extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db          = \XoopsDatabaseFactory::getDatabaseConnection();
         parent::__construct();
         $this->initVar('task_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('task_letter_id', XOBJ_DTYPE_INT, null, false);
@@ -64,31 +64,31 @@ class XnewsletterTask extends XoopsObject
 
         require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
-        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
+        $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $letterCriteria = new CriteriaCompo();
+        $letterCriteria = new \CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
-        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, 'task_letter_id', $this->getVar('task_letter_id'));
+        $letter_select = new \XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, 'task_letter_id', $this->getVar('task_letter_id'));
         $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
-        $subscrCriteria = new CriteriaCompo();
+        $subscrCriteria = new \CriteriaCompo();
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
-        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, 'task_subscr_id', $this->getVar('task_subscr_id'));
+        $subscr_select = new \XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, 'task_subscr_id', $this->getVar('task_subscr_id'));
         $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
-        $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, 'task_starttime', '', $this->getVar('task_starttime')));
+        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, 'task_starttime', '', $this->getVar('task_starttime')));
 
-        $form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_TASK_SUBMITTER, 'task_submitter', false, $this->getVar('task_submitter'), 1, false), true);
+        $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_TASK_SUBMITTER, 'task_submitter', false, $this->getVar('task_submitter'), 1, false), true);
 
-        $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_CREATED, 'task_created', '', $this->getVar('task_created')));
+        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_CREATED, 'task_created', '', $this->getVar('task_created')));
 
-        $form->addElement(new XoopsFormHidden('op', 'save_task'));
-        $form->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormHidden('op', 'save_task'));
+        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
 
         return $form;
     }
@@ -106,9 +106,9 @@ class XnewsletterTaskHandler extends XoopsPersistableObjectHandler
     public $xnewsletter = null;
 
     /**
-     * @param null|object|XoopsDatabase $db
+     * @param null|object|\XoopsDatabase $db
      */
-    public function __construct(XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db)
     {
         parent::__construct($db, 'xnewsletter_task', 'XnewsletterTask', 'task_id', 'task_letter_id');
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();

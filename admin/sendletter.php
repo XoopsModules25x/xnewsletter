@@ -34,7 +34,7 @@ require_once __DIR__ . '/admin_header.php';
 $op                  = Request::getString('op', 'list');
 $letter_id           = Request::getInt('letter_id', 0);
 $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
-if ($xn_send_in_packages > 0 && 'send_test' != $op) {
+if ($xn_send_in_packages > 0 && 'send_test' !== $op) {
     $xn_send_in_packages_time = $xnewsletter->getConfig('xn_send_in_packages_time');
 } else {
     $xn_send_in_packages_time = 0;

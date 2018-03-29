@@ -71,7 +71,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
 
     // get emails of subscribers
     $recipients = [];
-    if ('send_test' == $op) {
+    if ('send_test' === $op) {
         $recipients[] = 0;
     } else {
         // read all subscribers
@@ -85,14 +85,14 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
             die();
         }
 
-        while ($subscr = $xoopsDB->fetchArray($subscrs)) {
+        while (false !== ($subscr = $xoopsDB->fetchArray($subscrs))) {
             $subscr_id = $subscr['subscr_id'];
-            if ('resend_letter' == $op) {
+            if ('resend_letter' === $op) {
                 // read subscribers, where send failed
-                $protocolCriteria = new CriteriaCompo();
-                $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
-                $protocolCriteria->add(new Criteria('protocol_subscriber_id', $subscr_id));
-                $protocolCriteria->add(new Criteria('protocol_success', true));
+                $protocolCriteria = new \CriteriaCompo();
+                $protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
+                $protocolCriteria->add(new \Criteria('protocol_subscriber_id', $subscr_id));
+                $protocolCriteria->add(new \Criteria('protocol_success', true));
                 $protocolsCriteria = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
                 if ($protocolsCriteria > 0) {
                     $subscr_id = 0;
@@ -146,7 +146,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
                 unset($protocolObj);
 
                 return false;
-            } elseif ('send_test' != $op) {
+            } elseif ('send_test' !== $op) {
                 // update letter
                 $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
                 $letterObj->setVar('letter_sender', $uid);
@@ -175,7 +175,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
 
     if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
         require_once XOOPS_ROOT_PATH . '/class/template.php';
-        $xoopsTpl = new XoopsTpl();
+        $xoopsTpl = new \XoopsTpl();
     }
     // get template path
     $template_path = XNEWSLETTER_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
@@ -196,7 +196,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         return _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID;
     }
 
-    while ($task_letter = $xoopsDB->fetchArray($task_letters)) {
+    while (false !== ($task_letter = $xoopsDB->fetchArray($task_letters))) {
         $letter_id = $task_letter['task_letter_id'];
         $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
         if (0 == count($letterObj)) {
@@ -229,14 +229,14 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         $letter_title   = $letterObj->getVar('letter_title');
         $letter_content = $letterObj->getVar('letter_content', 'n');
 
-        $letterTpl = new XoopsTpl();
+        $letterTpl = new \XoopsTpl();
         // letter data
         $letterTpl->assign('content', $letter_content);
         $letterTpl->assign('title', $letter_title); // new from v1.3
         // letter attachments as link
-        $attachmentAslinkCriteria = new CriteriaCompo();
-        $attachmentAslinkCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-        $attachmentAslinkCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
+        $attachmentAslinkCriteria = new \CriteriaCompo();
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+        $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
         $attachmentAslinkCriteria->setSort('attachment_id');
         $attachmentAslinkCriteria->setOrder('ASC');
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
@@ -260,7 +260,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
             return $task_letters->getErrors();
         }
         $recipients = [];
-        while ($task_letter = $xoopsDB->fetchArray($task_letters)) {
+        while (false !== ($task_letter = $xoopsDB->fetchArray($task_letters))) {
             $subscr_id = $task_letter['task_subscr_id'];
             $task_id   = $task_letter['task_id'];
             if (0 == $subscr_id) {
@@ -302,9 +302,9 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         }
 
         // get letter attachments as attachment
-        $attachmentAsattachmentCriteria = new CriteriaCompo();
-        $attachmentAsattachmentCriteria->add(new Criteria('attachment_letter_id', $letter_id));
-        $attachmentAsattachmentCriteria->add(new Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
+        $attachmentAsattachmentCriteria = new \CriteriaCompo();
+        $attachmentAsattachmentCriteria->add(new \Criteria('attachment_letter_id', $letter_id));
+        $attachmentAsattachmentCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
         $attachmentAsattachmentCriteria->setSort('attachment_id');
         $attachmentAsattachmentCriteria->setOrder('ASC');
         $attachmentObjs  = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsattachmentCriteria, true);
@@ -457,7 +457,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->errorMessage(); //error messages from PHPMailer
             ++$count_err;
             $protocol_success = false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // IN PROGRESS
             $protocol_status = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $e->getMessage(); //error messages from anything else!
             ++$count_err;

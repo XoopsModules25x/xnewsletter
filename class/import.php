@@ -44,7 +44,7 @@ class XnewsletterImport extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('import_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('import_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('import_firstname', XOBJ_DTYPE_TXTBOX, null, false, 100);
@@ -75,17 +75,17 @@ class XnewsletterImport extends XoopsObject
         $title = _AM_XNEWSLETTER_IMPORT_SEARCH;
 
         require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-        $form = new XoopsThemeForm($title, 'form_select_import', $action, 'post', true);
+        $form = new \XoopsThemeForm($title, 'form_select_import', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
-        $catCriteria = new CriteriaCompo();
+        $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
-        $cat_select = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, 'cat_id', '1');
+        $cat_select = new \XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_PRESELECT_CAT, 'cat_id', '1');
         $cat_select->addOptionArray($this->xnewsletter->getHandler('cat')->getList($catCriteria));
         $form->addElement($cat_select, false);
 
-        $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, 'plugin', $plugin, '<br>');
+        $opt_import_type = new \XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, 'plugin', $plugin, '<br>');
         $opt_import_type->setExtra('onclick="document.forms.form_select_import.submit()"');
         $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . '/plugins/');
         $arrPlugin         = [];
@@ -106,7 +106,7 @@ class XnewsletterImport extends XoopsObject
                     if (true === $show_plugin) {
                         $label = "<img src='" . $arrPlugin['icon'] . "' title='" . $arrPlugin['descr'] . "' alt='" . $arrPlugin['descr'] . "' style='height:32px;margin-bottom:5px;margin-right:5px'>" . $arrPlugin['descr'];
                         $opt_import_type->addOption($arrPlugin['name'], $label);
-                        $form->addElement(new XoopsFormHidden('hasform_' . $pluginName, $arrPlugin['hasform']));
+                        $form->addElement(new \XoopsFormHidden('hasform_' . $pluginName, $arrPlugin['hasform']));
                         if ($plugin == $pluginName && 1 == $arrPlugin['hasform']) {
                             $currpluginhasform = 1;
                         }
@@ -117,14 +117,14 @@ class XnewsletterImport extends XoopsObject
         $form->addElement($opt_import_type, false);
 
         //option, whether data should be shown for check or directly imported
-        $check_after = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_AFTER_READ, 'action_after_read', $action_after_read, '<br>');
+        $check_after = new \XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_AFTER_READ, 'action_after_read', $action_after_read, '<br>');
         $check_after->addOption(0, _AM_XNEWSLETTER_IMPORT_READ_IMPORT);
         $check_after->addOption(1, _AM_XNEWSLETTER_IMPORT_READ_CHECK);
         $check_after->setExtra('onclick="document.forms.form_select_import.submit()"');
         $form->addElement($check_after, false);
 
         //limit for import
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT, '100000'), false);
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT, '100000'), false);
         if (0 == $action_after_read) {
             if ($limitcheck < 500 && $limitcheck > 0) {
                 $limitcheck = 500;
@@ -134,7 +134,7 @@ class XnewsletterImport extends XoopsObject
                 $limitcheck = 200;
             }
         }
-        $sel_limitcheck = new XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT_PACKAGE, 'limitcheck', $limitcheck);
+        $sel_limitcheck = new \XoopsFormSelect(_AM_XNEWSLETTER_IMPORT_CHECK_LIMIT_PACKAGE, 'limitcheck', $limitcheck);
         if (0 == $action_after_read) {
             $sel_limitcheck->addOption(0, _AM_XNEWSLETTER_IMPORT_NOLIMIT);
             $sel_limitcheck->addOption(500, 500);
@@ -153,21 +153,21 @@ class XnewsletterImport extends XoopsObject
         $form->addElement($sel_limitcheck, false);
 
         $skip               = 1 == $action_after_read ? 0 : 1;
-        $skipcatsubscrexist = new XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_SKIP_EXISTING, 'skipcatsubscrexist', $skip);
+        $skipcatsubscrexist = new \XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_SKIP_EXISTING, 'skipcatsubscrexist', $skip);
         if (0 == $action_after_read) {
             $skipcatsubscrexist->setExtra('disabled="disabled"');
         }
         $form->addElement($skipcatsubscrexist, false);
 
-        $form->addElement(new XoopsFormHidden('op', 'default'));
-        $button_tray = new XoopsFormElementTray('', '');
+        $form->addElement(new \XoopsFormHidden('op', 'default'));
+        $button_tray = new \XoopsFormElementTray('', '');
         if (1 == $currpluginhasform) {
             //show form for additional options
-            $button1 = new XoopsFormButton('', 'form_additional', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit1');
+            $button1 = new \XoopsFormButton('', 'form_additional', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit1');
             $button1->setExtra('onclick="document.getElementById(\'op\').value = \'form_additional\';document.forms.form_select_import.submit()"');
             $button_tray->addElement($button1);
         } else {
-            $button2 = new XoopsFormButton('', 'searchdata', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit2');
+            $button2 = new \XoopsFormButton('', 'searchdata', _AM_XNEWSLETTER_IMPORT_CONTINUE, 'submit2');
             $button2->setExtra('onclick="document.getElementById(\'op\').value = \'searchdata\';document.forms.form_select_import.submit()"');
             $button_tray->addElement($button2);
         }
@@ -205,9 +205,9 @@ class XnewsletterImportHandler extends XoopsPersistableObjectHandler
     public $xnewsletter = null;
 
     /**
-     * @param null|object|XoopsDatabase $db
+     * @param null|object|\XoopsDatabase $db
      */
-    public function __construct(XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db)
     {
         parent::__construct($db, 'xnewsletter_import', 'XnewsletterImport', 'import_id', 'import_email');
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();

@@ -44,7 +44,7 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit              = $xnewsletter->getConfig('adminperpage');
-        $attachmentCriteria = new CriteriaCompo();
+        $attachmentCriteria = new \CriteriaCompo();
         $attachmentCriteria->setSort('attachment_letter_id DESC, attachment_id');
         $attachmentCriteria->setOrder('DESC');
         $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
@@ -54,7 +54,7 @@ switch ($op) {
         $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentCriteria, true);
         if ($attachmentCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($attachmentCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($attachmentCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';

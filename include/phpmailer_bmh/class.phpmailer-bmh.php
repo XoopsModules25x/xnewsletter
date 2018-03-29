@@ -337,9 +337,9 @@ class BounceMailHandler
     {
         set_time_limit(6000);
         if (!$this->testmode) {
-            $this->_mailbox_link = imap_open("$file_path", '', '', CL_EXPUNGE);
+            $this->_mailbox_link = imap_open((string)$file_path, '', '', CL_EXPUNGE);
         } else {
-            $this->_mailbox_link = imap_open("$file_path", '', '');
+            $this->_mailbox_link = imap_open((string)$file_path, '', '');
         }
         if (!$this->_mailbox_link) {
             $this->error_msg = 'Cannot open the mailbox file to ' . $file_path . $this->bmh_newline . 'Error MSG: ' . imap_last_error();
@@ -416,7 +416,7 @@ class BounceMailHandler
                 $structure = imap_fetchstructure($this->_mailbox_link, $x);
                 if (1 == $structure->type
                     && $structure->ifsubtype
-                    && 'REPORT' == $structure->subtype
+                    && 'REPORT' === $structure->subtype
                     && $structure->ifparameters
                     && $this->isParameter($structure->parameters, 'REPORT-TYPE', 'delivery-status')) {
                     $processed = $this->processBounce($x, 'DSN', $c_total);
@@ -538,7 +538,7 @@ class BounceMailHandler
     {
         $header  = imap_header($this->_mailbox_link, $pos);
         $subject = strip_tags($header->subject);
-        if ('DSN' == $type) {
+        if ('DSN' === $type) {
             // first part of DSN (Delivery Status Notification), human-readable explanation
             $dsn_msg           = imap_fetchbody($this->_mailbox_link, $pos, '1');
             $dsn_msg_structure = imap_bodystruct($this->_mailbox_link, $pos, '1');
@@ -554,7 +554,7 @@ class BounceMailHandler
 
             // process bounces by rules
             $result = bmhDSNRules($dsn_msg, $dsn_report, $this->debug_dsn_rule);
-        } elseif ('BODY' == $type) {
+        } elseif ('BODY' === $type) {
             $structure = imap_fetchstructure($this->_mailbox_link, $pos);
             switch ($structure->type) {
                 case 0: // Content-type = text

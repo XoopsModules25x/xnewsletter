@@ -51,7 +51,7 @@ function b_xnewsletter_letter($options)
     array_shift($options);
     array_shift($options);
 
-    $letterCriteria = new CriteriaCompo();
+    $letterCriteria = new \CriteriaCompo();
     switch ($type_block) {
         // For the block: letter recents
         case 'recent':
@@ -60,8 +60,8 @@ function b_xnewsletter_letter($options)
             break;
         // For the block: letter of today
         case 'day':
-            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
-            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
+            $letterCriteria->add(new \Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
+            $letterCriteria->add(new \Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
             $letterCriteria->setSort('letter_created');
             $letterCriteria->setOrder('ASC');
             break;

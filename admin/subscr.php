@@ -42,14 +42,14 @@ $filter_subscr_firstname = Request::getString('filter_subscr_firstname', '');
 $filter_subscr_lastname  = Request::getString('filter_subscr_lastname', '');
 $filter_subscr_email     = Request::getString('filter_subscr_email', '');
 
-if ('apply_filter' == $op) {
-    if ('LIKE' == $filter_subscr && '' == !$filter_subscr_firstname) {
+if ('apply_filter' === $op) {
+    if ('LIKE' === $filter_subscr && '' == !$filter_subscr_firstname) {
         $filter_subscr_firstname = "%{$filter_subscr_firstname}%";
     }
-    if ('LIKE' == $filter_subscr && '' == !$filter_subscr_lastname) {
+    if ('LIKE' === $filter_subscr && '' == !$filter_subscr_lastname) {
         $filter_subscr_lastname = "%{$filter_subscr_lastname}%";
     }
-    if ('LIKE' == $filter_subscr && '' == !$filter_subscr_email) {
+    if ('LIKE' === $filter_subscr && '' == !$filter_subscr_email) {
         $filter_subscr_email = "%{$filter_subscr_email}%";
     }
     if ('' == $filter_subscr_firstname && '' == $filter_subscr_lastname && '' == $filter_subscr_email) {
@@ -80,12 +80,12 @@ switch ($op) {
 
         $class = 'odd';
         echo "<tr class='{$class}'>";
-        $class = ('even' == $class) ? 'odd' : 'even';
+        $class = ('even' === $class) ? 'odd' : 'even';
         echo "<td>{$subscr_id}</td>";
         echo '<td>' . $subscrObj->getVar('subscr_email') . '</td>';
         echo '<td>';
-        $catsubscrCriteria = new CriteriaCompo();
-        $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
+        $catsubscrCriteria = new \CriteriaCompo();
+        $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_id));
         $catsubscrCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
         if ($catsubscrCount > 0) {
             $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -107,23 +107,23 @@ switch ($op) {
     default:
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
-        if ('apply_filter' == $op) {
+        if ('apply_filter' === $op) {
             $adminObject->addItemButton(_AM_XNEWSLETTER_SUBSCR_SHOW_ALL, '?op=list', 'view_detailed');
         }
         $adminObject->displayButton('left');
         //
         $limit          = $xnewsletter->getConfig('adminperpage');
-        $subscrCriteria = new CriteriaCompo();
+        $subscrCriteria = new \CriteriaCompo();
 
-        if ('apply_filter' == $op) {
+        if ('apply_filter' === $op) {
             if ('' != $filter_subscr_firstname) {
-                $subscrCriteria->add(new Criteria('subscr_firstname', $filter_subscr_firstname, $filter_subscr));
+                $subscrCriteria->add(new \Criteria('subscr_firstname', $filter_subscr_firstname, $filter_subscr));
             }
             if ('' != $filter_subscr_lastname) {
-                $subscrCriteria->add(new Criteria('subscr_lastname', $filter_subscr_lastname, $filter_subscr));
+                $subscrCriteria->add(new \Criteria('subscr_lastname', $filter_subscr_lastname, $filter_subscr));
             }
             if ('' != $filter_subscr_email) {
-                $subscrCriteria->add(new Criteria('subscr_email', $filter_subscr_email, $filter_subscr));
+                $subscrCriteria->add(new \Criteria('subscr_email', $filter_subscr_email, $filter_subscr));
             }
         }
         $subscrCriteria->setSort('subscr_id');
@@ -140,12 +140,12 @@ switch ($op) {
             $linklist .= "&filter_subscr_firstname={$filter_subscr_firstname}";
             $linklist .= "&filter_subscr_lastname={$filter_subscr_lastname}";
             $linklist .= "&filter_subscr_email={$filter_subscr_email}";
-            $pagenav  = new XoopsPageNav($subscrCount, $limit, $start, 'start', $linklist);
+            $pagenav  = new \XoopsPageNav($subscrCount, $limit, $start, 'start', $linklist);
             $pagenav  = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
         }
-        if ('LIKE' == $filter_subscr) {
+        if ('LIKE' === $filter_subscr) {
             //clean up var for refill form
             $filter_subscr_firstname = str_replace('%', '', $filter_subscr_firstname);
             $filter_subscr_lastname  = str_replace('%', '', $filter_subscr_lastname);
@@ -171,12 +171,12 @@ switch ($op) {
             echo "<form id='form_filter' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_filter'>";
             $inputstyle = '';//style='border: 1px solid #000000;";
             echo "<tr class='{$class}'>";
-            $class = ('even' == $class) ? 'odd' : 'even';
+            $class = ('even' === $class) ? 'odd' : 'even';
             echo "    <td class='center'>&nbsp;</td>";
             echo "    <td colspan='2'>" . _SEARCH . ':&nbsp;&nbsp;';
             echo "    <select id='filter_subscr' title='" . _SEARCH . "' name='filter_subscr' size='1'>";
-            echo "        <option value='='" . (('=' == $filter_subscr) ? ' selected' : '') . '>' . _AM_XNEWSLETTER_SEARCH_EQUAL . '</option>';
-            echo "        <option value='LIKE'" . (('LIKE' == $filter_subscr) ? ' selected' : '') . '>' . _AM_XNEWSLETTER_SEARCH_CONTAINS . '</option>';
+            echo "        <option value='='" . (('=' === $filter_subscr) ? ' selected' : '') . '>' . _AM_XNEWSLETTER_SEARCH_EQUAL . '</option>';
+            echo "        <option value='LIKE'" . (('LIKE' === $filter_subscr) ? ' selected' : '') . '>' . _AM_XNEWSLETTER_SEARCH_CONTAINS . '</option>';
             echo '    </select>';
             echo '    </td>';
             echo "    <td><input {$inputstyle} id='filter_subscr_firstname' type='text' value='{$filter_subscr_firstname}' maxlength='50' size='15' title='' name='filter_subscr_firstname'></td>";
@@ -213,7 +213,7 @@ switch ($op) {
             echo "<form id='form_action' onsubmit='return check(this);' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_action'>";
             foreach ($subscrObjs as $subscr_id => $subscrObj) {
                 echo "<tr class='{$class}'>";
-                $class = ('even' == $class) ? 'odd' : 'even';
+                $class = ('even' === $class) ? 'odd' : 'even';
                 echo "    <td class='center'><input type='checkbox' name='subscr_ids[]' value='{$subscr_id}'></td>";
                 echo '    <td>' . $subscr_id . '</td>';
                 echo '    <td>' . $subscrObj->getVar('subscr_sex') . '&nbsp;</td>';
@@ -274,7 +274,7 @@ switch ($op) {
     case 'apply_actions':
         $action         = Request::getString('actions_action');
         $subscr_ids     = Request::getArray('subscr_ids', unserialize(Request::getString('serialize_subscr_ids')));
-        $subscrCriteria = new Criteria('subscr_id', '(' . implode(',', $subscr_ids) . ')', 'IN');
+        $subscrCriteria = new \Criteria('subscr_id', '(' . implode(',', $subscr_ids) . ')', 'IN');
         switch ($action) {
             case 'delete':
                 if (true === Request::getBool('ok', false, 'POST')) {

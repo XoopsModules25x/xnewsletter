@@ -1,5 +1,5 @@
 <table class="outer">
-    <{foreachq item=catsubscr from=$block}>
+    <{foreach item=catsubscr from=$block}>
     <tr class="<{cycle values = "even,odd"}>">
         <td>
             <{$catsubscr.catsubscr_email}>;

@@ -44,7 +44,7 @@ class XnewsletterMailinglist extends XoopsObject
     public function __construct()
     {
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();
-        $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
+        $this->db          = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('mailinglist_id', XOBJ_DTYPE_INT, null, fals);
         $this->initVar('mailinglist_name', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('mailinglist_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
@@ -71,36 +71,36 @@ class XnewsletterMailinglist extends XoopsObject
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_MAILINGLIST_ADD) : sprintf(_AM_XNEWSLETTER_MAILINGLIST_EDIT);
 
         require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
+        $form = new \XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $mailinglist_name = $this->isNew() ? 'myname' : $this->getVar('mailinglist_name');
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_NAME, 'mailinglist_name', 50, 255, $mailinglist_name), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_NAME, 'mailinglist_name', 50, 255, $mailinglist_name), true);
 
         $mailinglist_email = $this->isNew() ? 'mailinglist@mydomain.com' : $this->getVar('mailinglist_email');
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_EMAIL_DESC, 'mailinglist_email', 50, 255, $mailinglist_email), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_EMAIL_DESC, 'mailinglist_email', 50, 255, $mailinglist_email), true);
 
         $mailinglist_listname = $this->isNew() ? 'nameofmylist' : $this->getVar('mailinglist_listname');
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_LISTNAME, 'mailinglist_listname', 50, 255, $mailinglist_listname), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_LISTNAME, 'mailinglist_listname', 50, 255, $mailinglist_listname), true);
 
         $mailinglist_subscribe = $this->isNew() ? 'subscribe nameofmylist {email}' : $this->getVar('mailinglist_subscribe');
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "<br><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . '</span>', 'mailinglist_subscribe', 50, 255, $mailinglist_subscribe), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . "<br><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . '</span>', 'mailinglist_subscribe', 50, 255, $mailinglist_subscribe), true);
 
         $mailinglist_unsubscribe = $this->isNew() ? 'unsubscribe nameofmylist {email}' : $this->getVar('mailinglist_unsubscribe');
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "<br><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . '</span>', 'mailinglist_unsubscribe', 50, 255, $mailinglist_unsubscribe), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . "<br><span style='font-size:0,75em'>" . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE_DESC . '</span>', 'mailinglist_unsubscribe', 50, 255, $mailinglist_unsubscribe), true);
 
         $time = $this->isNew() ? time() : $this->getVar('mailinglist_created');
-        $form->addElement(new XoopsFormHidden('mailinglist_submitter', $GLOBALS['xoopsUser']->uid()));
-        $form->addElement(new XoopsFormHidden('mailinglist_created', $time));
+        $form->addElement(new \XoopsFormHidden('mailinglist_submitter', $GLOBALS['xoopsUser']->uid()));
+        $form->addElement(new \XoopsFormHidden('mailinglist_created', $time));
 
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
 
-        //$form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_MAILINGLIST_SUBMITTER, "mailinglist_submitter", false, $this->getVar("mailinglist_submitter"), 1, false), true);
-        //$form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_MAILINGLIST_CREATED, "mailinglist_created", "", $this->getVar("mailinglist_created")));
+        //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_MAILINGLIST_SUBMITTER, "mailinglist_submitter", false, $this->getVar("mailinglist_submitter"), 1, false), true);
+        //$form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_MAILINGLIST_CREATED, "mailinglist_created", "", $this->getVar("mailinglist_created")));
 
-        $form->addElement(new XoopsFormHidden('op', 'save_mailinglist'));
-        $form->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormHidden('op', 'save_mailinglist'));
+        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
 
         return $form;
     }
@@ -118,9 +118,9 @@ class XnewsletterMailinglistHandler extends XoopsPersistableObjectHandler
     public $xnewsletter = null;
 
     /**
-     * @param null|object|XoopsDatabase $db
+     * @param null|object|\XoopsDatabase $db
      */
-    public function __construct(XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db)
     {
         parent::__construct($db, 'xnewsletter_mailinglist', 'XnewsletterMailinglist', 'mailinglist_id', 'mailinglist_email');
         $this->xnewsletter = XnewsletterXnewsletter::getInstance();

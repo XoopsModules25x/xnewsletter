@@ -62,9 +62,9 @@ if (!$sendletter_perm['send']) {
 }
 
 $start_sending    = false;
-$protocolCriteria = new CriteriaCompo();
-$protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
-$protocolCriteria->add(new Criteria('protocol_subscriber_id', 0, '>'));
+$protocolCriteria = new \CriteriaCompo();
+$protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
+$protocolCriteria->add(new \Criteria('protocol_subscriber_id', 0, '>'));
 $protocolCriteria->setLimit(1);
 $protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
 if ($protocolCount > 0) {

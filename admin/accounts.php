@@ -212,7 +212,7 @@ switch ($op) {
         $adminObject->displayButton('left');
         //
         $limit            = $xnewsletter->getConfig('adminperpage');
-        $accountsCriteria = new CriteriaCompo();
+        $accountsCriteria = new \CriteriaCompo();
         $accountsCriteria->setSort('accounts_id ASC, accounts_type');
         $accountsCriteria->setOrder('ASC');
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount();
@@ -222,7 +222,7 @@ switch ($op) {
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
         if ($accountsCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -297,8 +297,8 @@ switch ($op) {
         $_POST['accounts_id'] = $accounts_id;
         $accountObj           = xnewsletter_setPost($accountObj, $_POST);
 
-        $accountsCriteria = new CriteriaCompo();
-        $accountsCriteria->add(new Criteria('accounts_default', 1));
+        $accountsCriteria = new \CriteriaCompo();
+        $accountsCriteria->add(new \Criteria('accounts_default', 1));
         $count_accounts_default = $xnewsletter->getHandler('accounts')->getCount($accountsCriteria);
         if ($count_accounts_default > 0) {
             if (1 == $accountObj->getVar('accounts_default')) {

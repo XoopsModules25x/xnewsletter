@@ -69,8 +69,8 @@ switch ($op) {
             }
 
             //delete subscription
-            $catsubscrCriteria = new CriteriaCompo();
-            $catsubscrCriteria->add(new Criteria('catsubscr_subscrid', $subscr_id));
+            $catsubscrCriteria = new \CriteriaCompo();
+            $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_id));
             $catsubscrsCount = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
             if ($catsubscrsCount > 0) {
                 $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
@@ -143,8 +143,8 @@ switch ($op) {
         require_once __DIR__ . '/bmh_callback_database.php';
         require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php';
 
-        $accountCriteria = new CriteriaCompo();
-        $accountCriteria->add(new Criteria('accounts_use_bmh', '1'));
+        $accountCriteria = new \CriteriaCompo();
+        $accountCriteria->add(new \Criteria('accounts_use_bmh', '1'));
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount($accountCriteria);
 
         if ($accountsCount > 0) {
@@ -217,9 +217,9 @@ switch ($op) {
         ];
 
         $limit       = $xnewsletter->getConfig('adminperpage');
-        $bhmCriteria = new CriteriaCompo();
+        $bhmCriteria = new \CriteriaCompo();
         if ($filter > -1) {
-            $bhmCriteria->add(new Criteria('bmh_measure', $filter));
+            $bhmCriteria->add(new \Criteria('bmh_measure', $filter));
         }
         $bhmCriteria->setSort('bmh_id');
         $bhmCriteria->setOrder('DESC');
@@ -230,7 +230,7 @@ switch ($op) {
         $bhmObjs = $xnewsletter->getHandler('bmh')->getAll($bhmCriteria);
         if ($bhmCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new XoopsPageNav($bhmCount, $limit, $start, 'start', 'op=list');
+            $pagenav = new \XoopsPageNav($bhmCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -240,7 +240,7 @@ switch ($op) {
         echo "<table class='outer width100' cellspacing='1'><tr class='odd'><td>";
         echo "<form id='form_filter' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_filter'>";
 
-        $checked = ($filter == -1) ? 'checked' : '';
+        $checked = (-1 == $filter) ? 'checked' : '';
         echo "<input id='bmh_measure_all' type='radio' {$checked} value='-1' title='" . _AM_XNEWSLETTER_BMH_MEASURE . "' name='bmh_measure_filter' onclick='submit()'>
             <label for='bmh_measure_all' name='bmh_measure_all'>" . _AM_XNEWSLETTER_BMH_MEASURE_ALL . '</label>';
 

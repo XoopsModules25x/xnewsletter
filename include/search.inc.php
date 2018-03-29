@@ -57,7 +57,7 @@ function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid)
     $result = $xoopsDB->query($sql, $limit, $offset);
     $ret    = [];
     $i      = 0;
-    while ($myrow = $xoopsDB->fetchArray($result)) {
+    while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
         $ret[$i]['image'] = 'assets/images/icons/xn_search.png';
         $ret[$i]['link']  = 'cat.php?cat_id=' . $myrow['cat_id'] . '';
         $ret[$i]['title'] = $myrow['cat_name'];
