@@ -131,7 +131,7 @@ class XnewsletterLetter extends XoopsObject
         $form->addElement($template_select, false);
 
         // letter_cats
-        $gpermHandler  = xoops_getHandler('groupperm');
+        $grouppermHandler  = xoops_getHandler('groupperm');
         $memberHandler = xoops_getHandler('member');
         $groups        = $memberHandler->getGroupsByUser($xoopsUser->uid());
         $catCriteria   = new \CriteriaCompo();
@@ -142,7 +142,7 @@ class XnewsletterLetter extends XoopsObject
         $catObjs     = $this->xnewsletter->getHandler('cat')->getAll($catCriteria);
         foreach ($catObjs as $cat_id => $catObj) {
             $cat_name = $catObj->getVar('cat_name');
-            $show     = $gpermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid());
+            $show     = $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid());
             if (1 == $show) {
                 $cat_select->addOption($cat_id, $cat_name);
             }

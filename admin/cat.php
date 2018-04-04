@@ -80,7 +80,7 @@ switch ($op) {
         if (count($catObjs) > 0) {
             $class        = 'odd';
             $groupNames   = $memberHandler->getGroupList();
-            $gpermHandler = xoops_getHandler('groupperm');
+            $grouppermHandler = xoops_getHandler('groupperm');
             foreach ($catObjs as $cat_id => $catObj) {
                 echo "<tr class='{$class}'>";
                 $class = ('even' === $class) ? 'odd' : 'even';
@@ -88,7 +88,7 @@ switch ($op) {
                 echo "<td>{$catObj->getVar('cat_name')}</td>";
                 echo "<td>{$catObj->getVar('cat_info')}&nbsp;</td>";
                 // cat_gperms_admin
-                $cat_gperms_admin_groupids = $gpermHandler->getGroupIds('newsletter_admin_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $cat_gperms_admin_groupids = $grouppermHandler->getGroupIds('newsletter_admin_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort($cat_gperms_admin_groupids);
                 $cat_gperms_admin = '';
                 foreach ($cat_gperms_admin_groupids as $groupid) {
@@ -98,7 +98,7 @@ switch ($op) {
                 echo '<td>' . $cat_gperms_admin . '</td>';
 
                 // cat_gperms_create
-                $cat_gperms_create_groupids = $gpermHandler->getGroupIds('newsletter_create_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $cat_gperms_create_groupids = $grouppermHandler->getGroupIds('newsletter_create_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort($cat_gperms_create_groupids);
                 $cat_gperms_create = '';
                 foreach ($cat_gperms_create_groupids as $groupid) {
@@ -108,7 +108,7 @@ switch ($op) {
                 echo '<td>' . $cat_gperms_create . '</td>';
 
                 // cat_gperms_list
-                $cat_gperms_list_groupids = $gpermHandler->getGroupIds('newsletter_list_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $cat_gperms_list_groupids = $grouppermHandler->getGroupIds('newsletter_list_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort($cat_gperms_list_groupids);
                 $cat_gperms_list = '';
                 foreach ($cat_gperms_list_groupids as $groupid) {
@@ -118,7 +118,7 @@ switch ($op) {
                 echo '<td>' . $cat_gperms_list . '</td>';
 
                 // cat_gperms_read
-                $cat_gperms_read_groupids = $gpermHandler->getGroupIds('newsletter_read_cat', $cat_id, $xnewsletter->getModule()->mid());
+                $cat_gperms_read_groupids = $grouppermHandler->getGroupIds('newsletter_read_cat', $cat_id, $xnewsletter->getModule()->mid());
                 sort($cat_gperms_read_groupids);
                 $cat_gperms_read = '';
                 foreach ($cat_gperms_read_groupids as $groupid) {
@@ -174,32 +174,32 @@ switch ($op) {
             $cat_id = $catObj->getVar('cat_id');
             //
             // Form cat_gperms_read
-            $gpermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_read_cat', $cat_id);
-            $gpermHandler->addRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
+            $grouppermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_read_cat', $cat_id);
+            $grouppermHandler->addRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
             $cat_gperms_read_groupids = Request::getArray('cat_gperms_read', []);
             foreach ($cat_gperms_read_groupids as $groupid) {
-                $gpermHandler->addRight('newsletter_read_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
+                $grouppermHandler->addRight('newsletter_read_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
             }
             // Form cat_gperms_admin
-            $gpermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_admin_cat', $cat_id);
-            $gpermHandler->addRight('newsletter_admin_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
+            $grouppermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_admin_cat', $cat_id);
+            $grouppermHandler->addRight('newsletter_admin_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
             $cat_gperms_admin_groupids = Request::getArray('cat_gperms_admin', []);
             foreach ($cat_gperms_admin_groupids as $groupid) {
-                $gpermHandler->addRight('newsletter_admin_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
+                $grouppermHandler->addRight('newsletter_admin_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
             }
             // Form cat_gperms_create
-            $gpermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_create_cat', $cat_id);
-            $gpermHandler->addRight('newsletter_create_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
+            $grouppermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_create_cat', $cat_id);
+            $grouppermHandler->addRight('newsletter_create_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
             $cat_gperms_create_groupids = Request::getArray('cat_gperms_create', []);
             foreach ($cat_gperms_create_groupids as $groupid) {
-                $gpermHandler->addRight('newsletter_create_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
+                $grouppermHandler->addRight('newsletter_create_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
             }
             // Form cat_gperms_list
-            $gpermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_list_cat', $cat_id);
-            $gpermHandler->addRight('newsletter_list_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
+            $grouppermHandler->deleteByModule($xnewsletter->getModule()->mid(), 'newsletter_list_cat', $cat_id);
+            $grouppermHandler->addRight('newsletter_list_cat', $cat_id, XOOPS_GROUP_ADMIN, $xnewsletter->getModule()->mid());
             $cat_gperms_list_groupids = Request::getArray('cat_gperms_list', []);
             foreach ($cat_gperms_list_groupids as $groupid) {
-                $gpermHandler->addRight('newsletter_list_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
+                $grouppermHandler->addRight('newsletter_list_cat', $cat_id, $groupid, $xnewsletter->getModule()->mid());
             }
             //
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);

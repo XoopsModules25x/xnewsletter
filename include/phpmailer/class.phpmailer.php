@@ -780,7 +780,7 @@ class PHPMailer
     {
         $ini_sendmail_path = ini_get('sendmail_path');
 
-        if (!stristr($ini_sendmail_path, 'sendmail')) {
+        if (false === stripos($ini_sendmail_path, 'sendmail')) {
             $this->Sendmail = '/usr/sbin/sendmail';
         } else {
             $this->Sendmail = $ini_sendmail_path;
@@ -797,7 +797,7 @@ class PHPMailer
     {
         $ini_sendmail_path = ini_get('sendmail_path');
 
-        if (!stristr($ini_sendmail_path, 'qmail')) {
+        if (false === stripos($ini_sendmail_path, 'qmail')) {
             $this->Sendmail = '/var/qmail/bin/qmail-inject';
         } else {
             $this->Sendmail = $ini_sendmail_path;
@@ -1378,7 +1378,7 @@ class PHPMailer
      */
     public function smtpConnect($options = [])
     {
-        if (is_null($this->smtp)) {
+        if (null === $this->smtp) {
             $this->smtp = $this->getSMTPInstance();
         }
 
@@ -1453,7 +1453,7 @@ class PHPMailer
         // If we get here, all connection attempts have failed, so close connection hard
         $this->smtp->close();
         // As we've caught all exceptions, just report whatever the last one was
-        if ($this->exceptions and !is_null($lastexception)) {
+        if ($this->exceptions and null !== $lastexception) {
             throw $lastexception;
         }
 
@@ -2930,7 +2930,7 @@ class PHPMailer
     protected function setError($msg)
     {
         $this->error_count++;
-        if ('smtp' === $this->Mailer and !is_null($this->smtp)) {
+        if ('smtp' === $this->Mailer and null !== $this->smtp) {
             $lasterror = $this->smtp->getError();
             if (!empty($lasterror) and array_key_exists('smtp_msg', $lasterror)) {
                 $msg .= '<p>' . $this->lang('smtp_error') . $lasterror['smtp_msg'] . "</p>\n";
@@ -3492,7 +3492,7 @@ class PHPMailer
         $body = str_replace("\n", "\r\n", $body);
         // END stabilize line endings
         while ("\r\n\r\n" === substr($body, strlen($body) - 4, 4)) {
-            $body = substr($body, 0, strlen($body) - 2);
+            $body = substr($body, 0, -2);
         }
 
         return $body;

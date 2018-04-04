@@ -80,7 +80,7 @@ switch ($op) {
         $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria, null, true, true);
         // cats table
         foreach ($catObjs as $cat_id => $catObj) {
-            $permissionShowCats[$cat_id] = $gpermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+            $permissionShowCats[$cat_id] = $grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
             if (true === $permissionShowCats[$cat_id]) {
                 $cat_array         = $catObj->toArray();
                 $catsubscrCriteria = new \CriteriaCompo();
@@ -295,7 +295,7 @@ switch ($op) {
                     unset($letter_array['letter_cats']); // IN PROGRESS
                     foreach ($letter_cat_ids as $letter_cat_id) {
                         $catObj = $xnewsletter->getHandler('cat')->get($letter_cat_id);
-                        if ($gpermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
+                        if ($grouppermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
                             ++$catsAvailableCount;
                             $letter_array['letter_cats'][] = $catObj->toArray();
                         }

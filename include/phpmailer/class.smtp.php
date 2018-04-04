@@ -217,7 +217,7 @@ class SMTP
         static $streamok;
         //This is enabled by default since 5.0.0 but some providers disable it
         //Check this once and cache the result
-        if (is_null($streamok)) {
+        if (null === $streamok) {
             $streamok = function_exists('stream_socket_client');
         }
         // Clear errors to avoid confusion

@@ -155,7 +155,7 @@ class XnewsletterSubscr extends XoopsObject
         $opt_cat  = [];
         $opt_tray = new \XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . '</span>', '<br>');
         $opt_tray->setDescription(_MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL_DESC);
-        $gpermHandler = xoops_getHandler('groupperm');
+        $grouppermHandler = xoops_getHandler('groupperm');
         $uid          = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         $groups       = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
 
@@ -169,8 +169,8 @@ class XnewsletterSubscr extends XoopsObject
         $values = [];
         foreach ($catObjs as $cat_id => $catObj) {
             // if anonymous user or Xoops user can read cat...
-            if ($gpermHandler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $this->xnewsletter->getModule()->mid())
-                || $gpermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid())) {
+            if ($grouppermHandler->checkRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ANONYMOUS, $this->xnewsletter->getModule()->mid())
+                || $grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $this->xnewsletter->getModule()->mid())) {
                 // get existing catsubscr
                 $catsubscrCriteria = new \CriteriaCompo();
                 $catsubscrCriteria->add(new \Criteria('catsubscr_catid', $cat_id));

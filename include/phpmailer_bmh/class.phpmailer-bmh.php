@@ -660,7 +660,7 @@ class BounceMailHandler
      */
     public function mailbox_exist($mailbox, $create = true)
     {
-        if ('' == trim($mailbox) || !strstr($mailbox, 'INBOX.')) {
+        if ('' == trim($mailbox) || false === strpos($mailbox, 'INBOX.')) {
             // this is a critical error with either the mailbox name blank or an invalid mailbox name
             // need to stop processing and exit at this point
             echo "Invalid mailbox name for move operation. Cannot continue.<br>\n";
@@ -702,7 +702,7 @@ class BounceMailHandler
      * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
      *
      * @internal param string $mailbox (the mailbox name)
-     * @return boolean
+     * @return void
      */
     public function globalDelete()
     {
@@ -718,7 +718,7 @@ class BounceMailHandler
                 // get the mailbox name only
                 $nameArr = explode('}', imap_utf7_decode($val->name));
                 $nameRaw = $nameArr[count($nameArr) - 1];
-                if (!stristr($nameRaw, 'sent')) {
+                if (false === stripos($nameRaw, 'sent')) {
                     $mboxd    = imap_open('{' . $this->mailhost . ':' . $port . '}' . $nameRaw, $this->mailbox_username, $this->mailbox_password, CL_EXPUNGE);
                     $messages = imap_sort($mboxd, SORTDATE, 0);
                     $i        = 0;

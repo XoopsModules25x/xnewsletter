@@ -408,7 +408,7 @@ switch ($op) {
             $errors     = [];
             $number_ids = 0;
 
-            $letterObjs = $xnewsletter->getHandler('letter')->getall();
+            $letterObjs = $xnewsletter->getHandler('letter')->getAll();
             foreach ($letterObjs as $letter_id => $letterObj) {
                 $letter_cats_new = '';
                 $letter_cats_old = $letterObj->getVar('letter_cats');

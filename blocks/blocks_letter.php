@@ -38,7 +38,7 @@ function b_xnewsletter_letter($options)
 {
     global $xoopsUser;
     $myts          = \MyTextSanitizer::getInstance();
-    $gpermHandler  = xoops_getHandler('groupperm');
+    $grouppermHandler  = xoops_getHandler('groupperm');
     $memberHandler = xoops_getHandler('member');
     $xnewsletter   = XnewsletterXnewsletter::getInstance();
 
@@ -85,7 +85,7 @@ function b_xnewsletter_letter($options)
         $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         $showCat     = false;
         foreach ($letter_cats as $cat_id) {
-            $showCat = $gpermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+            $showCat = $grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
             if (true === $showCat) {
                 $letter[$letter_id]['letter_id'] = $letterObj->getVar('letter_id');
                 $letter_title                    = $letterObj->getVar('letter_title');

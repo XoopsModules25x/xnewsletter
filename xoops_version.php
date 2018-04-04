@@ -126,7 +126,7 @@ $subcount          = 1;
 $modversion['sub'] = [];
 
 // check user rights
-$gpermHandler = xoops_getHandler('groupperm');
+$grouppermHandler = xoops_getHandler('groupperm');
 /** @var XoopsModuleHandler $moduleHandler */
 $moduleHandler = xoops_getHandler('module');
 $memberHandler = xoops_getHandler('member');
@@ -147,14 +147,14 @@ if (is_object($xoopsModule)) {
     $catObjs = $catHandler->getAll($catCriteria);
 
     foreach ($catObjs as $catObj) {
-        if ($gpermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
+        if ($grouppermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
             $showRead = true;
         }
-        if ($gpermHandler->checkRight('newsletter_create_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
+        if ($grouppermHandler->checkRight('newsletter_create_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
             $showEdit   = true;
             $showCreate = true;
         }
-        if ($gpermHandler->checkRight('newsletter_list_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
+        if ($grouppermHandler->checkRight('newsletter_list_cat', $catObj->getVar('cat_id'), $groups, $xoopsModule->mid())) {
             $showList = true;
         }
     }

@@ -295,7 +295,7 @@ switch ($op) {
         break;
 
     case 'delete_protocol_list':
-        $letter_id = \Xmf\Request::getInt('letter_id', 0, REQUEST);
+        $letter_id = \Xmf\Request::getInt('letter_id', 0, 'REQUEST');
         if ($letter_id > 0) {
             $letterObj = $xnewsletter->getHandler('letter')->get($_REQUEST['letter_id']);
             if (true === Request::getBool('ok', false, 'POST')) {

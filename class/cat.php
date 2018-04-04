@@ -71,7 +71,7 @@ class XnewsletterCat extends XoopsObject
     {
         global $xoopsDB;
 
-        $gpermHandler = xoops_getHandler('groupperm');
+        $grouppermHandler = xoops_getHandler('groupperm');
 
         if (false === $action) {
             $action = $_SERVER['REQUEST_URI'];
@@ -126,7 +126,7 @@ class XnewsletterCat extends XoopsObject
         $select_perm_admin->setExtra("disabled='disabled'");
 
         // permission read cat
-        $cat_gperms_read     = $gpermHandler->getGroupIds('newsletter_read_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
+        $cat_gperms_read     = $grouppermHandler->getGroupIds('newsletter_read_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_read = $this->isNew() ? '0' : $cat_gperms_read;
         $perms_tray          = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_READ, '');
         // checkbox webmaster
@@ -144,7 +144,7 @@ class XnewsletterCat extends XoopsObject
         unset($select_perm);
 
         // permission create cat
-        $cat_gperms_create     = $gpermHandler->getGroupIds('newsletter_create_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
+        $cat_gperms_create     = $grouppermHandler->getGroupIds('newsletter_create_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_create = $this->isNew() ? '0' : $cat_gperms_create;
         $perms_tray            = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_CREATE . _AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC, '');
         // checkbox webmaster
@@ -162,7 +162,7 @@ class XnewsletterCat extends XoopsObject
         unset($select_perm);
 
         // permission admin cat
-        $cat_gperms_admin     = $gpermHandler->getGroupIds('newsletter_admin_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
+        $cat_gperms_admin     = $grouppermHandler->getGroupIds('newsletter_admin_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? '0' : $cat_gperms_admin;
         $perms_tray           = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_ADMIN . _AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC, '');
         // checkbox webmaster
@@ -180,7 +180,7 @@ class XnewsletterCat extends XoopsObject
         unset($select_perm);
 
         // permission list subscriber of this cat
-        $cat_gperms_list      = $gpermHandler->getGroupIds('newsletter_list_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
+        $cat_gperms_list      = $grouppermHandler->getGroupIds('newsletter_list_cat', $this->getVar('cat_id'), $this->xnewsletter->getModule()->mid());
         $arr_cat_gperms_admin = $this->isNew() ? '0' : $cat_gperms_list;
 
         $perms_tray = new \XoopsFormElementTray(_AM_XNEWSLETTER_CAT_GPERMS_LIST, '');

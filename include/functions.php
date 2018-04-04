@@ -290,7 +290,7 @@ function xnewsletter_setPost($contentObj, $sets)
 function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
 {
     global $xoopsUser;
-    $gpermHandler  = xoops_getHandler('groupperm');
+    $grouppermHandler  = xoops_getHandler('groupperm');
     $memberHandler = xoops_getHandler('member');
     $xnewsletter   = XnewsletterXnewsletter::getInstance();
 
@@ -317,7 +317,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
         $letterObj   = $xnewsletter->getHandler('letter')->get($letter_id);
         $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         foreach ($letter_cats as $cat_id) {
-            if ($gpermHandler->checkRight('newsletter_admin_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+            if ($grouppermHandler->checkRight('newsletter_admin_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
                 $permissions['read']   = true;
                 $permissions['edit']   = true;
                 $permissions['delete'] = true;
@@ -325,7 +325,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
                 $permissions['send']   = true;
                 $permissions['list']   = true;
             } else {
-                if ($gpermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
                     $permissions['create'] = true;
                     $permissions['read']   = true; //creator should have perm to read all letters of this cat
                     if ($uid == $letterObj->getVar('letter_submitter')) {
@@ -334,10 +334,10 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
                         $permissions['send']   = true; //creator must have perm to send/resend own letters
                     }
                 }
-                if ($gpermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
                     $permissions['read'] = true;
                 }
-                if ($gpermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
                     $permissions['list'] = true;
                 }
             }
@@ -358,7 +358,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
 function xnewsletter_userAllowedCreateCat($cat_id = 0)
 {
     global $xoopsUser;
-    $gpermHandler  = xoops_getHandler('groupperm');
+    $grouppermHandler  = xoops_getHandler('groupperm');
     $memberHandler = xoops_getHandler('member');
     $xnewsletter   = XnewsletterXnewsletter::getInstance();
 
@@ -372,13 +372,13 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0)
 
     if ($cat_id > 0) {
         $catObj    = $xnewsletter->getHandler('cat')->get($cat_id);
-        $allowedit = $gpermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+        $allowedit = $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
     } else {
         $catCriteria = new \CriteriaCompo();
         $catObjs     = $xnewsletter->getHandler('cat')->getAll($catCriteria);
         foreach ($catObjs as $i => $catObj) {
             $cat_id    = $catObj->getVar('cat_id');
-            $allowedit += $gpermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+            $allowedit += $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
         }
     }
 
@@ -448,7 +448,7 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
     // human readable format -- powers of 1024
     $unit = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB'];
 
-    return @round($bytes / pow(1024, $i = floor(log($bytes, 1024))), $precision) . '' . $unit[(int)$i];
+    return @round($bytes / (1024 ** $i = floor(log($bytes, 1024))), $precision) . '' . $unit[(int)$i];
 }
 
 /**
@@ -457,6 +457,8 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  * @param int $letter_id
  *
  * @return int
+ * @throws \Html2TextException
+ * @throws \phpmailerException
  */
 function xnewsletter_emailSize($letter_id = 0)
 {

@@ -28,7 +28,7 @@ if (($userPermissions['read'] && $letterObj->getVar('letter_sent') > 0) || (true
 
     // MSIE Bug fix
     $headerFilename = $attachmentFilename;
-    if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+    if (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         $headerFilename = preg_replace('/\./', '%2e', $headerFilename, substr_count($headerFilename, '.') - 1);
     }
     //
@@ -39,7 +39,7 @@ if (($userPermissions['read'] && $letterObj->getVar('letter_sent') > 0) || (true
     header('Content-Transfer-Encoding: binary');
     header("Content-Type: {$attachmentMimetype}");
     header("Content-Disposition: attachment; filename={$headerFilename}");
-    if (strstr($attachmentMimetype, 'text/')) {
+    if (false !== strpos($attachmentMimetype, 'text/')) {
         // downladed file is not binary
         xnewsletter_download($attachmentPath, false, true);
     } else {

@@ -492,13 +492,13 @@ class xnewsletterRequest
             // If the allow raw flag is set, do not modify the variable
         } elseif ($mask & 4) {
             // If the allow html flag is set, apply a safe html filter to the variable
-            if (is_null($safeHtmlFilter)) {
+            if (null === $safeHtmlFilter) {
                 $safeHtmlFilter = xnewsletterFilterInput::getInstance(null, null, 1, 1);
             }
             $var = $safeHtmlFilter->clean($var, $type);
         } else {
             // Since no allow flags were set, we will apply the most strict filter to the variable
-            if (is_null($noHtmlFilter)) {
+            if (null === $noHtmlFilter) {
                 $noHtmlFilter = xnewsletterFilterInput::getInstance(/* $tags, $attr, $tag_method, $attr_method, $xss_auto */);
             }
             $var = $noHtmlFilter->clean($var, $type);
@@ -702,7 +702,7 @@ class xnewsletterFilterInput
                 break;
             default:
                 // Check for static usage and assign $filter the proper variable
-                if (is_object($this) && 'xnewsletterFilterInput' === get_class($this)) {
+                if (is_object($this) && $this instanceof \xnewsletterFilterInput) {
                     $filter =& $this;
                 } else {
                     $filter = self::getInstance();
@@ -962,7 +962,7 @@ class xnewsletterFilterInput
                 // convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr value)
                 if (("'" === substr($attrSubSet[1], 0, 1))
                     && ("'" === substr($attrSubSet[1], strlen($attrSubSet[1]) - 1, 1))) {
-                    $attrSubSet[1] = substr($attrSubSet[1], 1, strlen($attrSubSet[1]) - 2);
+                    $attrSubSet[1] = substr($attrSubSet[1], 1, -2);
                 }
                 // strip slashes
                 $attrSubSet[1] = stripslashes($attrSubSet[1]);
