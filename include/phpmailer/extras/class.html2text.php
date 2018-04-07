@@ -353,7 +353,7 @@ class Html2Text
     public function set_base_url($url = '')
     {
         if (empty($url)) {
-            if (!empty($_SERVER['HTTP_HOST'])) {
+           if (\Xmf\Request::hasVar('HTTP_HOST', 'SERVER')) {
                 $this->url = 'http://' . $_SERVER['HTTP_HOST'];
             } else {
                 $this->url = '';
