@@ -207,7 +207,7 @@ function xnewsletter_printPage($content)
          http://creativecommons.org/licenses/by-sa/2.0/
          Note:           If you change or improve on this script, please let us know.
          ------------------------------------------------------------------------------*/
-        if (Array.prototype.push == null) {
+        if (Array.prototype.push === null) {
             Array.prototype.push = function (item) {
                 this[this.length] = item;
 

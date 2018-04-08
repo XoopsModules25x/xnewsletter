@@ -214,7 +214,7 @@ function iterate_over_node($node)
         case 'a':
             // links are returned in [text](link) format
             $href = $node->getAttribute('href');
-            if (null == $href) {
+            if (null === $href) {
                 // it doesn't link anywhere
                 if (null != $node->getAttribute('name')) {
                     $output = "[$output]";
