@@ -145,7 +145,7 @@ switch ($op) {
                     $catsubscr_quited = _NO;
                 }
                 echo '<td>' . $catsubscr_quited . '</td>';
-                echo '<td>' . XoopsUser::getUnameFromId($catsubscrObj->getVar('catsubscr_submitter'), 'S') . '</td>';
+                echo '<td>' . \XoopsUser::getUnameFromId($catsubscrObj->getVar('catsubscr_submitter'), 'S') . '</td>';
                 echo '<td>' . formatTimestamp($catsubscrObj->getVar('catsubscr_created'), 'S') . '</td>';
 
                 echo "<td class='center' nowrap='nowrap'>

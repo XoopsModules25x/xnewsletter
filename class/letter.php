@@ -27,12 +27,12 @@
  * ****************************************************************************
  */
 
-require_once __DIR__ . '/../include/common.php';
+require_once  dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterLetter
  */
-class XnewsletterLetter extends XoopsObject
+class XnewsletterLetter extends \XoopsObject
 {
     public $xnewsletter = null;
 
@@ -251,7 +251,7 @@ class XnewsletterLetter extends XoopsObject
             $time          = $this->getVar('letter_created');
             $submitter_uid = $this->getVar('letter_submitter');
             xoops_load('xoopsuserutility');
-            $submitter_name = XoopsUserUtility::getUnameFromId($submitter_uid);
+            $submitter_name = \XoopsUserUtility::getUnameFromId($submitter_uid);
         }
 
         $form->addElement(new \XoopsFormHidden('letter_submitter', $submitter_uid));
@@ -270,7 +270,7 @@ class XnewsletterLetter extends XoopsObject
 /**
  * Class XnewsletterLetterHandler
  */
-class XnewsletterLetterHandler extends XoopsPersistableObjectHandler
+class XnewsletterLetterHandler extends \XoopsPersistableObjectHandler
 {
     /**
      * @var XnewsletterXnewsletter

@@ -179,7 +179,7 @@ switch ($op) {
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
         $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
-        $letter_array['letter_submitter_name']         = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
+        $letter_array['letter_submitter_name']         = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
         $xoopsTpl->assign('letter', $letter_array);
         break;
 
@@ -231,7 +231,7 @@ switch ($op) {
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
         $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
-        $letter_array['letter_submitter_name']         = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
+        $letter_array['letter_submitter_name']         = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
         $xoopsTpl->assign('letter', $letter_array);
         break;
 
@@ -273,9 +273,9 @@ switch ($op) {
                     || (true === $userPermissions['send'])) {
                     $letter_array                             = $letterObj->toArray();
                     $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
-                    $letter_array['letter_submitter_name']    = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
+                    $letter_array['letter_submitter_name']    = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
                     $letter_array['letter_sent_formatted']    = 0 != $letterObj->getVar('letter_sent') ? formatTimestamp($letterObj->getVar('letter_sent'), $xnewsletter->getConfig('dateformat')) : '';
-                    $letter_array['letter_sender_name']       = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_sender'));
+                    $letter_array['letter_sender_name']       = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_sender'));
                     //
                     preg_match('/db:([0-9]*)/', $letter_array['letter_template'], $matches);
                     if (isset($matches[1])

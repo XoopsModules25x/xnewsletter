@@ -253,7 +253,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_EDITOR_DESC';
 $modversion['config'][$i]['formtype']    = 'select';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = 'dhtmltextarea';
-$modversion['config'][$i]['options']     = XoopsLists::getEditorList();
+$modversion['config'][$i]['options']     = \XoopsLists::getEditorList();
 ++$i;
 $modversion['config'][$i]['name']        = 'template_editor';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_TEMPLATE_EDITOR';
@@ -261,7 +261,7 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_TEMPLATE_EDITOR_DESC
 $modversion['config'][$i]['formtype']    = 'select';
 $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['default']     = 'textarea';
-$modversion['config'][$i]['options']     = XoopsLists::getEditorList();
+$modversion['config'][$i]['options']     = \XoopsLists::getEditorList();
 ++$i;
 $modversion['config'][$i]['name']        = 'keywords';
 $modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_KEYWORDS';

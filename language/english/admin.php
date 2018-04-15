@@ -351,7 +351,7 @@ define('_AM_XNEWSLETTER_IMPORT_CSV_FILE', 'CSV-file:');
 define('_AM_XNEWSLETTER_IMPORT_CSV_DELIMITER', 'Delimiter:');
 define('_AM_XNEWSLETTER_IMPORT_CSV_HEADER', 'CSV-file with header');
 define('_AM_XNEWSLETTER_IMPORT_CSV', 'One column ( email ) or four columns ( email | sex | first name | last name )<br>see sample1col.csv and sample4col.csv in /plug-ins');
-define('_AM_XNEWSLETTER_IMPORT_XOOPSUSER', 'Options to import/synchronise XoopsUsers');
+define('_AM_XNEWSLETTER_IMPORT_XOOPSUSER', 'Options to import/synchronise \XoopsUsers');
 define('_AM_XNEWSLETTER_IMPORT_XOOPSUSER_GROUPS', 'Select groups');
 define('_AM_XNEWSLETTER_NEWTASK', 'Add New task');
 define('_AM_XNEWSLETTER_TASKLIST', 'List task');

@@ -20,12 +20,12 @@
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-require_once __DIR__ . '/../include/common.php';
+require_once  dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterTask
  */
-class XnewsletterTask extends XoopsObject
+class XnewsletterTask extends \XoopsObject
 {
     public $xnewsletter = null;
 
@@ -97,7 +97,7 @@ class XnewsletterTask extends XoopsObject
 /**
  * Class XnewsletterTaskHandler
  */
-class XnewsletterTaskHandler extends XoopsPersistableObjectHandler
+class XnewsletterTaskHandler extends \XoopsPersistableObjectHandler
 {
     /**
      * @var XnewsletterXnewsletter

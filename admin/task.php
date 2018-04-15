@@ -73,7 +73,7 @@ switch ($op) {
                     }
                     echo '<td>' . $title_subscr . '</td>';
                     echo '<td>' . formatTimestamp($taskObj->getVar('task_starttime'), 'mysql') . '</td>';
-                    echo '<td>' . XoopsUser::getUnameFromId($taskObj->getVar('task_submitter'), 'S') . '</td>';
+                    echo '<td>' . \XoopsUser::getUnameFromId($taskObj->getVar('task_submitter'), 'S') . '</td>';
                     echo '<td>' . formatTimestamp($taskObj->getVar('task_created'), 'mysql') . '</td>';
                     echo '<td>';
                     echo "

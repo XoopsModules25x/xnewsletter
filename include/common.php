@@ -57,6 +57,7 @@ $xoopsModule = $xnewsletter->getModule();
 // Load Xoops handlers
 $moduleHandler       = xoops_getHandler('module');
 $memberHandler       = xoops_getHandler('member');
+/** @var \XoopsNotificationHandler $notificationHandler */
 $notificationHandler = xoops_getHandler('notification');
 $grouppermHandler        = xoops_getHandler('groupperm');
 $configHandler       = xoops_getHandler('config');

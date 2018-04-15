@@ -215,7 +215,7 @@ switch ($op) {
                 echo '<td>' . $subscriber . '</td>';
                 echo '<td>' . $protocolObj->getVar('protocol_status') . '</td>';
                 echo '<td>' . $success . '</td>';
-                echo '<td>' . XoopsUser::getUnameFromId($protocolObj->getVar('protocol_submitter'), 'S') . '</td>';
+                echo '<td>' . \XoopsUser::getUnameFromId($protocolObj->getVar('protocol_submitter'), 'S') . '</td>';
                 echo '<td>' . formatTimestamp($protocolObj->getVar('protocol_created'), 'L') . '</td>';
 
                 echo "

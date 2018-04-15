@@ -27,12 +27,12 @@
  * ****************************************************************************
  */
 
-require_once __DIR__ . '/../include/common.php';
+require_once  dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterBmh
  */
-class XnewsletterBmh extends XoopsObject
+class XnewsletterBmh extends \XoopsObject
 {
     public $xnewsletter = null;
 
@@ -116,7 +116,7 @@ class XnewsletterBmh extends XoopsObject
 /**
  * Class XnewsletterBmh
  */
-class XnewsletterBmhHandler extends XoopsPersistableObjectHandler
+class XnewsletterBmhHandler extends \XoopsPersistableObjectHandler
 {
     /**
      * @var XnewsletterXnewsletter

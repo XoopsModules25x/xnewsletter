@@ -68,7 +68,7 @@ if ($letterObj && '' != $letterObj->getVar('letter_template')) {
     $letter_array                             = $letterObj->toArray();
     $letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
     $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
-    $letter_array['letter_submitter_name']    = XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
+    $letter_array['letter_submitter_name']    = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
     $xoopsTpl->assign('letter', $letter_array);
 
     // IN PROGRESS

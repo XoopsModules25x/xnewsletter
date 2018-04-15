@@ -81,7 +81,7 @@ switch ($op) {
                 echo '<td>' . $template_id . '</td>';
                 echo '<td>' . $templateObj->getVar('template_title') . '</td>';
                 echo '<td>' . $templateObj->getVar('template_description') . '</td>';
-                echo "<td class='center'>" . XoopsUser::getUnameFromId($templateObj->getVar('template_submitter'), 'S') . '</td>';
+                echo "<td class='center'>" . \XoopsUser::getUnameFromId($templateObj->getVar('template_submitter'), 'S') . '</td>';
                 echo "<td class='center'>" . formatTimestamp($templateObj->getVar('template_created'), 'S') . '</td>';
                 echo "<td class='center' nowrap='nowrap'>";
                 echo "    <a href='?op=edit_template&template_id=" . $template_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "'></a>";

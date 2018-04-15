@@ -27,12 +27,12 @@
  * ****************************************************************************
  */
 
-require_once __DIR__ . '/../include/common.php';
+require_once  dirname(__DIR__) . '/include/common.php';
 
 /**
  * Class XnewsletterImport
  */
-class XnewsletterImport extends XoopsObject
+class XnewsletterImport extends \XoopsObject
 {
     public $xnewsletter = null;
 
@@ -87,7 +87,7 @@ class XnewsletterImport extends XoopsObject
 
         $opt_import_type = new \XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, 'plugin', $plugin, '<br>');
         $opt_import_type->setExtra('onclick="document.forms.form_select_import.submit()"');
-        $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . '/plugins/');
+        $aFiles            = \XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . '/plugins/');
         $arrPlugin         = [];
         $currpluginhasform = 0;
         foreach ($aFiles as $file) {
@@ -196,7 +196,7 @@ class XnewsletterImport extends XoopsObject
 /**
  * Class XnewsletterImportHandler
  */
-class XnewsletterImportHandler extends XoopsPersistableObjectHandler
+class XnewsletterImportHandler extends \XoopsPersistableObjectHandler
 {
     /**
      * @var XnewsletterXnewsletter

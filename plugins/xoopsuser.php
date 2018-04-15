@@ -27,7 +27,7 @@
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-require_once __DIR__ . '/../include/common.php';
+require_once  dirname(__DIR__) . '/include/common.php';
 
 /**
  * @return array
@@ -42,7 +42,7 @@ function xnewsletter_plugin_getinfo_xoopsuser()
     //$pluginInfo['modulepath'] = XNEWSLETTER_ROOT_PATH . "/plugins/xoopsuser.php";
     $pluginInfo['tables'][0] = $xoopsDB->prefix('users');
     $pluginInfo['tables'][1] = $xoopsDB->prefix('groups_users_link');
-    $pluginInfo['descr']     = 'Import XoopsUser';
+    $pluginInfo['descr']     = 'Import \XoopsUser';
     $pluginInfo['hasform']   = 1;
 
     return $pluginInfo;

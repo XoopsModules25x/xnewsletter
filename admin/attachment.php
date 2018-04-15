@@ -84,7 +84,7 @@ switch ($op) {
                 echo '<br>';
                 echo $attachmentObj->getVar('attachment_type');
                 echo '</td>';
-                echo '<td>' . XoopsUser::getUnameFromId($attachmentObj->getVar('attachment_submitter'), 'S') . '</td>';
+                echo '<td>' . \XoopsUser::getUnameFromId($attachmentObj->getVar('attachment_submitter'), 'S') . '</td>';
                 echo '<td>' . formatTimestamp($attachmentObj->getVar('attachment_created'), 'S') . '</td>';
                 echo "<td class='center'>";
                 echo "    <a href='?op=edit_attachment&attachment_id={$attachment_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "'></a>";

@@ -64,7 +64,7 @@ if ($protocolCount > 0) {
         if (is_object($subscrObj)) {
             $subscr_array                                = $subscrObj->toArray();
             $protocol_array['subscr']                    = $subscr_array;
-            $protocol_array['subscr']['subscriber_name'] = 0 != $subscrObj->getVar('subscr_uid') ? XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
+            $protocol_array['subscr']['subscriber_name'] = 0 != $subscrObj->getVar('subscr_uid') ? \XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
         } else {
             $protocol_array['subscr'] = false;
         }

@@ -222,7 +222,7 @@ switch ($op) {
                 echo '    <td>' . $subscrObj->getVar('subscr_email') . '&nbsp;</td>';
                 echo '    <td>';
                 if ($subscrObj->getVar('subscr_uid') > 0) {
-                    echo XoopsUser::getUnameFromId($subscrObj->getVar('subscr_uid'), 'S');
+                    echo \XoopsUser::getUnameFromId($subscrObj->getVar('subscr_uid'), 'S');
                 } else {
                     echo '-';
                 }
