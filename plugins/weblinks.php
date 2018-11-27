@@ -68,8 +68,8 @@ function xnewsletter_plugin_getdata_weblinks($cat_id, $action_after_read, $limit
 
     $sql = "SELECT `mail`, `name`";
     $sql .= " FROM " . $xoopsDB->prefix("weblinks_link");
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
-    while ($lineArray = mysql_fetch_array($result_users)) {
+    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
         $sex       = "";
@@ -98,7 +98,7 @@ function xnewsletter_plugin_getdata_weblinks($cat_id, $action_after_read, $limit
             }
 //            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
 //            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . mysql_error());
+//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . $xoopsDB->error());
             ++$j;
         }
         ++$i;

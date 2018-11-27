@@ -335,8 +335,8 @@ function xnewsletter_pluginCheckEmail($email = '') {
     }
     $sql = "SELECT `subscr_id` FROM {$xoopsDB->prefix("xnewsletter_subscr")}";
     $sql .= " WHERE ((subscr_email)='{$email}')";
-    if(!$subscriber = mysql_query($sql)) die ("MySQL-Error in xnewsletter_pluginCheckEmail: " . mysql_error());
-    $row_result = mysql_fetch_assoc($subscriber);
+    if(!$subscriber = $xoopsDB->query($sql)) die ("MySQL-Error in xnewsletter_pluginCheckEmail: " . $xoopsDB->error());
+    $row_result = $xoopsDB->fetchArray($subscriber);
     $ret = $row_result['subscr_id'] > 0 ? $row_result['subscr_id'] : false;
     unset($row_result);
     unset($subscriber);
@@ -357,8 +357,8 @@ function xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id) {
     $sql = "SELECT `catsubscr_id`";
     $sql .= " FROM {$xoopsDB->prefix("xnewsletter_catsubscr")}";
     $sql .= " WHERE ((catsubscr_subscrid)={$subscr_id} AND (catsubscr_catid)={$cat_id})";
-    if(!$subscriber = mysql_query($sql)) die ("MySQL-Error in xnewsletter_pluginCheckCatSubscr: " . mysql_error());
-    $row_result = mysql_fetch_assoc($subscriber);
+    if(!$subscriber = $xoopsDB->query($sql)) die ("MySQL-Error in xnewsletter_pluginCheckCatSubscr: " . $xoopsDB->error());
+    $row_result = $xoopsDB->fetchArray($subscriber);
     $ret = $row_result['catsubscr_id'] > 0 ? $row_result['catsubscr_id'] : false;
     unset($row_result);
     unset($subscriber);
