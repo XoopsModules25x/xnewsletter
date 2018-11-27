@@ -117,7 +117,7 @@ switch ($op) {
             $sql .= $xoopsDB->prefix('xnewsletter_catsubscr')."` ON `subscr_id` = `catsubscr_subscrid` ";
             $sql .= "SET `catsubscr_quited` = " . time() . " WHERE (((`subscr_email`)='";
             $sql .= $bmh_email. "'))";
-            if(!$result = $xoopsDB->queryF($sql)) die ('MySQL-Error: ' . mysql_error());
+            if(!$result = $xoopsDB->queryF($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
         }
         //set bmh_measure for all entries in bmh with this email
         $sql_upd = "UPDATE ".$xoopsDB->prefix('xnewsletter_bmh')." SET ";
@@ -125,7 +125,7 @@ switch ($op) {
         $sql_upd .=", `bmh_submitter` = '" . $xoopsUser->uid() . "'";
         $sql_upd .=", `bmh_created` = '" . time() . "'";
         $sql_upd .=" WHERE ((`" . $xoopsDB->prefix('xnewsletter_bmh') . "`.`bmh_email` ='{$bmh_email}') AND (`" . $xoopsDB->prefix('xnewsletter_bmh') . "`.`bmh_measure` ='0'))";
-        if(!$result = $xoopsDB->queryF($sql_upd)) die ("MySQL-Error: " . mysql_error());
+        if(!$result = $xoopsDB->queryF($sql_upd)) die ("MySQL-Error: " . $xoopsDB->error());
 
         redirect_header("?op=list&filter={$filter}", 3, _AM_XNEWSLETTER_FORMOK);
 

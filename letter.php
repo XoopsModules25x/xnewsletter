@@ -126,8 +126,8 @@ switch ($op) {
                 $sql ="SELECT `subscr_sex`, `subscr_lastname`, `subscr_firstname`, `subscr_email`, `subscr_id`";
                 $sql.= " FROM {$xoopsDB->prefix("xnewsletter_subscr")} INNER JOIN {$xoopsDB->prefix("xnewsletter_catsubscr")} ON `subscr_id` = `catsubscr_subscrid`";
                 $sql.= " WHERE (((`catsubscr_catid`)={$cat_id}) AND ((`catsubscr_quited`)=0)) ORDER BY `subscr_lastname`, `subscr_email`;";
-                if(!$subscrs = $xoopsDB->query($sql)) die ("MySQL-Error: " . mysql_error());
-                while ($subscr_array = mysql_fetch_assoc($subscrs)) {
+                if(!$subscrs = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+                while ($subscr_array = $xoopsDB->fetchArray($subscrs)) {
                     $subscr_array['counter'] = ++$counter;
                     $xoopsTpl->append('subscrs', $subscr_array);
                 }
@@ -594,7 +594,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
                 // delete protocol
                 $sql = "DELETE FROM `{$xoopsDB->prefix("xnewsletter_protocol")}`";
                 $sql.= " WHERE `protocol_letter_id`={$letter_id}";
-                if(!$result = $xoopsDB->query($sql)) die("MySQL-Error: " . mysql_error());
+                if(!$result = $xoopsDB->query($sql)) die("MySQL-Error: " . $xoopsDB->error());
 
                 // delete attachments
                 $attachmentCriteria = new CriteriaCompo();
