@@ -461,7 +461,7 @@ switch ($op) {
             if ($xnewsletter->getHandler('letter')->delete($letterObj)) {
                 //delete protocol
                 $sql = "DELETE FROM `".$xoopsDB->prefix("xnewsletter_protocol")."` WHERE `protocol_letter_id`=".$letter_id;
-                if(!$result = $xoopsDB->query($sql)) die("MySQL-Error: " . mysql_error());
+                if(!$result = $xoopsDB->query($sql)) die("MySQL-Error: " . $xoopsDB->error());
 
                 //delete attachments
                 $attachmentCriteria = new CriteriaCompo();

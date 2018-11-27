@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * ****************************************************************************
  *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
  * ****************************************************************************
@@ -16,14 +16,15 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
+ * ****************************************************************************
+ */
+ /**
+ *  @copyright  Goffy
+ *  @link http://wedega.com Wedega
  *  @license    GPL 2.0
  *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ *  @author     Goffy <webmaster@wedega.com>
  *
- *  Version : $Id $
- * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 include_once dirname(__DIR__) . '/include/common.php';
@@ -31,21 +32,15 @@ include_once dirname(__DIR__) . '/include/common.php';
 /**
  * @return array
  */
-function xnewsletter_plugin_getinfo_smartpartner()
-{
+function xnewsletter_plugin_getinfo_simplenewsletter() {
     global $xoopsDB;
 
     $pluginInfo = array();
-    $pluginInfo['name'] = "smartpartner";
-    if (file_exists(XOOPS_URL . "/modules/smartpartner/images/module_logo.gif")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/images/module_logo.gif";
-    } elseif (file_exists(XOOPS_URL . "/modules/smartpartner/assets/images/module_logo.png")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/assets/images/module_logo.png";
-    }
-    //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/smartpartner/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("smartpartner_partner");
-    $pluginInfo['descr']     = "Import from Smartpartner";
-    $pluginInfo['hasform']   = 0;
+    $pluginInfo['name'] = "simplenewsletter";
+    $pluginInfo['icon'] = XOOPS_URL . "/modules/simplenewsletter/images/news_subscribe.png";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix("simplenewsletter_members");
+    $pluginInfo['descr'] = "Import from simplenewsletter";
+    $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
 }
@@ -58,32 +53,34 @@ function xnewsletter_plugin_getinfo_smartpartner()
  *
  * @return int
  */
-function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist) {
+function xnewsletter_plugin_getdata_simplenewsletter($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist) {
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    //$table_import = $xoopsDB->prefix('xnewsletter_import');
-    $import_status = $action_after_read == 0 ? 1 : 0;
+    $import_status = (0 == $action_after_read) ? 1 : 0;
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `contact_email`, `contact_name`";
-    $sql .= " FROM " . $xoopsDB->prefix("smartpartner_partner");
-    $sql .= " WHERE (`contact_email` is not null and not(`contact_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    $sql = "SELECT `member_email`, `member_firstname`, `member_lastname`";
+    $sql .= " FROM {$xoopsDB->prefix("simplenewsletter_members")}";
+    $sql .= " WHERE (`member_email` IS NOT NULL AND NOT(`member_email`=''))";
+    if (!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
-        $email     = $lineArray[0];
+        $email     = substr($lineArray[0], 0, 100); // only allow 1st 100 chars
+        $email     = checkEmail($email);  // make sure truncated string is valid email addr
+        $email     = (false === $email) ? '' : $email;
         $sex       = "";
-        $firstname = "";
-        $lastname  = $lineArray[1];
+        $firstname = substr($lineArray[1], 0, 100); // only allow 1st 100 chars
+        $lastname  = substr($lineArray[2], 0, 100); // only allow 1st 100 chars
 
-        $subscr_id = xnewsletter_pluginCheckEmail($email);
+        $subscr_id    = xnewsletter_pluginCheckEmail($email);
         $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);
 
-        if ($skipcatsubscrexist == 1 && $catsubscr_id > 0) {
+        if (((1 == $skipcatsubscrexist) && ($catsubscr_id > 0)) || ('' == $email)) {
             //skip existing subscriptions
         } else {
+//        if (((1 != $skipcatsubscrexist) || ($catsubscr_id <= 0)) && ('' != $email)) {
             $currcatid = $catsubscr_id > 0 ? 0 : $cat_id;
             $importObj = $xnewsletter->getHandler('import')->create();
             $importObj->setVar('import_email', $email);
@@ -98,9 +95,6 @@ function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $l
                 echo $importObj->getHtmlErrors();
                 exit();
             }
-//            $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
-//            $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $currcatid, $subscr_id, $catsubscr_id, $import_status)";
-//            $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . $xoopsDB->error());
             ++$j;
         }
         ++$i;

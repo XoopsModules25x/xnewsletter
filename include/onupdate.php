@@ -72,8 +72,8 @@ function xoops_module_update_xnewsletter_130() {
         "CREATE TABLE `" . $xoopsDB->prefix('xnewsletter_template') . "` (
         `template_id` int (8)   NOT NULL  auto_increment,
         `template_title` varchar (100)   NOT NULL default '',
-        `template_description` text   NOT NULL default '',
-        `template_content` text   NOT NULL default '',
+        `template_description` text   NOT NULL,
+        `template_content` text   NOT NULL,
         `template_submitter` int (8)   NOT NULL default '0',
         `template_created` int (8)   NOT NULL default '0',
         PRIMARY KEY (`template_id`)
