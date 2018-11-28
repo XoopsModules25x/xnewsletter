@@ -115,7 +115,7 @@ switch ($op) {
                     reset ($folders);
                     sort ($folders);
                     $foldercreated = 0;
-                    while (list( $key, $val) = each ($folders)) {
+                    foreach ($folders as $key => $val) {
                         echo "($key) ";
                         echo imap_utf7_decode (str_replace("{" . $command . "}", "", $val)) . "<br>\n";
                         if ("{" . $command . "}" . $accounts_inbox == $val) $accounts_inbox_ok = 1;
@@ -134,7 +134,7 @@ switch ($op) {
                     }
                     if ($foldercreated == 1) {
                         $folders_recheck = imap_listmailbox($mbox, "{" . $command . "}", "*");
-                        while (list( $key, $val) = each ($folders_recheck)) {
+                        foreach ($folders_recheck as $key => $val) {
                             if ("{" . $command . "}" . $accounts_hardbox == $val) $accounts_hardbox_ok = 1;
                             if ("{" . $command . "}" . $accounts_softbox == $val) $accounts_softbox_ok = 1;
                         }
