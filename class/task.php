@@ -38,7 +38,7 @@ class XnewsletterTask extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->XoopsObject();
+        parent::__construct();
         $this->initVar('task_id', XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar('task_letter_id', XOBJ_DTYPE_INT, null, false, 8);
         $this->initVar('task_subscr_id', XOBJ_DTYPE_INT, null, false, 8);
