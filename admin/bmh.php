@@ -282,7 +282,7 @@ switch ($op) {
                 echo "<td class='center'>" . $bhmObj->getVar("bmh_email") . "</td>";
 
                 echo "<td class='center'>" . $arr_measure_type[$bhmObj->getVar("bmh_measure")] . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($bhmObj->getVar("bmh_created"),"S") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($bhmObj->getVar("bmh_created"),"S") . "</td>";
 
                 echo "<td class='center width20'>
                     <a href='?op=handle_bmh&bmh_id=" . $bhm_id . "&bmh_measure=" . _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING . "&filter=" . $filter . "'>

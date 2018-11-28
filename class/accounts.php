@@ -124,7 +124,7 @@ class XnewsletterAccounts extends XoopsObject
         }
 
         $accstd_select = new XoopsFormSelect(_AM_XNEWSLETTER_ACCOUNTS_TYPE, "accounts_type", $this->getVar("accounts_type"));
-        $accstd_select->setextra('onchange="document.forms.' . $this->xnewsletter->getModule()->getVar('dirname') . '_form.submit()"');
+        $accstd_select->setExtra('onchange="document.forms.' . $this->xnewsletter->getModule()->getVar('dirname') . '_form.submit()"');
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL);
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL, _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL);
         $accstd_select->addOption(_AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3, _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3);

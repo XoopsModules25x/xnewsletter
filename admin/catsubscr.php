@@ -161,13 +161,13 @@ switch ($op) {
                 $subscr_email = ($subscr) ? $subscr->getVar("subscr_email") : "";
                 echo "<td class='center'>" . $subscr_email . "</td>";
                 if ($catsubscrObj->getVar("catsubscr_quited") > 0) {
-                    $catsubscr_quited = formatTimeStamp($catsubscrObj->getVar("catsubscr_quited"), "M");
+                    $catsubscr_quited = formatTimestamp($catsubscrObj->getVar("catsubscr_quited"), "M");
                 } else {
                     $catsubscr_quited = "";
                 }
                 echo "<td class='center'>" . $catsubscr_quited . "</td>";
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($catsubscrObj->getVar("catsubscr_submitter"), "S") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($catsubscrObj->getVar("catsubscr_created"), "S") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($catsubscrObj->getVar("catsubscr_created"), "S") . "</td>";
 
                 echo "<td class='center width5' nowrap='nowrap'>
                     <a href='?op=edit_catsubscr&catsubscr_id=" . $catsubscr_id . "&cat_id=" . $cat_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "' /></a>

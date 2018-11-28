@@ -231,8 +231,8 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
     //check the rights of current user for this letter
     // returns the permission as array
     global $xoopsUser;
-    $gperm_handler = xoops_gethandler('groupperm');
-    $member_handler = xoops_gethandler('member');
+    $gperm_handler = xoops_getHandler('groupperm');
+    $member_handler = xoops_getHandler('member');
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $perm = array(
@@ -297,8 +297,8 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0) {
     //if a cat is defined, than only check for this cat, otherwise check whether there is minimum one cat with right create
 
     global $xoopsUser;
-    $gperm_handler  = xoops_gethandler('groupperm');
-    $member_handler = xoops_gethandler('member');
+    $gperm_handler  = xoops_getHandler('groupperm');
+    $member_handler = xoops_getHandler('member');
     $xnewsletter    = xnewsletterxnewsletter::getInstance();
 
     $allowedit = 0;

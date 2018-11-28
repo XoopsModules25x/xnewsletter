@@ -91,7 +91,7 @@ switch ($op) {
                 ++$p;
                 if (count($protocolObjs)>1) $protocol_status .="($p) ";
                 $protocol_status .= $protocolObj->getVar("protocol_status") . "<br/>";
-                $protocol_created .= formatTimeStamp($protocolObj->getVar("protocol_created"),"M") . "<br/>";
+                $protocol_created .= formatTimestamp($protocolObj->getVar("protocol_created"),"M") . "<br/>";
             }
             if ($protocolsCount > 2) $protocol_status .= "...";
             echo "
@@ -126,7 +126,7 @@ switch ($op) {
                         ++$p;
                         if (count($protocolObjs)>1) $protocol_status .="($p) ";
                         $protocol_status .= $protocol->getVar("protocol_status") . "<br/>";
-                        $protocol_created .= formatTimeStamp($protocol->getVar("protocol_created"),"M")."<br/>";
+                        $protocol_created .= formatTimestamp($protocol->getVar("protocol_created"),"M")."<br/>";
                     }
                     if ($protocolsCount > 2) $protocol_status .= "...";
                     echo "
@@ -210,7 +210,7 @@ switch ($op) {
                 echo "<td class='center'>" . $protocolObj->getVar("protocol_status") . "</td>";
                 echo "<td class='center'>" . $success . "</td>";
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($protocolObj->getVar("protocol_submitter"), "S") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($protocolObj->getVar("protocol_created"), "L") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($protocolObj->getVar("protocol_created"), "L") . "</td>";
 
                 echo "
                     <td class='center width5'>

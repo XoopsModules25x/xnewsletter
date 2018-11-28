@@ -86,7 +86,7 @@ switch ($op) {
                 echo "<td class='center'>" . $attachmentObj->getVar("attachment_name") . "</td>";
                 echo "<td class='center'>" . $attachmentObj->getVar("attachment_type") . "</td>";
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($attachmentObj->getVar("attachment_submitter"), "S") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($attachmentObj->getVar("attachment_created"), "S") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($attachmentObj->getVar("attachment_created"), "S") . "</td>";
 
                 echo "
                 <td class='center width5' nowrap='nowrap'>

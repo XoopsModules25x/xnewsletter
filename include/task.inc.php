@@ -296,7 +296,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         try {
             if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
                 $pop = new POP3();
-                $pop->Authorise($account_server_out, $account_port_out, 30, $account_username, $account_password, 1);
+                $pop->authorise($account_server_out, $account_port_out, 30, $account_username, $account_password, 1);
             }
 
             $mail = new PHPMailer();
@@ -311,7 +311,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
             $mail->Password = $account_password; // SMTP account password
 
             if ($account_type == _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3) {
-                $mail->IsSMTP();
+                $mail->isSMTP();
                 //$mail->SMTPDebug = 2;
                 $mail->Host = $account_server_out;
             }
@@ -326,8 +326,8 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $mail->SMTPSecure = $account_securetype_out; // sets the prefix to the server
             }
 
-            $mail->SetFrom($account_yourmail, $account_yourname);
-            $mail->AddReplyTo($account_yourmail, $account_yourname);
+            $mail->setFrom($account_yourmail, $account_yourname);
+            $mail->addReplyTo($account_yourmail, $account_yourname);
             $mail->Subject = html_entity_decode($letter_title, ENT_QUOTES);
 
             foreach ($recipients as $recipient) {
@@ -356,20 +356,20 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 }
                 $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
 
-                $mail->AddAddress($recipient['address'], $recipient['firstname'] . " " . $recipient['lastname']);
-                $mail->MsgHTML($htmlBody); // $mail->Body = $htmlBody;
+                $mail->addAddress($recipient['address'], $recipient['firstname'] . " " . $recipient['lastname']);
+                $mail->msgHTML($htmlBody); // $mail->Body = $htmlBody;
                 $mail->AltBody = $textBody;
 
                 foreach ($attachments as $attachment) {
                     if (file_exists($attachment)) {
-                        $mail->AddAttachment($attachment);
+                        $mail->addAttachment($attachment);
                         echo "<br>att exist:" . $attachment;
                     } else {
                         echo "<br>att not exist:" . $attachment;
                     }
                 }
                 ++$count_total;
-                if ( $mail->Send()) {
+                if ( $mail->send()) {
                     if ($subscriber_id == 0) {
                         $protocol_status = _AM_XNEWSLETTER_SEND_SUCCESS_TEST . " (" . $recipient["address"] . ")";
                     } else {
@@ -385,7 +385,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $text_clean = array("<strong>", "</strong>", "<br/>", "<br />");
                 $protocol_status = str_replace($text_clean, "", $protocol_status);
 
-                $mail->ClearAddresses();
+                $mail->clearAddresses();
 
                 //delete item in table task
                 $sql_delete = "DELETE FROM {$xoopsDB->prefix('xnewsletter_task')}";

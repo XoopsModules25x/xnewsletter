@@ -145,8 +145,8 @@ class XnewsletterSubscr extends XoopsObject
         $opt_tray = new XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . "</span>", "<br />");
 
         //get newsletters available for current user
-        $gperm_handler  = xoops_gethandler('groupperm');
-        $member_handler = xoops_gethandler('member');
+        $gperm_handler  = xoops_getHandler('groupperm');
+        $member_handler = xoops_getHandler('member');
         $currentuid     = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         if ($currentuid == 0) {
             $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);
@@ -182,7 +182,7 @@ class XnewsletterSubscr extends XoopsObject
                 }
 
                 if ($catsubscr_quited > 0) {
-                    $dat_catsubscr_quited = formatTimeStamp($catsubscr_quited, "M");
+                    $dat_catsubscr_quited = formatTimestamp($catsubscr_quited, "M");
                     $cat_name .= "<div style='padding-left:20px;padding-top:0;padding-bottom:0'>";
                     $cat_name .= str_replace("%q", $dat_catsubscr_quited, _MA_XNEWSLETTER_SUBSCRIPTION_QUITED_DETAIL);
                     $cat_name .= "</div>";

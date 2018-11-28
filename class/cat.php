@@ -66,7 +66,7 @@ class XnewsletterCat extends XoopsObject
     {
         global $xoopsDB;
 
-        $gperm_handler = xoops_gethandler('groupperm');
+        $gperm_handler = xoops_getHandler('groupperm');
 
         if ($action === false) {
             $action = $_SERVER["REQUEST_URI"];
@@ -81,7 +81,7 @@ class XnewsletterCat extends XoopsObject
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_CAT_NAME, "cat_name", 50, 255, $this->getVar("cat_name", 'e')), true);
         $form->addElement(new XoopsFormDhtmlTextArea(_AM_XNEWSLETTER_CAT_INFO, "cat_info", $this->getVar("cat_info", 'e')), false);
 
-        $member_handler = xoops_gethandler('member');
+        $member_handler = xoops_getHandler('member');
         $userGroups     = $member_handler->getGroupList();
 
         // create admin checkbox

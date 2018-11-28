@@ -123,7 +123,7 @@ function xnewsletter_plugin_getdata_xoopsuser($cat_id, $action_after_read, $limi
 function xnewsletter_plugin_getform_xoopsuser($cat_id, $action_after_read, $limitCheck, $skipCatsubscrExist) {
     global $xoopsDB;
     $xnewsletter = xnewsletterxnewsletter::getInstance();
-    $member_handler = xoops_gethandler('member');
+    $member_handler = xoops_getHandler('member');
 
     $userGroups = $member_handler->getGroupList();
 

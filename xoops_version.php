@@ -131,12 +131,12 @@ $showCreate = false;
 $showList = true;
 
 if (is_object($xoopsUser) && isset($xoopsUser)) {
-    $gperm_handler = xoops_gethandler('groupperm');
-    $module_handler = xoops_gethandler('module');
+    $gperm_handler = xoops_getHandler('groupperm');
+    $module_handler = xoops_getHandler('module');
     $xoopsModule = $module_handler->getByDirname('xnewsletter');
     if (is_object($xoopsModule)) {
         $mid = $xoopsModule->mid();
-        $member_handler = xoops_gethandler('member');
+        $member_handler = xoops_getHandler('member');
         $my_group_ids = $member_handler->getGroupsByUser($xoopsUser->uid());
 
         $catHandler = xoops_getModuleHandler('cat', 'xnewsletter');

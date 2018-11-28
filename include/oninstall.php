@@ -56,7 +56,7 @@ function xoops_module_pre_install_xnewsletter(&$xoopsModule)
 function xoops_module_install_xnewsletter(&$xoopsModule)
 {
     // get module config values
-    $hModConfig = xoops_gethandler('config');
+    $hModConfig = xoops_getHandler('config');
     $configArray = $hModConfig->getConfigsByCat(0, $xoopsModule->getVar('mid'));
 
     //Creation of folder "uploads" for the module to the site root

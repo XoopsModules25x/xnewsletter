@@ -80,7 +80,7 @@ function b_xnewsletter_catsubscr($options) {
             if ($length_title > 0 && strlen($cat_name) > $length_title)
                 $cat_name = substr($cat_name, 0, $length_title) . "...";
             $catsubscrArray[$catsubscr_id]["catsubscr_newsletter"] = $cat_name;
-            $catsubscrArray[$catsubscr_id]["catsubscr_created"] = formatTimeStamp($catsubscrObj->getVar("catsubscr_created"), "S");
+            $catsubscrArray[$catsubscr_id]["catsubscr_created"] = formatTimestamp($catsubscrObj->getVar("catsubscr_created"), "S");
         }
     }
 

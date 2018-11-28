@@ -36,8 +36,8 @@ include_once dirname(__DIR__) . '/include/common.php';
 function b_xnewsletter_letter($options) {
     global $xoopsUser;
     $myts = MyTextSanitizer::getInstance();
-    $gperm_handler = xoops_gethandler('groupperm');
-    $member_handler = xoops_gethandler('member');
+    $gperm_handler = xoops_getHandler('groupperm');
+    $member_handler = xoops_getHandler('member');
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
     $letter = array();
@@ -94,7 +94,7 @@ function b_xnewsletter_letter($options) {
                 // $letter[$letter_id]["letter_content"] = $letterObj->getVar("letter_content");
                 // $letter[$letter_id]["letter_cats"] = $letterObj->getVar("letter_cats");
                 // $letter[$letter_id]["letter_submitter"] = $letterObj->getVar("letter_submitter");
-                $letter[$letter_id]['letter_created'] = formatTimeStamp($letterObj->getVar('letter_created'), 'S');
+                $letter[$letter_id]['letter_created'] = formatTimestamp($letterObj->getVar('letter_created'), 'S');
                 $letter[$letter_id]['href'] = XOOPS_URL . "/modules/{$xnewsletter->getModule()->dirname()}/letter.php?op=show_preview&letter_id={$letterObj->getVar('letter_id')}";
             }
         }

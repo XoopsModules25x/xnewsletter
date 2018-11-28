@@ -70,9 +70,9 @@ switch ($op) {
                         }
                     }
                     echo "<td align=\"center\">" . $title_subscr . "</td>";
-                    echo "<td align=\"center\">" . formatTimeStamp($taskObj->getVar("task_starttime"), "mysql") . "</td>";
+                    echo "<td align=\"center\">" . formatTimestamp($taskObj->getVar("task_starttime"), "mysql") . "</td>";
                     echo "<td class='center'>" . XoopsUser::getUnameFromId($taskObj->getVar("task_submitter"), "S") . "</td>";
-                    echo "<td class='center'>" . formatTimeStamp($taskObj->getVar("task_created"), "mysql") . "</td>";
+                    echo "<td class='center'>" . formatTimestamp($taskObj->getVar("task_created"), "mysql") . "</td>";
                     echo "<td align='center' width='10%'>";
                     echo "
                     <a href='?op=delete_task&task_id=" . $taskObj->getVar("task_id") . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='". _DELETE . "' title='" . _DELETE . "'></a>

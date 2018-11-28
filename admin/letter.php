@@ -249,7 +249,7 @@ switch ($op) {
                 echo "<td class='center'><a href=' protocol.php?op=list_letter&letter_id=" . $protocol_letter_id . "'>" . $protocol_status . "</a></td>";
 
                 echo "<td class='center'>" . XoopsUser::getUnameFromId($letterObj->getVar("letter_submitter"), "S") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($letterObj->getVar("letter_created"), "s") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($letterObj->getVar("letter_created"), "s") . "</td>";
 
                 echo "<td class='center width10'>";
                 echo "    <a href='?op=edit_letter&letter_id=" . $letter_id . "'>

@@ -77,10 +77,10 @@ switch ($op) {
 
             $class = "odd";
 
-            $member_handler = xoops_gethandler('member');
+            $member_handler = xoops_getHandler('member');
             $grouplist = $member_handler->getGroupList();
 
-            $gperm_handler = xoops_gethandler('groupperm');
+            $gperm_handler = xoops_getHandler('groupperm');
 
             foreach ($catObjs as $cat_id => $catObj) {
                 echo "<tr class='" . $class . "'>";
@@ -186,7 +186,7 @@ switch ($op) {
 
         global $xoopsDB;
 
-        $gperm_handler = xoops_gethandler('groupperm');
+        $gperm_handler = xoops_getHandler('groupperm');
 
         // Form cat_mailinglist
         $cat_mailinglist = !empty($_REQUEST["cat_mailinglist"]) ? intval($_REQUEST["cat_mailinglist"]) : 0;

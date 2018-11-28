@@ -86,7 +86,7 @@ class XnewsletterImport extends XoopsObject
         $form->addElement($cat_select, false);
 
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
-        $opt_import_type->setextra('onclick="document.forms.form_select_import.submit()"');
+        $opt_import_type->setExtra('onclick="document.forms.form_select_import.submit()"');
         $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . "/plugins/");
         $arrPlugin         = array();
         $currpluginhasform = 0;
@@ -121,7 +121,7 @@ class XnewsletterImport extends XoopsObject
         $check_after = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_AFTER_READ, "action_after_read", $action_after_read, "<br />");
         $check_after->addOption(0, _AM_XNEWSLETTER_IMPORT_READ_IMPORT);
         $check_after->addOption(1, _AM_XNEWSLETTER_IMPORT_READ_CHECK);
-        $check_after->setextra('onclick="document.forms.form_select_import.submit()"');
+        $check_after->setExtra('onclick="document.forms.form_select_import.submit()"');
         $form->addElement($check_after, false);
 
         //limit for import
@@ -156,7 +156,7 @@ class XnewsletterImport extends XoopsObject
         $skip               = $action_after_read == 1 ? 0 : 1;
         $skipcatsubscrexist = new XoopsFormRadioYN(_AM_XNEWSLETTER_IMPORT_SKIP_EXISTING, "skipcatsubscrexist", $skip);
         if ($action_after_read == 0) {
-            $skipcatsubscrexist->setextra('disabled="disabled"');
+            $skipcatsubscrexist->setExtra('disabled="disabled"');
         }
         $form->addElement($skipcatsubscrexist, false);
 
@@ -165,11 +165,11 @@ class XnewsletterImport extends XoopsObject
         if ($currpluginhasform == 1) {
             //show form for additional options
             $button1 = new XoopsFormButton("", "form_additional", _AM_XNEWSLETTER_IMPORT_CONTINUE, "submit1");
-            $button1->setextra('onclick="document.getElementById(\'op\').value = \'form_additional\';document.forms.form_select_import.submit()"');
+            $button1->setExtra('onclick="document.getElementById(\'op\').value = \'form_additional\';document.forms.form_select_import.submit()"');
             $button_tray->addElement($button1);
         } else {
             $button2 = new XoopsFormButton("", "searchdata", _AM_XNEWSLETTER_IMPORT_CONTINUE, "submit2");
-            $button2->setextra('onclick="document.getElementById(\'op\').value = \'searchdata\';document.forms.form_select_import.submit()"');
+            $button2->setExtra('onclick="document.getElementById(\'op\').value = \'searchdata\';document.forms.form_select_import.submit()"');
             $button_tray->addElement($button2);
         }
         $form->addElement($button_tray);

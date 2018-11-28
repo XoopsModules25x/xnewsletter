@@ -81,7 +81,7 @@ switch ($op) {
                 echo "<td class='center'>" . $mailinglistObj->getVar("mailinglist_listname") . "</td>";
                 echo "<td class='center'>" . $mailinglistObj->getVar("mailinglist_subscribe") . "</td>";
                 echo "<td class='center'>" . $mailinglistObj->getVar("mailinglist_unsubscribe") . "</td>";
-                echo "<td class='center'>" . formatTimeStamp($mailinglistObj->getVar("mailinglist_created"), "S") . "</td>";
+                echo "<td class='center'>" . formatTimestamp($mailinglistObj->getVar("mailinglist_created"), "S") . "</td>";
                 echo "<td class='center width5'>
                     <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='"._EDIT."' title='"._EDIT . "' /></a>
                     <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=".XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='"._DELETE."' title='" . _DELETE . "' /></a>
