@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_evennews() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "evennews";
     $pluginInfo['icon'] = XOOPS_URL . "/modules/evennews/images/logo.png";
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/evennews/xoops_version.php";

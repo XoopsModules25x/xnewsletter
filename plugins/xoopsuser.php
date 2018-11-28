@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_xoopsuser() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "xoopsuser";
     $pluginInfo['icon'] = XNEWSLETTER_URL . "/plugins/system_user.png";
     //$pluginInfo['modulepath'] = XNEWSLETTER_ROOT_PATH . "/plugins/xoopsuser.php";

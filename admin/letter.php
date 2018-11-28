@@ -349,7 +349,7 @@ switch ($op) {
 
             $letter_id = $letterObj->getVar("letter_id");
             //upload attachments
-            $uploaded_files = array();
+            $uploaded_files = [];
             include_once XOOPS_ROOT_PATH . "/class/uploader.php";
             $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . "/";
             //check upload_dir
@@ -369,7 +369,7 @@ switch ($op) {
                         $errors = $uploader->getErrors();
                         redirect_header("javascript:history.go(-1)",3, $errors);
                     } else {
-                        $uploaded_files[] = array("name" => $uploader->getSavedFileName(), "type" => $uploader->getMediaType());
+                        $uploaded_files[] = ["name" => $uploader->getSavedFileName(), "type" => $uploader->getMediaType()];
                     }
                 }
 
@@ -480,7 +480,7 @@ switch ($op) {
                 echo $letterObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "letter_id" => $letter_id, "op" => "delete_letter"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $letterObj->getVar("letter_title")));
+            xoops_confirm(["ok" => 1, "letter_id" => $letter_id, "op" => "delete_letter"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $letterObj->getVar("letter_title")));
         }
     break;
 }

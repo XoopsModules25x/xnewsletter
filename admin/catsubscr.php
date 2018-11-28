@@ -280,7 +280,7 @@ switch ($op) {
       $confirmtext = str_replace("%s", $_REQUEST["subscr_email"], $confirmtext);
       $confirmtext = str_replace('"', " ", $confirmtext);
 
-            xoops_confirm(array("ok" => 1, "catsubscr_id" => $_REQUEST["catsubscr_id"], "op" => "delete_catsubscr"), $_SERVER["REQUEST_URI"], sprintf($confirmtext));
+            xoops_confirm(["ok" => 1, "catsubscr_id" => $_REQUEST["catsubscr_id"], "op" => "delete_catsubscr"], $_SERVER["REQUEST_URI"], sprintf($confirmtext));
         }
     break;
 }

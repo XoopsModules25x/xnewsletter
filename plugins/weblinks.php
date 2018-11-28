@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_weblinks() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "weblinks";
     if (file_exists(XOOPS_URL . "/modules/sweblinks/images/weblinks_slogo.png")) {
         $pluginInfo['icon'] = XOOPS_URL . "/modules/weblinks/images/weblinks_slogo.png";

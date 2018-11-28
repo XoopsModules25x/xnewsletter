@@ -35,7 +35,7 @@ function xnewsletter_plugin_getinfo_smartpartner()
 {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "smartpartner";
     if (file_exists(XOOPS_URL . "/modules/smartpartner/images/module_logo.gif")) {
         $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/images/module_logo.gif";

@@ -297,7 +297,7 @@ switch ($op) {
                 echo $protocolObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "protocol_id" => $_REQUEST["protocol_id"], "op" => "delete_protocol"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar("protocol_id")));
+            xoops_confirm(["ok" => 1, "protocol_id" => $_REQUEST["protocol_id"], "op" => "delete_protocol"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $protocolObj->getVar("protocol_id")));
         }
     break;
 
@@ -317,7 +317,7 @@ switch ($op) {
                     redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELNOTOK);
                 }
             } else {
-                xoops_confirm(array("ok" => 1, "letter_id" => $letter_id, "op" => "delete_protocol_list"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar("letter_title")));
+                xoops_confirm(["ok" => 1, "letter_id" => $letter_id, "op" => "delete_protocol_list"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar("letter_title")));
             }
         }
     break;

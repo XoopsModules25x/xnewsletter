@@ -63,13 +63,13 @@ $subscr_lastname = '';
 
 $count_ok = 0;
 $count_err = 0;
-$actionProts_ok = array(); // IN PROGRESS: remove from here
-$actionProts_error = array(); // IN PROGRESS: remove from here
+$actionProts_ok = []; // IN PROGRESS: remove from here
+$actionProts_error = []; // IN PROGRESS: remove from here
 
 switch ($op) {
     case "resend_subscription" :
-        $actionProts_ok = array();
-        $actionProts_error = array();
+        $actionProts_ok = [];
+        $actionProts_error = [];
         $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
         include_once XOOPS_ROOT_PATH . "/header.php";
 
@@ -161,7 +161,7 @@ switch ($op) {
 
 
             // read current selections and create code for actkey
-            $cat_selections = array();
+            $cat_selections = [];
             $code_selections = '';
             $catCriteria = new CriteriaCompo();
             $catCriteria->setSort('cat_id');
@@ -230,7 +230,7 @@ switch ($op) {
                 $subscrObj->setVar('subscr_actoptions', '');
             } else {
                 //format subscr_actoptions: selected_newsletters||firstname||lastname||sex
-                $code_options = array();
+                $code_options = [];
                 $code_options[0] = $code_selections;
                 $code_options[1] = XoopsRequest::getString('subscr_firstname', '');
                 $code_options[2] = XoopsRequest::getString('subscr_lastname', '');
@@ -361,7 +361,7 @@ switch ($op) {
             }
             // handle current selections
             foreach ($cat_selections as $sel) {
-                $selection = array();
+                $selection = [];
                 if ($sel == '') $sel = '0-0-0-0';
                 $selection = explode('-', $sel);
                 $cat_id = $selection[0];
@@ -715,7 +715,7 @@ switch ($op) {
             }
         } else {
             $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
-            xoops_confirm(array('ok' => true, 'subscr_id' => $subscr_id, 'subscr_email' => $subscr_email, 'op' => 'delete_subscription'), $currentFile, sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE));
+            xoops_confirm(['ok' => true, 'subscr_id' => $subscr_id, 'subscr_email' => $subscr_email, 'op' => 'delete_subscription'], $currentFile, sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE));
         }
         break;
 

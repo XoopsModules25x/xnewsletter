@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_subscribers() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "subscribers";
     if (file_exists(XOOPS_URL . "/modules/subscribers/images/module_logo.gif")) {
         $pluginInfo['icon'] = XOOPS_URL . "/modules/subscribers/images/module_logo.gif";

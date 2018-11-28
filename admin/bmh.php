@@ -96,7 +96,7 @@ switch ($op) {
                 echo $actionprot_err;
             }
         } else {
-            xoops_confirm(array('ok' => 1, 'bmh_id' => $bmh_id, 'op' => 'bmh_delsubscr', 'filter' => $filter), $currentFile, sprintf(_AM_XNEWSLETTER_BMH_MEASURE_DELETE_SURE));
+            xoops_confirm(['ok' => 1, 'bmh_id' => $bmh_id, 'op' => 'bmh_delsubscr', 'filter' => $filter], $currentFile, sprintf(_AM_XNEWSLETTER_BMH_MEASURE_DELETE_SURE));
         }
     break;
 
@@ -201,12 +201,13 @@ switch ($op) {
         $indexAdmin->addItemButton(_AM_XNEWSLETTER_RUNBMH, '?op=run_bmh', 'add');
         echo $indexAdmin->renderButton();
         //
-        $arr_measure_type = array(
+        $arr_measure_type = [
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_ALL=>_AM_XNEWSLETTER_BMH_MEASURE_ALL,
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_PENDING=>_AM_XNEWSLETTER_BMH_MEASURE_PENDING,
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_NOTHING=>_AM_XNEWSLETTER_BMH_MEASURE_NOTHING,
             _AM_XNEWSLETTER_BMH_MEASURE_VAL_QUIT=>_AM_XNEWSLETTER_BMH_MEASURE_QUITED,
-            _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE=>_AM_XNEWSLETTER_BMH_MEASURE_DELETED);
+            _AM_XNEWSLETTER_BMH_MEASURE_VAL_DELETE=>_AM_XNEWSLETTER_BMH_MEASURE_DELETED
+        ];
 
         $limit = $xnewsletter->getConfig('adminperpage');
         $bhmCriteria = new CriteriaCompo();
@@ -372,7 +373,7 @@ switch ($op) {
                 echo $bmhObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "bmh_id" => $bmh_id, "op" => "delete_bmh"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $bmhObj->getVar("bmh_rule_no")));
+            xoops_confirm(["ok" => 1, "bmh_id" => $bmh_id, "op" => "delete_bmh"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $bmhObj->getVar("bmh_rule_no")));
         }
     break;
 }

@@ -228,13 +228,13 @@ switch ($op) {
                 echo "<tr class='{$class}'>";
                 $class = ($class == 'even') ? 'odd' : 'even';
                 echo "<td class='center'>{$accounts_id}</td>";
-                $arr_accounts_type=array(
+                $arr_accounts_type= [
                         _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
                     _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL,
                             _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3 => _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3,
                             _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP => _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP,
                            _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL
-                );
+                ];
                 echo "<td class='center'>" . $arr_accounts_type[$accountsObj->getVar("accounts_type")] . "</td>";
                 echo "<td class='center'>" . $accountsObj->getVar("accounts_name") . "</td>";
                 echo "<td class='center'>" . $accountsObj->getVar("accounts_yourname") . "</td>";
@@ -357,7 +357,7 @@ switch ($op) {
                 echo $accountObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array('ok' => 1, 'accounts_id' => $accounts_id, 'op' => 'delete_account'), $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));
+            xoops_confirm(['ok' => 1, 'accounts_id' => $accounts_id, 'op' => 'delete_account'], $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));
         }
         break;
 }

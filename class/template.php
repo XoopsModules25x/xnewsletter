@@ -79,7 +79,7 @@ class XnewsletterTemplate extends XoopsObject
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_TEMPLATE_TITLE, "template_title", 50, 255, $this->getVar("template_title", 'e')), true);
 
-        $editor_configs           = array();
+        $editor_configs           = [];
         $editor_configs["name"]   = "template_description";
         $editor_configs["value"]  = $this->getVar("template_description", "e");
         $editor_configs["rows"]   = 10;
@@ -91,7 +91,7 @@ class XnewsletterTemplate extends XoopsObject
         $template_description_editor->setDescription(_AM_XNEWSLETTER_TEMPLATE_DESCRIPTION_DESC);
         $form->addElement($template_description_editor, false);
 
-        $editor_configs           = array();
+        $editor_configs           = [];
         $editor_configs["name"]   = "template_content";
         $editor_configs["value"]  = $this->getVar("template_content", "e");
         $editor_configs["rows"]   = 10;

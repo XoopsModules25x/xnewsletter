@@ -88,7 +88,7 @@ class XnewsletterImport extends XoopsObject
         $opt_import_type = new XoopsFormRadio(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, "plugin", $plugin, "<br />");
         $opt_import_type->setExtra('onclick="document.forms.form_select_import.submit()"');
         $aFiles            = XoopsLists::getFileListAsArray(XNEWSLETTER_ROOT_PATH . "/plugins/");
-        $arrPlugin         = array();
+        $arrPlugin         = [];
         $currpluginhasform = 0;
         foreach ($aFiles as $file) {
             if (substr($file, strlen($file) - 4, 4) == '.php') {
@@ -143,7 +143,7 @@ class XnewsletterImport extends XoopsObject
             $sel_limitcheck->addOption(10000, 10000);
             $sel_limitcheck->addOption(25000, 25000);
         } else {
-            $limitOptions = array(25, 50, 100, 200, 400);
+            $limitOptions = [25, 50, 100, 200, 400];
             foreach ($limitOptions as $limitOption) {
                 // check if limit options are compatible with php.ini 'max_input_vars' setting
                 if ((ini_get('max_input_vars') == 0) || ((($limitOption * 7) + 4) < ini_get('max_input_vars'))) {

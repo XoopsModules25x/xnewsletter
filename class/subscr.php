@@ -141,7 +141,7 @@ class XnewsletterSubscr extends XoopsObject
 
         $form->addElement(new XoopsFormLabel("<br/><br/>", ""));
 
-        $opt_cat  = array();
+        $opt_cat  = [];
         $opt_tray = new XoopsFormElementTray("<span style='text-decoration:underline'>" . _MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL . "</span>", "<br />");
 
         //get newsletters available for current user
@@ -149,7 +149,7 @@ class XnewsletterSubscr extends XoopsObject
         $member_handler = xoops_getHandler('member');
         $currentuid     = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
         if ($currentuid == 0) {
-            $my_group_ids = array(XOOPS_GROUP_ANONYMOUS);
+            $my_group_ids = [XOOPS_GROUP_ANONYMOUS];
         } else {
             $my_group_ids = $member_handler->getGroupsByUser($currentuid);
         }

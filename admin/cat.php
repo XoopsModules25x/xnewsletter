@@ -331,7 +331,7 @@ switch ($op) {
                 echo $catObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "cat_id" => $cat_id, "op" => "delete_cat"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $catObj->getVar("cat_name")));
+            xoops_confirm(["ok" => 1, "cat_id" => $cat_id, "op" => "delete_cat"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $catObj->getVar("cat_name")));
         }
         break;
 }

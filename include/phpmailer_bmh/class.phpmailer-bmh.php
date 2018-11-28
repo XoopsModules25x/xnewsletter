@@ -576,7 +576,7 @@ class BounceMailHandler {
       if ( trim($email) == '' ) {
         $email = $header->fromaddress;
       }
-      $params = array($pos,$bounce_type,$email,$subject,$xheader,$remove,$rule_no,$rule_cat,$totalFetched);
+      $params = [$pos, $bounce_type, $email, $subject, $xheader, $remove, $rule_no, $rule_cat, $totalFetched];
       call_user_func_array($this->action_function,$params);
     } else { // match rule, do bounce action
       if ($this->testmode) {
@@ -584,7 +584,7 @@ class BounceMailHandler {
 
         return true;
       } else {
-        $params = array($pos,$bounce_type,$email,$subject,$xheader,$remove,$rule_no,$rule_cat,$totalFetched);
+        $params = [$pos, $bounce_type, $email, $subject, $xheader, $remove, $rule_no, $rule_cat, $totalFetched];
 
         return call_user_func_array($this->action_function,$params);
       }

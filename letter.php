@@ -30,7 +30,7 @@ $currentFile = basename(__FILE__);
 include_once __DIR__ . "/header.php";
 
 $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
-$groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+$groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
 
 $op         = XoopsRequest::getString('op', 'list_letters');
 $letter_id  = XoopsRequest::getInt('letter_id', 0);
@@ -174,7 +174,7 @@ switch ($op) {
             //Form letter_cats
             $letter_cats = '';
             //$cat_arr = isset($_REQUEST["letter_cats"]) ? $_REQUEST["letter_cats"] : "";
-            $cats_arr = XoopsRequest::getArray('letter_cats', array());
+            $cats_arr = XoopsRequest::getArray('letter_cats', []);
             if (count($cats_arr) > 0) {
                 foreach ($cats_arr as $cat) {
                     $letter_cats .= $cat . '|';
@@ -301,7 +301,7 @@ break;
         // letters table
         if ($letterCount> 0) {
             foreach ($letterObjs as $letter_id => $letterObj) {
-                $userPermissions = array();
+                $userPermissions = [];
                 $userPermissions = xnewsletter_getUserPermissionsByLetter($letter_id);
                 if ($userPermissions["read"]) {
                     $letter_array = $letterObj->toArray();
@@ -340,10 +340,10 @@ break;
                         $protocol_status = "";
                         $protocol_letter_id = 0;
                         foreach ($protocolObjs as $protocolObj) {
-                            $letter_array['protocols'][] = array(
+                            $letter_array['protocols'][] = [
                                 'protocol_status' => $protocolObj->getVar("protocol_status"),
                                 'protocol_letter_id' => $protocolObj->getVar("protocol_letter_id")
-                                );
+                            ];
                         }
                     }
 
@@ -440,7 +440,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
         //Form letter_cats
         $letter_cats = "";
         //$cat_arr = isset($_REQUEST["letter_cats"]) ? $_REQUEST["letter_cats"] : "";
-        $cat_arr = XoopsRequest::getArray('letter_cats', array());
+        $cat_arr = XoopsRequest::getArray('letter_cats', []);
         if (count($cat_arr) > 0) {
             foreach ($cat_arr as $cat) {
                 $letter_cats .= $cat . '|';
@@ -471,7 +471,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
             $letter_id = $letterObj->getVar("letter_id");
 
             //upload attachments
-            $uploaded_files = array();
+            $uploaded_files = [];
             include_once XOOPS_ROOT_PATH . "/class/uploader.php";
             $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/';
             if (!is_dir($uploaddir)) {
@@ -489,7 +489,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
                         $errors = $uploader->getErrors();
                         redirect_header("javascript:history.go(-1)", 3, $errors);
                     } else {
-                        $uploaded_files[] = array("name" => $uploader->getSavedFileName(), "origname" => $uploader->getMediaType());
+                        $uploaded_files[] = ["name" => $uploader->getSavedFileName(), "origname" => $uploader->getMediaType()];
                     }
                 }
             }
@@ -613,7 +613,7 @@ $xoopsOption['template_main'] = 'xnewsletter_letter.tpl'; // IN PROGRESS
                 echo $letterObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "letter_id" => $letter_id, "op" => "delete_letter"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $letterObj->getVar("letter_title")));
+            xoops_confirm(["ok" => 1, "letter_id" => $letter_id, "op" => "delete_letter"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $letterObj->getVar("letter_title")));
         }
         break;
 }

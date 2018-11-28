@@ -30,7 +30,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 $xnewsletter = xnewsletterxnewsletter::getInstance();
 $pathImageAdmin = 'assets/images/icons';
 
-$adminmenu = array();
+$adminmenu = [];
 $i = 1;
 $adminmenu[$i]["title"] = _MI_XNEWSLETTER_ADMENU1;
 $adminmenu[$i]["link"] = "admin/index.php";

@@ -62,15 +62,15 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
     require_once XOOPS_ROOT_PATH . "/class/mail/phpmailer/class.smtp.php";
 
     //get emails of subscribers
-    $recipients = array();
-    $recipients[] = array(
+    $recipients = [];
+    $recipients[] = [
         "address"=> $mailinglist_email,
         "firstname" => "",
         "lastname" => "",
         "subscr_sex" => "",
         "subscriber_id" => "0",
         "catsubscr_id" => "0"
-        );
+    ];
 
     $letter_id = 0;
     $senderUid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
@@ -101,7 +101,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id) {
             $protocol_success = 0;
         }
         //create item in protocol for this email
-        $text_clean = array("<strong>", "</strong>", "<br/>", "<br />");
+        $text_clean = ["<strong>", "</strong>", "<br/>", "<br />"];
         $protocol_status = str_replace($text_clean, "", $protocol_status);
 
         $protocolObj = $xnewsletter->getHandler('protocol')->create();

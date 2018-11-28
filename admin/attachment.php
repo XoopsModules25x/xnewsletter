@@ -170,7 +170,7 @@ switch ($op) {
                 echo $attachmentObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "attachment_id" => $attachment_id, "op" => "delete_attachment"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $attachmentObj->getVar("attachment_letter_id")));
+            xoops_confirm(["ok" => 1, "attachment_id" => $attachment_id, "op" => "delete_attachment"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $attachmentObj->getVar("attachment_letter_id")));
         }
     break;
 }

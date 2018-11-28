@@ -163,7 +163,7 @@ switch ($op) {
                 echo $obj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "template_id" => $template_id, "op" => "delete_template"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar("template_title")));
+            xoops_confirm(["ok" => 1, "template_id" => $template_id, "op" => "delete_template"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $templateObj->getVar("template_title")));
         }
     break;
 }

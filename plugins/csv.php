@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_csv() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "csv";
     $pluginInfo['icon'] = XNEWSLETTER_URL . "/plugins/csv.png";
     //$pluginInfo['modulepath'] = XNEWSLETTER_ROOT_PATH . "/plugins/csv.php";

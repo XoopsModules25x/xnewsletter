@@ -98,7 +98,7 @@ switch ($op) {
                 echo $taskObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $taskObj->getVar("task")));
+            xoops_confirm(["ok" => 1, "task_id" => $_REQUEST["task_id"], "op" => "delete_task"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $taskObj->getVar("task")));
         }
         break;
 }

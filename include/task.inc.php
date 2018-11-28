@@ -68,7 +68,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
     }
 
     //get emails of subscribers
-    $recipients = array();
+    $recipients = [];
     if ($op == 'send_test') {
         $recipients[] = 0;
     } else {
@@ -221,18 +221,18 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
         $letterTpl->assign('date', time()); // new from v1.3
 
         // get emails of subscribers
-        $recipients = array();
+        $recipients = [];
         $sql_tasklist = "SELECT `task_id`, `task_subscr_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
         $sql_tasklist .= " WHERE ((`task_letter_id`= {$letter_id}) AND (`task_starttime` < " . time() . "))";
         if (!$task_letters = $xoopsDB->query($sql_tasklist)) {
             return $task_letters->getErrors();
         }
-        $recipients = array();
+        $recipients = [];
         while ($task_letter = $xoopsDB->fetchArray($task_letters)) {
             $subscr_id = $task_letter['task_subscr_id'];
             $task_id = $task_letter['task_id'];
             if ($subscr_id == 0) {
-                $recipients[] = array(
+                $recipients[] = [
                     'task_id'           => $task_id,
                     'address'           => $letterObj->getVar('letter_email_test'),
                     'firstname'         => _AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW,
@@ -241,7 +241,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                     'subscriber_id'     => '0',
                     'catsubscr_id'      => '0',
                     'subscriber_actkey' => 'Test'
-                    );
+                ];
             } else {
                 $sql_subscr = "SELECT * FROM {$xoopsDB->prefix('xnewsletter_subscr')}";
                 $sql_subscr .= " WHERE `subscr_id`= {$subscr_id}";
@@ -250,7 +250,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 }
 
                 $subscriber = $xoopsDB->fetchArray($task_subscrs);
-                $recipients[] = array(
+                $recipients[] = [
                     'task_id'           => $task_id,
                     'address'           => $subscriber['subscr_email'],
                     'firstname'         => $subscriber['subscr_firstname'],
@@ -258,7 +258,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                     'subscr_sex'        => $subscriber['subscr_sex'],
                     'subscriber_id'     => $subscriber['subscr_id'],
                     'subscriber_actkey' => $subscriber['subscr_actkey']
-                );
+                ];
             }
             if ($xn_send_in_packages > 0 && count($recipients) == $xn_send_in_packages)
                 break;
@@ -286,7 +286,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                 $attachments[] = $uploaddir . $attachmentObj->getVar("attachment_name");
             }
         } else {
-            $attachments = array();
+            $attachments = [];
         }
 
         $senderuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid(): 0;
@@ -382,7 +382,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
                     ++$count_err;
                 }
                 //create item in protocol for this email
-                $text_clean = array("<strong>", "</strong>", "<br/>", "<br />");
+                $text_clean = ["<strong>", "</strong>", "<br/>", "<br />"];
                 $protocol_status = str_replace($text_clean, "", $protocol_status);
 
                 $mail->clearAddresses();

@@ -34,7 +34,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_rmbulletin() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "rmbulletin";
     $pluginInfo['icon'] = XOOPS_URL . "/modules/rmbulletin/images/logo.png";
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/rmbulletin/xoops_version.php";

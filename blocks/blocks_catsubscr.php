@@ -38,7 +38,7 @@ function b_xnewsletter_catsubscr($options) {
     $xnewsletter = xnewsletterxnewsletter::getInstance();
     $myts = MyTextSanitizer::getInstance();
 
-    $catsubscrArray = array();
+    $catsubscrArray = [];
     $type_block = $options[0];
     $nb_catsubscr = $options[1];
     $length_title = $options[2];

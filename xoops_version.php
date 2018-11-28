@@ -65,10 +65,10 @@ $modversion['manual_file'] = XOOPS_URL . "/modules/{$modversion['dirname']}/docs
 $modversion['min_php']     = '5.3.7';
 $modversion['min_xoops']   = '2.5.7';
 $modversion['min_admin']   = '1.1';
-$modversion['min_db']      = array(
+$modversion['min_db']      = [
     'mysql'  => '5.0.7',
     'mysqli' => '5.0.7'
-);
+];
 
 $modversion['dirmoduleadmin']       = "Frameworks/moduleclasses";
 $modversion['icons16']              = "Frameworks/moduleclasses/icons/16";
@@ -250,13 +250,13 @@ $modversion['config'][$i]['title']          = "_MI_XNEWSLETTER_ATTACHMENT_MIMETY
 $modversion['config'][$i]['description']    = "_MI_XNEWSLETTER_ATTACHMENT_MIMETYPES_DESC";
 $modversion['config'][$i]['formtype']       = "select_multi";
 $modversion['config'][$i]['valuetype']      = "array";
-$modversion['config'][$i]['default']        = array(
+$modversion['config'][$i]['default']        = [
     "application/pdf",
     "image/gif",
     "image/jpeg",
     "image/png"
-    );
-$modversion["config"][$i]["options"]        = array(
+];
+$modversion["config"][$i]["options"]        = [
     'pdf' => 'application/pdf',
     'doc' => 'application/msword',
     'docx' => 'application/msword',
@@ -279,7 +279,7 @@ $modversion["config"][$i]["options"]        = array(
     'asc' => 'text/plain',
     'txt' => 'text/plain',
     'rtf' => 'text/rtf'
-    );
+];
 
 ++$i;
 //Uploads : path attachments
@@ -297,14 +297,14 @@ $modversion['config'][$i]['formtype'] = "textbox";
 $modversion['config'][$i]['valuetype'] = "text";
 $modversion['config'][$i]['default'] = '15';
 ++$i;
-$modversion['config'][$i] = array(
+$modversion['config'][$i] = [
     'name'        => 'dateformat',
     'title'       => '_MI_XNEWSLETTER_DATEFORMAT',
     'description' => '_MI_XNEWSLETTER_DATEFORMATDSC',
     'formtype'    => 'textbox',
     'valuetype'   => 'text',
     'default'     => _DATESTRING
-); //'D, d-M-Y');
+]; //'D, d-M-Y');
 ++$i;
 $modversion['config'][$i]['name'] = "welcome_message";
 $modversion['config'][$i]['title'] = "_MI_XNEWSLETTER_WELCOME_MESSAGE";
@@ -382,7 +382,7 @@ unset($i);
 $b = 0;
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_subscrinfo.php',
     'name'          => _MI_XNEWSLETTER_SUBSCRINFO_BLOCK,
     'description'   => '',
@@ -391,10 +391,10 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_subscrinfo_block.tpl',
     'can_clone'     => true,
     'options'       => ''
-);
+];
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_catsubscr.php',
     'name'          => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_RECENT,
     'description'   => '',
@@ -403,10 +403,10 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_catsubscr_block_recent.tpl',
     'can_clone'     => true,
     'options'       => 'recent|5|0|0'
-);
+];
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_catsubscr.php',
     'name'          => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_DAY,
     'description'   => '',
@@ -415,10 +415,10 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_catsubscr_block_day.tpl',
     'can_clone'     => true,
     'options'       => 'day|5|0|0'
-);
+];
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_letter.php',
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_RECENT,
     'description'   => '',
@@ -427,10 +427,10 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_letter_block_recent.tpl',
     'can_clone'     => true,
     'options'       => 'recent|5|0|0'
-);
+];
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_letter.php',
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_DAY,
     'description'   => '',
@@ -439,10 +439,10 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_letter_block_day.tpl',
     'can_clone'     => true,
     'options'       => 'day|5|0|0'
-);
+];
 
 $b++;
-$modversion['blocks'][$b] = array(
+$modversion['blocks'][$b] = [
     'file'          => 'blocks_letter.php' ,
     'name'          => _MI_XNEWSLETTER_LETTER_BLOCK_RANDOM,
     'description'   => '',
@@ -451,4 +451,4 @@ $modversion['blocks'][$b] = array(
     'template'      => 'xnewsletter_letter_block_random.tpl',
     'can_clone'     => true,
     'options'       => 'random|5|0|0'
-);
+];

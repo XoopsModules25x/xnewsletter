@@ -136,9 +136,9 @@ break;
         if ($xnewsletter->getHandler('letter')->getCount() > 0) {
             // get newsletters available for current user
             $gperm_handler = xoops_getHandler('groupperm');
-            $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : array(0 => XOOPS_GROUP_ANONYMOUS);
+            $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
 
-            $letters_array = array();
+            $letters_array = [];
             foreach ($letterObjs as $letterObj) {
                 $letter_array = $letterObj->toArray();
                 $letter_array['letter_content'] = $myts->undoHtmlSpecialChars($letterObj->getVar('letter_content')); //needed when using GUI editors (e.g. tinymce)

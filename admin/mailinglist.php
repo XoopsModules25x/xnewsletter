@@ -173,7 +173,7 @@ switch ($op) {
             echo $mailinglistObj->getHtmlErrors();
         }
         } else {
-            xoops_confirm(array("ok" => 1, "mailinglist_id" => $_REQUEST["mailinglist_id"], "op" => "delete_mailinglist"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar("mailinglist_email")));
+            xoops_confirm(["ok" => 1, "mailinglist_id" => $_REQUEST["mailinglist_id"], "op" => "delete_mailinglist"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar("mailinglist_email")));
         }
         break;
 }

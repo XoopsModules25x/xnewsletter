@@ -27,7 +27,7 @@ class xnewsletterxnewsletter
     var $handler;
     var $config;
     var $debug;
-    var $debugArray = array();
+    var $debugArray = [];
 
     /**
      * @param $debug

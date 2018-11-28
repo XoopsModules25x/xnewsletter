@@ -45,7 +45,7 @@ function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid) {
     }
     $sql .= " ORDER BY cat_created DESC";
     $result = $xoopsDB->query($sql, $limit, $offset);
-    $ret = array();
+    $ret = [];
     $i = 0;
     while ($myrow = $xoopsDB->fetchArray($result)) {
         $ret[$i]["image"] = "assets/images/icons/xn_search.png";

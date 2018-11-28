@@ -35,7 +35,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_simplenewsletter() {
     global $xoopsDB;
 
-    $pluginInfo = array();
+    $pluginInfo = [];
     $pluginInfo['name'] = "simplenewsletter";
     $pluginInfo['icon'] = XOOPS_URL . "/modules/simplenewsletter/images/news_subscribe.png";
     $pluginInfo['tables'][0] = $xoopsDB->prefix("simplenewsletter_members");

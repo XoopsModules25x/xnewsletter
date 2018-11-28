@@ -55,7 +55,7 @@ class XnewsletterLetter extends XoopsObject
         $this->initVar("letter_email_test", XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar("letter_submitter", XOBJ_DTYPE_INT, null, false, 10);
         $this->initVar("letter_created", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar('att_to_add', XOBJ_DTYPE_ARRAY, array());
+        $this->initVar('att_to_add', XOBJ_DTYPE_ARRAY, []);
     }
 
     /**
@@ -80,7 +80,7 @@ class XnewsletterLetter extends XoopsObject
 
         $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_LETTER_TITLE, "letter_title", 50, 255, $this->getVar("letter_title", 'e')), true);
 
-        $editor_configs           = array();
+        $editor_configs           = [];
         $editor_configs["name"]   = "letter_content";
         $editor_configs["value"]  = $this->getVar("letter_content", "e");
         $editor_configs["rows"]   = 10;
@@ -100,7 +100,7 @@ class XnewsletterLetter extends XoopsObject
         if (!is_dir($template_path)) {
             $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
         }
-        $templateFiles = array();
+        $templateFiles = [];
         if (!$dirHandler = @opendir($template_path)) die(str_replace("%p", $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
         while ($filename = readdir($dirHandler)) {
             if (($filename != ".") and ($filename != "..") and ($filename != "index.html")) {
@@ -146,7 +146,7 @@ class XnewsletterLetter extends XoopsObject
 
         $attachment_tray = new XoopsFormElementTray(_AM_XNEWSLETTER_LETTER_ATTACHMENT, '<br>');
         if ($this->isNew()) {
-            $attachmentObjs = array();
+            $attachmentObjs = [];
         } else {
             $attachmentCriteria = new CriteriaCompo();
             $attachmentCriteria->add(new Criteria('attachment_letter_id', $this->getVar("letter_id")));
@@ -155,7 +155,7 @@ class XnewsletterLetter extends XoopsObject
             $attachmentObjs = $this->xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
         }
         $i = 1;
-        $remove_attachment_tray = array();
+        $remove_attachment_tray = [];
         foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
             $remove_attachment_tray[$attachment_id] = new XoopsFormElementTray("", '&nbsp;&nbsp;');
             $remove_attachment_tray[$attachment_id]->addElement(new XoopsFormLabel("", $attachmentObj->getVar("attachment_name")));

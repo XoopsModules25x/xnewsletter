@@ -33,28 +33,28 @@ Last updated: January 21 2009 13:49 EST
 */
 
 global $rule_categories;
-$rule_categories = array(
-   'antispam'       => array('remove'=>0,'bounce_type'=>'blocked'  )
-  ,'autoreply'      => array('remove'=>0,'bounce_type'=>'autoreply')
-  ,'concurrent'     => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'content_reject' => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'command_reject' => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'internal_error' => array('remove'=>0,'bounce_type'=>'temporary')
-  ,'defer'          => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'delayed'        => array('remove'=>0,'bounce_type'=>'temporary')
-  ,'dns_loop'       => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'dns_unknown'    => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'full'           => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'inactive'       => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'latin_only'     => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'other'          => array('remove'=>0,'bounce_type'=>'generic'  )
-  ,'oversize'       => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'outofoffice'    => array('remove'=>2,'bounce_type'=>'soft'     )
-  ,'unknown'        => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'unrecognized'   => array('remove'=>0,'bounce_type'=>false,     )
-  ,'user_reject'    => array('remove'=>1,'bounce_type'=>'hard'     )
-  ,'warning'        => array('remove'=>2,'bounce_type'=>'soft'     )
-);
+$rule_categories = [
+   'antispam'       => ['remove' =>0, 'bounce_type' =>'blocked']
+  ,'autoreply'      => ['remove' =>0, 'bounce_type' =>'autoreply']
+  ,'concurrent'     => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'content_reject' => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'command_reject' => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'internal_error' => ['remove' =>0, 'bounce_type' =>'temporary']
+  ,'defer'          => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'delayed'        => ['remove' =>0, 'bounce_type' =>'temporary']
+  ,'dns_loop'       => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'dns_unknown'    => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'full'           => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'inactive'       => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'latin_only'     => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'other'          => ['remove' =>0, 'bounce_type' =>'generic']
+  ,'oversize'       => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'outofoffice'    => ['remove' =>2, 'bounce_type' =>'soft']
+  ,'unknown'        => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'unrecognized'   => ['remove' =>0, 'bounce_type' =>false,]
+  ,'user_reject'    => ['remove' =>1, 'bounce_type' =>'hard']
+  ,'warning'        => ['remove' =>2, 'bounce_type' =>'soft']
+];
 
 /*
  * var for new line ending
@@ -71,13 +71,13 @@ $rule_categories = array(
  */
 function bmhBodyRules($body,$structure,$debug_mode=false) {
   // initialize the result array
-  $result = array(
+  $result = [
      'email'       => ''
     ,'bounce_type' => false
     ,'remove'      => 0
     ,'rule_cat'    => 'unrecognized'
     ,'rule_no'     => '0000'
-  );
+  ];
 
   // ======== rule =========
   if (false) {
@@ -564,13 +564,13 @@ function bmhBodyRules($body,$structure,$debug_mode=false) {
  */
 function bmhDSNRules($dsn_msg,$dsn_report,$debug_mode=false) {
   // initialize the result array
-  $result = array(
+  $result = [
     'email'        => ''
     ,'bounce_type' => false
     ,'remove'      => 0
     ,'rule_cat'    => 'unrecognized'
     ,'rule_no'     => '0000'
-  );
+  ];
   $action      = false;
   $status_code = false;
   $diag_code   = false;

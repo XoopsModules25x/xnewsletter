@@ -71,7 +71,7 @@ if ($protocolCount > 0) {
     if (isset($_REQUEST["ok"]) && $_REQUEST["ok"] == true) {
         $start_sending = true;
     } else {
-        xoops_confirm(array("ok" => true, "op" => $op, "letter_id" => $letter_id), $_SERVER["REQUEST_URI"], _AM_XNEWSLETTER_SEND_SURE_SENT );
+        xoops_confirm(["ok" => true, "op" => $op, "letter_id" => $letter_id], $_SERVER["REQUEST_URI"], _AM_XNEWSLETTER_SEND_SURE_SENT );
     }
 } else {
     $start_sending = true;

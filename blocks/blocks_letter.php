@@ -40,7 +40,7 @@ function b_xnewsletter_letter($options) {
     $member_handler = xoops_getHandler('member');
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $letter = array();
+    $letter = [];
     $type_block = $options[0];
     $nb_letter = $options[1];
     $length_title = $options[2];
@@ -71,7 +71,7 @@ function b_xnewsletter_letter($options) {
 
     $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
     if ($uid == 0) {
-        $groups = array(XOOPS_GROUP_ANONYMOUS);
+        $groups = [XOOPS_GROUP_ANONYMOUS];
     } else {
         $groups = $member_handler->getGroupsByUser($uid) ;
     }
@@ -79,7 +79,7 @@ function b_xnewsletter_letter($options) {
     $letterCriteria->setLimit($nb_letter);
     $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
     foreach ($letterObjs as $letter_id => $letterObj) {
-        $letter_cats = array();
+        $letter_cats = [];
         $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         $showCat = false;
         foreach ($letter_cats as $cat_id) {

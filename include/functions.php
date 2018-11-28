@@ -235,14 +235,14 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0) {
     $member_handler = xoops_getHandler('member');
     $xnewsletter = xnewsletterxnewsletter::getInstance();
 
-    $perm = array(
+    $perm = [
         "read" => false,
         "edit" => false,
         "delete" => false,
         "create" => false,
         "send" => false
-        );
-    $letter_cats = array();
+    ];
+    $letter_cats = [];
     $currentuid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
 
     // perm read

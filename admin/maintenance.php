@@ -176,7 +176,7 @@ switch ($op) {
             }
             redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT_OK);
         } else {
-            xoops_confirm(array("ok" => 1, "", "op" => "del_import"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT);
+            xoops_confirm(["ok" => 1, "", "op" => "del_import"], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT);
         }
         break;
 
@@ -193,8 +193,8 @@ switch ($op) {
 
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
             $deleted = 0;
-            $errors = array();
-            $subscrArrays = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria, array('subscr_id'), false, false);
+            $errors = [];
+            $subscrArrays = $xnewsletter->getHandler('subscr')->getAll($subscrCriteria, ['subscr_id'], false, false);
             foreach ($subscrArrays as $subscrArray) {
                 $subscrObj = $xnewsletter->getHandler('subscr')->get((int) $subscrArray['subscr_id']);
                 $sql = "DELETE FROM `{$xoopsDB->prefix('xnewsletter_subscr')}` WHERE subscr_id={$subscrArray['subscr_id']}";
@@ -240,7 +240,7 @@ switch ($op) {
 
         } else {
             if ($subscrsCount > 0) {
-                xoops_confirm(array("ok" => 1, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"), $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrsCount, $_POST['del_date']));
+                xoops_confirm(["ok" => 1, "del_date" => $_POST['del_date'], "op" => "del_oldsubscr"], $currentFile, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETEUSER, $subscrsCount, $_POST['del_date']));
             } else {
                 redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETENOTHING);
             }
@@ -270,7 +270,7 @@ switch ($op) {
             }
             redirect_header($currentFile, 2,_AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOK);
         } else {
-            xoops_confirm(array("ok" => 1, "", "op" => "del_oldprotocol"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL);
+            xoops_confirm(["ok" => 1, "", "op" => "del_oldprotocol"], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL);
         }
         break;
 
@@ -279,7 +279,7 @@ switch ($op) {
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
             $number_ids = 0;
             $deleted = 0;
-            $errors = array();
+            $errors = [];
             $sql = "SELECT Count(`catsubscr_id`) AS `nb_ids` FROM `{$xoopsDB->prefix("xnewsletter_catsubscr")}` LEFT JOIN `{$xoopsDB->prefix("xnewsletter_subscr")}` ON `catsubscr_subscrid` = `subscr_id` WHERE (`subscr_id` Is Null)";
             if ( $result = $xoopsDB->query($sql) ) {
                 $row_result = $xoopsDB->fetchRow($result);
@@ -324,7 +324,7 @@ switch ($op) {
                 redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids));
             }
         } else {
-            xoops_confirm(array("ok" => 1, "", "op" => "del_invalid_catsubscr"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
+            xoops_confirm(["ok" => 1, "", "op" => "del_invalid_catsubscr"], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
         }
         break;
 
@@ -333,7 +333,7 @@ switch ($op) {
             $use_mailinglist = $GLOBALS['xoopsModuleConfig']['xn_use_mailinglist'];
             $number_ids = 0;
             $update = 0;
-            $errors = array();
+            $errors = [];
             if ($use_mailinglist == 0 || $use_mailinglist == '0') {
                 //set cat_mailinglist = 0, if use mailinglist = false (if someone changed module preferences later)
                 $sql = "SELECT Count(`cat_id`) AS `nb_ids` FROM `{$xoopsDB->prefix("xnewsletter_cat")}` WHERE (`cat_mailinglist` > 0)";
@@ -396,7 +396,7 @@ switch ($op) {
             redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML_OK, $number_ids));
 
         } else {
-          xoops_confirm(array("ok" => 1, "", "op" => "del_invalid_ml"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML);
+          xoops_confirm(["ok" => 1, "", "op" => "del_invalid_ml"], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML);
         }
         break;
 
@@ -404,14 +404,14 @@ switch ($op) {
         //remove cat from letter_cats, if cat is missing (if someone deleted cat after creating letter)
         if (isset($_POST["ok"]) && $_POST["ok"] == "1") {
             $update = 0;
-            $errors = array();
+            $errors = [];
             $number_ids = 0;
 
             $letter_arr = $xnewsletter->getHandler('letter')->getall();
             foreach (array_keys($letter_arr) as $letter_id) {
                 $letter_cats_new = "";
                 $letter_cats_old = $letter_arr[$letter_id]->getVar("letter_cats");
-                $letter_cats = array();
+                $letter_cats = [];
                 $letter_cats = explode("|", $letter_cats_old);
 
                 foreach ($letter_cats as $cat_id) {
@@ -464,7 +464,7 @@ switch ($op) {
             }
             redirect_header($currentFile, 3,sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL_OK, $number_ids));
         } else {
-            xoops_confirm(array("ok" => 1, "", "op" => "del_invalid_cat"), $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL);
+            xoops_confirm(["ok" => 1, "", "op" => "del_invalid_cat"], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL);
         }
         break;
 }

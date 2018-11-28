@@ -30,7 +30,7 @@
 class XnewsletterBreadcrumb
 {
     var $dirname;
-    var $_bread = array();
+    var $_bread = [];
 
     /**
      *
@@ -46,10 +46,10 @@ class XnewsletterBreadcrumb
      */
     function addLink( $title='', $link='' )
     {
-        $this->_bread[] = array(
+        $this->_bread[] = [
             'link'  => $link,
             'title' => $title
-            );
+        ];
     }
 
     /**

@@ -316,7 +316,7 @@ switch ($op) {
                 echo $subscrObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array("ok" => 1, "subscr_id" => $_REQUEST["subscr_id"], "op" => "delete_subscr"), $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar("subscr_email")));
+            xoops_confirm(["ok" => 1, "subscr_id" => $_REQUEST["subscr_id"], "op" => "delete_subscr"], $_SERVER["REQUEST_URI"], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar("subscr_email")));
         }
     break;
 }
