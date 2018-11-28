@@ -9,7 +9,7 @@
             <th class="center"><{$smarty.const._AM_XNEWSLETTER_LETTER_CREATED}></th>
             <th class="center">&nbsp;</th>
         </tr>
-    <{foreachq item='letter' from=$letters}>
+    <{foreach item='letter' from=$letters}>
         <tr class = "<{cycle values = 'even,odd'}>">
             <td class="center"><{$letter.letter_id}></td>
             <td class="center"><{$letter.letter_title}></td>
