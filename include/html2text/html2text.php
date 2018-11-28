@@ -192,13 +192,13 @@ function iterate_over_node($node) {
         case 'p':
         case 'br':
             // add one line
-            if ($nextName != 'div')
+            if ($nextName !== 'div')
                 $output .= "\n";
             break;
 
         case 'div':
             // add one line only if the next child isn't a div
-            if ($nextName != 'div' && $nextName != null)
+            if ($nextName !== 'div' && $nextName != null)
                 $output .= "\n";
             break;
 

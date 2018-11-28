@@ -91,7 +91,7 @@ class XnewsletterImport extends XoopsObject
         $arrPlugin         = [];
         $currpluginhasform = 0;
         foreach ($aFiles as $file) {
-            if (substr($file, strlen($file) - 4, 4) == '.php') {
+            if (substr($file, strlen($file) - 4, 4) === '.php') {
                 $pluginName = str_replace('.php', '', $file);
                 $pluginFile = XNEWSLETTER_ROOT_PATH . '/plugins/' . $pluginName . '.php';
                 if (file_exists($pluginFile)) {

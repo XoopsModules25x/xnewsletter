@@ -389,7 +389,7 @@ class BounceMailHandler {
       // fetch the messages one at a time
       if ($this->use_fetchstructure) {
         $structure = imap_fetchstructure($this->_mailbox_link,$x);
-        if ($structure->type == 1 && $structure->ifsubtype && $structure->subtype == 'REPORT' && $structure->ifparameters && $this->isParameter($structure->parameters, 'REPORT-TYPE','delivery-status')) {
+        if ($structure->type == 1 && $structure->ifsubtype && $structure->subtype === 'REPORT' && $structure->ifparameters && $this->isParameter($structure->parameters, 'REPORT-TYPE', 'delivery-status')) {
           $processed = $this->processBounce($x,'DSN',$c_total);
         } else { // not standard DSN msg
           $this->output( 'Msg #' .  $x . ' is not a standard DSN message',VERBOSE_REPORT);
@@ -502,7 +502,7 @@ class BounceMailHandler {
   public function processBounce($pos,$type,$totalFetched) {
     $header      = imap_header($this->_mailbox_link,$pos);
     $subject     = strip_tags($header->subject);
-    if ($type == 'DSN') {
+    if ($type === 'DSN') {
       // first part of DSN (Delivery Status Notification), human-readable explanation
       $dsn_msg = imap_fetchbody($this->_mailbox_link, $pos, '1');
       $dsn_msg_structure = imap_bodystruct($this->_mailbox_link, $pos, '1');
@@ -518,7 +518,7 @@ class BounceMailHandler {
 
       // process bounces by rules
       $result = bmhDSNRules($dsn_msg,$dsn_report,$this->debug_dsn_rule);
-    } elseif ($type == 'BODY') {
+    } elseif ($type === 'BODY') {
       $structure = imap_fetchstructure($this->_mailbox_link,$pos);
       switch ($structure->type) {
         case 0: // Content-type = text

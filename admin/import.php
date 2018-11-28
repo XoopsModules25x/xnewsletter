@@ -105,7 +105,7 @@ switch ($op) {
             foreach ($importObjs as $i => $importObj) {
                 ++$counter;
                 $form .= '<tr class="' . $class . '">';
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 $form .= '<td align="center">' . $counter;
                 $form .=  "<input type='hidden' name='import_id_" . $counter . "' title='import_id_" . $counter . "' id='import_id_" . $counter . "' value='" . $importObj->getVar('import_id') . "' />";
                 $form .= '</td>';
@@ -191,7 +191,7 @@ switch ($op) {
                 $form .= '</tr>';
             }
             $form .= '<tr class="' . $class . '">';
-            $class = ($class == 'even') ? 'odd' : 'even';
+            $class = ($class === 'even') ? 'odd' : 'even';
             $form .= '<td colspan="8"align="center">';
             $form .= "<input type='hidden' name='counter' title='counter' id='counter' value='" . $counter . "' />";
             $form .= "<input type='hidden' name='limitcheck' title='limitcheck' id='limitcheck' value='" . $limitcheck . "' />";
@@ -400,13 +400,13 @@ switch ($op) {
         $result= $xoopsDB->queryF($sql);
 
         //import data into xnewsletter_import with plugin
-        if ($plugin == 'csv') {
+        if ($plugin === 'csv') {
             $csv_file = $_FILES['csv_file']['tmp_name'];
             $csv_header    = XoopsRequest::getInt('csv_header', 0);
             $csv_delimiter = XoopsRequest::getString('csv_delimiter', ',');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
-        } else if ($plugin == 'xoopsuser') {
+        } else if ($plugin === 'xoopsuser') {
             $arr_groups = $_POST['xoopsuser_group'];
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $arr_groups);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $arr_groups);

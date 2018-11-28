@@ -77,7 +77,7 @@ switch ($op) {
 
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $attachment_id . '</td>';
 
                 $letter = $xnewsletter->getHandler('letter')->get($attachmentObj->getVar('attachment_letter_id'));

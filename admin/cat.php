@@ -84,7 +84,7 @@ switch ($op) {
 
             foreach ($catObjs as $cat_id => $catObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $cat_id . '</td>';
                 echo "<td class='center'>" . $catObj->getVar('cat_name') . '</td>';
                 echo '<td>' . $catObj->getVar('cat_info') . '&nbsp;</td>';

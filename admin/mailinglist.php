@@ -74,7 +74,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $mailinglist_id . '</td>';
                 echo "<td class='center'>" . $mailinglistObj->getVar('mailinglist_name') . '</td>';
                 echo "<td class='center'>" . $mailinglistObj->getVar('mailinglist_email') . '</td>';

@@ -60,7 +60,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
         redirect_header('letter.php', 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
     }
 
-    if ($op == 'send_test') {
+    if ($op === 'send_test') {
         //check for valid email for testing
         $letter_email_test = $letterObj->getVar('letter_email_test');
         if ($letter_email_test == '')
@@ -69,7 +69,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
 
     //get emails of subscribers
     $recipients = [];
-    if ($op == 'send_test') {
+    if ($op === 'send_test') {
         $recipients[] = 0;
     } else {
         //read all subscribers
@@ -83,7 +83,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
 
         while ($subscriber = $xoopsDB->fetchArray($subscribers)) {
             $subscr_id = $subscriber['subscr_id'];
-            if ($op == 'resend_letter') {
+            if ($op === 'resend_letter') {
                 //read subscribers, where send failed
                 $protocolCriteria = new CriteriaCompo();
                 $protocolCriteria->add(new Criteria('protocol_letter_id', $letter_id));
@@ -278,7 +278,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0) {
             $attachmentObjs = $xnewsletter->getHandler('attachment')->getAll($attachmentCriteria);
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
                 $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path');
-                if (substr($uploaddir, -1) != '/') {
+                if (substr($uploaddir, -1) !== '/') {
                     //check, whether path seperator is existing
                     $uploaddir .= '/';
                 }

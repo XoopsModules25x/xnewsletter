@@ -77,7 +77,7 @@ switch ($op) {
 
             foreach ($templateObjs as $template_id => $templateObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $template_id . '</td>';
                 echo "<td class='center'>" . $templateObj->getVar('template_title') . '</td>';
                 echo '<td>' . $templateObj->getVar('template_description') . '</td>';

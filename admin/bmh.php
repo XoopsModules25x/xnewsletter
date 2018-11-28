@@ -272,7 +272,7 @@ switch ($op) {
 
             foreach ($bhmObjs as $bhm_id => $bhmObj) {
                 echo "<tr class='".$class."'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $bhm_id . '</td>';
                 echo "<td class='center'>" . $bhmObj->getVar('bmh_rule_no') . '</td>';
                 echo "<td class='center'>" . $bhmObj->getVar('bmh_rule_cat') . '</td>';

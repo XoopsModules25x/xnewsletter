@@ -36,7 +36,7 @@ $save_and_check = XoopsRequest::getString('save_and_check', 'none');
 $accounts_id    = XoopsRequest::getInt('accounts_id', 0);
 $post           = XoopsRequest::getString('post', '');
 
-if ('' == $post &&  'save_accounts' == $op && 'none' == $save_and_check) {
+if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
     $op = 'edit_account';
 }
 
@@ -226,7 +226,7 @@ switch ($op) {
 
             foreach ($accountsObjs as $accounts_id => $accountsObj) {
                 echo "<tr class='{$class}'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>{$accounts_id}</td>";
                 $arr_accounts_type= [
                         _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
@@ -316,7 +316,7 @@ switch ($op) {
         $accountObj->setVar('accounts_default', $verif_accounts_default);
         if (('' != $accountObj->getVar('accounts_yourmail')) && $accountObj->getVar('accounts_yourmail') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
             if ($xnewsletter->getHandler('accounts')->insert($accountObj)) {
-                if ('none' == $save_and_check) {
+                if ('none' === $save_and_check) {
                     redirect_header('?op=list', 2, _AM_XNEWSLETTER_FORMOK);
                 } else {
                     redirect_header("?op=check_account&accounts_id={$accountObj->getVar('accounts_id')}", 2, _AM_XNEWSLETTER_FORMOK);

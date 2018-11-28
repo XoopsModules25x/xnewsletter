@@ -39,10 +39,10 @@ $filter_subscr_firstname = XoopsRequest::getString('filter_subscr_firstname', ''
 $filter_subscr_lastname  = XoopsRequest::getString('filter_subscr_lastname', '');
 $filter_subscr_email     = XoopsRequest::getString('filter_subscr_email', '');
 
-if ($op == 'apply_filter') {
-    if ($filter_subscr == 'LIKE' && !$filter_subscr_firstname == '') $filter_subscr_firstname = '%' . $filter_subscr_firstname . '%';
-    if ($filter_subscr == 'LIKE' && !$filter_subscr_lastname == '') $filter_subscr_lastname = '%' . $filter_subscr_lastname . '%';
-    if ($filter_subscr == 'LIKE' && !$filter_subscr_email == '') $filter_subscr_email = '%' . $filter_subscr_email . '%';
+if ($op === 'apply_filter') {
+    if ($filter_subscr === 'LIKE' && !$filter_subscr_firstname == '') $filter_subscr_firstname = '%' . $filter_subscr_firstname . '%';
+    if ($filter_subscr === 'LIKE' && !$filter_subscr_lastname == '') $filter_subscr_lastname = '%' . $filter_subscr_lastname . '%';
+    if ($filter_subscr === 'LIKE' && !$filter_subscr_email == '') $filter_subscr_email = '%' . $filter_subscr_email . '%';
     if ($filter_subscr_firstname == '' && $filter_subscr_lastname == '' && $filter_subscr_email == '') $op = 'list';
 }
 
@@ -70,7 +70,7 @@ switch ($op) {
 
         $class = 'odd';
         echo "<tr class='"  .$class . "'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "<td class='center'>" . $subscr_id . '</td>';
         echo "<td class='center'>" . $subscrObj->getVar('subscr_email') . '</td>';
         echo "<td class='center'>";
@@ -99,13 +99,13 @@ switch ($op) {
     default:
         echo $subscrAdmin->addNavigation($currentFile);
         $subscrAdmin->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
-        if ($op == 'apply_filter') $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCR_SHOW_ALL, '?op=list', 'view_detailed');
+        if ($op === 'apply_filter') $subscrAdmin->addItemButton(_AM_XNEWSLETTER_SUBSCR_SHOW_ALL, '?op=list', 'view_detailed');
         echo $subscrAdmin->renderButton();
         //
         $limit = $xnewsletter->getConfig('adminperpage');
         $subscrCriteria = new CriteriaCompo();
 
-        if ($op == 'apply_filter') {
+        if ($op === 'apply_filter') {
             if ($filter_subscr_firstname != '')
                 $subscrCriteria->add(new Criteria('subscr_firstname', $filter_subscr_firstname, $filter_subscr));
             if ($filter_subscr_lastname != '')
@@ -132,7 +132,7 @@ switch ($op) {
         } else {
             $pagenav = '';
         }
-        if ($filter_subscr == 'LIKE') {
+        if ($filter_subscr === 'LIKE') {
             //clean up var for refill form
             $filter_subscr_firstname = str_replace('%', '', $filter_subscr_firstname);
             $filter_subscr_lastname = str_replace('%', '', $filter_subscr_lastname);
@@ -157,14 +157,14 @@ switch ($op) {
 
             $inputstyle = "style='border: 1px solid #000000;";
             echo "<tr class='" . $class . "'>";
-            $class = ($class == 'even') ? 'odd' : 'even';
+            $class = ($class === 'even') ? 'odd' : 'even';
             echo "<td class='center' colspan='2'>" . _AM_XNEWSLETTER_SEARCH . ':&nbsp;&nbsp;';
             echo "<select id='filter_subscr' title='" . _AM_XNEWSLETTER_SEARCH . "' name='filter_subscr' size='1'>";
             echo '<option ';
-            if ($filter_subscr == '=') echo "selected='selected' ";
+            if ($filter_subscr === '=') echo "selected='selected' ";
             echo "value='='>" . _AM_XNEWSLETTER_SEARCH_EQUAL . '</option>';
             echo '<option ';
-            if ($filter_subscr == 'LIKE') echo "selected='selected' ";
+            if ($filter_subscr === 'LIKE') echo "selected='selected' ";
             echo " value='LIKE'>" . _AM_XNEWSLETTER_SEARCH_CONTAINS . '</option>';
             echo '</select>';
             echo '</td>';
@@ -182,7 +182,7 @@ switch ($op) {
 
             foreach ($subscrObjs as $subscr_id => $subscrObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $subscr_id . '</td>';
                 echo "<td class='center'>" . $subscrObj->getVar('subscr_sex') . '&nbsp;</td>';
                 echo "<td class='center'>" . $subscrObj->getVar('subscr_firstname') . '&nbsp;</td>';

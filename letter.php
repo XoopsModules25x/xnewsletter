@@ -45,19 +45,19 @@ $delete_att_3 = XoopsRequest::getString('delete_attachment_3', 'none');
 $delete_att_4 = XoopsRequest::getString('delete_attachment_4', 'none');
 $delete_att_5 = XoopsRequest::getString('delete_attachment_5', 'none');
 
-if ($delete_att_1 != 'none') {
+if ($delete_att_1 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 1;
-} elseif ($delete_att_2 != 'none') {
+} elseif ($delete_att_2 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 2;
-} elseif ($delete_att_3 != 'none') {
+} elseif ($delete_att_3 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 3;
-} elseif ($delete_att_4 != 'none') {
+} elseif ($delete_att_4 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 4;
-} elseif ($delete_att_5 != 'none') {
+} elseif ($delete_att_5 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 5;
 } else {
@@ -151,7 +151,7 @@ switch ($op) {
 // IN PROGRESS FROM HERE
         // get attachment
         $attachment_id = XoopsRequest::getString("attachment_{$id_del}", 'none');
-        if ($attachment_id == 'none') {
+        if ($attachment_id === 'none') {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         }
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);

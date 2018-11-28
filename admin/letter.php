@@ -42,19 +42,19 @@ $delete_att_5 = XoopsRequest::getString('delete_attachment_5', 'none');
 
 
 
-if ($delete_att_1 != 'none') {
+if ($delete_att_1 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 1;
-} elseif ($delete_att_2 != 'none') {
+} elseif ($delete_att_2 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 2;
-} elseif ($delete_att_3 != 'none') {
+} elseif ($delete_att_3 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 3;
-} elseif ($delete_att_4 != 'none') {
+} elseif ($delete_att_4 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 4;
-} elseif ($delete_att_5 != 'none') {
+} elseif ($delete_att_5 !== 'none') {
     $op = 'delete_attachment';
     $id_del = 5;
 } else {
@@ -64,7 +64,7 @@ if ($delete_att_1 != 'none') {
 switch ($op) {
     case 'delete_attachment':
         $attachment_id = XoopsRequest::getString("attachment_{$id_del}", 'none');
-        if ($attachment_id == 'none') redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
+        if ($attachment_id === 'none') redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
         $attachment_name = $attachmentObj->getVar('attachment_name');
 
@@ -181,7 +181,7 @@ switch ($op) {
 
             foreach ($letterObjs as $letter_id => $letterObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $letter_id . '</td>';
                 echo "<td class='center'>" . $letterObj->getVar('letter_title') . '</td>';
                 $verify_val = $letterObj->getVar('letter_template') == '' ? '&nbsp;' : $letterObj->getVar('letter_template');

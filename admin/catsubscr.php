@@ -73,7 +73,7 @@ switch ($op) {
 
             foreach ($catObjs as $cat_id => $catObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $cat_id . '</td>';
                 echo "
                     <td class='center'>
@@ -150,7 +150,7 @@ switch ($op) {
 
             foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $catsubscr_id . '</td>';
 
                 $cat = $xnewsletter->getHandler('cat')->get($cat_id);

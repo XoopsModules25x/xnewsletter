@@ -50,7 +50,7 @@ switch ($op) {
 
         // delete protocols
         echo "   <tr class='{$class}'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo "            <td align='center' valign='middle'>protocol</td>";
         echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEPROTOCOL . '</td>';
@@ -66,7 +66,7 @@ switch ($op) {
 
         // delete unconfirmed registrations
         echo "   <tr class='{$class}'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo "            <td align='center' valign='middle'>subscr</td>";
         echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETEDATE . '</td>';
@@ -84,7 +84,7 @@ switch ($op) {
 
         // delete invalid catsubscr
         echo "   <tr class='{$class}'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo "            <td align='center' valign='middle'>catsubscr</td>";
         echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR . '</td>';
@@ -102,7 +102,7 @@ switch ($op) {
 
         if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
             echo "   <tr class='{$class}'>";
-            $class = ($class == 'even') ? 'odd' : 'even';
+            $class = ($class === 'even') ? 'odd' : 'even';
             echo "        <form action='{$currentFile}' method='post'>";
             echo "            <td align='center' valign='middle'>ml</td>";
             echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_ML . '</td>';
@@ -119,7 +119,7 @@ switch ($op) {
 
         // delete invalid cat
         echo "   <tr class='{$class}'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo "            <td align='center' valign='middle'>cat</td>";
         echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_CATNL . '</td>';
@@ -135,7 +135,7 @@ switch ($op) {
 
         // delete import
         echo "   <tr class='{$class}'>";
-        $class = ($class == 'even') ? 'odd' : 'even';
+        $class = ($class === 'even') ? 'odd' : 'even';
         echo "        <form action='{$currentFile}' method='post'>";
         echo "            <td align='center' valign='middle'>import</td>";
         echo "            <td align='left' valign='middle'>" . _AM_XNEWSLETTER_MAINTENANCE_DELETE_IMPORT . '</td>';

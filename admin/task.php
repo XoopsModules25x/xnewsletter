@@ -53,7 +53,7 @@ switch ($op) {
             foreach ($taskObjs as $task_id => $taskObj) {
                 if ($taskObj->getVar('task_pid') == 0) {
                     echo "<tr class='" . $class . "'>";
-                    $class = ($class == 'even') ? 'odd' : 'even';
+                    $class = ($class === 'even') ? 'odd' : 'even';
 
                     $letterObj = $xnewsletter->getHandler('letter')->get($taskObj->getVar('task_letter_id'));
                     $title_letter = $letterObj->getVar('letter_title');

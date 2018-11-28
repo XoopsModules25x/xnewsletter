@@ -34,7 +34,7 @@ $letter_id = XoopsRequest::getInt('letter_id', 0);
 
 $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
 
-if ($xn_send_in_packages > 0 && $op != 'send_test') {
+if ($xn_send_in_packages > 0 && $op !== 'send_test') {
     $xn_send_in_packages_time = $xnewsletter->getConfig('xn_send_in_packages_time');
 } else {
     $xn_send_in_packages_time = 0;

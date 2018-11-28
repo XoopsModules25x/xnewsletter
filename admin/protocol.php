@@ -73,7 +73,7 @@ switch ($op) {
 
             //first show misc protocol items
             echo "<tr class='" . $class . "'>";
-            $class = ($class == 'even') ? 'odd' : 'even';
+            $class = ($class === 'even') ? 'odd' : 'even';
             echo "<td class='center'> - </td>";
             echo "<td class='center'>" . _AM_XNEWSLETTER_PROTOCOL_MISC . '</td>';
 
@@ -117,7 +117,7 @@ switch ($op) {
                     $protocol_created = '';
 
                     echo "<tr class='" . $class. "'>";
-                    $class = ($class == 'even') ? 'odd' : 'even';
+                    $class = ($class === 'even') ? 'odd' : 'even';
                     echo "<td class='center'>" . $i . '</td>';
                     echo "<td class='center'>" . $letterObjs[$i]->getVar('letter_title') . '</td>';
 
@@ -200,7 +200,7 @@ switch ($op) {
             $class = 'odd';
             foreach ($protocolObjs as $protocol_id => $protocolObj) {
                 echo "<tr class='" . $class . "'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>" . $protocol_id . '</td>';
                 $subscrObj = $xnewsletter->getHandler('subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
                 $subscriber = ($subscrObj) ? $subscrObj->getVar('subscr_email') : _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;

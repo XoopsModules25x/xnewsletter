@@ -32,10 +32,10 @@ include_once __DIR__ . '/header.php';
 $op            = XoopsRequest::getString('op', 'list_subscriptions');
 $activationKey = XoopsRequest::getString('actkey', '');
 $subscr_id     = XoopsRequest::getInt('subscr_id', 0);
-$subscr_email  = ($op != 'unsub') ? XoopsRequest::getString('subscr_email', '') : '';
+$subscr_email  = ($op !== 'unsub') ? XoopsRequest::getString('subscr_email', '') : '';
 $ip            =  xoops_getenv('REMOTE_ADDR');
 
-if ($op == 'save_subscription' || $activationKey != '') {
+if ($op === 'save_subscription' || $activationKey != '') {
     $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
 } else {
     $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
@@ -43,13 +43,13 @@ if ($op == 'save_subscription' || $activationKey != '') {
 if (isset($_REQUEST['addnew'])) {
     $op = 'addnew_subscription';
 }
-if ($activationKey && $op != 'delete_subscription_confirmed' && $op != 'unsub') {
+if ($activationKey && $op !== 'delete_subscription_confirmed' && $op !== 'unsub') {
     $op = 'save_subscription';
 }
-if ($op == 'delete_subscription_confirmed') {
+if ($op === 'delete_subscription_confirmed') {
     $op = 'delete_subscription';
 }
-if ($op == 'unsub') {
+if ($op === 'unsub') {
     $op = 'list_subscriptions';
     $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
     $_SESSION['redirect_mail'] = XoopsRequest::getString('email', '');
@@ -257,7 +257,7 @@ switch ($op) {
                     $xoopsMailer->reset();
                     $xoopsMailer->setTemplateDir();
                     $xoopsMailer->useMail();
-                    if ($saveType == 'update') {
+                    if ($saveType === 'update') {
                         $xoopsMailer->setTemplate('update.tpl');
                     } else {
                         $xoopsMailer->setTemplate('activate.tpl');
@@ -353,7 +353,7 @@ switch ($op) {
             if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
                 redirect_header($currentFile, 2, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR);
             } else {
-                if ($saveType == 'addnew') {
+                if ($saveType === 'addnew') {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_CLOSED;
                 } else {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_UPDATE_CLOSED;

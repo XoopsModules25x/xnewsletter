@@ -103,7 +103,7 @@ class XnewsletterLetter extends XoopsObject
         $templateFiles = [];
         if (!$dirHandler = @opendir($template_path)) die(str_replace('%p', $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
         while ($filename = readdir($dirHandler)) {
-            if (($filename != '.') and ($filename != '..') and ($filename != 'index.html')) {
+            if (($filename !== '.') and ($filename !== '..') and ($filename !== 'index.html')) {
                 $info            = pathinfo($filename);
                 $templateFiles[] = basename($filename, '.' . $info['extension']);
             }
