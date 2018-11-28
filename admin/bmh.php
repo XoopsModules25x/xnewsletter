@@ -49,7 +49,7 @@ switch ($op) {
             $sql .= ') LIMIT 1;';
             if ( $user = $xoopsDB->query($sql) ) {
                 $row_user = $xoopsDB->fetchRow($user);
-                $subscr_id = intval($row_user[0]);
+                $subscr_id = (int)$row_user[0];
             }
             if ($subscr_id == 0) {
                 //set bmh_measure for all entries in bmh with this email

@@ -189,7 +189,7 @@ switch ($op) {
         $gperm_handler = xoops_getHandler('groupperm');
 
         // Form cat_mailinglist
-        $cat_mailinglist = !empty($_REQUEST['cat_mailinglist']) ? intval($_REQUEST['cat_mailinglist']) : 0;
+        $cat_mailinglist = !empty($_REQUEST['cat_mailinglist']) ? (int)$_REQUEST['cat_mailinglist'] : 0;
         $catObj->setVar('cat_mailinglist', $cat_mailinglist);
 
         // Form cat_submitter

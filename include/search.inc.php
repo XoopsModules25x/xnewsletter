@@ -39,7 +39,7 @@ function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid) {
     $sql.= " FROM {$xoopsDB->prefix('xnewsletter_cat')}";
     $sql.= ' WHERE cat_created > 0';
     if ($userid != 0) {
-        $sql .= ' AND cat_submitter=' . intval($userid) . ' ';
+        $sql .= ' AND cat_submitter=' . (int)$userid . ' ';
     }
     if (is_array($queryarray) && $count = count($queryarray)) {
         $sql .= " AND ((cat_name LIKE '%{$queryarray[0]}%' OR cat_info LIKE '%{$queryarray[0]}%')";

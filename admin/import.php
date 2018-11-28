@@ -288,7 +288,7 @@ switch ($op) {
                         $sql = 'INSERT';
                         $sql .= " INTO `{$xoopsDB->prefix('xnewsletter_subscr')}`";
                         $sql .= ' (`subscr_email`, `subscr_firstname`, `subscr_lastname`, `subscr_uid`, `subscr_sex`, `subscr_submitter`, `subscr_created`, `subscr_ip`, `subscr_activated`, `subscr_actoptions`)';
-                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . intval($subscr_uid) . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', '1', '')";
+                        $sql .= " VALUES ('{$subscr_email}', '{$subscr_firstname}', '{$subscr_lastname}', " . (int)$subscr_uid . ", '{$subscr_sex}', {$submitter}, " . time() . ",'{$ip}', '1', '')";
                         if (!$xoopsDB->queryF($sql)) {
                             createProtocol(str_replace('%e', $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), 0, $submitter);
                         } else {

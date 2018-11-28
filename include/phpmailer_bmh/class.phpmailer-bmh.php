@@ -315,9 +315,9 @@ class BounceMailHandler {
   public function openLocal($file_path) {
     set_time_limit(6000);
     if (!$this->testmode) {
-      $this->_mailbox_link = imap_open("$file_path",'','',CL_EXPUNGE);
+      $this->_mailbox_link = imap_open((string)$file_path, '', '', CL_EXPUNGE);
     } else {
-      $this->_mailbox_link = imap_open("$file_path",'','');
+      $this->_mailbox_link = imap_open((string)$file_path, '', '');
     }
     if (!$this->_mailbox_link) {
       $this->error_msg = 'Cannot open the mailbox file to ' . $file_path . $this->bmh_newline . 'Error MSG: ' . imap_last_error();
