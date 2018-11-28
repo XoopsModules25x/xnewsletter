@@ -261,7 +261,7 @@ class BounceMailHandler {
      * @param bool|string $msg           ,  if not given, output the last error msg
      * @param int|string  $verbose_level ,  the output level of this message
      */
-  function output($msg=false,$verbose_level=VERBOSE_SIMPLE) {
+  public function output($msg=false,$verbose_level=VERBOSE_SIMPLE) {
     if ($this->verbose >= $verbose_level) {
       if (empty($msg)) {
         echo $this->error_msg . $this->bmh_newline;
@@ -275,7 +275,7 @@ class BounceMailHandler {
    * Open a mail box
    * @return boolean
    */
-  function openMailbox() {
+  public function openMailbox() {
     // before starting the processing, let's check the delete flag and do global deletes if true
     if ( trim($this->deleteMsgDate) != '' ) {
       //echo "processing global delete based on date of " . $this->deleteMsgDate . "<br />";
@@ -312,7 +312,7 @@ class BounceMailHandler {
    * @param string $file_path (The local mailbox file path)
    * @return boolean
    */
-  function openLocal($file_path) {
+  public function openLocal($file_path) {
     set_time_limit(6000);
     if (!$this->testmode) {
       $this->_mailbox_link = imap_open("$file_path",'','',CL_EXPUNGE);
@@ -336,7 +336,7 @@ class BounceMailHandler {
      * @param bool|string $max (maximum limit messages processed in one batch, if not given uses the property $max_messages
      * @return boolean
      */
-  function processMailbox($max=false) {
+  public function processMailbox($max=false) {
     if ( empty($this->action_function) || !function_exists($this->action_function) ) {
       $this->error_msg = 'Action function not found!';
       $this->output();
@@ -480,7 +480,7 @@ class BounceMailHandler {
    * @param string $varValue       (value to check for)
    * @return boolean
    */
-  function isParameter($currParameters, $varKey, $varValue) {
+  public function isParameter($currParameters, $varKey, $varValue) {
     foreach ($currParameters as $key => $value) {
       if ($key == $varKey) {
         if ($value == $varValue) {
@@ -499,7 +499,7 @@ class BounceMailHandler {
    * @param string $totalFetched   (total number of messages in mailbox)
    * @return boolean
    */
-  function processBounce($pos,$type,$totalFetched) {
+  public function processBounce($pos,$type,$totalFetched) {
     $header      = imap_header($this->_mailbox_link,$pos);
     $subject     = strip_tags($header->subject);
     if ($type == 'DSN') {
@@ -599,7 +599,7 @@ class BounceMailHandler {
    * @param boolean $create         (whether or not to create the checkmailbox if not found, defaults to true)
    * @return boolean
    */
-  function mailbox_exist($mailbox,$create=true) {
+  public function mailbox_exist($mailbox,$create=true) {
     if ( trim($mailbox) == '' || !strstr($mailbox,'INBOX.') ) {
       // this is a critical error with either the mailbox name blank or an invalid mailbox name
       // need to stop processing and exit at this point
@@ -643,7 +643,7 @@ class BounceMailHandler {
      * @internal param string $mailbox (the mailbox name)
      * @return void
      */
-  function globalDelete() {
+  public function globalDelete() {
     $dateArr = explode('-', $this->deleteMsgDate); // date format is yyyy-mm-dd
     $delDate = mktime(0, 0, 0, $dateArr[1], $dateArr[2], $dateArr[0]);
 

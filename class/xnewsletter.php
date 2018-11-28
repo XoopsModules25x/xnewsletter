@@ -22,12 +22,12 @@
 
 class xnewsletterxnewsletter
 {
-    var $dirname;
-    var $module;
-    var $handler;
-    var $config;
-    var $debug;
-    var $debugArray = [];
+    public $dirname;
+    public $module;
+    public $handler;
+    public $config;
+    public $debug;
+    public $debugArray = [];
 
     /**
      * @param $debug

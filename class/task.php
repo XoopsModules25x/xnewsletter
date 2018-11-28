@@ -52,7 +52,7 @@ class XnewsletterTask extends XoopsObject
      *
      * @return XoopsThemeForm
      */
-    function getForm($action = false)
+    public function getForm($action = false)
     {
         global $xoopsDB;
 
