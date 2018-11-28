@@ -15,7 +15,6 @@
  * @param string  $rule_cat      Bounce Mail Handler detect rule category.
  * @param int     $totalFetched  total number of messages in the mailbox
  * @return boolean
- *  Version : $Id $
  */
 
 require_once __DIR__ . '/admin_header.php';

@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: letter.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 

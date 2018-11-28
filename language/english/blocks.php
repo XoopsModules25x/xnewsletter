@@ -20,7 +20,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
 define('_MB_XNEWSLETTER_CATSUBSCR_ALLCAT', 'All categories');

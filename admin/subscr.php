@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : 1 Wed 2012/11/28 22:18:22 :  Exp $
  * ****************************************************************************
  */
 

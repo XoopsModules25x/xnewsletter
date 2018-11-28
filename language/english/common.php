@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :   svn:$id$
  * ****************************************************************************
  */
 // Common

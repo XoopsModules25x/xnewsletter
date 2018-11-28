@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");

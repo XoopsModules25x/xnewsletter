@@ -25,7 +25,6 @@
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 

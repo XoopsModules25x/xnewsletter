@@ -22,8 +22,7 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: protocol.php 12491 2014-04-25 13:21:55Z beckmi $
- * ****************************************************************************
+  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);

@@ -22,8 +22,7 @@
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
- * ****************************************************************************
+  * ****************************************************************************
  * @param $queryarray
  * @param $andor
  * @param $limit
