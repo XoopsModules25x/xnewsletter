@@ -30,5 +30,5 @@
 
 // module information
 //$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/xnewsletter.png";
-$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/logo.png";
-$moduleCopyrightHtml = ""; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";
+$moduleImageUrl = XNEWSLETTER_URL . '/assets/images/logo.png';
+$moduleCopyrightHtml = ''; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";

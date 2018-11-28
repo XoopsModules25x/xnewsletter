@@ -35,15 +35,15 @@ function xnewsletter_plugin_getinfo_subscribers() {
     global $xoopsDB;
 
     $pluginInfo = [];
-    $pluginInfo['name'] = "subscribers";
-    if (file_exists(XOOPS_URL . "/modules/subscribers/images/module_logo.gif")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/subscribers/images/module_logo.gif";
-    } elseif (file_exists(XOOPS_URL . "/modules/subscribers/assets/images/module_logo.png")) {
-            $pluginInfo['icon'] = XOOPS_URL . "/modules/subscribers/assets/images/module_logo.png";
+    $pluginInfo['name'] = 'subscribers';
+    if (file_exists(XOOPS_URL . '/modules/subscribers/images/module_logo.gif')) {
+        $pluginInfo['icon'] = XOOPS_URL . '/modules/subscribers/images/module_logo.gif';
+    } elseif (file_exists(XOOPS_URL . '/modules/subscribers/assets/images/module_logo.png')) {
+            $pluginInfo['icon'] = XOOPS_URL . '/modules/subscribers/assets/images/module_logo.png';
         }
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/subscribers/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("subscribers_user");
-    $pluginInfo['descr'] = "Import from subscribers";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('subscribers_user');
+    $pluginInfo['descr'] = 'Import from subscribers';
     $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
@@ -66,15 +66,15 @@ function xnewsletter_plugin_getdata_subscribers($cat_id, $action_after_read, $li
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `user_email`, `user_name`";
-    $sql .= " FROM " . $xoopsDB->prefix("subscribers_user");
+    $sql = 'SELECT `user_email`, `user_name`';
+    $sql .= ' FROM ' . $xoopsDB->prefix('subscribers_user');
     $sql .= " WHERE (`user_email` is not null and not(`user_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    if(!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
-        $sex       = "";
-        $firstname = "";
+        $sex       = '';
+        $firstname = '';
         $lastname  = $lineArray[1];
 
         $subscr_id = xnewsletter_pluginCheckEmail($email);

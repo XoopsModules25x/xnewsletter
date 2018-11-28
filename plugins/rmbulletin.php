@@ -35,11 +35,11 @@ function xnewsletter_plugin_getinfo_rmbulletin() {
     global $xoopsDB;
 
     $pluginInfo = [];
-    $pluginInfo['name'] = "rmbulletin";
-    $pluginInfo['icon'] = XOOPS_URL . "/modules/rmbulletin/images/logo.png";
+    $pluginInfo['name'] = 'rmbulletin';
+    $pluginInfo['icon'] = XOOPS_URL . '/modules/rmbulletin/images/logo.png';
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/rmbulletin/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("rmb_users");
-    $pluginInfo['descr'] = "Import from RM-Bulletin";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('rmb_users');
+    $pluginInfo['descr'] = 'Import from RM-Bulletin';
     $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
@@ -62,15 +62,15 @@ function xnewsletter_plugin_getdata_rmbulletin($cat_id, $action_after_read, $lim
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `email`";
-    $sql .= " FROM " . $xoopsDB->prefix("rmb_users");
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    $sql = 'SELECT `email`';
+    $sql .= ' FROM ' . $xoopsDB->prefix('rmb_users');
+    if(!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
-        $sex       = "";
-        $firstname = "";
-        $lastname  = "";
+        $sex       = '';
+        $firstname = '';
+        $lastname  = '';
 
         $subscr_id = xnewsletter_pluginCheckEmail($email);
         $catsubscr_id = xnewsletter_pluginCheckCatSubscr($subscr_id, $cat_id);

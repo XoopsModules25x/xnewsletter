@@ -36,10 +36,10 @@ function xnewsletter_plugin_getinfo_simplenewsletter() {
     global $xoopsDB;
 
     $pluginInfo = [];
-    $pluginInfo['name'] = "simplenewsletter";
-    $pluginInfo['icon'] = XOOPS_URL . "/modules/simplenewsletter/images/news_subscribe.png";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("simplenewsletter_members");
-    $pluginInfo['descr'] = "Import from simplenewsletter";
+    $pluginInfo['name'] = 'simplenewsletter';
+    $pluginInfo['icon'] = XOOPS_URL . '/modules/simplenewsletter/images/news_subscribe.png';
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('simplenewsletter_members');
+    $pluginInfo['descr'] = 'Import from simplenewsletter';
     $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
@@ -61,16 +61,16 @@ function xnewsletter_plugin_getdata_simplenewsletter($cat_id, $action_after_read
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `member_email`, `member_firstname`, `member_lastname`";
-    $sql .= " FROM {$xoopsDB->prefix("simplenewsletter_members")}";
+    $sql = 'SELECT `member_email`, `member_firstname`, `member_lastname`';
+    $sql .= " FROM {$xoopsDB->prefix('simplenewsletter_members')}";
     $sql .= " WHERE (`member_email` IS NOT NULL AND NOT(`member_email`=''))";
-    if (!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    if (!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = substr($lineArray[0], 0, 100); // only allow 1st 100 chars
         $email     = checkEmail($email);  // make sure truncated string is valid email addr
         $email     = (false === $email) ? '' : $email;
-        $sex       = "";
+        $sex       = '';
         $firstname = substr($lineArray[1], 0, 100); // only allow 1st 100 chars
         $lastname  = substr($lineArray[2], 0, 100); // only allow 1st 100 chars
 

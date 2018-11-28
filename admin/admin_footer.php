@@ -32,7 +32,7 @@ echo "
 </div>";
 echo "
 <div class='center small italic pad5'>
-<strong>" . $xnewsletter->getModule()->getVar('name') . "</strong> " . _AM_XNEWSLETTER_MAINTAINEDBY . "
+<strong>" . $xnewsletter->getModule()->getVar('name') . '</strong> ' . _AM_XNEWSLETTER_MAINTAINEDBY . "
 <a href='http://www.xoops.org' title='Visit' class='tooltip' rel='external'>XOOPS Community</a>
 </div>";
 xoops_cp_footer();

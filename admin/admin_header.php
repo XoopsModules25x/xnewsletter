@@ -30,7 +30,7 @@ include_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
 include_once dirname(__DIR__) . '/include/common.php';
 
 // Include xoops admin header
-include_once XOOPS_ROOT_PATH . "/include/cp_functions.php";
+include_once XOOPS_ROOT_PATH . '/include/cp_functions.php';
 
 $pathIcon16 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons16');
 $pathIcon32 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons32');
@@ -64,11 +64,11 @@ if ($xoopsUser) {
         exit();
     }
 } else {
-    redirect_header(XOOPS_URL . "/user.php", 1, _NOPERM);
+    redirect_header(XOOPS_URL . '/user.php', 1, _NOPERM);
     exit();
 }
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-    include_once XOOPS_ROOT_PATH . "/class/template.php";
+    include_once XOOPS_ROOT_PATH . '/class/template.php';
     $xoopsTpl = new XoopsTpl();
 }

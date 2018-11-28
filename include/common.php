@@ -21,12 +21,12 @@
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // This must contain the name of the folder in which reside xnewsletter
-define("XNEWSLETTER_DIRNAME", basename(dirname(__DIR__)));
-define("XNEWSLETTER_URL", XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
-define("XNEWSLETTER_ROOT_PATH", XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
-define("XNEWSLETTER_IMAGES_URL", XNEWSLETTER_URL . '/assets/images');
-define("XNEWSLETTER_ADMIN_URL", XNEWSLETTER_URL . '/admin');
-define("XNEWSLETTER_ICONS_URL", XNEWSLETTER_URL . '/assets/images/icons');
+define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
+define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
+define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
+define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
+define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
+define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
 
 xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 

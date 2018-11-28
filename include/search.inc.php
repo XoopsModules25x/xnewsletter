@@ -35,11 +35,11 @@
 function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid) {
     global $xoopsDB;
 
-    $sql = "SELECT cat_id, cat_name, cat_submitter, cat_created";
-    $sql.= " FROM {$xoopsDB->prefix("xnewsletter_cat")}";
-    $sql.= " WHERE cat_created > 0";
+    $sql = 'SELECT cat_id, cat_name, cat_submitter, cat_created';
+    $sql.= " FROM {$xoopsDB->prefix('xnewsletter_cat')}";
+    $sql.= ' WHERE cat_created > 0';
     if ($userid != 0) {
-        $sql .= " AND cat_submitter=" . intval($userid) . " ";
+        $sql .= ' AND cat_submitter=' . intval($userid) . ' ';
     }
     if (is_array($queryarray) && $count = count($queryarray)) {
         $sql .= " AND ((cat_name LIKE '%{$queryarray[0]}%' OR cat_info LIKE '%{$queryarray[0]}%')";
@@ -47,18 +47,18 @@ function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid) {
             $sql .= " {$andor} ";
             $sql .= "(cat_name LIKE '%{$queryarray[$i]}%' OR cat_info LIKE '%{$queryarray[0]}%')";
         }
-        $sql .= ")";
+        $sql .= ')';
     }
-    $sql .= " ORDER BY cat_created DESC";
+    $sql .= ' ORDER BY cat_created DESC';
     $result = $xoopsDB->query($sql, $limit, $offset);
     $ret = [];
     $i = 0;
     while ($myrow = $xoopsDB->fetchArray($result)) {
-        $ret[$i]["image"] = "assets/images/icons/xn_search.png";
-        $ret[$i]["link"] = "cat.php?cat_id=" . $myrow["cat_id"] . "";
-        $ret[$i]["title"] = $myrow["cat_name"];
-        $ret[$i]["time"] = $myrow["cat_created"];
-        $ret[$i]["uid"] = $myrow["cat_submitter"];
+        $ret[$i]['image'] = 'assets/images/icons/xn_search.png';
+        $ret[$i]['link']  = 'cat.php?cat_id=' . $myrow['cat_id'] . '';
+        $ret[$i]['title'] = $myrow['cat_name'];
+        $ret[$i]['time']  = $myrow['cat_created'];
+        $ret[$i]['uid']   = $myrow['cat_submitter'];
         ++$i;
     }
 

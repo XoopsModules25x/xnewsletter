@@ -45,13 +45,13 @@ class XnewsletterProtocol extends XoopsObject
     {
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
         $this->db          = XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar("protocol_id", XOBJ_DTYPE_INT, null, false, 8);
-        $this->initVar("protocol_letter_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_subscriber_id", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_status", XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar("protocol_success", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_submitter", XOBJ_DTYPE_INT, null, false, 10);
-        $this->initVar("protocol_created", XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('protocol_id', XOBJ_DTYPE_INT, null, false, 8);
+        $this->initVar('protocol_letter_id', XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('protocol_subscriber_id', XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('protocol_status', XOBJ_DTYPE_TXTBOX, null, false, 200);
+        $this->initVar('protocol_success', XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('protocol_submitter', XOBJ_DTYPE_INT, null, false, 10);
+        $this->initVar('protocol_created', XOBJ_DTYPE_INT, null, false, 10);
     }
 
     /**
@@ -64,39 +64,39 @@ class XnewsletterProtocol extends XoopsObject
         global $xoopsDB;
 
         if ($action === false) {
-            $action = $_SERVER["REQUEST_URI"];
+            $action = $_SERVER['REQUEST_URI'];
         }
 
         $title = $this->isNew() ? sprintf(_AM_XNEWSLETTER_PROTOCOL_ADD) : sprintf(_AM_XNEWSLETTER_PROTOCOL_EDIT);
 
-        include_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
-        $form = new XoopsThemeForm($title, "form", $action, "post", true);
+        include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+        $form = new XoopsThemeForm($title, 'form', $action, 'post', true);
         $form->setExtra('enctype="multipart/form-data"');
 
         $letterCriteria = new CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
-        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, "protocol_letter_id", $this->getVar("protocol_letter_id"));
+        $letter_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, 'protocol_letter_id', $this->getVar('protocol_letter_id'));
         $letter_select->addOptionArray($this->xnewsletter->getHandler('letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
         $subscrCriteria = new CriteriaCompo();
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
-        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID, "protocol_subscriber_id", $this->getVar("protocol_subscriber_id"));
+        $subscr_select = new XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID, 'protocol_subscriber_id', $this->getVar('protocol_subscriber_id'));
         $subscr_select->addOptionArray($this->xnewsletter->getHandler('subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, "protocol_status", 50, 255, $this->getVar("protocol_status")), false);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, 'protocol_status', 50, 255, $this->getVar('protocol_status')), false);
 
-        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_SUCCESS, "protocol_success", 50, 255, $this->getVar("protocol_success")), false);
+        $form->addElement(new XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_SUCCESS, 'protocol_success', 50, 255, $this->getVar('protocol_success')), false);
 
-        $form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_PROTOCOL_SUBMITTER, "protocol_submitter", false, $this->getVar("protocol_submitter"), 1, false), true);
+        $form->addElement(new XoopsFormSelectUser(_AM_XNEWSLETTER_PROTOCOL_SUBMITTER, 'protocol_submitter', false, $this->getVar('protocol_submitter'), 1, false), true);
 
-        $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_PROTOCOL_CREATED, "protocol_created", "", $this->getVar("protocol_created")));
+        $form->addElement(new XoopsFormTextDateSelect(_AM_XNEWSLETTER_PROTOCOL_CREATED, 'protocol_created', '', $this->getVar('protocol_created')));
 
-        $form->addElement(new XoopsFormHidden("op", "save_protocol"));
-        $form->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
+        $form->addElement(new XoopsFormHidden('op', 'save_protocol'));
+        $form->addElement(new XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
 
         return $form;
     }
@@ -118,7 +118,7 @@ class XnewsletterProtocolHandler extends XoopsPersistableObjectHandler
      */
     public function __construct(&$db)
     {
-        parent::__construct($db, "xnewsletter_protocol", "XnewsletterProtocol", "protocol_id", "protocol_letter_id");
+        parent::__construct($db, 'xnewsletter_protocol', 'XnewsletterProtocol', 'protocol_id', 'protocol_letter_id');
         $this->xnewsletter = xnewsletterxnewsletter::getInstance();
     }
 }

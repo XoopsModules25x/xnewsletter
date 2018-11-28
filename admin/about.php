@@ -30,7 +30,7 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 //global $indexAdmin;
 
-echo $indexAdmin->addNavigation("about.php");
+echo $indexAdmin->addNavigation('about.php');
 echo $indexAdmin->renderAbout('9P3B3FXKF868J', false);
 
 include_once __DIR__ . '/admin_footer.php';

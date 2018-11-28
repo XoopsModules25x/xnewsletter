@@ -27,10 +27,10 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once __DIR__ . "/header.php";
+include_once __DIR__ . '/header.php';
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page

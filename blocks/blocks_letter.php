@@ -52,19 +52,19 @@ function b_xnewsletter_letter($options) {
     $letterCriteria = new CriteriaCompo();
     switch ($type_block) {
         // For the block: letter recents
-        case "recent":
+        case 'recent':
             $letterCriteria->setSort('letter_created');
             $letterCriteria->setOrder('DESC');
             break;
         // For the block: letter of today
-        case "day":
+        case 'day':
             $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
             $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
             $letterCriteria->setSort('letter_created');
             $letterCriteria->setOrder('ASC');
             break;
         // For the block: letter random
-        case "random":
+        case 'random':
             $letterCriteria->setSort('RAND()');
             break;
     }
@@ -109,17 +109,17 @@ function b_xnewsletter_letter($options) {
  * @return string
  */
 function b_xnewsletter_letter_edit($options) {
-    $form = "" . _MB_XNEWSLETTER_LETTER_DISPLAY . "\n";
+    $form = '' . _MB_XNEWSLETTER_LETTER_DISPLAY . "\n";
     $form .= "<input type=\"hidden\" name=\"options[0]\" value=\"{$options[0]}\" />";
     $form .= "<input name=\"options[1]\" size=\"5\" maxlength=\"255\" value=\"{$options[1]}\" type=\"text\" />";
-    $form .= "<br />";
-    $form .= "" . _MB_XNEWSLETTER_LETTER_TITLELENGTH . " : <input name=\"options[2]\" size=\"5\" maxlength=\"255\" value=\"{$options[2]}\" type=\"text\" />";
-    $form .= "<br /><br />";
+    $form .= '<br />';
+    $form .= '' . _MB_XNEWSLETTER_LETTER_TITLELENGTH . " : <input name=\"options[2]\" size=\"5\" maxlength=\"255\" value=\"{$options[2]}\" type=\"text\" />";
+    $form .= '<br /><br />';
     array_shift($options);
     array_shift($options);
     array_shift($options);
-    $form .= "<label name='lbl_cattodisplay'>" . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . "</label>";
-    $form .= "<br /><br />";
+    $form .= "<label name='lbl_cattodisplay'>" . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . '</label>';
+    $form .= '<br /><br />';
 
     return $form;
 }

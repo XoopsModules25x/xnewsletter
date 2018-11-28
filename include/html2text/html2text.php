@@ -31,7 +31,7 @@ function convert_html_to_text($html) {
 
     $doc = new DOMDocument();
     if (!$doc->loadHTML($html))
-        throw new Html2TextException("Could not load HTML - badly formed?", $html);
+        throw new Html2TextException('Could not load HTML - badly formed?', $html);
 
     $output = iterate_over_node($doc);
 
@@ -112,11 +112,11 @@ function prev_child_name($node) {
  */
 function iterate_over_node($node) {
     if ($node instanceof DOMText) {
-        return preg_replace("/\\s+/im", " ", $node->wholeText);
+        return preg_replace("/\\s+/im", ' ', $node->wholeText);
     }
     if ($node instanceof DOMDocumentType) {
         // ignore
-        return "";
+        return '';
     }
 
     $nextName = next_child_name($node);
@@ -126,36 +126,36 @@ function iterate_over_node($node) {
 
     // start whitespace
     switch ($name) {
-        case "hr":
+        case 'hr':
             return "------\n";
 
-        case "style":
-        case "head":
-        case "title":
-        case "meta":
-        case "script":
+        case 'style':
+        case 'head':
+        case 'title':
+        case 'meta':
+        case 'script':
             // ignore these tags
-            return "";
+            return '';
 
-        case "h1":
-        case "h2":
-        case "h3":
-        case "h4":
-        case "h5":
-        case "h6":
+        case 'h1':
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
             // add two newlines
             $output = "\n";
             break;
 
-        case "p":
-        case "div":
+        case 'p':
+        case 'div':
             // add one line
             $output = "\n";
             break;
 
         default:
             // print out contents of unknown tags
-            $output = "";
+            $output = '';
             break;
     }
 
@@ -172,42 +172,42 @@ function iterate_over_node($node) {
 
     // end whitespace
     switch ($name) {
-        case "style":
-        case "head":
-        case "title":
-        case "meta":
-        case "script":
+        case 'style':
+        case 'head':
+        case 'title':
+        case 'meta':
+        case 'script':
             // ignore these tags
-            return "";
+            return '';
 
-        case "h1":
-        case "h2":
-        case "h3":
-        case "h4":
-        case "h5":
-        case "h6":
+        case 'h1':
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
             $output .= "\n";
             break;
 
-        case "p":
-        case "br":
+        case 'p':
+        case 'br':
             // add one line
-            if ($nextName != "div")
+            if ($nextName != 'div')
                 $output .= "\n";
             break;
 
-        case "div":
+        case 'div':
             // add one line only if the next child isn't a div
-            if ($nextName != "div" && $nextName != null)
+            if ($nextName != 'div' && $nextName != null)
                 $output .= "\n";
             break;
 
-        case "a":
+        case 'a':
             // links are returned in [text](link) format
-            $href = $node->getAttribute("href");
+            $href = $node->getAttribute('href');
             if ($href == null) {
                 // it doesn't link anywhere
-                if ($node->getAttribute("name") != null) {
+                if ($node->getAttribute('name') != null) {
                     $output = "[$output]";
                 }
             } else {
@@ -222,7 +222,7 @@ function iterate_over_node($node) {
 
             // does the next node require additional whitespace?
             switch ($nextName) {
-                case "h1": case "h2": case "h3": case "h4": case "h5": case "h6":
+                case 'h1': case 'h2': case 'h3': case 'h4': case 'h5': case 'h6':
                     $output .= "\n";
                     break;
             }
@@ -244,7 +244,7 @@ class Html2TextException extends Exception {
      * @param string $message
      * @param string $more_info
      */
-    public function __construct($message = "", $more_info = "") {
+    public function __construct($message = '', $more_info = '') {
         parent::__construct($message);
         $this->more_info = $more_info;
     }

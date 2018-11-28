@@ -26,61 +26,61 @@
  * ****************************************************************************
  */
 
-$indexFile = XOOPS_UPLOAD_PATH . "/index.html";
-$blankFile = XOOPS_UPLOAD_PATH . "/blank.gif";
+$indexFile = XOOPS_UPLOAD_PATH . '/index.html';
+$blankFile = XOOPS_UPLOAD_PATH . '/blank.gif';
 
 //Creation of folder "uploads" for the module to the site root
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/index.html');
 
 //Creation of the file accounts in uploads directory
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/accounts";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/accounts';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/accounts/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/accounts/index.html');
 
 //Creation of the file cat in uploads directory
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/cat";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/cat';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/cat/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/cat/index.html');
 
 //Creation of the file subscr in uploads directory
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/subscr";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/subscr';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/subscr/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/subscr/index.html');
 
 //Creation of the file catsubscr in uploads directory
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/catsubscr";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/catsubscr';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/catsubscr/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/catsubscr/index.html');
 
 //Creation of the file letter in uploads directory
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/letter";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/letter';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
     chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/letter/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/letter/index.html');
 
 //Creation of the file protocol in uploads directory
-$module_uploads = XOOPS_ROOT_PATH."/uploads/xnewsletter/protocol";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/protocol';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/protocol/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/protocol/index.html');
 
 //Creation of the folder letter_attachment in uploads directory for files
-$module_uploads = XOOPS_ROOT_PATH . "/uploads/xnewsletter/attachments/";
+$module_uploads = XOOPS_ROOT_PATH . '/uploads/xnewsletter/attachments/';
 if(!is_dir($module_uploads))
     mkdir($module_uploads, 0777);
 chmod($module_uploads, 0777);
-copy($indexFile, XOOPS_ROOT_PATH . "/uploads/xnewsletter/attachments/index.html");
+copy($indexFile, XOOPS_ROOT_PATH . '/uploads/xnewsletter/attachments/index.html');

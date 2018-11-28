@@ -27,15 +27,15 @@
  */
 
 $currentFile = basename(__FILE__);
-include_once __DIR__ . "/header.php";
+include_once __DIR__ . '/header.php';
 
 $op = XoopsRequest::getString('op', 'welcome');
 
 switch ($op) {
-    case "welcome" :
+    case 'welcome' :
     default :
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_index.tpl";
-        include XOOPS_ROOT_PATH . "/header.php";
+        include XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -50,10 +50,10 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_content', _MA_XNEWSLETTER_WELCOME); // this definition is not removed for backward compatibility issues
         break;
 
-    case "show_preview" :
-    case "show_letter_preview" :
+    case 'show_preview' :
+    case 'show_letter_preview' :
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_preview.tpl";
-        include XOOPS_ROOT_PATH . "/header.php";
+        include XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -87,15 +87,15 @@ switch ($op) {
 
         $letter_array = $letterObj->toArray();
 
-        preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+        preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
         if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
             // get template from database
-            $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+            $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
         } else {
             // get template from filesystem
             $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
             if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
-            $template = $template_path . $letterObj->getVar("letter_template") . ".tpl";
+            $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
             $htmlBody = $xoopsTpl->fetch($template);
         }
         $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
@@ -108,12 +108,12 @@ switch ($op) {
         $xoopsTpl->assign('letter', $letter_array);
         break;
 
-    case "list_letter" :
-exit("IN_PROGRESS: use op=list_letters instead of op=list_letter");
+    case 'list_letter' :
+exit('IN_PROGRESS: use op=list_letters instead of op=list_letter');
 break;
-    case "list_letters" :
+    case 'list_letters' :
         $xoopsOption['template_main'] = "{$xnewsletter->getModule()->dirname()}_index_list_letters.tpl";
-        include XOOPS_ROOT_PATH . "/header.php";
+        include XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -129,8 +129,8 @@ break;
 
         // get letters array
         $criteria = new CriteriaCompo();
-        $criteria->setSort("letter_id");
-        $criteria->setOrder("DESC");
+        $criteria->setSort('letter_id');
+        $criteria->setOrder('DESC');
         $letterObjs = $xnewsletter->getHandler('letter')->getAll($criteria);
 
         if ($xnewsletter->getHandler('letter')->getCount() > 0) {
@@ -161,11 +161,11 @@ break;
                 }
             }
             if (count($letters_array) == 0) {
-                redirect_header("index.php", 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
+                redirect_header('index.php', 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
             }
             $xoopsTpl->assign('letters', $letters_array);
         } else {
-            redirect_header("index.php", 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
+            redirect_header('index.php', 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
         }
         break;
 }

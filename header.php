@@ -29,7 +29,7 @@
 include_once dirname(dirname(__DIR__)) . '/mainfile.php';
 include_once __DIR__ . '/include/common.php';
 
-include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 include_once XOOPS_ROOT_PATH . '/include/functions.php';
 
 global $xoopsConfig;
