@@ -641,7 +641,7 @@ class BounceMailHandler {
      * Function to delete messages in a mailbox, based on date
      * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
      * @internal param string $mailbox (the mailbox name)
-     * @return boolean
+     * @return void
      */
   function globalDelete() {
     $dateArr = explode('-', $this->deleteMsgDate); // date format is yyyy-mm-dd

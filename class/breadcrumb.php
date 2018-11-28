@@ -42,7 +42,8 @@ class XnewsletterBreadcrumb
 
     /**
      * Add link to breadcrumb
-     *
+     * @param string $title
+     * @param string $link
      */
     function addLink( $title='', $link='' )
     {
