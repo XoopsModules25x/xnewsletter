@@ -112,7 +112,7 @@ switch ($op) {
                 echo "<td class='left'>";
                 if (is_array($folders)) {
                     xoops_load('XoopsLocal');
-					reset ($folders);
+                    reset ($folders);
                     sort ($folders);
                     $foldercreated = 0;
                     foreach ($folders as $key => $val) {
