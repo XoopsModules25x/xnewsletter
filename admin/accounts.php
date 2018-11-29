@@ -111,12 +111,13 @@ switch ($op) {
                 echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . '</td>';
                 echo "<td class='left'>";
                 if (is_array($folders)) {
-                    reset ($folders);
+                    xoops_load('XoopsLocal');
+					reset ($folders);
                     sort ($folders);
                     $foldercreated = 0;
                     foreach ($folders as $key => $val) {
                         echo "($key) ";
-                        echo imap_utf7_decode (str_replace('{' . $command . '}', '', $val)) . "<br>\n";
+                        echo XoopsLocal::utf8_encode(imap_utf7_decode (str_replace("{" . $command . "}", "", $val))) . "<br>\n";
                         if ('{' . $command . '}' . $accounts_inbox == $val) $accounts_inbox_ok = 1;
                         if ('{' . $command . '}' . $accounts_hardbox == $val) {
                             $accounts_hardbox_ok = 1;

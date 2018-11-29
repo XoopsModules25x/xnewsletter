@@ -210,7 +210,7 @@ switch ($op) {
 
         $limit = $xnewsletter->getConfig('adminperpage');
         $bhmCriteria = new CriteriaCompo();
-        if ($filter > -1) $criteria->add(new Criteria('bmh_measure', $filter));
+        if ($filter > -1) $bhmCriteria->add(new Criteria('bmh_measure', $filter));
         $bhmCriteria->setSort('bmh_id');
         $bhmCriteria->setOrder('DESC');
         $bhmsCount = $xnewsletter->getHandler('bmh')->getCount($bhmCriteria);
