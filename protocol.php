@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,15 +22,14 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: protocol.php 12491 2014-04-25 13:21:55Z beckmi $
- * ****************************************************************************
+  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once __DIR__ . "/header.php";
+include_once __DIR__ . '/header.php';
 
 $xoopsOption['template_main'] = 'xnewsletter_protocol.tpl';
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
 $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page

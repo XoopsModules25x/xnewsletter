@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,14 +22,13 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : 1 Wed 2012/11/28 22:18:22 :  Exp $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once __DIR__ . "/header.php";
+include_once __DIR__ . '/header.php';
 
-include_once XOOPS_ROOT_PATH . "/header.php";
+include_once XOOPS_ROOT_PATH . '/header.php';
 
 error_reporting(0);
 $xoopsLogger->activated = false;
@@ -40,7 +39,7 @@ $GLOBALS['xoopsTpl']->assign('xoops_pagetitle', _AM_XNEWSLETTER_LETTER_ACTION_PR
 $letter_id = XoopsRequest::getString('letter_id', 'list');
 // check letter_id
 if ($letter_id < 1) {
-    redirect_header("letter.php", 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
+    redirect_header('letter.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
 }
 
 $content = '';
@@ -75,15 +74,15 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
     $content .= "<h2>{$letterObj->getVar('letter_title')}</h2>";
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
 
-    preg_match('/db:([0-9]*)/', $letterObj->getVar("letter_template"), $matches);
+    preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
     if(isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
         // get template from database
-        $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', "n"));
+        $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
     } else {
         // get template from filesystem
         $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
         if (!is_dir($template_path)) $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
-        $template = $template_path . $letterObj->getVar("letter_template") . ".tpl";
+        $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
         $htmlBody = $xoopsTpl->fetch($template);
     }
     $content .= $htmlBody;
@@ -91,7 +90,7 @@ if ($letterObj && $letterObj->getVar('letter_template') != '') {
 }
 
 if ($content == '') {
-    redirect_header("letter.php", 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERCONTENT);
+    redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERCONTENT);
 }
 
 $xoopsTpl->assign('xoopsConfig', $xoopsConfig);
@@ -111,7 +110,7 @@ function xnewsletter_printPage($content) {
     $myts = MyTextSanitizer::getInstance();
 
     echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-       . "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"" . _LANGCODE . "\" lang=\"" . _LANGCODE . "\">\n";
+         . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . _LANGCODE . '" lang="' . _LANGCODE . "\">\n";
 
     echo "<head>\n";
     echo '<title>' . $xoopsConfig['sitename'] . '</title>\n';
@@ -150,7 +149,7 @@ function xnewsletter_printPage($content) {
           var target    = document.getElementById(targetID);
           var h2        = document.createElement('h2');
           addClass.apply(h2,['printOnly']);
-          var h2_txt    = document.createTextNode('<?php echo "_MA_NW_LINKS"; ?>');
+          var h2_txt    = document.createTextNode('<?php echo '_MA_NW_LINKS'; ?>');
           h2.appendChild(h2_txt);
           var coll = container.getElementsByTagName('*');
           var ol   = document.createElement('ol');

@@ -7,7 +7,7 @@
             <th class="center" colspan="2"><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_STATUS}></th>
             <th class="center"><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_CREATED}></th>
         </tr>
-    <{foreachq item='protocol' from=$protocols}>
+    <{foreach item='protocol' from=$protocols}>
         <tr class = "<{cycle values = 'even,odd'}>">
             <td class="center"><{$protocol.protocol_id}></td>
             <td class="center">

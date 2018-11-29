@@ -29,44 +29,45 @@
 
 class XnewsletterBreadcrumb
 {
-    var $dirname;
-    var $_bread = array();
+    public $dirname;
+    public $_bread = [];
 
     /**
      *
      */
-    function __construct()
+    public function __construct()
     {
         $this->dirname =  basename(dirname(__DIR__));
     }
 
     /**
      * Add link to breadcrumb
-     *
+     * @param string $title
+     * @param string $link
      */
-    function addLink( $title='', $link='' )
+    public function addLink( $title='', $link='' )
     {
-        $this->_bread[] = array(
+        $this->_bread[] = [
             'link'  => $link,
             'title' => $title
-            );
+        ];
     }
 
     /**
      * Render xnewsletter BreadCrumb
      *
      */
-    function render()
+    public function render()
     {
         if ( !isset($GLOBALS['xoTheme']) || !is_object($GLOBALS['xoTheme'])  ) {
-            include_once $GLOBALS['xoops']->path( "/class/theme.php" );
+            include_once $GLOBALS['xoops']->path('/class/theme.php');
             $GLOBALS['xoTheme'] = new xos_opal_Theme();
             }
 
         require_once $GLOBALS['xoops']->path('class/template.php');
         $breadcrumbTpl = new XoopsTpl();
         $breadcrumbTpl->assign('breadcrumb', $this->_bread);
-        $html = $breadcrumbTpl->fetch("db:" . $this->dirname . "_common_breadcrumb.tpl");
+        $html = $breadcrumbTpl->fetch('db:' . $this->dirname . '_common_breadcrumb.tpl');
         unset($breadcrumbTpl);
 
         return $html;

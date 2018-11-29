@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 
@@ -36,7 +35,7 @@ $save_and_check = XoopsRequest::getString('save_and_check', 'none');
 $accounts_id    = XoopsRequest::getInt('accounts_id', 0);
 $post           = XoopsRequest::getString('post', '');
 
-if ('' == $post &&  'save_accounts' == $op && 'none' == $save_and_check) {
+if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
     $op = 'edit_account';
 }
 
@@ -82,50 +81,50 @@ switch ($op) {
                 <tr>
                     <th class='center width5'></th>
                     <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK . "</th>
-                        <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO . "</th>
-                </tr>";
+                        <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO . '</th>
+                </tr>';
 
-        $mbox = @imap_open("{" . $command . "}", $accounts_username, $accounts_password); // or die ("can't connect: " . imap_last_error());
+        $mbox = @imap_open('{' . $command . '}', $accounts_username, $accounts_password); // or die ("can't connect: " . imap_last_error());
         if ($mbox === false) {
-            echo "<tr>";
-            echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . "</td>";
-            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . "</td>";
-            echo "<td class='left'>" . imap_last_error() . "</td>";
-            echo "</tr>";
+            echo '<tr>';
+            echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . '</td>';
+            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . '</td>';
+            echo "<td class='left'>" . imap_last_error() . '</td>';
+            echo '</tr>';
         } else {
-            echo "<tr>";
-            echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . "</td>";
-            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . "</td>";
+            echo '<tr>';
+            echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . '</td>';
+            echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . '</td>';
             echo "<td class='left'></td>";
-            echo "</tr>";
+            echo '</tr>';
 
-            $folders = imap_listmailbox($mbox, "{" . $command . "}", "*");
+            $folders = imap_listmailbox($mbox, '{' . $command . '}', '*');
             if ($folders == false) {
-                echo "<tr>";
-                echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . "</td>";
-                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . "</td>";
-                echo "<td class='left'>" . imap_last_error() . "</td>";
-                echo "</tr>";
+                echo '<tr>';
+                echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . '</td>';
+                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . '</td>';
+                echo "<td class='left'>" . imap_last_error() . '</td>';
+                echo '</tr>';
             } else {
-                echo "<tr>";
-                echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . "</td>";
-                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . "</td>";
+                echo '<tr>';
+                echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . '</td>';
+                echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS._AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . '</td>';
                 echo "<td class='left'>";
                 if (is_array($folders)) {
                     reset ($folders);
                     sort ($folders);
                     $foldercreated = 0;
-                    while (list( $key, $val) = each ($folders)) {
+                    foreach ($folders as $key => $val) {
                         echo "($key) ";
-                        echo imap_utf7_decode (str_replace("{" . $command . "}", "", $val)) . "<br>\n";
-                        if ("{" . $command . "}" . $accounts_inbox == $val) $accounts_inbox_ok = 1;
-                        if ("{" . $command . "}" . $accounts_hardbox == $val) {
+                        echo imap_utf7_decode (str_replace('{' . $command . '}', '', $val)) . "<br>\n";
+                        if ('{' . $command . '}' . $accounts_inbox == $val) $accounts_inbox_ok = 1;
+                        if ('{' . $command . '}' . $accounts_hardbox == $val) {
                             $accounts_hardbox_ok = 1;
                         } else {
                             @imap_createmailbox($mbox, imap_utf7_encode('{'.$command.'}' . $accounts_hardbox));
                             $foldercreated = 1;
                         }
-                        if ("{" . $command . "}" . $accounts_softbox == $val) {
+                        if ('{' . $command . '}' . $accounts_softbox == $val) {
                             $accounts_softbox_ok = 1;
                         } else {
                             @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_softbox));
@@ -133,57 +132,57 @@ switch ($op) {
                         }
                     }
                     if ($foldercreated == 1) {
-                        $folders_recheck = imap_listmailbox($mbox, "{" . $command . "}", "*");
-                        while (list( $key, $val) = each ($folders_recheck)) {
-                            if ("{" . $command . "}" . $accounts_hardbox == $val) $accounts_hardbox_ok = 1;
-                            if ("{" . $command . "}" . $accounts_softbox == $val) $accounts_softbox_ok = 1;
+                        $folders_recheck = imap_listmailbox($mbox, '{' . $command . '}', '*');
+                        foreach ($folders_recheck as $key => $val) {
+                            if ('{' . $command . '}' . $accounts_hardbox == $val) $accounts_hardbox_ok = 1;
+                            if ('{' . $command . '}' . $accounts_softbox == $val) $accounts_softbox_ok = 1;
                         }
                     }
                 }
 
-                echo "</td>";
-                echo "</tr>";
-                echo "<tr>";
-                if ($accountObj->getVar("accounts_use_bmh") == '1') {
+                echo '</td>';
+                echo '</tr>';
+                echo '<tr>';
+                if ($accountObj->getVar('accounts_use_bmh') == '1') {
                     if (1 == $accounts_inbox_ok && 1 == $accounts_hardbox_ok && 1 == $accounts_softbox_ok) {
-                        echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . "</td>";
+                        echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . '</td>';
                     } else {
-                        echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . "</td>";
+                        echo "<td class='center width5'>" . XNEWSLETTER_IMG_FAILED . '</td>';
                     }
-                    echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH . "</td>";
+                    echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH . '</td>';
                     echo "<td class='left'>";
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_INBOX . " ";
+                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_INBOX . ' ';
                     if (1 == $accounts_inbox_ok) {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
                     } else {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
                     }
-                    echo "<br />";
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_HARDBOX." ";
+                    echo '<br />';
+                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_HARDBOX . ' ';
                     if (1 == $accounts_hardbox_ok) {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
                     } else {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
                     }
-                    echo "<br />";
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_SOFTBOX . " ";
+                    echo '<br />';
+                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_SOFTBOX . ' ';
                     if (1 == $accounts_softbox_ok) {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
                     } else {
                         echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
                     }
-                    echo "<br />";
-                    echo "</td>";
+                    echo '<br />';
+                    echo '</td>';
                 } else {
-                    echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . "</td>";
-                    echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH._AM_XNEWSLETTER_ACCOUNTS_CHECK_SKIPPED . "</td>";
+                    echo "<td class='center width5'>" . XNEWSLETTER_IMG_OK . '</td>';
+                    echo "<td class='left'>" . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH._AM_XNEWSLETTER_ACCOUNTS_CHECK_SKIPPED . '</td>';
                     echo "<td class='center'></td>";
                 }
-                echo "</tr>";
+                echo '</tr>';
             }
             imap_close($mbox);
         }
-        echo "</table>";
+        echo '</table>';
         break;
 
     case 'list':
@@ -194,15 +193,15 @@ switch ($op) {
         //
         $limit = $xnewsletter->getConfig('adminperpage');
         $accountsCriteria = new CriteriaCompo();
-        $accountsCriteria->setSort("accounts_id ASC, accounts_type");
-        $accountsCriteria->setOrder("ASC");
+        $accountsCriteria->setSort('accounts_id ASC, accounts_type');
+        $accountsCriteria->setOrder('ASC');
         $accountsCount = $xnewsletter->getHandler('accounts')->getCount();
         $start = XoopsRequest::getInt('start', 0);
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
         $accountsObjs = $xnewsletter->getHandler('accounts')->getAll($accountsCriteria);
         if ($accountsCount > $limit) {
-            include_once XOOPS_ROOT_PATH . "/class/pagenav.php";
+            include_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
             $pagenav = $pagenav->renderNav(4);
         } else {
@@ -219,40 +218,40 @@ switch ($op) {
                     <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_YOURNAME . "</th>
                     <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_YOURMAIL . "</th>
                     <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_DEFAULT . "</th>
-                    <th class='center width10'>"._AM_XNEWSLETTER_FORMACTION . "</th>
-                </tr>";
+                    <th class='center width10'>"._AM_XNEWSLETTER_FORMACTION . '</th>
+                </tr>';
 
-            $class = "odd";
+            $class = 'odd';
 
             foreach ($accountsObjs as $accounts_id => $accountsObj) {
                 echo "<tr class='{$class}'>";
-                $class = ($class == 'even') ? 'odd' : 'even';
+                $class = ($class === 'even') ? 'odd' : 'even';
                 echo "<td class='center'>{$accounts_id}</td>";
-                $arr_accounts_type=array(
+                $arr_accounts_type= [
                         _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
                     _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL,
                             _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3 => _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3,
                             _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP => _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP,
                            _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL
-                );
-                echo "<td class='center'>" . $arr_accounts_type[$accountsObj->getVar("accounts_type")] . "</td>";
-                echo "<td class='center'>" . $accountsObj->getVar("accounts_name") . "</td>";
-                echo "<td class='center'>" . $accountsObj->getVar("accounts_yourname") . "</td>";
-                echo "<td class='center'>" . $accountsObj->getVar("accounts_yourmail") . "</td>";
-                $verif_accounts_default = ($accountsObj->getVar("accounts_default") == 1) ? _YES : _NO;
+                ];
+                echo "<td class='center'>" . $arr_accounts_type[$accountsObj->getVar('accounts_type')] . '</td>';
+                echo "<td class='center'>" . $accountsObj->getVar('accounts_name') . '</td>';
+                echo "<td class='center'>" . $accountsObj->getVar('accounts_yourname') . '</td>';
+                echo "<td class='center'>" . $accountsObj->getVar('accounts_yourmail') . '</td>';
+                $verif_accounts_default = ($accountsObj->getVar('accounts_default') == 1) ? _YES : _NO;
                 echo "<td class='center'>{$verif_accounts_default}</td>";
 
                 echo "<td class='center width5'>";
                 echo "    <a href='?op=edit_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='"._EDIT . "' /></a>";
                 echo "    <a href='?op=delete_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "' /></a>";
-                if ($accountsObj->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accountsObj->getVar("accounts_type") != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
+                if ($accountsObj->getVar('accounts_type') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL && $accountsObj->getVar('accounts_type') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL) {
                     echo "    <a href='?op=check_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_check.png alt='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' title='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' /></a>";
                 }
-                echo "</td>";
-                echo "</tr>";
+                echo '</td>';
+                echo '</tr>';
             }
-            echo "</table><br /><br />";
-            echo "<br /><div class='center'>" . $pagenav . "</div><br />";
+            echo '</table><br /><br />';
+            echo "<br /><div class='center'>" . $pagenav . '</div><br />';
         } else {
             echo "<table class='outer width100' cellspacing='1'>
                     <tr>
@@ -270,9 +269,9 @@ switch ($op) {
                         <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_PORT_OUT . "</th>
                         <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_SECURETYPE_OUT . "</th>
                         <th class='center'>" . _AM_XNEWSLETTER_ACCOUNTS_DEFAULT . "</th>
-                        <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . "</th>
-                    </tr>";
-            echo "</table><br /><br />";
+                        <th class='center width10'>" . _AM_XNEWSLETTER_FORMACTION . '</th>
+                    </tr>';
+            echo '</table><br /><br />';
         }
 
         break;
@@ -316,7 +315,7 @@ switch ($op) {
         $accountObj->setVar('accounts_default', $verif_accounts_default);
         if (('' != $accountObj->getVar('accounts_yourmail')) && $accountObj->getVar('accounts_yourmail') != _AM_XNEWSLETTER_ACCOUNTS_TYPE_YOUREMAIL ) {
             if ($xnewsletter->getHandler('accounts')->insert($accountObj)) {
-                if ('none' == $save_and_check) {
+                if ('none' === $save_and_check) {
                     redirect_header('?op=list', 2, _AM_XNEWSLETTER_FORMOK);
                 } else {
                     redirect_header("?op=check_account&accounts_id={$accountObj->getVar('accounts_id')}", 2, _AM_XNEWSLETTER_FORMOK);
@@ -357,7 +356,7 @@ switch ($op) {
                 echo $accountObj->getHtmlErrors();
             }
         } else {
-            xoops_confirm(array('ok' => 1, 'accounts_id' => $accounts_id, 'op' => 'delete_account'), $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));
+            xoops_confirm(['ok' => 1, 'accounts_id' => $accounts_id, 'op' => 'delete_account'], $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));
         }
         break;
 }

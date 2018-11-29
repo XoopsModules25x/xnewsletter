@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
@@ -35,16 +34,16 @@ function xnewsletter_plugin_getinfo_smartpartner()
 {
     global $xoopsDB;
 
-    $pluginInfo = array();
-    $pluginInfo['name'] = "smartpartner";
-    if (file_exists(XOOPS_URL . "/modules/smartpartner/images/module_logo.gif")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/images/module_logo.gif";
-    } elseif (file_exists(XOOPS_URL . "/modules/smartpartner/assets/images/module_logo.png")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/smartpartner/assets/images/module_logo.png";
+    $pluginInfo = [];
+    $pluginInfo['name'] = 'smartpartner';
+    if (file_exists(XOOPS_URL . '/modules/smartpartner/images/module_logo.gif')) {
+        $pluginInfo['icon'] = XOOPS_URL . '/modules/smartpartner/images/module_logo.gif';
+    } elseif (file_exists(XOOPS_URL . '/modules/smartpartner/assets/images/module_logo.png')) {
+        $pluginInfo['icon'] = XOOPS_URL . '/modules/smartpartner/assets/images/module_logo.png';
     }
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/smartpartner/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("smartpartner_partner");
-    $pluginInfo['descr']     = "Import from Smartpartner";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('smartpartner_partner');
+    $pluginInfo['descr']     = 'Import from Smartpartner';
     $pluginInfo['hasform']   = 0;
 
     return $pluginInfo;
@@ -67,15 +66,15 @@ function xnewsletter_plugin_getdata_smartpartner($cat_id, $action_after_read, $l
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `contact_email`, `contact_name`";
-    $sql .= " FROM " . $xoopsDB->prefix("smartpartner_partner");
+    $sql = 'SELECT `contact_email`, `contact_name`';
+    $sql .= ' FROM ' . $xoopsDB->prefix('smartpartner_partner');
     $sql .= " WHERE (`contact_email` is not null and not(`contact_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    if(!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
-        $sex       = "";
-        $firstname = "";
+        $sex       = '';
+        $firstname = '';
         $lastname  = $lineArray[1];
 
         $subscr_id = xnewsletter_pluginCheckEmail($email);

@@ -65,7 +65,7 @@ class BounceMailHandler {
    * Holds Bounce Mail Handler version.
    * @var string
    */
-  public $Version = "5.0.0rc1 goffy";
+  public $Version = '5.0.0rc1 goffy';
 
   /**
    * Holds result of last processing.
@@ -261,7 +261,7 @@ class BounceMailHandler {
      * @param bool|string $msg           ,  if not given, output the last error msg
      * @param int|string  $verbose_level ,  the output level of this message
      */
-  function output($msg=false,$verbose_level=VERBOSE_SIMPLE) {
+  public function output($msg=false,$verbose_level=VERBOSE_SIMPLE) {
     if ($this->verbose >= $verbose_level) {
       if (empty($msg)) {
         echo $this->error_msg . $this->bmh_newline;
@@ -275,7 +275,7 @@ class BounceMailHandler {
    * Open a mail box
    * @return boolean
    */
-  function openMailbox() {
+  public function openMailbox() {
     // before starting the processing, let's check the delete flag and do global deletes if true
     if ( trim($this->deleteMsgDate) != '' ) {
       //echo "processing global delete based on date of " . $this->deleteMsgDate . "<br />";
@@ -291,9 +291,9 @@ class BounceMailHandler {
     set_time_limit(6000);
     //echo "{".$this->mailhost.":".$port."}" . $this->boxname."<br/>";
     if (!$this->testmode) {
-      $this->_mailbox_link = imap_open("{".$this->mailhost.":".$port."}" . $this->boxname,$this->mailbox_username,$this->mailbox_password,CL_EXPUNGE);
+      $this->_mailbox_link = imap_open('{' . $this->mailhost . ':' . $port . '}' . $this->boxname, $this->mailbox_username, $this->mailbox_password, CL_EXPUNGE);
     } else {
-      $this->_mailbox_link = imap_open("{".$this->mailhost.":".$port."}" . $this->boxname,$this->mailbox_username,$this->mailbox_password);
+      $this->_mailbox_link = imap_open('{' . $this->mailhost . ':' . $port . '}' . $this->boxname, $this->mailbox_username, $this->mailbox_password);
     }
     if (!$this->_mailbox_link) {
       $this->error_msg = 'Cannot create ' . $this->service . ' connection to ' . $this->mailhost . $this->bmh_newline . 'Error MSG: ' . imap_last_error();
@@ -312,12 +312,12 @@ class BounceMailHandler {
    * @param string $file_path (The local mailbox file path)
    * @return boolean
    */
-  function openLocal($file_path) {
+  public function openLocal($file_path) {
     set_time_limit(6000);
     if (!$this->testmode) {
-      $this->_mailbox_link = imap_open("$file_path",'','',CL_EXPUNGE);
+      $this->_mailbox_link = imap_open((string)$file_path, '', '', CL_EXPUNGE);
     } else {
-      $this->_mailbox_link = imap_open("$file_path",'','');
+      $this->_mailbox_link = imap_open((string)$file_path, '', '');
     }
     if (!$this->_mailbox_link) {
       $this->error_msg = 'Cannot open the mailbox file to ' . $file_path . $this->bmh_newline . 'Error MSG: ' . imap_last_error();
@@ -336,7 +336,7 @@ class BounceMailHandler {
      * @param bool|string $max (maximum limit messages processed in one batch, if not given uses the property $max_messages
      * @return boolean
      */
-  function processMailbox($max=false) {
+  public function processMailbox($max=false) {
     if ( empty($this->action_function) || !function_exists($this->action_function) ) {
       $this->error_msg = 'Action function not found!';
       $this->output();
@@ -389,7 +389,7 @@ class BounceMailHandler {
       // fetch the messages one at a time
       if ($this->use_fetchstructure) {
         $structure = imap_fetchstructure($this->_mailbox_link,$x);
-        if ($structure->type == 1 && $structure->ifsubtype && $structure->subtype == 'REPORT' && $structure->ifparameters && $this->isParameter($structure->parameters, 'REPORT-TYPE','delivery-status')) {
+        if ($structure->type == 1 && $structure->ifsubtype && $structure->subtype === 'REPORT' && $structure->ifparameters && $this->isParameter($structure->parameters, 'REPORT-TYPE', 'delivery-status')) {
           $processed = $this->processBounce($x,'DSN',$c_total);
         } else { // not standard DSN msg
           $this->output( 'Msg #' .  $x . ' is not a standard DSN message',VERBOSE_REPORT);
@@ -480,7 +480,7 @@ class BounceMailHandler {
    * @param string $varValue       (value to check for)
    * @return boolean
    */
-  function isParameter($currParameters, $varKey, $varValue) {
+  public function isParameter($currParameters, $varKey, $varValue) {
     foreach ($currParameters as $key => $value) {
       if ($key == $varKey) {
         if ($value == $varValue) {
@@ -499,13 +499,13 @@ class BounceMailHandler {
    * @param string $totalFetched   (total number of messages in mailbox)
    * @return boolean
    */
-  function processBounce($pos,$type,$totalFetched) {
+  public function processBounce($pos,$type,$totalFetched) {
     $header      = imap_header($this->_mailbox_link,$pos);
     $subject     = strip_tags($header->subject);
-    if ($type == 'DSN') {
+    if ($type === 'DSN') {
       // first part of DSN (Delivery Status Notification), human-readable explanation
-      $dsn_msg = imap_fetchbody($this->_mailbox_link,$pos,"1");
-      $dsn_msg_structure = imap_bodystruct($this->_mailbox_link,$pos,"1");
+      $dsn_msg = imap_fetchbody($this->_mailbox_link, $pos, '1');
+      $dsn_msg_structure = imap_bodystruct($this->_mailbox_link, $pos, '1');
 
       if ($dsn_msg_structure->encoding == 4) {
         $dsn_msg = quoted_printable_decode($dsn_msg);
@@ -514,16 +514,16 @@ class BounceMailHandler {
       }
 
       // second part of DSN (Delivery Status Notification), delivery-status
-      $dsn_report = imap_fetchbody($this->_mailbox_link,$pos,"2");
+      $dsn_report = imap_fetchbody($this->_mailbox_link, $pos, '2');
 
       // process bounces by rules
       $result = bmhDSNRules($dsn_msg,$dsn_report,$this->debug_dsn_rule);
-    } elseif ($type == 'BODY') {
+    } elseif ($type === 'BODY') {
       $structure = imap_fetchstructure($this->_mailbox_link,$pos);
       switch ($structure->type) {
         case 0: // Content-type = text
         case 1: // Content-type = multipart
-          $body = imap_fetchbody($this->_mailbox_link,$pos,"1");
+          $body = imap_fetchbody($this->_mailbox_link, $pos, '1');
           // Detect encoding and decode - only base64
           if ($structure->parts[0]->encoding == 4) {
             $body = quoted_printable_decode($body);
@@ -576,7 +576,7 @@ class BounceMailHandler {
       if ( trim($email) == '' ) {
         $email = $header->fromaddress;
       }
-      $params = array($pos,$bounce_type,$email,$subject,$xheader,$remove,$rule_no,$rule_cat,$totalFetched);
+      $params = [$pos, $bounce_type, $email, $subject, $xheader, $remove, $rule_no, $rule_cat, $totalFetched];
       call_user_func_array($this->action_function,$params);
     } else { // match rule, do bounce action
       if ($this->testmode) {
@@ -584,7 +584,7 @@ class BounceMailHandler {
 
         return true;
       } else {
-        $params = array($pos,$bounce_type,$email,$subject,$xheader,$remove,$rule_no,$rule_cat,$totalFetched);
+        $params = [$pos, $bounce_type, $email, $subject, $xheader, $remove, $rule_no, $rule_cat, $totalFetched];
 
         return call_user_func_array($this->action_function,$params);
       }
@@ -599,7 +599,7 @@ class BounceMailHandler {
    * @param boolean $create         (whether or not to create the checkmailbox if not found, defaults to true)
    * @return boolean
    */
-  function mailbox_exist($mailbox,$create=true) {
+  public function mailbox_exist($mailbox,$create=true) {
     if ( trim($mailbox) == '' || !strstr($mailbox,'INBOX.') ) {
       // this is a critical error with either the mailbox name blank or an invalid mailbox name
       // need to stop processing and exit at this point
@@ -608,8 +608,8 @@ class BounceMailHandler {
       exit();
     }
     $port = $this->port . '/' . $this->service . '/' . $this->service_option;
-    $mbox = imap_open('{'.$this->mailhost.":".$port.'}',$this->mailbox_username,$this->mailbox_password,OP_HALFOPEN);
-    $list = imap_getmailboxes($mbox,'{'.$this->mailhost.":".$port.'}',"*");
+    $mbox = imap_open('{'.$this->mailhost . ':' . $port . '}', $this->mailbox_username, $this->mailbox_password, OP_HALFOPEN);
+    $list = imap_getmailboxes($mbox,'{'.$this->mailhost . ':' . $port . '}', '*');
     $mailboxFound = false;
     if (is_array($list)) {
       foreach ($list as $key => $val) {
@@ -621,7 +621,7 @@ class BounceMailHandler {
         }
       }
       if ( ($mailboxFound === false) && $create ) {
-        @imap_createmailbox($mbox, imap_utf7_encode('{'.$this->mailhost.":".$port.'}' . $mailbox));
+        @imap_createmailbox($mbox, imap_utf7_encode('{'.$this->mailhost . ':' . $port . '}' . $mailbox));
         imap_close($mbox);
 
         return true;
@@ -641,15 +641,15 @@ class BounceMailHandler {
      * Function to delete messages in a mailbox, based on date
      * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
      * @internal param string $mailbox (the mailbox name)
-     * @return boolean
+     * @return void
      */
-  function globalDelete() {
+  public function globalDelete() {
     $dateArr = explode('-', $this->deleteMsgDate); // date format is yyyy-mm-dd
     $delDate = mktime(0, 0, 0, $dateArr[1], $dateArr[2], $dateArr[0]);
 
     $port  = $this->port . '/' . $this->service . '/' . $this->service_option;
-    $mboxt = imap_open('{'.$this->mailhost.":".$port.'}',$this->mailbox_username,$this->mailbox_password,OP_HALFOPEN);
-    $list  = imap_getmailboxes($mboxt,'{'.$this->mailhost.":".$port.'}',"*");
+    $mboxt = imap_open('{'.$this->mailhost . ':' . $port . '}', $this->mailbox_username, $this->mailbox_password, OP_HALFOPEN);
+    $list  = imap_getmailboxes($mboxt,'{'.$this->mailhost . ':' . $port . '}', '*');
     $mailboxFound = false;
     if (is_array($list)) {
       foreach ($list as $key => $val) {
@@ -657,13 +657,13 @@ class BounceMailHandler {
         $nameArr = explode('}',imap_utf7_decode($val->name));
         $nameRaw = $nameArr[count($nameArr)-1];
         if ( !stristr($nameRaw,'sent') ) {
-          $mboxd = imap_open('{'.$this->mailhost.":".$port.'}'.$nameRaw,$this->mailbox_username,$this->mailbox_password,CL_EXPUNGE);
+          $mboxd = imap_open('{'.$this->mailhost . ':' . $port . '}' . $nameRaw, $this->mailbox_username, $this->mailbox_password, CL_EXPUNGE);
           $messages = imap_sort($mboxd, SORTDATE, 0);
           $i = 0;
           $check = imap_mailboxmsginfo($mboxd);
           foreach ($messages as $message) {
             $header = imap_header($mboxd, $message);
-            $fdate  = date("F j, Y", $header->udate);
+            $fdate  = date('F j, Y', $header->udate);
             // purge if prior to global delete date
             if ($header->udate < $delDate) {
               imap_delete($mboxd, $message);

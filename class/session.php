@@ -91,7 +91,7 @@ class xnewsletterSession
      */
     public function destroy()
     {
-        $_SESSION = array();
+        $_SESSION = [];
         session_destroy();
     }
 

@@ -21,12 +21,12 @@
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // This must contain the name of the folder in which reside xnewsletter
-define("XNEWSLETTER_DIRNAME", basename(dirname(__DIR__)));
-define("XNEWSLETTER_URL", XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
-define("XNEWSLETTER_ROOT_PATH", XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
-define("XNEWSLETTER_IMAGES_URL", XNEWSLETTER_URL . '/assets/images');
-define("XNEWSLETTER_ADMIN_URL", XNEWSLETTER_URL . '/admin');
-define("XNEWSLETTER_ICONS_URL", XNEWSLETTER_URL . '/assets/images/icons');
+define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
+define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
+define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
+define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
+define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
+define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
 
 xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 
@@ -57,8 +57,8 @@ if (is_object($xnewsletter->getModule())) {
 $xoopsModule = $xnewsletter->getModule();
 
 // Load Xoops handlers
-$module_handler       = xoops_gethandler('module');
-$member_handler       = xoops_gethandler('member');
-$notification_handler = xoops_gethandler('notification');
-$gperm_handler        = xoops_gethandler('groupperm');
-$config_handler       = xoops_gethandler('config');
+$module_handler       = xoops_getHandler('module');
+$member_handler       = xoops_getHandler('member');
+$notification_handler = xoops_getHandler('notification');
+$gperm_handler        = xoops_getHandler('groupperm');
+$config_handler       = xoops_getHandler('config');

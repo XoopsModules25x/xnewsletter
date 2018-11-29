@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 
@@ -30,7 +29,7 @@ include_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
 include_once dirname(__DIR__) . '/include/common.php';
 
 // Include xoops admin header
-include_once XOOPS_ROOT_PATH . "/include/cp_functions.php";
+include_once XOOPS_ROOT_PATH . '/include/cp_functions.php';
 
 $pathIcon16 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons16');
 $pathIcon32 = XOOPS_URL . '/' . $xnewsletter->getModule()->getInfo('icons32');
@@ -58,17 +57,17 @@ $indexAdmin = new ModuleAdmin();
 $myts = MyTextSanitizer::getInstance();
 
 if ($xoopsUser) {
-    $moduleperm_handler = xoops_gethandler('groupperm');
+    $moduleperm_handler = xoops_getHandler('groupperm');
     if (!$moduleperm_handler->checkRight('module_admin', $xnewsletter->getModule()->mid(), $xoopsUser->getGroups())) {
         redirect_header(XOOPS_URL, 1, _NOPERM);
         exit();
     }
 } else {
-    redirect_header(XOOPS_URL . "/user.php", 1, _NOPERM);
+    redirect_header(XOOPS_URL . '/user.php', 1, _NOPERM);
     exit();
 }
 
 if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
-    include_once XOOPS_ROOT_PATH . "/class/template.php";
+    include_once XOOPS_ROOT_PATH . '/class/template.php';
     $xoopsTpl = new XoopsTpl();
 }

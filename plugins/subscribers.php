@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
@@ -34,16 +33,16 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_subscribers() {
     global $xoopsDB;
 
-    $pluginInfo = array();
-    $pluginInfo['name'] = "subscribers";
-    if (file_exists(XOOPS_URL . "/modules/subscribers/images/module_logo.gif")) {
-        $pluginInfo['icon'] = XOOPS_URL . "/modules/subscribers/images/module_logo.gif";
-    } elseif (file_exists(XOOPS_URL . "/modules/subscribers/assets/images/module_logo.png")) {
-            $pluginInfo['icon'] = XOOPS_URL . "/modules/subscribers/assets/images/module_logo.png";
+    $pluginInfo = [];
+    $pluginInfo['name'] = 'subscribers';
+    if (file_exists(XOOPS_URL . '/modules/subscribers/images/module_logo.gif')) {
+        $pluginInfo['icon'] = XOOPS_URL . '/modules/subscribers/images/module_logo.gif';
+    } elseif (file_exists(XOOPS_URL . '/modules/subscribers/assets/images/module_logo.png')) {
+            $pluginInfo['icon'] = XOOPS_URL . '/modules/subscribers/assets/images/module_logo.png';
         }
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/subscribers/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("subscribers_user");
-    $pluginInfo['descr'] = "Import from subscribers";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('subscribers_user');
+    $pluginInfo['descr'] = 'Import from subscribers';
     $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
@@ -66,15 +65,15 @@ function xnewsletter_plugin_getdata_subscribers($cat_id, $action_after_read, $li
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `user_email`, `user_name`";
-    $sql .= " FROM " . $xoopsDB->prefix("subscribers_user");
+    $sql = 'SELECT `user_email`, `user_name`';
+    $sql .= ' FROM ' . $xoopsDB->prefix('subscribers_user');
     $sql .= " WHERE (`user_email` is not null and not(`user_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    if(!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
-        $sex       = "";
-        $firstname = "";
+        $sex       = '';
+        $firstname = '';
         $lastname  = $lineArray[1];
 
         $subscr_id = xnewsletter_pluginCheckEmail($email);

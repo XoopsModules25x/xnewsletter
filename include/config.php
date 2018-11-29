@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: config.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
@@ -30,5 +29,5 @@
 
 // module information
 //$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/xnewsletter.png";
-$moduleImageUrl = XNEWSLETTER_URL . "/assets/images/logo.png";
-$moduleCopyrightHtml = ""; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";
+$moduleImageUrl = XNEWSLETTER_URL . '/assets/images/logo.png';
+$moduleCopyrightHtml = ''; //"<br /><br /><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt='' /></a>";

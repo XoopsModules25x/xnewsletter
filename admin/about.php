@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 
@@ -30,7 +29,7 @@ include_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 //global $indexAdmin;
 
-echo $indexAdmin->addNavigation("about.php");
-echo $indexAdmin->renderabout('9P3B3FXKF868J', false);
+echo $indexAdmin->addNavigation('about.php');
+echo $indexAdmin->renderAbout('9P3B3FXKF868J', false);
 
 include_once __DIR__ . '/admin_footer.php';

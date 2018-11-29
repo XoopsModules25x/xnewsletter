@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id $
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
@@ -34,12 +33,12 @@ include_once dirname(__DIR__) . '/include/common.php';
 function xnewsletter_plugin_getinfo_evennews() {
     global $xoopsDB;
 
-    $pluginInfo = array();
-    $pluginInfo['name'] = "evennews";
-    $pluginInfo['icon'] = XOOPS_URL . "/modules/evennews/images/logo.png";
+    $pluginInfo = [];
+    $pluginInfo['name'] = 'evennews';
+    $pluginInfo['icon'] = XOOPS_URL . '/modules/evennews/images/logo.png';
     //$pluginInfo['modulepath'] = XOOPS_ROOT_PATH . "/modules/evennews/xoops_version.php";
-    $pluginInfo['tables'][0] = $xoopsDB->prefix("evennews_members");
-    $pluginInfo['descr'] = "Import from evennews";
+    $pluginInfo['tables'][0] = $xoopsDB->prefix('evennews_members');
+    $pluginInfo['descr'] = 'Import from evennews';
     $pluginInfo['hasform'] = 0;
 
     return $pluginInfo;
@@ -62,14 +61,14 @@ function xnewsletter_plugin_getdata_evennews($cat_id, $action_after_read, $limit
     $i = 0;
     $j = 0;
 
-    $sql = "SELECT `user_email`, `user_name`, `user_nick`";
-    $sql .= " FROM {$xoopsDB->prefix("evennews_members")}";
+    $sql = 'SELECT `user_email`, `user_name`, `user_nick`';
+    $sql .= " FROM {$xoopsDB->prefix('evennews_members')}";
     $sql .= " WHERE (`user_email` is not null and not(`user_email`=''))";
-    if(!$result_users = $xoopsDB->query($sql)) die ("MySQL-Error: " . $xoopsDB->error());
+    if(!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
     while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
         ++$i;
         $email     = $lineArray[0];
-        $sex       = "";
+        $sex       = '';
         $firstname = $lineArray[1];
         $lastname  = $lineArray[2];
 

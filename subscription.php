@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,20 +22,19 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : $Id: subscription.php 12559 2014-06-02 08:10:39Z beckmi $
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once __DIR__ . "/header.php";
+include_once __DIR__ . '/header.php';
 
 $op            = XoopsRequest::getString('op', 'list_subscriptions');
 $activationKey = XoopsRequest::getString('actkey', '');
 $subscr_id     = XoopsRequest::getInt('subscr_id', 0);
-$subscr_email  = ($op != 'unsub') ? XoopsRequest::getString('subscr_email', '') : '';
+$subscr_email  = ($op !== 'unsub') ? XoopsRequest::getString('subscr_email', '') : '';
 $ip            =  xoops_getenv('REMOTE_ADDR');
 
-if ($op == 'save_subscription' || $activationKey != '') {
+if ($op === 'save_subscription' || $activationKey != '') {
     $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
 } else {
     $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
@@ -43,13 +42,13 @@ if ($op == 'save_subscription' || $activationKey != '') {
 if (isset($_REQUEST['addnew'])) {
     $op = 'addnew_subscription';
 }
-if ($activationKey && $op != 'delete_subscription_confirmed' && $op != 'unsub') {
+if ($activationKey && $op !== 'delete_subscription_confirmed' && $op !== 'unsub') {
     $op = 'save_subscription';
 }
-if ($op == 'delete_subscription_confirmed') {
+if ($op === 'delete_subscription_confirmed') {
     $op = 'delete_subscription';
 }
-if ($op == 'unsub') {
+if ($op === 'unsub') {
     $op = 'list_subscriptions';
     $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
     $_SESSION['redirect_mail'] = XoopsRequest::getString('email', '');
@@ -63,15 +62,15 @@ $subscr_lastname = '';
 
 $count_ok = 0;
 $count_err = 0;
-$actionProts_ok = array(); // IN PROGRESS: remove from here
-$actionProts_error = array(); // IN PROGRESS: remove from here
+$actionProts_ok = []; // IN PROGRESS: remove from here
+$actionProts_error = []; // IN PROGRESS: remove from here
 
 switch ($op) {
-    case "resend_subscription" :
-        $actionProts_ok = array();
-        $actionProts_error = array();
+    case 'resend_subscription' :
+        $actionProts_ok = [];
+        $actionProts_error = [];
         $xoopsOption['template_main'] = 'xnewsletter_subscription_result.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -103,24 +102,24 @@ switch ($op) {
             $xoopsMailer->assign('FIRSTNAME', $subscrObj->getVar('subscr_firstname'));
             $xoopsMailer->assign('LASTNAME', $subscrObj->getVar('subscr_lastname'));
             $xoopsMailer->assign('IP', $ip);
-            $activationKey = base64_encode(XOOPS_URL . "||addnew||{$subscr_id}||{$subscrObj->getVar("subscr_actkey")}||{$subscr_email}");
+            $activationKey = base64_encode(XOOPS_URL . "||addnew||{$subscr_id}||{$subscrObj->getVar('subscr_actkey')}||{$subscr_email}");
             $xoopsMailer->assign('ACTLINK', XOOPS_URL . "/modules/xnewsletter/{$currentFile}?actkey={$activationKey}");
             $subject = _MA_XNEWSLETTER_SUBSCRIPTIONSUBJECT . $GLOBALS['xoopsConfig']['sitename'];
             $xoopsMailer->setSubject($subject);
             if (!$xoopsMailer->send()) {
-                $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors();
+                $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors();
             }
-            $actionProts_ok[] = str_replace ("%nl", $cat_name, _MA_XNEWSLETTER_SENDMAIL_REG_OK);
+            $actionProts_ok[] = str_replace ('%nl', $cat_name, _MA_XNEWSLETTER_SENDMAIL_REG_OK);
         } else {
             // IN PROGRESS
-            redirect_header($currentFile, 5, "IN PROGRESS: error");
+            redirect_header($currentFile, 5, 'IN PROGRESS: error');
         }
         $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
         $xoopsTpl->assign('actionProts_error', $actionProts_error);
         break;
 
-    case "save_subscription" :
-        include_once XOOPS_ROOT_PATH . "/header.php";
+    case 'save_subscription' :
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -150,8 +149,8 @@ switch ($op) {
 
         if (!$activationKey) {
             // activation key doesn't exist
-            if (!$GLOBALS["xoopsSecurity"]->check()) {
-                redirect_header($currentFile, 3, implode(",", $GLOBALS["xoopsSecurity"]->getErrors()));
+            if (!$GLOBALS['xoopsSecurity']->check()) {
+                redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             if ($subscr_email == '') {
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
@@ -161,7 +160,7 @@ switch ($op) {
 
 
             // read current selections and create code for actkey
-            $cat_selections = array();
+            $cat_selections = [];
             $code_selections = '';
             $catCriteria = new CriteriaCompo();
             $catCriteria->setSort('cat_id');
@@ -171,12 +170,12 @@ switch ($op) {
             foreach ($catObjs as $cat_id => $catObj) {
                 // create selection code: cat_id - cat selected - old catsubcr_id - old catsubscr_quited
                 $code_selections .= ($code_selections == '') ? '' : '|';
-                $code_selections .= $cat_id . "-";
+                $code_selections .= $cat_id . '-';
                 $code_selections .= (isset($_REQUEST["letter_cats_{$cat_id}"])) ? '1' : '0';
-                $code_selections .= "-";
+                $code_selections .= '-';
                 $old_catsubcr_id = XoopsRequest::getInt("letter_cats_old_catsubcr_id_{$cat_id}", 0);
                 $code_selections .= $old_catsubcr_id;
-                $code_selections .= "-";
+                $code_selections .= '-';
                 $old_catsubcr_quited = XoopsRequest::getInt("letter_cats_old_catsubscr_quited_{$cat_id}", 0);
                 $code_selections .= $old_catsubcr_quited;
             }
@@ -197,7 +196,7 @@ switch ($op) {
                 $subscr_uid = 0;
                 $sql = "SELECT `uid` FROM {$xoopsDB->prefix('users')}";
                 $sql .= " WHERE (`email`='{$subscr_email}')";
-                $sql .= " LIMIT 1";
+                $sql .= ' LIMIT 1';
                 if ($user = $xoopsDB->query($sql)) {
                     $row_user = $xoopsDB->fetchRow($user);
                     $subscr_uid = $row_user[0];
@@ -230,7 +229,7 @@ switch ($op) {
                 $subscrObj->setVar('subscr_actoptions', '');
             } else {
                 //format subscr_actoptions: selected_newsletters||firstname||lastname||sex
-                $code_options = array();
+                $code_options = [];
                 $code_options[0] = $code_selections;
                 $code_options[1] = XoopsRequest::getString('subscr_firstname', '');
                 $code_options[2] = XoopsRequest::getString('subscr_lastname', '');
@@ -257,7 +256,7 @@ switch ($op) {
                     $xoopsMailer->reset();
                     $xoopsMailer->setTemplateDir();
                     $xoopsMailer->useMail();
-                    if ($saveType == 'update') {
+                    if ($saveType === 'update') {
                         $xoopsMailer->setTemplate('update.tpl');
                     } else {
                         $xoopsMailer->setTemplate('activate.tpl');
@@ -265,22 +264,22 @@ switch ($op) {
                     $xoopsMailer->setToEmails($subscr_email);
                     if (isset($xoopsConfig['adminmail'])) $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
                     if (isset($xoopsConfig['sitename'])) $xoopsMailer->setFromName($xoopsConfig['sitename']);
-                    $xoopsMailer->assign('SEX', $subscrObj->getVar("subscr_sex"));
+                    $xoopsMailer->assign('SEX', $subscrObj->getVar('subscr_sex'));
                     $xoopsMailer->assign('EMAIL', $subscr_email);
-                    $xoopsMailer->assign('FIRSTNAME', $subscrObj->getVar("subscr_firstname"));
-                    $xoopsMailer->assign('LASTNAME', $subscrObj->getVar("subscr_lastname"));
+                    $xoopsMailer->assign('FIRSTNAME', $subscrObj->getVar('subscr_firstname'));
+                    $xoopsMailer->assign('LASTNAME', $subscrObj->getVar('subscr_lastname'));
                     $xoopsMailer->assign('IP', $ip);
                     $activationKey = base64_encode(XOOPS_URL . "||{$saveType}||{$subscr_id}||{$subscr_actkey}||{$subscr_email}");
                     $xoopsMailer->assign('ACTLINK', XOOPS_URL . "/modules/xnewsletter/{$currentFile}?actkey={$activationKey}");
                     $subject = _MA_XNEWSLETTER_SUBSCRIPTIONSUBJECT . $GLOBALS['xoopsConfig']['sitename'];
                     $xoopsMailer->setSubject($subject);
                     if (!$xoopsMailer->send()) {
-                        redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
+                        redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors());
                     }
                     $actionProts_ok[] = _MA_XNEWSLETTER_SENDMAIL_REG_OK;
                 }
             } else {
-                redirect_header($currentFile, 20, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . "<br />" . $subscrObj->getHtmlErrors());
+                redirect_header($currentFile, 20, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . '<br />' . $subscrObj->getHtmlErrors());
             }
         } else {
             // activation key exist
@@ -353,7 +352,7 @@ switch ($op) {
             if (!$xnewsletter->getHandler('subscr')->insert($subscrObj)) {
                 redirect_header($currentFile, 2, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR);
             } else {
-                if ($saveType == 'addnew') {
+                if ($saveType === 'addnew') {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_CLOSED;
                 } else {
                     $actionProts_ok[] = _MA_XNEWSLETTER_SUBSCRIPTION_REG_UPDATE_CLOSED;
@@ -361,7 +360,7 @@ switch ($op) {
             }
             // handle current selections
             foreach ($cat_selections as $sel) {
-                $selection = array();
+                $selection = [];
                 if ($sel == '') $sel = '0-0-0-0';
                 $selection = explode('-', $sel);
                 $cat_id = $selection[0];
@@ -375,23 +374,23 @@ switch ($op) {
                     // subscribe
                     $catsubscrObj = $xnewsletter->getHandler('catsubscr')->create();
                     //Form catsubscr_catid
-                    $catsubscrObj->setVar("catsubscr_catid", $cat_id);
+                    $catsubscrObj->setVar('catsubscr_catid', $cat_id);
                     //Form catsubscr_subscrid
-                    $catsubscrObj->setVar("catsubscr_subscrid", $subscr_id);
+                    $catsubscrObj->setVar('catsubscr_subscrid', $subscr_id);
                     //Form catsubscr_submitter
-                    $catsubscrObj->setVar("catsubscr_submitter", $submitterUid);
+                    $catsubscrObj->setVar('catsubscr_submitter', $submitterUid);
                     //Form catsubscr_submitter
-                    $catsubscrObj->setVar("catsubscr_created", time());
+                    $catsubscrObj->setVar('catsubscr_created', time());
                     if ($xnewsletter->getHandler('catsubscr')->insert($catsubscrObj)) {
                         $count_ok++;
                         if ($catsubcr_id_old > 0) {
-                            $actionProts_ok[] = str_replace("%nl", $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_NO_CHANGE);
+                            $actionProts_ok[] = str_replace('%nl', $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_NO_CHANGE);
                         } else {
-                            $actionProts_ok[] = str_replace("%nl", $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SUBSCRIBE);
+                            $actionProts_ok[] = str_replace('%nl', $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SUBSCRIBE);
                         }
                         //handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
+                            require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
                             subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -404,7 +403,7 @@ switch ($op) {
                     if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                         //handle mailinglists
                         if ($cat_mailinglist > 0) {
-                            require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
+                            require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
                             subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                         }
                     } else {
@@ -415,7 +414,7 @@ switch ($op) {
                     if ($count_err > 0) {
                         redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELNOTOK);
                     }
-                    $actionProts_ok[] = str_replace ("%nl", $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_UNSUBSCRIBE);
+                    $actionProts_ok[] = str_replace ('%nl', $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_UNSUBSCRIBE);
                 } elseif ($catsubcr_id_old > 0 && $catsubcr_quited_old > 0) {
                     // newsletter stay selected, but catsubscr_quited will be removed
                     $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($catsubcr_id_old);
@@ -424,14 +423,14 @@ switch ($op) {
 
                     if ($xnewsletter->getHandler('catsubscr')->insert($catsubscrObj)) {
                         $count_ok++;
-                        $actionProts_ok[] = str_replace ("%nl", $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_DAT_QUITED_REMOVED);
+                        $actionProts_ok[] = str_replace ('%nl', $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_DAT_QUITED_REMOVED);
                     } else {
                         $count_err++;
                         $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVECATSUBSCR . $catsubscrObj->getHtmlErrors();
                     }
                 } elseif ($catsubcr_id_old > 0) {
                     // newsletter still subscribed
-                    $actionProts_ok[] = str_replace ("%nl", $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_NO_CHANGE);
+                    $actionProts_ok[] = str_replace ('%nl', $cat_name, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_NO_CHANGE);
                 } else {
                     // nothing to do
                 }
@@ -465,16 +464,16 @@ switch ($op) {
             $xoopsMailer->assign('IP', $ip);
             $actlink = XOOPS_URL . "/modules/xnewsletter/{$currentFile}?subscr_email={$subscr_email}";
             $xoopsMailer->assign('ACTLINK', $actlink);
-            $user_link = XOOPS_URL . "/userinfo.php?uid=" . $xoopsUser->uid();
+            $user_link = XOOPS_URL . '/userinfo.php?uid=' . $xoopsUser->uid();
             $user_name = $xoopsUser->name();
             $xoopsMailer->assign('USERLINK', $user_link);
             $xoopsMailer->assign('USERNAME', $user_name);
             $subject_change = _MA_XNEWSLETTER_SUBSCRIPTION_SUBJECT_CHANGE . $GLOBALS['xoopsConfig']['sitename'];
             $xoopsMailer->setSubject($subject_change);
             if ($xoopsMailer->send()) {
-                $actionProts_ok[] = str_replace("%e", $subscr_email, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SENT_INFO);
+                $actionProts_ok[] = str_replace('%e', $subscr_email, _MA_XNEWSLETTER_SUBSCRIPTION_PROT_SENT_INFO);
             } else {
-                redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . "<br />" . $xoopsMailer->getErrors());
+                redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SENDACTKEY . '<br />' . $xoopsMailer->getErrors());
             }
         }
 
@@ -490,10 +489,10 @@ switch ($op) {
 
 
 
-    case "add_subscription" :
-    case "create_subscription" :
+    case 'add_subscription' :
+    case 'create_subscription' :
         $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -524,9 +523,9 @@ switch ($op) {
 
 
 
-    case "edit_subscription" :
+    case 'edit_subscription' :
         $xoopsOption['template_main'] = 'xnewsletter_subscription.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -551,8 +550,8 @@ switch ($op) {
 
 
 
-    case "delete_subscription" :
-        include_once XOOPS_ROOT_PATH . "/header.php";
+    case 'delete_subscription' :
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -641,7 +640,7 @@ switch ($op) {
 */
                     // delete subscriber
                     if (!$xnewsletter->getHandler('subscr')->delete($subscrObj, true)) {
-                        $actionProts_error = $subscrObj->getHtmlErrors() . "<br/><br/><br/>";
+                        $actionProts_error = $subscrObj->getHtmlErrors() . '<br/><br/><br/>';
                         $count_err++;
                     }
                     //delete subscription
@@ -651,14 +650,14 @@ switch ($op) {
                     if ($catsubscrCount > 0) {
                         $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
                         foreach (array_keys($catsubscrObjs) as $cat) {
-                            $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($catsubscrObjs[$cat]->getVar("catsubscr_id"));
-                            $catObj = $xnewsletter->getHandler('cat')->get($catsubscrObjs[$cat]->getVar("catsubscr_catid"));
-                            $cat_mailinglist = $catObj->getVar("cat_mailinglist");
+                            $catsubscrObj = $xnewsletter->getHandler('catsubscr')->get($catsubscrObjs[$cat]->getVar('catsubscr_id'));
+                            $catObj = $xnewsletter->getHandler('cat')->get($catsubscrObjs[$cat]->getVar('catsubscr_catid'));
+                            $cat_mailinglist = $catObj->getVar('cat_mailinglist');
 
                             if ($xnewsletter->getHandler('catsubscr')->delete($catsubscrObj, true)) {
                                 //handle mailinglists
                                 if ($cat_mailinglist > 0) {
-                                    require_once XOOPS_ROOT_PATH . "/modules/xnewsletter/include/mailinglist.php";
+                                    require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
                                     subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
                                 }
                             } else {
@@ -708,21 +707,21 @@ switch ($op) {
                     $subject_delete = _MA_XNEWSLETTER_DELETESUBJECT . $GLOBALS['xoopsConfig']['sitename'];
                     $xoopsMailer->setSubject($subject_delete);
                     if (!$xoopsMailer->send()) {
-                        redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . "<br />" . $xoopsMailer->getErrors());
+                        redirect_header($currentFile, 10, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . '<br />' . $xoopsMailer->getErrors());
                     }
                 }
                 redirect_header('index.php', 3, _MA_XNEWSLETTER_SENDMAIL_UNREG_OK);
             }
         } else {
             $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
-            xoops_confirm(array('ok' => true, 'subscr_id' => $subscr_id, 'subscr_email' => $subscr_email, 'op' => 'delete_subscription'), $currentFile, sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE));
+            xoops_confirm(['ok' => true, 'subscr_id' => $subscr_id, 'subscr_email' => $subscr_email, 'op' => 'delete_subscription'], $currentFile, sprintf(_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE));
         }
         break;
 
-    case "list_subscriptions" :
+    case 'list_subscriptions' :
     default :
         $xoopsOption['template_main'] = 'xnewsletter_subscription_list_subscriptions.tpl';
-        include_once XOOPS_ROOT_PATH . "/header.php";
+        include_once XOOPS_ROOT_PATH . '/header.php';
 
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
         $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
@@ -744,7 +743,7 @@ switch ($op) {
             // existing email from search form
             if (!xnewsletter_checkEmail($subscr_email))
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
-            xoops_load("captcha");
+            xoops_load('captcha');
             $xoopsCaptcha = XoopsCaptcha::getinstance();
             if (!$xoopsCaptcha->verify()) {
                 $_SESSION['redirect_mail'] = $subscr_email;

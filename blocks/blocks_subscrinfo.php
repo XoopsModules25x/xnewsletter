@@ -1,7 +1,7 @@
 <?php
 /**
  * ****************************************************************************
- *  - A Project by Developers TEAM For Xoops - ( http://www.xoops.org )
+ *  - A Project by Developers TEAM For Xoops - ( https://xoops.org )
  * ****************************************************************************
  *  XNEWSLETTER - MODULE FOR XOOPS
  *  Copyright (c) 2007 - 2012
@@ -22,7 +22,6 @@
  *  @package    xnewsletter
  *  @author     Goffy ( webmaster@wedega.com )
  *
- *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
@@ -36,7 +35,7 @@ include_once dirname(__DIR__) . '/include/common.php';
 function b_xnewsletter_subscrinfo($options) {
     xoops_loadLanguage('modinfo', 'xnewsletter');
     $unique_id = uniqid(mt_rand());
-    $subscrinfo = array();
+    $subscrinfo = [];
     $subscrinfo['formname'] = "formsubscrinfo_{$unique_id}";
     $subscrinfo['formaction'] = XOOPS_URL . '/modules/xnewsletter/subscription.php';
     $subscrinfo['infotext'] = _MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK;
