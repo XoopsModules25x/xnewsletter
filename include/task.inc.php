@@ -61,7 +61,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
         redirect_header('letter.php', 3, _MA_XNEWSLETTER_LETTER_NONEAVAIL);
     }
 
-    if ('send_test' == $op) {
+    if ('send_test' === $op) {
         //check for valid email for testing
         $letter_email_test = $letterObj->getVar('letter_email_test');
         if ('' == $letter_email_test) {
