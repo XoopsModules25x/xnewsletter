@@ -111,14 +111,14 @@ function b_xnewsletter_catsubscr_edit($options)
     array_shift($options);
     array_shift($options);
     $form .= '' . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . '<br><select name="options[]" multiple="multiple" size="5">';
-    $form .= '<option value="0" ' . (false === array_search(0, $options, true) ? '' : 'selected="selected"') . '>' . _MB_XNEWSLETTER_CATSUBSCR_ALLCAT . '</option>';
+    $form .= '<option value="0" ' . (!in_array(0, $options, true) ? '' : 'selected="selected"') . '>' . _MB_XNEWSLETTER_CATSUBSCR_ALLCAT . '</option>';
 
     $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
     $catObjs = $helper->getHandler('Cat')->getAll($catCriteria);
     foreach ($catObjs as $cat_id => $catObj) {
-        $form .= '<option value="' . $cat_id . '" ' . (false === array_search($cat_id, $options, true) ? '' : 'selected="selected"') . '>' . $catObj->getVar('cat_name') . '</option>';
+        $form .= '<option value="' . $cat_id . '" ' . (!in_array($cat_id, $options, true) ? '' : 'selected="selected"') . '>' . $catObj->getVar('cat_name') . '</option>';
     }
     $form .= '</select>';
 
