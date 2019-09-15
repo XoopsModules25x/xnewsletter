@@ -26,7 +26,7 @@ $xoopsTpl->assign('isAdmin', xnewsletter_userIsAdmin());
 // Extra info
 // copyright
 $xoopsTpl->assign('copyright', $moduleCopyrightHtml); // this definition is not removed for backward compatibility issues
-$xoopsTpl->assign('copyright_code', $moduleCopyrightHtml); // include/config.php
+$xoopsTpl->assign('copyright_code', $moduleCopyrightHtml); // config/config.php
 // advertise
 $xoopsTpl->assign('adv', $helper->getConfig('advertise')); // this definition is not removed for backward compatibility issues
 $xoopsTpl->assign('advertise_code', $helper->getConfig('advertise'));

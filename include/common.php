@@ -33,7 +33,7 @@ define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
 
 xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 
-require_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
+require_once XNEWSLETTER_ROOT_PATH . '/config/config.php'; // IN PROGRESS
 require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
 //require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class

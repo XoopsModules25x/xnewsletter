@@ -37,6 +37,7 @@ class Configurator
     public $oldFiles        = [];
     public $oldFolders      = [];
     public $renameTables    = [];
+    public $moduleStats     = [];
     public $modCopyright;
 
     /**
@@ -44,10 +45,10 @@ class Configurator
      */
     public function __construct()
     {
-        $moduleDirName      = basename(dirname(dirname(__DIR__)));
-        $moduleDirNameUpper = mb_strtoupper($moduleDirName);
+//        $moduleDirName      = basename(dirname(dirname(__DIR__)));
+//        $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-        require_once dirname(dirname(__DIR__)) . '/include/config.php';
+        require dirname(dirname(__DIR__)) . '/config/config.php';
         $config = getConfig();
 
         $this->name            = $config->name;
@@ -59,6 +60,7 @@ class Configurator
         $this->oldFiles        = $config->oldFiles;
         $this->oldFolders      = $config->oldFolders;
         $this->renameTables    = $config->renameTables;
+        $this->moduleStats     = $config->moduleStats;
         $this->modCopyright    = $config->modCopyright;
     }
 }
