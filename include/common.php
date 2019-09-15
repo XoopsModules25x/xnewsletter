@@ -23,27 +23,50 @@ use XoopsModules\Xnewsletter;
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
-// This must contain the name of the folder in which reside xnewsletter
-define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
-define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
-define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
-define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
-define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
-define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
+include dirname(__DIR__) . '/preloads/autoloader.php';
 
-xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
+$moduleDirName      = basename(dirname(__DIR__));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName); //$capsDirName
+
+/** @var \XoopsDatabase $db */
+/** @var \XoopsModules\Xnewsletter\Helper $helper */
+/** @var \XoopsModules\Xnewsletter\Utility $utility */
+$db      = \XoopsDatabaseFactory::getDatabaseConnection();
+$debug   = false;
+$helper  = \XoopsModules\Xnewsletter\Helper::getInstance($debug);
+$utility = new \XoopsModules\Xnewsletter\Utility();
+
+$helper->loadLanguage('common');
+
+$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon32 = \Xmf\Module\Admin::iconUrl('', 32);
+if (is_object($helper->getModule())) {
+    $pathModIcon16 = $helper->getModule()->getInfo('modicons16');
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+}
+
+// This must contain the name of the folder in which reside xnewsletter
+if (!defined($moduleDirNameUpper . '_CONSTANTS_DEFINED')) {
+    define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
+    define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
+    define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
+    define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
+    define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
+    define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
+    define($moduleDirNameUpper . '_CONSTANTS_DEFINED', 1);
+}
 
 require_once XNEWSLETTER_ROOT_PATH . '/config/config.php'; // IN PROGRESS
 require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
-//require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class
-//require_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // XnewsletterXnewsletter class
-//require_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
-//require_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // Breadcrumb class
+require_once XNEWSLETTER_ROOT_PATH . '/config/icons.php';
 
 xoops_load('XoopsUserUtility');
 // MyTextSanitizer object
 $myts = \MyTextSanitizer::getInstance();
+
+$moduleImageUrl      = XNEWSLETTER_URL . '/assets/images/xnewsletter.png';
+$moduleCopyrightHtml = ''; //"<br><br><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt=''></a>";
 
 $debug  = false;
 $helper = \XoopsModules\Xnewsletter\Helper::getInstance($debug);
@@ -65,3 +88,23 @@ $memberHandler = xoops_getHandler('member');
 $notificationHandler = xoops_getHandler('notification');
 $grouppermHandler    = xoops_getHandler('groupperm');
 $configHandler       = xoops_getHandler('config');
+
+$debug = false;
+
+// MyTextSanitizer object
+$myts = \MyTextSanitizer::getInstance();
+
+if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof \XoopsTpl)) {
+    require_once $GLOBALS['xoops']->path('class/template.php');
+    $GLOBALS['xoopsTpl'] = new \XoopsTpl();
+}
+
+$GLOBALS['xoopsTpl']->assign('mod_url', XOOPS_URL . '/modules/' . $moduleDirName);
+// Local icons path
+if (is_object($helper->getModule())) {
+    $pathModIcon16 = $helper->getModule()->getInfo('modicons16');
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+
+    $GLOBALS['xoopsTpl']->assign('pathModIcon16', XOOPS_URL . '/modules/' . $moduleDirName . '/' . $pathModIcon16);
+    $GLOBALS['xoopsTpl']->assign('pathModIcon32', $pathModIcon32);
+}

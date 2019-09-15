@@ -33,6 +33,6 @@ require_once XOOPS_ROOT_PATH . '/include/functions.php';
 global $xoopsConfig;
 
 //Load languages
-xoops_loadLanguage('admin', $helper->getModule()->dirname());
-xoops_loadLanguage('modinfo', $helper->getModule()->dirname());
-xoops_loadLanguage('main', $helper->getModule()->dirname());
+$helper->loadLanguage('admin');
+$helper->loadLanguage('modinfo');
+$helper->loadLanguage('main');

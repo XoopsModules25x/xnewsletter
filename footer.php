@@ -17,6 +17,10 @@
  * @since           1.3
  * @author          Xoops Development Team
  */
+
+require __DIR__ . '/include/common.php';
+
+
 // Module info/menu
 $moduleInfo = $helper->getModule()->getInfo();
 //$xoopsTpl->assign('xnewsletterModuleInfo', $moduleInfo); // huge array but useful?
