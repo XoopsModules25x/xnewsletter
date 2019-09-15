@@ -40,7 +40,7 @@ class TaskHandler extends \XoopsPersistableObjectHandler
     public $helper = null;
 
     /**
-     * @param null|object|\XoopsDatabase $db
+     * @param null|\XoopsDatabase $db
      */
     public function __construct(\XoopsDatabase $db = null)
     {
