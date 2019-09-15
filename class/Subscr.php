@@ -62,7 +62,7 @@ class Subscr extends \XoopsObject
     /**
      * @param bool $action
      *
-     * @return XoopsThemeForm
+     * @return \XoopsThemeForm
      */
     public function getSearchForm($action = false)
     {
@@ -106,7 +106,7 @@ class Subscr extends \XoopsObject
     /**
      * @param bool $action
      *
-     * @return XoopsThemeForm
+     * @return \XoopsThemeForm
      */
     public function getForm($action = false)
     {
@@ -226,7 +226,7 @@ class Subscr extends \XoopsObject
     /**
      * @param bool $action
      *
-     * @return XoopsThemeForm
+     * @return \XoopsThemeForm
      */
     public function getFormAdmin($action = false)
     {

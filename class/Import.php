@@ -62,7 +62,7 @@ class Import extends \XoopsObject
      * @param int  $limitcheck
      * @param bool $action
      *
-     * @return XoopsThemeForm
+     * @return \XoopsThemeForm
      */
     public function getSearchForm($plugin, $action_after_read = 1, $limitcheck = 0, $action = false)
     {

@@ -43,7 +43,7 @@ class Xnewsletter
     /**
      * @param bool $debug
      *
-     * @return Helper
+     * @return \XoopsModules\Xnewsletter\Xnewsletter
      */
     public static function getInstance($debug = false)
     {
@@ -66,6 +66,7 @@ class Xnewsletter
 
     /**
      * @param null $name
+     * @return |null
      */
     public function getConfig($name = null)
     {

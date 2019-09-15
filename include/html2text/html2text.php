@@ -51,7 +51,6 @@ function convert_html_to_text($html)
  * then \r becomes \n. This means that all newlines (Unix, Windows, Mac)
  * all become \ns.
  *
- * @param text text with any number of \r, \r\n and \n combinations
  * @param mixed $text
  *
  * @return string fixed text
