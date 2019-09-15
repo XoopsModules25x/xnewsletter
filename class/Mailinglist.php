@@ -45,7 +45,7 @@ class Mailinglist extends \XoopsObject
     {
         $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar('mailinglist_id', XOBJ_DTYPE_INT, null, fals);
+        $this->initVar('mailinglist_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('mailinglist_name', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('mailinglist_email', XOBJ_DTYPE_TXTBOX, null, false, 100);
         $this->initVar('mailinglist_listname', XOBJ_DTYPE_TXTBOX, null, false, 100);

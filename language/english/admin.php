@@ -491,3 +491,8 @@ define('_AM_XNEWSLETTER_ERROR_COLUMN', 'Could not create column in database : %s
 define('_AM_XNEWSLETTER_ERROR_BAD_XOOPS', 'This module requires XOOPS %s+ (%s installed)');
 define('_AM_XNEWSLETTER_ERROR_BAD_PHP', 'This module requires PHP version %s+ (%s installed)');
 define('_AM_XNEWSLETTER_ERROR_TAG_REMOVAL', 'Could not remove tags from Tag Module');
+
+//1.4
+define('_AM_XNEWSLETTER_BMH_ADD', 'Add a Bounced email handler');
+define('_AM_XNEWSLETTER_BMH_ACCOUNTS_ID', 'Account ID of Bounced email');
+define('_AM_XNEWSLETTER_UPGRADEFAILED', "Update failed - couldn't drop a table");
