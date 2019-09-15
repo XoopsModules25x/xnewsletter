@@ -44,7 +44,8 @@ class AttachmentHandler extends \XoopsPersistableObjectHandler
     public $helper = null;
 
     /**
-     * @param null|\XoopsDatabase $db
+     * @param null|\XoopsDatabase                   $db
+     * @param \XoopsModules\Xnewsletter\Helper|null $helper
      */
     public function __construct(\XoopsDatabase $db = null, Helper $helper = null)
     {
