@@ -212,7 +212,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
 
         // read data of account
         $letter_account = $letterObj->getVar('letter_account');
-        if ('' == $letter_account && 0 == $letter_account) {
+        if ('' == $letter_account || 0 == $letter_account) {
             return _MA_XNEWSLETTER_ACCOUNTS_NONEAVAIL;
         }
         $accountObj             = $helper->getHandler('Accounts')->get($letter_account);
@@ -324,7 +324,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
             }
 
             //$mail = new PHPMailer();
-            $mail = new XnewsletterMailer();
+            $mail = new Xnewsletter\XnewsletterMailer();
 
             $mail->CharSet = _CHARSET; //use xoops default character set
 

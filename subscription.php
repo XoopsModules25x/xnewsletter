@@ -739,7 +739,7 @@ switch ($op) {
         }
         // IN PROGRESS
 
-        if (Request::getBool('ok', false, 'POST') || '' != $activationKey) {
+        if (\Xmf\Request::getBool('ok', false, 'POST') || '' != $activationKey) {
             $GLOBALS['xoopsOption']['template_main'] = 'xnewsletter_subscription_result.tpl';
             require_once XOOPS_ROOT_PATH . '/header.php';
 

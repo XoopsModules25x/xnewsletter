@@ -496,7 +496,7 @@ function xnewsletter_emailSize($letter_id = 0)
 
     // read data of account
     $letter_account = $letterObj->getVar('letter_account');
-    if ('' == $letter_account && 0 == $letter_account) {
+    if ('' == $letter_account || 0 == $letter_account) {
         return false;
     }
     $accountObj             = $helper->getHandler('Accounts')->get($letter_account);
@@ -573,7 +573,7 @@ function xnewsletter_emailSize($letter_id = 0)
         $attachmentsPath[] = XOOPS_UPLOAD_PATH . $helper->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');
     }
 
-    $mail           = new XnewsletterMailer();
+    $mail           = new Xnewsletter\XnewsletterMailer();
     $mail->CharSet  = _CHARSET; //use xoops default character set
     $mail->Username = $account_username; // SMTP account username
     $mail->Password = $account_password; // SMTP account password

@@ -55,13 +55,13 @@ class AttachmentHandler extends \XoopsPersistableObjectHandler
     /**
      * Delete attachment ({@link attachment} object) and file from filesystem
      *
-     * @param object $attachmentObj
+     * @param \XoopsObject $attachmentObj
      * @param bool   $force
      *
      * @internal param object $object
      * @return bool
      */
-    public function delete($attachmentObj, $force = false)
+    public function delete(\XoopsObject $attachmentObj, $force = false)
     {
         $res                  = true;
         $attachment_letter_id = (int)$attachmentObj->getVar('attachment_letter_id');
