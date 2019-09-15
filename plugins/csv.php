@@ -76,7 +76,7 @@ function xnewsletter_plugin_getdata_csv(
     $i             = 0;
     $j             = 0;
 
-    if (false !== ($handle = fopen($file, 'r'))) {
+    if (false !== ($handle = fopen($file, 'rb'))) {
         while (false !== ($lineArray = fgetcsv($handle, 4000, $delimiter))) {
             if (true === $header || 0 == $i) {
                 // remove header line

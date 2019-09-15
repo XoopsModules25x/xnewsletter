@@ -626,7 +626,7 @@ function xnewsletter_download($filePath, $isBinary = true, $retBytes = true)
     if (true === $isBinary) {
         $handler = fopen($filePath, 'rb');
     } else {
-        $handler = fopen($filePath, 'r');
+        $handler = fopen($filePath, 'rb');
     }
     if (false === $handler) {
         return false;
@@ -686,7 +686,7 @@ function xnewsletter_largeDownload($filePath, $fileMimetype)
                 preg_match('/bytes=(\d+)-(\d+)?/', $_SERVER['HTTP_RANGE'], $matches);
                 $offset  = (int)$matches[1];
                 $length  = (int)$matches[2] - $offset;
-                $fhandle = fopen($filePath, 'r');
+                $fhandle = fopen($filePath, 'rb');
                 fseek($fhandle, $offset); // seek to the requested offset, this is 0 if it's not a partial content request
                 $data = fread($fhandle, $length);
                 fclose($fhandle);
