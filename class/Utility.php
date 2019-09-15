@@ -1,8 +1,6 @@
-<?php namespace XoopsModules\Xnewsletter;
+<?php
 
-use Xmf\Request;
-use XoopsModules\Xnewsletter;
-use XoopsModules\Xnewsletter\Common;
+namespace XoopsModules\Xnewsletter;
 
 /**
  * Class Utility

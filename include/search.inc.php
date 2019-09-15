@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -34,7 +33,6 @@
  *
  * @return array
  */
-
 function xnewsletter_search($queryarray, $andor, $limit, $offset, $userid)
 {
     global $xoopsDB;

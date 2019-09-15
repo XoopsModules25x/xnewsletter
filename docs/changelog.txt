@@ -1,5 +1,13 @@
-Version 1.3     NOT RELEASED
--------------------------------
+<h5>1.4 Alpha 1   [WORK IN PROGRESS - NOT RELEASED]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.9
+<hr>
+- namespaces (mamba)
+- class autoloading (mamba)
+- reverted in_array() true check (mamba)
+- reversed to while (list()) (mamba)
+WORK IN PROGRESS
+
+<h5>1.3     NOT RELEASED</h5>
+<hr>
  - replaced "dirname(__FILE__)" with "__DIR__" (mamba)
  - centered icons in tables (mamba)
  - some English updates (mamba)
@@ -21,8 +29,8 @@ Version 1.3     NOT RELEASED
  - normalized prefixes for language constants to XNEWSLETTER (mamba)
  - replaced $i++ with ++$i (mamba)
 
-Version 1.2
---------------
+<h5>1.2</h5>
+<hr>
  - standardize code (luciorota)
  - added newsletter info field is html compatible (luciorota)
  - added new tag <{$title}> in letter templates (luciorota)
@@ -48,8 +56,8 @@ Version 1.2
  - Update Adminindex (alfred)
  - fix userinput (alfred)
 
-Version 1.1
---------------
+<h5>1.1</h5>
+<hr>
  - Add option to send newsletters in packages by using a cronjob (goffy)
  - Rebuilt importtool based on temporary table (goffy)
  - Changed table names to new xoops table scheme(table name starts with mod_) (goffy)
@@ -59,6 +67,6 @@ Version 1.1
  - fix error none subscriber for send newsletter (goffy)
  - fix error in blocks (goffy)
 
-Version 1.0
---------------
+<h5>1.0</h5>
+<hr>
  - Original release xnewsletter (goffy,alfred)

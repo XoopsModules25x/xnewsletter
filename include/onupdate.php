@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -31,7 +30,6 @@
  *
  * @return bool
  */
-
 function xoops_module_update_xnewsletter(\XoopsObject $xoopsModule, $oldversion = null)
 {
     if (100 == $oldversion) {
@@ -58,14 +56,14 @@ function xoops_module_update_xnewsletter_130()
     // change module dirname to lowercase
     $path    = dirname(__DIR__);
     $dirname = basename(dirname(__DIR__));
-    rename($path, strtolower($dirname));
+    rename($path, mb_strtolower($dirname));
     // update module dirname field in database to lowercase
     global $xoopsDB;
-    $sql    = "UPDATE `{$xoopsDB->prefix('modules')}` SET `dirname` = '" . strtolower($dirname) . "'";
-    $sql    .= " WHERE LOWER(`dirname`) = '" . strtolower($dirname) . "';";
+    $sql    = "UPDATE `{$xoopsDB->prefix('modules')}` SET `dirname` = '" . mb_strtolower($dirname) . "'";
+    $sql    .= " WHERE LOWER(`dirname`) = '" . mb_strtolower($dirname) . "';";
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": UPDATE 'modules' SET `dirname` = '" . strtolower($dirname) . "'";
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": UPDATE 'modules' SET `dirname` = '" . mb_strtolower($dirname) . "'";
     }
 
     // reverse 'mod_' prefix on tables
@@ -161,7 +159,7 @@ function xoops_module_update_xnewsletter_130()
     $folderHandler->delete($cssFile);
 
     //delete .html entries from the tpl table
-    $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE LOWER(`tpl_module`) = '" . strtolower($dirname) . "' AND `tpl_file` LIKE '%.html%'";
+    $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE LOWER(`tpl_module`) = '" . mb_strtolower($dirname) . "' AND `tpl_file` LIKE '%.html%'";
     $GLOBALS['xoopsDB']->queryF($sql);
 
     return true;

@@ -1,6 +1,6 @@
 <{include file="db:xnewsletter_header.tpl"}>
 
-<{if (($actionProts_ok|@count gt 0) or ($actionProts_warning|@count gt 0) or ($actionProts_error|@count gt 0))}>
+<{if (($actionProts_ok|@count gt 0) || ($actionProts_warning|@count gt 0) || ($actionProts_error|@count gt 0))}>
     <{foreach item='actionProt_ok' from=$actionProts_ok}>
         <div>
         <span class="left" style="display: inline-block; height: 100%; vertical-align: middle;">

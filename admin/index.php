@@ -17,34 +17,31 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
-
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // count "total"
-$catCount        = $xnewsletter->getHandler('cat')->getCount();
-$accountsCount   = $xnewsletter->getHandler('accounts')->getCount();
-$subscrCount     = $xnewsletter->getHandler('subscr')->getCount();
-$catsubscrCount  = $xnewsletter->getHandler('catsubscr')->getCount();
-$letterCount     = $xnewsletter->getHandler('letter')->getCount();
-$protocolCount   = $xnewsletter->getHandler('protocol')->getCount();
-$attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
-if (true === $xnewsletter->getConfig('xn_use_mailinglist')) {
-    $mailinglistCount = $xnewsletter->getHandler('mailinglist')->getCount();
+$catCount        = $helper->getHandler('Cat')->getCount();
+$accountsCount   = $helper->getHandler('Accounts')->getCount();
+$subscrCount     = $helper->getHandler('Subscr')->getCount();
+$catsubscrCount  = $helper->getHandler('Catsubscr')->getCount();
+$letterCount     = $helper->getHandler('Letter')->getCount();
+$protocolCount   = $helper->getHandler('Protocol')->getCount();
+$attachmentCount = $helper->getHandler('Attachment')->getCount();
+if (true === $helper->getConfig('xn_use_mailinglist')) {
+    $mailinglistCount = $helper->getHandler('Mailinglist')->getCount();
 }
-$bmhCount = $xnewsletter->getHandler('bmh')->getCount();
-if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    $taskCount = $xnewsletter->getHandler('task')->getCount();
+$bmhCount = $helper->getHandler('Bmh')->getCount();
+if ($helper->getConfig('xn_send_in_packages') > 0) {
+    $taskCount = $helper->getHandler('Task')->getCount();
 }
 
 define('_RED', '#FF0000'); // red color
@@ -62,10 +59,10 @@ $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_CATSUBSCR, $catsub
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_LETTER, $letterCount), '', (0 == $letterCount) ? _RED : _GREEN);
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_ATTACHMENT, $attachmentCount), '', (0 == $attachmentCount) ? _RED : _GREEN);
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_PROTOCOL, $protocolCount), '', (0 == $protocolCount) ? _RED : _GREEN);
-if (true === $xnewsletter->getConfig('xn_use_mailinglist')) {
+if (true === $helper->getConfig('xn_use_mailinglist')) {
     $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_MAILINGLIST, $mailinglistCount), '', (0 == $mailinglistCount) ? _RED : _GREEN);
 }
-if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
+if ($helper->getConfig('xn_send_in_packages') > 0) {
     $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_TASK, $taskCount), '', (0 == $taskCount) ? _RED : _GREEN);
 }
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_BMH, $bmhCount), '', (0 == $bmhCount) ? _RED : _GREEN);

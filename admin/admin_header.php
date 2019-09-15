@@ -17,31 +17,31 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
 
-require_once  dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+use XoopsModules\Xnewsletter;
+
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 //require_once $GLOBALS['xoops']->path('www/class/xoopsformloader.php');
 
 // require_once  dirname(__DIR__) . '/class/Utility.php';
-require_once  dirname(__DIR__) . '/include/common.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
 $moduleDirName = basename(dirname(__DIR__));
 
-$pathIcon16      = \Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon16      = \Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 32);
 
 //Load languages
-xoops_loadLanguage('admin', $xnewsletter->getModule()->dirname());
-xoops_loadLanguage('modinfo', $xnewsletter->getModule()->dirname());
-xoops_loadLanguage('main', $xnewsletter->getModule()->dirname());
+xoops_loadLanguage('admin', $helper->getModule()->dirname());
+xoops_loadLanguage('modinfo', $helper->getModule()->dirname());
+xoops_loadLanguage('main', $helper->getModule()->dirname());
 
 define('XNEWSLETTER_IMG_OK', "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_ok.png' alt='" . _AM_XNEWSLETTER_OK . "' title='" . _AM_XNEWSLETTER_OK . "'>&nbsp;&nbsp;");
 define('XNEWSLETTER_IMG_FAILED', "<img src='" . XNEWSLETTER_ICONS_URL . "/xn_failed.png' alt='" . _AM_XNEWSLETTER_FAILED . "' title='" . _AM_XNEWSLETTER_FAILED . "'>&nbsp;&nbsp;");
@@ -60,7 +60,7 @@ $myts = \MyTextSanitizer::getInstance();
 
 if ($xoopsUser) {
     $grouppermHandler = xoops_getHandler('groupperm');
-    if (!$grouppermHandler->checkRight('module_admin', $xnewsletter->getModule()->mid(), $xoopsUser->getGroups())) {
+    if (!$grouppermHandler->checkRight('module_admin', $helper->getModule()->mid(), $xoopsUser->getGroups())) {
         redirect_header(XOOPS_URL, 1, _NOPERM);
     }
 } else {

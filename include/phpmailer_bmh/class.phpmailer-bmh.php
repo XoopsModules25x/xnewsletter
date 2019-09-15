@@ -40,9 +40,7 @@ Last updated: January 21 2009 13:49 EST */
  * @copyright 2008-2009, Andy Prevost
  * @license   GPL licensed
  * @link      http://sourceforge.net/projects/bmh
- *
  */
-
 require_once dirname(dirname(dirname(dirname(__DIR__)))) . '/mainfile.php';
 require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/phpmailer-bmh_rules.php';
 
@@ -56,7 +54,6 @@ define('VERBOSE_DEBUG', 3); // means output detail report as well as debug info.
  */
 class BounceMailHandler
 {
-
     /////////////////////////////////////////////////
     // PROPERTIES, PUBLIC
     /////////////////////////////////////////////////
@@ -142,14 +139,14 @@ class BounceMailHandler
     /**
      * Test mode, if true will not delete messages
      *
-     * @var boolean
+     * @var bool
      */
     public $testmode = false;
 
     /**
      * Purge the unknown messages (or not)
      *
-     * @var boolean
+     * @var bool
      */
     public $purge_unprocessed = false;
 
@@ -163,14 +160,14 @@ class BounceMailHandler
     /**
      * control the failed DSN rules output
      *
-     * @var boolean
+     * @var bool
      */
     public $debug_dsn_rule = false;
 
     /**
      * control the failed BODY rules output
      *
-     * @var boolean
+     * @var bool
      */
     public $debug_body_rule = false;
 
@@ -181,14 +178,14 @@ class BounceMailHandler
      * a bit faster than imap_fetchstructure function and take less resources.
      * however - the difference is negligible
      *
-     * @var boolean
+     * @var bool
      */
     public $use_fetchstructure = true;
 
     /**
      * If disable_delete is equal to true, it will disable the delete function
      *
-     * @var boolean
+     * @var bool
      */
     public $disable_delete = false;
 
@@ -282,16 +279,15 @@ class BounceMailHandler
         if ($this->verbose >= $verbose_level) {
             if (empty($msg)) {
                 echo $this->error_msg . $this->bmh_newline;
-            } else {
-                //echo $msg . $this->bmh_newline;
             }
+            //echo $msg . $this->bmh_newline;
         }
     }
 
     /**
      * Open a mail box
      *
-     * @return boolean
+     * @return bool
      */
     public function openMailbox()
     {
@@ -319,11 +315,10 @@ class BounceMailHandler
             $this->output();
 
             return false;
-        } else {
-            $this->output('Connected to: ' . $this->mailhost . ' (' . $this->mailbox_username . ')');
-
-            return true;
         }
+        $this->output('Connected to: ' . $this->mailhost . ' (' . $this->mailbox_username . ')');
+
+        return true;
     }
 
     /**
@@ -331,7 +326,7 @@ class BounceMailHandler
      *
      * @param string $file_path (The local mailbox file path)
      *
-     * @return boolean
+     * @return bool
      */
     public function openLocal($file_path)
     {
@@ -346,11 +341,10 @@ class BounceMailHandler
             $this->output();
 
             return false;
-        } else {
-            $this->output('Opened ' . $file_path);
-
-            return true;
         }
+        $this->output('Opened ' . $file_path);
+
+        return true;
     }
 
     /**
@@ -358,7 +352,7 @@ class BounceMailHandler
      *
      * @param bool|string $max (maximum limit messages processed in one batch, if not given uses the property $max_messages
      *
-     * @return boolean
+     * @return bool
      */
     public function processMailbox($max = false)
     {
@@ -510,7 +504,7 @@ class BounceMailHandler
      * @param string $varKey         (imap_fetstructure key)
      * @param string $varValue       (value to check for)
      *
-     * @return boolean
+     * @return bool
      */
     public function isParameter($currParameters, $varKey, $varValue)
     {
@@ -532,11 +526,11 @@ class BounceMailHandler
      * @param string $type         (DNS or BODY type)
      * @param string $totalFetched (total number of messages in mailbox)
      *
-     * @return boolean
+     * @return bool
      */
     public function processBounce($pos, $type, $totalFetched)
     {
-        $header  = imap_header($this->_mailbox_link, $pos);
+        $header  = imap_headerinfo($this->_mailbox_link, $pos);
         $subject = strip_tags($header->subject);
         if ('DSN' === $type) {
             // first part of DSN (Delivery Status Notification), human-readable explanation
@@ -546,7 +540,7 @@ class BounceMailHandler
             if (4 == $dsn_msg_structure->encoding) {
                 $dsn_msg = quoted_printable_decode($dsn_msg);
             } elseif (3 == $dsn_msg_structure->encoding) {
-                $dsn_msg = base64_decode($dsn_msg);
+                $dsn_msg = base64_decode($dsn_msg, true);
             }
 
             // second part of DSN (Delivery Status Notification), delivery-status
@@ -564,7 +558,7 @@ class BounceMailHandler
                     if (4 == $structure->parts[0]->encoding) {
                         $body = quoted_printable_decode($body);
                     } elseif (3 == $structure->parts[0]->encoding) {
-                        $body = base64_decode($body);
+                        $body = base64_decode($body, true);
                     }
                     $result = bmhBodyRules($body, $structure, $this->debug_body_rule);
                     break;
@@ -573,9 +567,9 @@ class BounceMailHandler
                     if (4 == $structure->encoding) {
                         $body = quoted_printable_decode($body);
                     } elseif (3 == $structure->encoding) {
-                        $body = base64_decode($body);
+                        $body = base64_decode($body, true);
                     }
-                    $body   = substr($body, 0, 1000);
+                    $body   = mb_substr($body, 0, 1000);
                     $result = bmhBodyRules($body, $structure, $this->debug_body_rule);
                     break;
                 default: // unsupport Content-type
@@ -621,7 +615,7 @@ class BounceMailHandler
                 $remove,
                 $rule_no,
                 $rule_cat,
-                $totalFetched
+                $totalFetched,
             ];
             call_user_func_array($this->action_function, $params);
         } else { // match rule, do bounce action
@@ -629,21 +623,20 @@ class BounceMailHandler
                 $this->output('Match: ' . $rule_no . ':' . $rule_cat . '; ' . $bounce_type . '; ' . $email);
 
                 return true;
-            } else {
-                $params = [
-                    $pos,
-                    $bounce_type,
-                    $email,
-                    $subject,
-                    $xheader,
-                    $remove,
-                    $rule_no,
-                    $rule_cat,
-                    $totalFetched
-                ];
-
-                return call_user_func_array($this->action_function, $params);
             }
+            $params = [
+                $pos,
+                $bounce_type,
+                $email,
+                $subject,
+                $xheader,
+                $remove,
+                $rule_no,
+                $rule_cat,
+                $totalFetched,
+            ];
+
+            return call_user_func_array($this->action_function, $params);
         }
 
         return null;
@@ -653,14 +646,14 @@ class BounceMailHandler
      * Function to check if a mailbox exists
      * - if not found, it will create it
      *
-     * @param string  $mailbox (the mailbox name, must be in 'INBOX.checkmailbox' format)
-     * @param boolean $create  (whether or not to create the checkmailbox if not found, defaults to true)
+     * @param string $mailbox (the mailbox name, must be in 'INBOX.checkmailbox' format)
+     * @param bool   $create  (whether or not to create the checkmailbox if not found, defaults to true)
      *
-     * @return boolean
+     * @return bool
      */
     public function mailbox_exist($mailbox, $create = true)
     {
-        if ('' == trim($mailbox) || false === strpos($mailbox, 'INBOX.')) {
+        if ('' == trim($mailbox) || false === mb_strpos($mailbox, 'INBOX.')) {
             // this is a critical error with either the mailbox name blank or an invalid mailbox name
             // need to stop processing and exit at this point
             echo "Invalid mailbox name for move operation. Cannot continue.<br>\n";
@@ -685,16 +678,14 @@ class BounceMailHandler
                 imap_close($mbox);
 
                 return true;
-            } else {
-                imap_close($mbox);
-
-                return false;
             }
-        } else {
             imap_close($mbox);
 
             return false;
         }
+        imap_close($mbox);
+
+        return false;
     }
 
     /**
@@ -702,7 +693,6 @@ class BounceMailHandler
      * NOTE: this is global ... will affect all mailboxes except any that have 'sent' in the mailbox name
      *
      * @internal param string $mailbox (the mailbox name)
-     * @return void
      */
     public function globalDelete()
     {
@@ -718,13 +708,13 @@ class BounceMailHandler
                 // get the mailbox name only
                 $nameArr = explode('}', imap_utf7_decode($val->name));
                 $nameRaw = $nameArr[count($nameArr) - 1];
-                if (false === stripos($nameRaw, 'sent')) {
+                if (false === mb_stripos($nameRaw, 'sent')) {
                     $mboxd    = imap_open('{' . $this->mailhost . ':' . $port . '}' . $nameRaw, $this->mailbox_username, $this->mailbox_password, CL_EXPUNGE);
                     $messages = imap_sort($mboxd, SORTDATE, 0);
                     $i        = 0;
                     $check    = imap_mailboxmsginfo($mboxd);
                     foreach ($messages as $message) {
-                        $header = imap_header($mboxd, $message);
+                        $header = imap_headerinfo($mboxd, $message);
                         $fdate  = date('F j, Y', $header->udate);
                         // purge if prior to global delete date
                         if ($header->udate < $delDate) {
@@ -737,7 +727,5 @@ class BounceMailHandler
                 }
             }
         }
-
-        return;
     }
 }

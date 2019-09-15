@@ -15,10 +15,11 @@
  * @param string  $rule_cat      Bounce Mail Handler detect rule category.
  * @param int     $totalFetched  total number of messages in the mailbox
  * @return boolean
- *  Version :
  */
 
-require_once __DIR__ . 'admin_header.php';
+use XoopsModules\Xnewsletter;
+
+require_once __DIR__ . '/admin_header.php';
 
 /**
  * @param      $msgnum
@@ -42,13 +43,13 @@ function callbackAction(
     $remove,
     $rule_no = false,
     $rule_cat = false,
-    $totalFetched = 0
-) {
+    $totalFetched = 0)
+{
     global $xoopsUser;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
     if ('0000' != $rule_no) {
-        $bmhObj = $xnewsletter->getHandler('bmh')->create();
+        $bmhObj = $helper->getHandler('Bmh')->create();
         $bmhObj->setVar('bmh_rule_no', $rule_no);
         $bmhObj->setVar('bmh_rule_cat', $rule_cat);
         $bmhObj->setVar('bmh_bouncetype', $bounce_type);
@@ -59,8 +60,8 @@ function callbackAction(
         $bmhObj->setVar('bmh_measure', '0');
         $bmhObj->setVar('bmh_submitter', $xoopsUser->uid());
         $bmhObj->setVar('bmh_created', time());
-        //
-        if (!$xnewsletter->getHandler('bmh')->insert($bmhObj)) {
+
+        if (!$helper->getHandler('Bmh')->insert($bmhObj)) {
             echo $bmhObj->getHtmlErrors();
 
             return false;

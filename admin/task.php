@@ -32,12 +32,12 @@ switch ($op) {
     case 'list':
     default:
         $adminObject->displayNavigation($currentFile);
-        //
+
         $taskCriteria = new \CriteriaCompo();
         $taskCriteria->setSort('task_id');
         $taskCriteria->setOrder('ASC');
-        $taskCounts = $xnewsletter->getHandler('task')->getCount();
-        $taskObjs   = $xnewsletter->getHandler('task')->getAll($taskCriteria);
+        $taskCounts = $helper->getHandler('Task')->getCount();
+        $taskObjs   = $helper->getHandler('Task')->getAll($taskCriteria);
 
         //Affichage du tableau
         echo "
@@ -57,14 +57,14 @@ switch ($op) {
                     echo "<tr class='{$class}'>";
                     $class = ('even' === $class) ? 'odd' : 'even';
 
-                    $letterObj    = $xnewsletter->getHandler('letter')->get($taskObj->getVar('task_letter_id'));
+                    $letterObj    = $helper->getHandler('Letter')->get($taskObj->getVar('task_letter_id'));
                     $title_letter = $letterObj->getVar('letter_title');
                     echo '<td>' . $title_letter . '</td>';
                     if (0 == $taskObj->getVar('task_subscr_id')) {
                         //send_test
                         $title_subscr = $letterObj->getVar('letter_email_test') . '<br>(send_test)';
                     } else {
-                        $subscr = $xnewsletter->getHandler('subscr')->get($taskObj->getVar('task_subscr_id'));
+                        $subscr = $helper->getHandler('Subscr')->get($taskObj->getVar('task_subscr_id'));
                         if (is_object($subscr)) {
                             $title_subscr = $subscr->getVar('subscr_email');
                         } else {
@@ -87,14 +87,13 @@ switch ($op) {
         }
         echo '</table><br><br>';
         break;
-
     case 'delete_task':
-        $taskObj = $xnewsletter->getHandler('task')->get($_REQUEST['task_id']);
+        $taskObj = $helper->getHandler('Task')->get($_REQUEST['task_id']);
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
-            if ($xnewsletter->getHandler('task')->delete($taskObj)) {
+            if ($helper->getHandler('Task')->delete($taskObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $taskObj->getHtmlErrors();

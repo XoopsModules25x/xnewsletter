@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -50,15 +49,15 @@ switch ($op) {
     case 'show_formcheck':
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         $adminObject->displayButton('left');
-        //
+
         $importCriteria = new \CriteriaCompo();
         $importCriteria->setSort('import_id');
         $importCriteria->setOrder('ASC');
-        $importsCount = $xnewsletter->getHandler('import')->getCount($importCriteria);
+        $importsCount = $helper->getHandler('Import')->getCount($importCriteria);
 
         $importCriteria->setStart($start);
         $importCriteria->setLimit($limitcheck);
-        $importObjs = $xnewsletter->getHandler('import')->getAll($importCriteria);
+        $importObjs = $helper->getHandler('Import')->getAll($importCriteria);
 
         if ($importsCount > 0) {
             require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
@@ -102,7 +101,7 @@ switch ($op) {
             $catCriteria = new \CriteriaCompo();
             $catCriteria->setSort('cat_id ASC, cat_name');
             $catCriteria->setOrder('ASC');
-            $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
+            $catObjs = $helper->getHandler('Cat')->getAll($catCriteria);
 
             foreach ($importObjs as $i => $importObj) {
                 ++$counter;
@@ -201,7 +200,6 @@ switch ($op) {
             echo $form;
         }
         break;
-
     case 'apply_import_form':
         //update xnewsletter with settings form_import
         $counter = Request::getInt('counter', 0);
@@ -231,20 +229,19 @@ switch ($op) {
 
         redirect_header("?op=exec_import_final&check_import=1&limitcheck={$limitcheck}", 0, '');
         break;
-
     case 'exec_import_final':
         //execute final import of all data from xnewsletter_import, where import_status = true
         //delete data from xnewsletter_import, when imported (successful or not)
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         $adminObject->displayButton('left');
-        //
+
         $ip        = xoops_getenv('REMOTE_ADDR');
         $submitter = $xoopsUser->uid();
 
         $importCriteria = new \CriteriaCompo();
         $importCriteria->add(new \Criteria('import_status', true));
-        $numrows_total = $xnewsletter->getHandler('import')->getCount();
-        $numrows_act   = $xnewsletter->getHandler('import')->getCount($importCriteria);
+        $numrows_total = $helper->getHandler('Import')->getCount();
+        $numrows_act   = $helper->getHandler('Import')->getCount($importCriteria);
         if ($numrows_act > 0) {
             $sql     = 'SELECT *';
             $sql     .= " FROM {$xoopsDB->prefix('xnewsletter_import')}";
@@ -343,7 +340,7 @@ switch ($op) {
             echo XNEWSLETTER_IMG_OK . $resulttext;
             echo '</div>';
 
-            $numrows_pend = $xnewsletter->getHandler('xnewsletter_import')->getCount();
+            $numrows_pend = $helper->getHandler('Xnewsletter_import')->getCount();
             if ($numrows_pend > 0) {
                 $form_continue = "<form id='form_continue' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_continue'>";
                 $form_continue .= "<input id='submit' class='formButton' type='submit' title='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' value='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' name='submit'>";
@@ -369,7 +366,6 @@ switch ($op) {
             echo _AM_XNEWSLETTER_IMPORT_NODATA;
         }
         break;
-
     case 'searchdata':
         //delete all existing data, import data into xnewsletter_import with plugin
         //set cat_id as preselected, update information about existing registration/subscriptions
@@ -384,7 +380,7 @@ switch ($op) {
 
         $function = 'xnewsletter_plugin_getdata_' . $plugin;
         if (!function_exists($function)) {
-            echo "Error: require function 'xnewsletter_plugin_getdata_{$plugin}' doesn't exist";
+            echo "Error: require_once function 'xnewsletter_plugin_getdata_{$plugin}' doesn't exist";
             echo str_replace('%f', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION);
             break;
         }
@@ -423,12 +419,11 @@ switch ($op) {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_IMPORT_NODATA);
         }
         break;
-
     case 'form_additional':
         //show form for additional settings
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
         $adminObject->displayButton('left');
-        //
+
         $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/{$plugin}.php";
         if (!file_exists($pluginFile)) {
             echo str_replace('%p', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
@@ -445,11 +440,10 @@ switch ($op) {
         $form = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist);
         $form->display();
         break;
-
     case 'default':
     default:
         //show basic search form
-        $importObj = $xnewsletter->getHandler('import')->create();
+        $importObj = $helper->getHandler('Import')->create();
         $form      = $importObj->getSearchForm($plugin, $action_after_read, $limitcheck);
         $form->display();
         break;

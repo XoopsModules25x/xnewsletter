@@ -5,7 +5,6 @@
  * @package PHPMailer
  * @author  Александар Јевремовић <ajevremovic@gmail.com>
  */
-
 $PHPMAILER_LANG['authenticate']         = 'SMTP грешка: аутентификација није успела.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP грешка: није могуће повезивање са SMTP сервером.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP грешка: подаци нису прихваћени.';

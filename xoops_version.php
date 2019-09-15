@@ -17,26 +17,29 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
+use XoopsModules\Xnewsletter;
+
 require_once __DIR__ . '/preloads/autoloader.php';
+
+/** @var \XoopsModules\Xnewsletter\Helper $helper */
+$helper = \XoopsModules\Xnewsletter\Helper::getInstance();
 
 $mydirname = basename(__DIR__);
 xoops_load('XoopsLists');
 
-$modversion['version']             = 1.3;
+$modversion['version']             = 1.4;
 $modversion['module_status']       = 'Beta 1';
-$modversion['release_date']        = '2017/09/16';
+$modversion['release_date']        = '2018/11/27';
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
 $modversion['author']              = 'Goffy, Alfred';
@@ -64,7 +67,7 @@ $modversion['release_file']        = XOOPS_URL . '/modules/' . $mydirname . '/do
 $modversion['manual']      = 'xnewsletter.txt';
 $modversion['manual_file'] = XOOPS_URL . "/modules/{$mydirname}/docs/";
 $modversion['min_php']     = '5.5';
-$modversion['min_xoops']   = '2.5.9';
+$modversion['min_xoops']   = '2.5.10';
 $modversion['min_admin']   = '1.1';
 $modversion['min_db']      = ['mysql' => '5.5'];
 
@@ -82,7 +85,6 @@ $modversion['helpsection'] = [
     ['name' => _MI_XNEWSLETTER_SUPPORT, 'link' => 'page=support'],
     ['name' => _MI_XNEWSLETTER_INSTALL, 'link' => 'page=help2'],
 ];
-
 
 // Admin things
 $modversion['hasAdmin'] = 1;
@@ -107,7 +109,7 @@ $modversion['tables'] = [
     'xnewsletter_bmh',
     'xnewsletter_import',
     'xnewsletter_task',
-    'xnewsletter_template'
+    'xnewsletter_template',
 ];
 
 // Scripts to run upon installation or update
@@ -127,7 +129,7 @@ $modversion['sub'] = [];
 
 // check user rights
 $grouppermHandler = xoops_getHandler('groupperm');
-/** @var XoopsModuleHandler $moduleHandler */
+/** @var \XoopsModuleHandler $moduleHandler */
 $moduleHandler = xoops_getHandler('module');
 $memberHandler = xoops_getHandler('member');
 $uid           = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
@@ -140,7 +142,8 @@ $showCreate = false;
 $showList   = false;
 
 if (is_object($xoopsModule)) {
-    $catHandler  = xoops_getModuleHandler('cat', 'xnewsletter');
+    //    $catHandler  = xoops_getModuleHandler('cat', 'xnewsletter');
+    $catHandler  = $helper->getHandler('Cat');
     $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
@@ -186,61 +189,61 @@ if (true === $showList) {
 $modversion['templates'] = [
     [
         'file'        => $mydirname . '_header.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_footer.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_empty.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_index.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_subscription.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_subscription_result.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_subscription_list_subscriptions.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_letter.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_letter_print.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_letter_preview.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_letter_list_letters.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_letter_list_subscrs.tpl',
-        'description' => ''
+        'description' => '',
     ],
     [
         'file'        => $mydirname . '_protocol.tpl',
-        'description' => ''
+        'description' => '',
     ],
     // Common templates
     [
         'file'        => $mydirname . '_common_breadcrumb.tpl',
-        'description' => ''
-    ]
+        'description' => '',
+    ],
 ];
 
 unset($i);
@@ -296,7 +299,7 @@ $modversion['config'][$i]['default']     = [
     'application/pdf',
     'image/gif',
     'image/jpeg',
-    'image/png'
+    'image/png',
 ];
 $modversion['config'][$i]['options']     = [
     'pdf'  => 'application/pdf',
@@ -320,7 +323,7 @@ $modversion['config'][$i]['options']     = [
     'tif'  => 'image/tif',
     'asc'  => 'text/plain',
     'txt'  => 'text/plain',
-    'rtf'  => 'text/rtf'
+    'rtf'  => 'text/rtf',
 ];
 
 ++$i;
@@ -345,7 +348,7 @@ $modversion['config'][$i] = [
     'description' => '_MI_XNEWSLETTER_DATEFORMATDSC',
     'formtype'    => 'textbox',
     'valuetype'   => 'text',
-    'default'     => _DATESTRING
+    'default'     => _DATESTRING,
 ]; //'D, d-M-Y');
 ++$i;
 $modversion['config'][$i]['name']        = 'welcome_message';
@@ -408,7 +411,7 @@ $modversion['config'][$i]['options']     = [
     _MI_XNEWSLETTER_CONFIRMATION_TIME_1  => 1,
     _MI_XNEWSLETTER_CONFIRMATION_TIME_6  => 6,
     _MI_XNEWSLETTER_CONFIRMATION_TIME_24 => 24,
-    _MI_XNEWSLETTER_CONFIRMATION_TIME_48 => 48
+    _MI_XNEWSLETTER_CONFIRMATION_TIME_48 => 48,
 ];
 ++$i;
 $modversion['config'][$i]['name']        = 'xn_groups_change_other';
@@ -446,7 +449,7 @@ $modversion['blocks'][$b] = [
     'edit_func'   => '',
     'template'    => 'xnewsletter_subscrinfo_block.tpl',
     'can_clone'   => true,
-    'options'     => ''
+    'options'     => '',
 ];
 
 $b++;
@@ -458,7 +461,7 @@ $modversion['blocks'][$b] = [
     'edit_func'   => 'b_xnewsletter_catsubscr_edit',
     'template'    => 'xnewsletter_catsubscr_block_recent.tpl',
     'can_clone'   => true,
-    'options'     => 'recent|5|0|0'
+    'options'     => 'recent|5|0|0',
 ];
 
 $b++;
@@ -470,7 +473,7 @@ $modversion['blocks'][$b] = [
     'edit_func'   => 'b_xnewsletter_catsubscr_edit',
     'template'    => 'xnewsletter_catsubscr_block_day.tpl',
     'can_clone'   => true,
-    'options'     => 'day|5|0|0'
+    'options'     => 'day|5|0|0',
 ];
 
 $b++;
@@ -482,7 +485,7 @@ $modversion['blocks'][$b] = [
     'edit_func'   => 'b_xnewsletter_letter_edit',
     'template'    => 'xnewsletter_letter_block_recent.tpl',
     'can_clone'   => true,
-    'options'     => 'recent|5|0|0'
+    'options'     => 'recent|5|0|0',
 ];
 
 $b++;
@@ -494,7 +497,7 @@ $modversion['blocks'][$b] = [
     'edit_func'   => 'b_xnewsletter_letter_edit',
     'template'    => 'xnewsletter_letter_block_day.tpl',
     'can_clone'   => true,
-    'options'     => 'day|5|0|0'
+    'options'     => 'day|5|0|0',
 ];
 
 $b++;
@@ -506,5 +509,5 @@ $modversion['blocks'][$b] = [
     'edit_func'   => 'b_xnewsletter_letter_edit',
     'template'    => 'xnewsletter_letter_block_random.tpl',
     'can_clone'   => true,
-    'options'     => 'random|5|0|0'
+    'options'     => 'random|5|0|0',
 ];

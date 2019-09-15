@@ -17,13 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GNU General Public License 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
 
@@ -42,16 +40,16 @@ switch ($op) {
     default:
         $adminObject->displayNavigation($currentFile);
         $adminObject->displayButton('left');
-        //
-        $limit              = $xnewsletter->getConfig('adminperpage');
+
+        $limit              = $helper->getConfig('adminperpage');
         $attachmentCriteria = new \CriteriaCompo();
         $attachmentCriteria->setSort('attachment_letter_id DESC, attachment_id');
         $attachmentCriteria->setOrder('DESC');
-        $attachmentCount = $xnewsletter->getHandler('attachment')->getCount();
+        $attachmentCount = $helper->getHandler('Attachment')->getCount();
         $start           = Request::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
-        $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentCriteria, true);
+        $attachmentObjs = $helper->getHandler('Attachment')->getObjects($attachmentCriteria, true);
         if ($attachmentCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new \XoopsPageNav($attachmentCount, $limit, $start, 'start', 'op=list');
@@ -73,7 +71,7 @@ switch ($op) {
         if ($attachmentCount > 0) {
             $class = 'odd';
             foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
-                $letterObj = $xnewsletter->getHandler('letter')->get($attachmentObj->getVar('attachment_letter_id'));
+                $letterObj = $helper->getHandler('Letter')->get($attachmentObj->getVar('attachment_letter_id'));
                 echo "<tr class='{$class}'>";
                 $class = ('even' === $class) ? 'odd' : 'even';
                 echo "<td class='center'>{$attachment_id}</td>";
@@ -98,26 +96,24 @@ switch ($op) {
         echo '<div>' . $pagenav . '</div>';
         echo '<br>';
         break;
-
     case 'edit_attachment':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_ATTACHMENTLIST, '?op=list', 'list');
         $adminObject->displayButton('left');
-        //
-        $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
+
+        $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
         $form          = $attachmentObj->getForm();
         $form->display();
         break;
-
     case 'save_attachment':
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        //
-        $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
+
+        $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
         $attachmentObj->setVar('attachment_mode', Request::getInt('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
-        //
-        if ($xnewsletter->getHandler('attachment')->insert($attachmentObj)) {
+
+        if ($helper->getHandler('Attachment')->insert($attachmentObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         } else {
             echo $attachmentObj->getHtmlErrors();
@@ -125,14 +121,13 @@ switch ($op) {
             $form->display();
         }
         break;
-
     case 'delete_attachment':
-        $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
+        $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
-            if ($xnewsletter->getHandler('attachment')->delete($attachmentObj)) {
+            if ($helper->getHandler('Attachment')->delete($attachmentObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $attachmentObj->getHtmlErrors();

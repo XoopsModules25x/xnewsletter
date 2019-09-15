@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Newsletter;
+<?php
+
+namespace XoopsModules\Newsletter;
 
 /*
  You may not change or alter any portion of this comment or credits

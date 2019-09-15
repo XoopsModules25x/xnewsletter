@@ -1,11 +1,9 @@
 <?php
 /**
  * Georgian PHPMailer language file: refer to English translation for definitive list
- *
  * @package PHPMailer
  * @author  Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
  */
-
 $PHPMAILER_LANG['authenticate']         = 'SMTP შეცდომა: ავტორიზაცია შეუძლებელია.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP შეცდომა: SMTP სერვერთან დაკავშირება შეუძლებელია.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP შეცდომა: მონაცემები არ იქნა მიღებული.';
@@ -24,3 +22,4 @@ $PHPMAILER_LANG['signing']              = 'ხელმოწერის შე
 $PHPMAILER_LANG['smtp_connect_failed']  = 'შეცდომა SMTP სერვერთან დაკავშირებისას';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP სერვერის შეცდომა: ';
 $PHPMAILER_LANG['variable_set']         = 'შეუძლებელია შემდეგი ცვლადის შექმნა ან შეცვლა: ';
+$PHPMAILER_LANG['extension_missing']    = 'ბიბლიოთეკა არ არსებობს: ';

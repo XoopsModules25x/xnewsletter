@@ -17,17 +17,18 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-require_once  dirname(__DIR__) . '/include/common.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @return array
@@ -62,13 +63,13 @@ function xnewsletter_plugin_getdata_csv(
     $cat_id,
     $action_after_read,
     $limitCheck,
-    $skipCatsubscrExist = true,
+    $skipCatsubscrExist,
     $file,
     $delimiter,
-    $header = true
-) {
+    $header = true)
+{
     global $xoopsDB;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
     //$table_import = $xoopsDB->prefix('xnewsletter_import');
     $import_status = 0 == $action_after_read ? true : false;
@@ -95,7 +96,7 @@ function xnewsletter_plugin_getdata_csv(
                         // NOP
                     } else {
                         $current_cat_id = $catsubscr_id > 0 ? 0 : $cat_id;
-                        $importObj      = $xnewsletter->getHandler('import')->create();
+                        $importObj      = $helper->getHandler('Import')->create();
                         $importObj->setVar('import_email', $email);
                         $importObj->setVar('import_sex', $sex);
                         $importObj->setVar('import_firstname', $firstname);
@@ -104,13 +105,13 @@ function xnewsletter_plugin_getdata_csv(
                         $importObj->setVar('import_subscr_id', $subscr_id);
                         $importObj->setVar('import_catsubscr_id', $catsubscr_id);
                         $importObj->setVar('import_status', $import_status);
-                        if (!$xnewsletter->getHandler('import')->insert($importObj)) {
+                        if (!$helper->getHandler('Import')->insert($importObj)) {
                             echo $importObj->getHtmlErrors();
                             exit();
                         }
                         //                    $sql = "INSERT INTO {$table_import} (import_email, import_sex, import_firstname, import_lastname, import_cat_id, import_subscr_id, import_catsubscr_id, import_status)";
                         //                    $sql .= " VALUES ('$email', '$sex', '$firstname', '$lastname', $current_cat_id, $subscr_id, $catsubscr_id, $import_status)";
-                        //                    $result_insert = $xoopsDB->query($sql) || die ("MySQL-Error: " . $GLOBALS['xoopsDB']->error());
+                        //                    $result_insert = $xoopsDB->query($sql) or die ("MySQL-Error: " . $GLOBALS['xoopsDB']->error());
                         ++$j;
                     }
                 }
@@ -143,8 +144,8 @@ function xnewsletter_plugin_getform_csv(
     $action_after_read,
     $limitCheck,
     $skipCatsubscrExist,
-    $action = false
-) {
+    $action = false)
+{
     if (false === $action) {
         $action = $_SERVER['REQUEST_URI'];
     }

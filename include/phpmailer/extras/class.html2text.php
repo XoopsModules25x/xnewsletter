@@ -45,7 +45,7 @@ class Html2Text
      * Set this value to 0 (or less) to ignore word wrapping
      * and not constrain text to a fixed-width column.
      *
-     * @type integer
+     * @type int
      */
     protected $width = 70;
 
@@ -78,7 +78,7 @@ class Html2Text
         '/(<table[^>]*>|<\/table>)/i',           // <table> and </table>
         '/(<tr[^>]*>|<\/tr>)/i',                 // <tr> and </tr>
         '/<td[^>]*>(.*?)<\/td>/i',               // <td> and </td>
-        '/<span class="_html2text_ignore">.+?<\/span>/i'  // <span class="_html2text_ignore">...</span>
+        '/<span class="_html2text_ignore">.+?<\/span>/i',  // <span class="_html2text_ignore">...</span>
     ];
 
     /**
@@ -109,7 +109,7 @@ class Html2Text
         "\n\n",                                 // <table> and </table>
         "\n",                                   // <tr> and </tr>
         "\t\t\\1\n",                            // <td> and </td>
-        ''                                      // <span class="_html2text_ignore">...</span>
+        '',                                      // <span class="_html2text_ignore">...</span>
     ];
 
     /**
@@ -188,7 +188,7 @@ class Html2Text
         "/\t/",
         '/ /',
         '/<pre[^>]*>/',
-        '/<\/pre>/'
+        '/<\/pre>/',
     ];
 
     /**
@@ -202,7 +202,7 @@ class Html2Text
         '&nbsp;&nbsp;&nbsp;&nbsp;',
         '&nbsp;',
         '',
-        ''
+        '',
     ];
 
     /**
@@ -230,7 +230,7 @@ class Html2Text
     /**
      * Indicates whether content in the $html variable has been converted yet.
      *
-     * @type boolean
+     * @type bool
      * @see $html, $text
      */
     protected $_converted = false;
@@ -257,7 +257,7 @@ class Html2Text
         //  Maximum width of the formatted text, in columns.
         //  Set this value to 0 (or less) to ignore word wrapping
         //  and not constrain text to a fixed-width column.
-        'width'    => 70
+        'width'    => 70,
     ];
 
     /**
@@ -267,9 +267,9 @@ class Html2Text
      * will instantiate with that source propagated, all that has
      * to be done it to call get_text().
      *
-     * @param string  $source    HTML content
-     * @param boolean $from_file Indicates $source is a file to pull content from
-     * @param array   $options   Set configuration options
+     * @param string $source    HTML content
+     * @param bool   $from_file Indicates $source is a file to pull content from
+     * @param array  $options   Set configuration options
      */
     public function __construct($source = '', $from_file = false, $options = [])
     {
@@ -285,8 +285,8 @@ class Html2Text
     /**
      * Loads source HTML into memory, either from $source string or a file.
      *
-     * @param string  $source    HTML content
-     * @param boolean $from_file Indicates $source is a file to pull content from
+     * @param string $source    HTML content
+     * @param bool   $from_file Indicates $source is a file to pull content from
      */
     public function set_html($source, $from_file = false)
     {
@@ -353,7 +353,7 @@ class Html2Text
     public function set_base_url($url = '')
     {
         if (empty($url)) {
-           if (\Xmf\Request::hasVar('HTTP_HOST', 'SERVER')) {
+            if (\Xmf\Request::hasVar('HTTP_HOST', 'SERVER')) {
                 $this->url = 'http://' . $_SERVER['HTTP_HOST'];
             } else {
                 $this->url = '';
@@ -361,8 +361,8 @@ class Html2Text
         } else {
             // Strip any trailing slashes for consistency (relative
             // URLs may already start with a slash like "/file.html")
-            if ('/' === substr($url, -1)) {
-                $url = substr($url, 0, -1);
+            if ('/' === mb_substr($url, -1)) {
+                $url = mb_substr($url, 0, -1);
             }
             $this->url = $url;
         }
@@ -479,14 +479,14 @@ class Html2Text
             $url = $link;
         } else {
             $url = $this->url;
-            if ('/' !== substr($link, 0, 1)) {
+            if ('/' !== mb_substr($link, 0, 1)) {
                 $url .= '/';
             }
             $url .= (string)$link;
         }
 
         if ('table' === $link_method) {
-            if (false === ($index = array_search($url, $this->_link_list))) {
+            if (false === ($index = array_search($url, $this->_link_list, true))) {
                 $index              = count($this->_link_list);
                 $this->_link_list[] = $url;
             }
@@ -494,10 +494,9 @@ class Html2Text
             return $display . ' [' . ($index + 1) . ']';
         } elseif ('nextline' === $link_method) {
             return $display . "\n[" . $url . ']';
-        } else { // link_method defaults to inline
+        }   // link_method defaults to inline
 
-            return $display . ' [' . $url . ']';
-        }
+        return $display . ' [' . $url . ']';
     }
 
     /**
@@ -548,7 +547,7 @@ class Html2Text
                         $end = $m[1];
                         $len = $end - $taglen - $start;
                         // Get blockquote content
-                        $body = substr($text, $start + $taglen - $diff, $len);
+                        $body = mb_substr($text, $start + $taglen - $diff, $len);
 
                         // Set text width
                         $p_width = $this->_options['width'];
@@ -564,15 +563,15 @@ class Html2Text
                         // Re-set text width
                         $this->_options['width'] = $p_width;
                         // Replace content
-                        $text = substr($text, 0, $start - $diff) . $body . substr($text, $end + strlen($m[0]) - $diff);
+                        $text = mb_substr($text, 0, $start - $diff) . $body . mb_substr($text, $end + mb_strlen($m[0]) - $diff);
 
-                        $diff = $len + $taglen + strlen($m[0]) - strlen($body);
+                        $diff = $len + $taglen + mb_strlen($m[0]) - mb_strlen($body);
                         unset($body);
                     }
                 } else {
                     if (0 == $level) {
                         $start  = $m[1];
-                        $taglen = strlen($m[0]);
+                        $taglen = mb_strlen($m[0]);
                     }
                     $level++;
                 }
@@ -589,7 +588,7 @@ class Html2Text
      */
     protected function _preg_callback($matches)
     {
-        switch (strtolower($matches[1])) {
+        switch (mb_strtolower($matches[1])) {
             case 'b':
             case 'strong':
                 return $this->_toupper($matches[3]);
@@ -621,8 +620,8 @@ class Html2Text
      */
     protected function _preg_pre_callback(
         /** @noinspection PhpUnusedParameterInspection */
-        $matches
-    ) {
+        $matches)
+    {
         return $this->pre_content;
     }
 
@@ -663,7 +662,7 @@ class Html2Text
         if (function_exists('mb_strtoupper')) {
             $str = mb_strtoupper($str, 'UTF-8');
         } else {
-            $str = strtoupper($str);
+            $str = mb_strtoupper($str);
         }
 
         $str = htmlspecialchars($str, ENT_COMPAT);

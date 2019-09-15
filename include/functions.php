@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -26,6 +25,8 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
 
 require_once __DIR__ . '/common.php';
 
@@ -57,22 +58,21 @@ function xnewsletter_checkModuleAdmin()
         require_once $GLOBALS['xoops']->path('/Frameworks/moduleclasses/moduleadmin/moduleadmin.php');
 
         return true;
-    } else {
-        echo xoops_error("Error: You don't use the Frameworks \"admin module\". Please install this Frameworks");
-
-        return false;
     }
+    echo xoops_error("Error: You don't use the Frameworks \"admin module\". Please install this Frameworks");
+
+    return false;
 }
 
 /**
  * Checks if a user is admin of xnewsletter
  *
- * @return boolean
+ * @return bool
  */
 function xnewsletter_userIsAdmin()
 {
     global $xoopsUser;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
     static $xnewsletter_isAdmin;
 
@@ -83,7 +83,7 @@ function xnewsletter_userIsAdmin()
     if (!$xoopsUser) {
         $xnewsletter_isAdmin = false;
     } else {
-        $xnewsletter_isAdmin = $xoopsUser->isAdmin($xnewsletter->getModule()->mid());
+        $xnewsletter_isAdmin = $xoopsUser->isAdmin($helper->getModule()->mid());
     }
 
     return $xnewsletter_isAdmin;
@@ -105,8 +105,8 @@ function xnewsletter_checkEmail($email, $antispam = false)
 /**
  * @param $html
  *
- * @return the
  * @throws Html2TextException
+ * @return the
  */
 function xnewsletter_html2text($html)
 {
@@ -129,7 +129,11 @@ function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $no
     require_once XOOPS_ROOT_PATH . '/include/functions.php';
     switch ($type) {
         case 'string':
-            $ret = isset($global[$key]) ? filter_var($global[$key], FILTER_SANITIZE_MAGIC_QUOTES) : $default;
+                        if(defined('FILTER_SANITIZE_ADD_SLASHES')){
+                $ret = isset($global[$key]) ? filter_var($global[$key], FILTER_SANITIZE_ADD_SLASHES) : $default;
+            } else {
+                $ret = isset($global[$key]) ? filter_var($global[$key], FILTER_SANITIZE_MAGIC_QUOTES) : $default;
+            }
             if ($notset) {
                 if ('' == trim($ret)) {
                     $ret = $default;
@@ -290,9 +294,9 @@ function xnewsletter_setPost($contentObj, $sets)
 function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
 {
     global $xoopsUser;
-    $grouppermHandler  = xoops_getHandler('groupperm');
-    $memberHandler = xoops_getHandler('member');
-    $xnewsletter   = XnewsletterXnewsletter::getInstance();
+    $grouppermHandler = xoops_getHandler('groupperm');
+    $memberHandler    = xoops_getHandler('member');
+    $helper           = Xnewsletter\Helper::getInstance();
 
     $uid    = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
     $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
@@ -303,7 +307,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
         'delete' => false,
         'create' => false,
         'send'   => false,
-        'list'   => false
+        'list'   => false,
     ];
 
     if ($uid > 0 && $xoopsUser->isAdmin()) {
@@ -314,10 +318,10 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
         $permissions['send']   = true;
         $permissions['list']   = true;
     } else {
-        $letterObj   = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj   = $helper->getHandler('Letter')->get($letter_id);
         $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
         foreach ($letter_cats as $cat_id) {
-            if ($grouppermHandler->checkRight('newsletter_admin_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+            if ($grouppermHandler->checkRight('newsletter_admin_cat', $cat_id, $groups, $helper->getModule()->mid())) {
                 $permissions['read']   = true;
                 $permissions['edit']   = true;
                 $permissions['delete'] = true;
@@ -325,7 +329,7 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
                 $permissions['send']   = true;
                 $permissions['list']   = true;
             } else {
-                if ($grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $helper->getModule()->mid())) {
                     $permissions['create'] = true;
                     $permissions['read']   = true; //creator should have perm to read all letters of this cat
                     if ($uid == $letterObj->getVar('letter_submitter')) {
@@ -334,10 +338,10 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
                         $permissions['send']   = true; //creator must have perm to send/resend own letters
                     }
                 }
-                if ($grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $helper->getModule()->mid())) {
                     $permissions['read'] = true;
                 }
-                if ($grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid())) {
+                if ($grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $helper->getModule()->mid())) {
                     $permissions['list'] = true;
                 }
             }
@@ -358,9 +362,9 @@ function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
 function xnewsletter_userAllowedCreateCat($cat_id = 0)
 {
     global $xoopsUser;
-    $grouppermHandler  = xoops_getHandler('groupperm');
-    $memberHandler = xoops_getHandler('member');
-    $xnewsletter   = XnewsletterXnewsletter::getInstance();
+    $grouppermHandler = xoops_getHandler('groupperm');
+    $memberHandler    = xoops_getHandler('member');
+    $helper           = Xnewsletter\Helper::getInstance();
 
     $allowedit = 0;
     $uid       = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
@@ -371,14 +375,14 @@ function xnewsletter_userAllowedCreateCat($cat_id = 0)
     $groups = $memberHandler->getGroupsByUser($uid);
 
     if ($cat_id > 0) {
-        $catObj    = $xnewsletter->getHandler('cat')->get($cat_id);
-        $allowedit = $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+        $catObj    = $helper->getHandler('Cat')->get($cat_id);
+        $allowedit = $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $helper->getModule()->mid());
     } else {
         $catCriteria = new \CriteriaCompo();
-        $catObjs     = $xnewsletter->getHandler('cat')->getAll($catCriteria);
+        $catObjs     = $helper->getHandler('Cat')->getAll($catCriteria);
         foreach ($catObjs as $i => $catObj) {
             $cat_id    = $catObj->getVar('cat_id');
-            $allowedit += $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+            $allowedit += $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $helper->getModule()->mid());
         }
     }
 
@@ -448,7 +452,7 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
     // human readable format -- powers of 1024
     $unit = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB'];
 
-    return @round($bytes / (1024 ** $i = floor(log($bytes, 1024))), $precision) . '' . $unit[(int)$i];
+    return @round($bytes / (pow(1024, $i = floor(log($bytes, 1024)))), $precision) . '' . $unit[(int)$i];
 }
 
 /**
@@ -456,15 +460,15 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  *
  * @param int $letter_id
  *
- * @return int
  * @throws \Html2TextException
  * @throws \phpmailerException
+ * @return int
  */
 function xnewsletter_emailSize($letter_id = 0)
 {
     require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
     global $XoopsTpl;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
     if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
         require_once XOOPS_ROOT_PATH . '/class/template.php';
@@ -479,7 +483,7 @@ function xnewsletter_emailSize($letter_id = 0)
         return str_replace('%p', $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH);
     }
 
-    $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+    $letterObj = $helper->getHandler('Letter')->get($letter_id);
     if (!is_array($letterObj) || 0 == count($letterObj)) {
         return false;
     }
@@ -496,7 +500,7 @@ function xnewsletter_emailSize($letter_id = 0)
     if ('' == $letter_account && 0 == $letter_account) {
         return false;
     }
-    $accountObj             = $xnewsletter->getHandler('accounts')->get($letter_account);
+    $accountObj             = $helper->getHandler('Accounts')->get($letter_account);
     $account_type           = $accountObj->getVar('accounts_type');
     $account_yourname       = $accountObj->getVar('accounts_yourname');
     $account_yourmail       = $accountObj->getVar('accounts_yourmail');
@@ -520,7 +524,7 @@ function xnewsletter_emailSize($letter_id = 0)
     $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
     $attachmentAslinkCriteria->setSort('attachment_id');
     $attachmentAslinkCriteria->setOrder('ASC');
-    $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
+    $attachmentObjs = $helper->getHandler('Attachment')->getObjects($attachmentAslinkCriteria, true);
     foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
         $attachment_array                    = $attachmentObj->toArray();
         $attachment_array['attachment_url']  = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
@@ -543,7 +547,7 @@ function xnewsletter_emailSize($letter_id = 0)
     $letterTpl->assign('unsubscribe_url', 'Test'); // new from v1.3
 
     preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-    if (isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+    if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
         // get template from database
         $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
     } else {
@@ -564,10 +568,10 @@ function xnewsletter_emailSize($letter_id = 0)
     $attachmentAsattachmentCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
     $attachmentAsattachmentCriteria->setSort('attachment_id');
     $attachmentAsattachmentCriteria->setOrder('ASC');
-    $attachmentObjs  = $xnewsletter->getHandler('attachment')->getObjects($attachmentAsattachmentCriteria, true);
+    $attachmentObjs  = $helper->getHandler('Attachment')->getObjects($attachmentAsattachmentCriteria, true);
     $attachmentsPath = [];
     foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
-        $attachmentsPath[] = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');
+        $attachmentsPath[] = XOOPS_UPLOAD_PATH . $helper->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');
     }
 
     $mail           = new XnewsletterMailer();
@@ -634,7 +638,7 @@ function xnewsletter_download($filePath, $isBinary = true, $retBytes = true)
         ob_flush();
         flush();
         if ($retBytes) {
-            $bytesCounter += strlen($buffer);
+            $bytesCounter += mb_strlen($buffer);
         }
     }
     $status = fclose($handler);
@@ -679,7 +683,7 @@ function xnewsletter_largeDownload($filePath, $fileMimetype)
             $offset = 0;
             $length = $size;
             //HEADERS FOR PARTIAL DOWNLOAD FACILITY BEGINS
-            if (isset($_SERVER['HTTP_RANGE'])) {
+            if (\Xmf\Request::hasVar('HTTP_RANGE', 'SERVER')) {
                 preg_match('/bytes=(\d+)-(\d+)?/', $_SERVER['HTTP_RANGE'], $matches);
                 $offset  = (int)$matches[1];
                 $length  = (int)$matches[2] - $offset;

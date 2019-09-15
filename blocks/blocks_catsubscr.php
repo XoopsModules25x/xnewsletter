@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -26,8 +25,11 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-require_once  dirname(__DIR__) . '/include/common.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @param $options
@@ -37,8 +39,8 @@ require_once  dirname(__DIR__) . '/include/common.php';
 function b_xnewsletter_catsubscr($options)
 {
     global $xoopsUser;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
-    $myts        = \MyTextSanitizer::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
+    $myts   = \MyTextSanitizer::getInstance();
 
     $catsubscrArray = [];
     $type_block     = $options[0];
@@ -66,22 +68,22 @@ function b_xnewsletter_catsubscr($options)
     }
 
     $catsubscrCriteria->setLimit($nb_catsubscr);
-    $catsubscrObjs = $xnewsletter->getHandler('catsubscr')->getAll($catsubscrCriteria);
+    $catsubscrObjs = $helper->getHandler('Catsubscr')->getAll($catsubscrCriteria);
     foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
         $cat_id = $catsubscrObj->getVar('catsubscr_catid');
         if (in_array($cat_id, $options) || '0' == $options[0]) {
             $subscr_id = $catsubscrObj->getVar('catsubscr_subscrid');
-            $subscrObj = $xnewsletter->getHandler('subscr')->get($subscr_id);
+            $subscrObj = $helper->getHandler('Subscr')->get($subscr_id);
             $email     = $subscrObj->getVar('subscr_email');
-            if ($length_title > 0 && strlen($email) > $length_title) {
-                $email = substr($email, 0, $length_title) . '...';
+            if ($length_title > 0 && mb_strlen($email) > $length_title) {
+                $email = mb_substr($email, 0, $length_title) . '...';
             }
             $catsubscrArray[$catsubscr_id]['catsubscr_email'] = $email;
 
-            $catObj   = $xnewsletter->getHandler('cat')->get($cat_id);
+            $catObj   = $helper->getHandler('Cat')->get($cat_id);
             $cat_name = $catObj->getVar('cat_name');
-            if ($length_title > 0 && strlen($cat_name) > $length_title) {
-                $cat_name = substr($cat_name, 0, $length_title) . '...';
+            if ($length_title > 0 && mb_strlen($cat_name) > $length_title) {
+                $cat_name = mb_substr($cat_name, 0, $length_title) . '...';
             }
             $catsubscrArray[$catsubscr_id]['catsubscr_newsletter'] = $cat_name;
             $catsubscrArray[$catsubscr_id]['catsubscr_created']    = formatTimestamp($catsubscrObj->getVar('catsubscr_created'), 'S');
@@ -99,7 +101,7 @@ function b_xnewsletter_catsubscr($options)
 function b_xnewsletter_catsubscr_edit($options)
 {
     global $xoopsUser;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
     $form = '' . _MB_XNEWSLETTER_LETTER_DISPLAY . "\n";
     $form .= '<input type="hidden" name="options[0]" value="' . $options[0] . '">';
@@ -109,14 +111,14 @@ function b_xnewsletter_catsubscr_edit($options)
     array_shift($options);
     array_shift($options);
     $form .= '' . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . '<br><select name="options[]" multiple="multiple" size="5">';
-    $form .= '<option value="0" ' . (false === array_search(0, $options) ? '' : 'selected="selected"') . '>' . _MB_XNEWSLETTER_CATSUBSCR_ALLCAT . '</option>';
+    $form .= '<option value="0" ' . (false === array_search(0, $options, true) ? '' : 'selected="selected"') . '>' . _MB_XNEWSLETTER_CATSUBSCR_ALLCAT . '</option>';
 
     $catCriteria = new \CriteriaCompo();
     $catCriteria->setSort('cat_id');
     $catCriteria->setOrder('ASC');
-    $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria);
+    $catObjs = $helper->getHandler('Cat')->getAll($catCriteria);
     foreach ($catObjs as $cat_id => $catObj) {
-        $form .= '<option value="' . $cat_id . '" ' . (false === array_search($cat_id, $options) ? '' : 'selected="selected"') . '>' . $catObj->getVar('cat_name') . '</option>';
+        $form .= '<option value="' . $cat_id . '" ' . (false === array_search($cat_id, $options, true) ? '' : 'selected="selected"') . '>' . $catObj->getVar('cat_name') . '</option>';
     }
     $form .= '</select>';
 

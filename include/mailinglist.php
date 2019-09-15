@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GNU General Public License 2.0
  * @package    xnewsletter
@@ -26,6 +25,9 @@
  *  Version : 1 Thu 2012/12/06 12:57:01 :  Exp $
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 require_once __DIR__ . '/common.php';
 
@@ -39,12 +41,12 @@ require_once __DIR__ . '/common.php';
 function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
 {
     global $xoopsUser, $xoopsConfig;
-    $xnewsletter = XnewsletterXnewsletter::getInstance();
+    $helper = Xnewsletter\Helper::getInstance();
 
-    $subscrObj    = $xnewsletter->getHandler('subscr')->get($subscr_id);
+    $subscrObj    = $helper->getHandler('Subscr')->get($subscr_id);
     $subscr_email = $subscrObj->getVar('subscr_email');
 
-    $mailinglistObj    = $xnewsletter->getHandler('mailinglist')->get($mailinglist_id);
+    $mailinglistObj    = $helper->getHandler('Mailinglist')->get($mailinglist_id);
     $mailinglist_email = $mailinglistObj->getVar('mailinglist_email');
     if (1 == $type) {
         $action_code = $mailinglistObj->getVar('mailinglist_subscribe');
@@ -71,7 +73,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
         'lastname'      => '',
         'subscr_sex'    => '',
         'subscriber_id' => '0',
-        'catsubscr_id'  => '0'
+        'catsubscr_id'  => '0',
     ];
 
     $letter_id = 0;
@@ -81,6 +83,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
 
     foreach ($recipients as $recipient) {
         $subscriber_id = $recipient['subscriber_id'];
+
         try {
             $xoopsMailer = xoops_getMailer();
             $xoopsMailer->reset();
@@ -102,7 +105,8 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
             $protocol_status = str_replace('%a', $action_code, _AM_XNEWSLETTER_SEND_SUCCESS_ML_DETAIL);
             $xoopsMailer->reset();
             $protocol_success = true;
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             $protocol_status  = _AM_XNEWSLETTER_SEND_ERROR_PHPMAILER . $xoopsMailer->getErrors(); //error messages
             $protocol_success = false;
         }
@@ -110,7 +114,7 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
         $text_clean      = ['<strong>', '</strong>', '<br>', '<br>'];
         $protocol_status = str_replace($text_clean, '', $protocol_status);
 
-        $protocolObj = $xnewsletter->getHandler('protocol')->create();
+        $protocolObj = $helper->getHandler('Protocol')->create();
         $protocolObj->setVar('protocol_letter_id', $letter_id);
         $protocolObj->setVar('protocol_subscriber_id', $subscriber_id);
         $protocolObj->setVar('protocol_status', $protocol_status);
@@ -118,23 +122,23 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
         $protocolObj->setVar('protocol_submitter', $senderUid);
         $protocolObj->setVar('protocol_created', time());
 
-        if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
+        if ($helper->getHandler('Protocol')->insert($protocolObj)) {
             //create protocol is ok
-            $protocolObj2 = $xnewsletter->getHandler('protocol')->create();
+            $protocolObj2 = $helper->getHandler('Protocol')->create();
             $protocolObj2->setVar('protocol_letter_id', $letter_id);
             $protocolObj2->setVar('protocol_subscriber_id', $subscriber_id);
             $protocolObj2->setVar('protocol_status', _AM_XNEWSLETTER_SEND_SUCCESS_ML);
             $protocolObj2->setVar('protocol_success', true);
             $protocolObj2->setVar('protocol_submitter', $senderUid);
             $protocolObj2->setVar('protocol_created', time());
-            if ($xnewsletter->getHandler('protocol')->insert($protocolObj2)) {
+            if ($helper->getHandler('Protocol')->insert($protocolObj2)) {
                 return true;
-            } else {
-                return $protocolObj2->getHtmlErrors();
             }
-        } else {
-            return $protocolObj->getHtmlErrors();
+
+            return $protocolObj2->getHtmlErrors();
         }
+
+        return $protocolObj->getHtmlErrors();
     }
 
     return null;

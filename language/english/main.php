@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -30,10 +29,8 @@
 define('_MA_XNEWSLETTER_INDEX', 'Home'); // NOT USED
 define('_MA_XNEWSLETTER_TITLE', 'xNewsletter');
 define('_MA_XNEWSLETTER_DESC', 'Newsletter module for Xoops');
-define(
-    '_MA_XNEWSLETTER_WELCOME',
-       '<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.'
-);
+define('_MA_XNEWSLETTER_WELCOME',
+       '<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.');
 define('_MA_XNEWSLETTER_ACCOUNTS', 'Accounts');
 define('_MA_XNEWSLETTER_CAT', 'Category');
 define('_MA_XNEWSLETTER_SUBSCR', 'Subscribers');
@@ -87,10 +84,8 @@ define('_MA_XNEWSLETTER_SENDMAIL_REG_OK', "An email with confirmation code has b
 define('_MA_XNEWSLETTER_DELETESUBJECT', 'Confirm to delete of newsletter from');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_REG_UPDATE_CLOSED', 'The registration data have been saved successful.');
 define('_MA_XNEWSLETTER_SENDMAIL_UNREG_OK', 'An email to confirm your unsubscription have been sent.');
-define(
-    '_MA_XNEWSLETTER_SUBSCRIPTION_UNFINISHED',
-       "<span style='color:red'>Attention: the registration has not been confirm till now. Please click on the activating link in the e-mail we sent you. If you did not get this e-mail, please click <a href='%link'>here</a> to get this mail once more.</span>"
-);
+define('_MA_XNEWSLETTER_SUBSCRIPTION_UNFINISHED',
+       "<span style='color:red'>Attention: the registration has not been confirm till now. Please click on the activating link in the e-mail we sent you. If you did not get this e-mail, please click <a href='%link'>here</a> to get this mail once more.</span>");
 define('_MA_XNEWSLETTER_PLEASE_LOGIN', "The email address %s belongs to a registered user. <br> please <a href='" . XOOPS_URL . "/user.php?xoops_redirect=/modules/xnewsletter/subscription.php'>login</a> to change the data.");
 define('_MA_XNEWSLETTER_LETTER_NONEAVAIL', 'No newsletters available for the moment');
 //1.2.2

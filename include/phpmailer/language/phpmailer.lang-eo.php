@@ -1,10 +1,8 @@
 <?php
 /**
  * Esperanto PHPMailer language file: refer to English translation for definitive list
- *
  * @package PHPMailer
  */
-
 $PHPMAILER_LANG['authenticate']         = 'Eraro de servilo SMTP : aŭtentigo malsukcesis.';
 $PHPMAILER_LANG['connect_host']         = 'Eraro de servilo SMTP : konektado al servilo malsukcesis.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Eraro de servilo SMTP : neĝustaj datumoj.';
@@ -23,3 +21,4 @@ $PHPMAILER_LANG['signing']              = 'Eraro de subskribo: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP konektado malsukcesis.';
 $PHPMAILER_LANG['smtp_error']           = 'Eraro de servilo SMTP : ';
 $PHPMAILER_LANG['variable_set']         = 'Variablo ne pravalorizeblas aŭ ne repravalorizeblas: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

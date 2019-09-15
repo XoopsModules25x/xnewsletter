@@ -8,6 +8,7 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * xnewsletter module
  *
@@ -17,6 +18,9 @@
  * @since           1.3
  * @author          Xoops Development Team
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // This must contain the name of the folder in which reside xnewsletter
@@ -32,32 +36,32 @@ xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 require_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
 require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
-require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class
-require_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // XnewsletterXnewsletter class
-require_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
-require_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // xnewsletterBreadcrumb class
+require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // XnewsletterXnewsletter class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // Breadcrumb class
 
 xoops_load('XoopsUserUtility');
 // MyTextSanitizer object
 $myts = \MyTextSanitizer::getInstance();
 
-$debug       = false;
-$xnewsletter = XnewsletterXnewsletter::getInstance($debug);
+$debug  = false;
+$helper = Xnewsletter\Helper::getInstance($debug);
 
 //This is needed or it will not work in blocks.
 global $xnewsletter_isAdmin;
 
 // Load only if module is installed
-if (is_object($xnewsletter->getModule())) {
+if (is_object($helper->getModule())) {
     // Find if the user is admin of the module
     $xnewsletter_isAdmin = xnewsletter_userIsAdmin();
 }
-$xoopsModule = $xnewsletter->getModule();
+$xoopsModule = $helper->getModule();
 
 // Load Xoops handlers
-$moduleHandler       = xoops_getHandler('module');
-$memberHandler       = xoops_getHandler('member');
+$moduleHandler = xoops_getHandler('module');
+$memberHandler = xoops_getHandler('member');
 /** @var \XoopsNotificationHandler $notificationHandler */
 $notificationHandler = xoops_getHandler('notification');
-$grouppermHandler        = xoops_getHandler('groupperm');
+$grouppermHandler    = xoops_getHandler('groupperm');
 $configHandler       = xoops_getHandler('config');

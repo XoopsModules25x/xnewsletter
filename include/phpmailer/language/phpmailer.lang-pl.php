@@ -1,10 +1,8 @@
 <?php
 /**
  * Polish PHPMailer language file: refer to English translation for definitive list
- *
  * @package PHPMailer
  */
-
 $PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić uwierzytelnienia.';
 $PHPMAILER_LANG['connect_host']         = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Błąd SMTP: Dane nie zostały przyjęte.';
@@ -23,3 +21,4 @@ $PHPMAILER_LANG['signing']              = 'Błąd podpisywania wiadomości: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() zakończone niepowodzeniem.';
 $PHPMAILER_LANG['smtp_error']           = 'Błąd SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'Nie można ustawić lub zmodyfikować zmiennej: ';
+$PHPMAILER_LANG['extension_missing']    = 'Brakujące rozszerzenie: ';

@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -73,17 +72,13 @@ define('_MI_XNEWSLETTER_ATTACHMENT_MIMETYPES_DESC', 'Allowed mime-types for atta
 define('_MI_XNEWSLETTER_ATTACHMENT_PATH', 'Upload-path');
 define('_MI_XNEWSLETTER_ATTACHMENT_PATH_DESC', 'Define path, where uploaded attachments will be saved ( folders after {XOOPS_ROOT_PATH}/uploads ), <b>with slash at beginning</b> and <b>with trailing slash</b>.');
 define('_MI_XNEWSLETTER_USE_MAILINGLIST', 'Use additional feature mailing lists');
-define(
-    '_MI_XNEWSLETTER_USE_MAILINGLIST_DESC',
-       "If you have existing mailing lists, you can synchronize and deregister a newsletter with a mailing list. <b>xNewsletter cannot create Mailing List </b>. If you enable this feature, you'll get an additional tab on the administration page of xNewsletter."
-);
+define('_MI_XNEWSLETTER_USE_MAILINGLIST_DESC',
+       "If you have existing mailing lists, you can synchronize and deregister a newsletter with a mailing list. <b>xNewsletter cannot create Mailing List </b>. If you enable this feature, you'll get an additional tab on the administration page of xNewsletter.");
 define('_MI_XNEWSLETTER_GROUPS_WITHOUT_ACTKEY', 'Groups (un)subscribing without confirmation email');
 define('_MI_XNEWSLETTER_GROUPS_WITHOUT_ACTKEY_DESC', 'Define the groups, which can make (un)subscriptions to a newsletter directly, without sending back a confirmation email');
 define('_MI_XNEWSLETTER_GROUPS_CHANGE_OTHER', 'Groups with permission to change subscription of other persons');
-define(
-    '_MI_XNEWSLETTER_GROUPS_CHANGE_OTHER_DESC',
-       'Define the groups, which can edit the subscriptions of other persons. Deleting the registration is not possible. This groups need also the permission to list the subscribers of a newsletter category. It is recommended to give this groups also the permission to create newsletters.'
-);
+define('_MI_XNEWSLETTER_GROUPS_CHANGE_OTHER_DESC',
+       'Define the groups, which can edit the subscriptions of other persons. Deleting the registration is not possible. This groups need also the permission to list the subscribers of a newsletter category. It is recommended to give this groups also the permission to create newsletters.');
 define('_MI_XNEWSLETTER_USE_SALUTATION', 'Use field salutation');
 define('_MI_XNEWSLETTER_USE_SALUTATION_DESC', "Please decide, whether you want use salutations like 'Mr.', 'Mrs.',...");
 define('_MI_XNEWSLETTER_SEND_IN_PACKAGES', 'Send e-mails in packages');
@@ -97,10 +92,8 @@ define('_MI_XNEWSLETTER_SUBSCRINFO_TEXT_BLOCK', 'If you want to be informed in t
 // version 1.3
 define('_MI_XNEWSLETTER_WELCOME_MESSAGE', 'Welcome message');
 define('_MI_XNEWSLETTER_WELCOME_MESSAGE_DESC', 'Html format');
-define(
-    '_MI_XNEWSLETTER_WELCOME',
-       '<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.'
-);
+define('_MI_XNEWSLETTER_WELCOME',
+       '<h2>Welcome in our newsletter system</h2>We hope, we can keep you up to date with our newsletters. Feel free to subscribe to one or more of our newsletters. If you do not want a newsletter any more, than you can easily unsubscribe here. You also can unsubscribe in a simple way via a link in each of our newsletters.');
 define('_MI_XNEWSLETTER_DATEFORMAT', 'Date format');
 define('_MI_XNEWSLETTER_DATEFORMATDSC', "Default data format for module front end. <br>More info here: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME', 'Confirmation email will expire within');
@@ -112,7 +105,7 @@ define('_MI_XNEWSLETTER_CONFIRMATION_TIME_24', '1 day');
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_48', '2 days');
 define('_MI_XNEWSLETTER_MAXATTACHMENTS', 'Maximum number of attachments');
 define('_MI_XNEWSLETTER_MAXATTACHMENTS_DESC', 'Default is 5');
-//
+
 define('_MI_XNEWSLETTER_ADMENU_TEMPLATES', 'Templates');
 define('_MI_XNEWSLETTER_EDITOR_DESC', '');
 define('_MI_XNEWSLETTER_TEMPLATE_EDITOR', 'Templates editor');
@@ -121,7 +114,7 @@ define('_MI_XNEWSLETTER_TEMPLATE_EDITOR_DESC', '');
 //1.3
 //Help
 define('_MI_XNEWSLETTER_DIRNAME', basename(dirname(dirname(__DIR__))));
-define('_MI_XNEWSLETTER_HELP_HEADER', __DIR__.'/help/helpheader.tpl');
+define('_MI_XNEWSLETTER_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
 define('_MI_XNEWSLETTER_BACK_2_ADMIN', 'Back to Administration of ');
 define('_MI_XNEWSLETTER_OVERVIEW', 'Overview');
 

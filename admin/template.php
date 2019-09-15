@@ -17,13 +17,11 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GNU General Public License 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
 
@@ -44,16 +42,16 @@ switch ($op) {
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWTEMPLATE, '?op=new_template', 'add');
         $adminObject->displayButton('left');
-        //
-        $limit            = $xnewsletter->getConfig('adminperpage');
+
+        $limit            = $helper->getConfig('adminperpage');
         $templateCriteria = new \CriteriaCompo();
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder('DESC');
-        $templatesCount = $xnewsletter->getHandler('template')->getCount();
+        $templatesCount = $helper->getHandler('Template')->getCount();
         $start          = Request::getInt('start', 0);
         $templateCriteria->setStart($start);
         $templateCriteria->setLimit($limit);
-        $templateObjs = $xnewsletter->getHandler('template')->getAll($templateCriteria);
+        $templateObjs = $helper->getHandler('Template')->getAll($templateCriteria);
         if ($templatesCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new \XoopsPageNav($templatesCount, $limit, $start, 'start', 'op=list');
@@ -96,55 +94,51 @@ switch ($op) {
         echo "<div>{$pagenav}</div>";
         echo '<br>';
         break;
-
     case 'new_template':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_TEMPLATELIST, '?op=list', 'list');
         $adminObject->displayButton('left');
-        //
-        $templateObj = $xnewsletter->getHandler('template')->create();
+
+        $templateObj = $helper->getHandler('Template')->create();
         $form        = $templateObj->getForm();
         $form->display();
         break;
-
     case 'save_template':
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        $templateObj = $xnewsletter->getHandler('template')->get($template_id);
+        $templateObj = $helper->getHandler('Template')->get($template_id);
         $templateObj->setVar('template_title', Request::getString('template_title', ''));
         $templateObj->setVar('template_description', $_REQUEST['template_description']);
         $templateObj->setVar('template_content', $_REQUEST['template_content']);
         $templateObj->setVar('template_submitter', Request::getInt('template_submitter', 0));
         $templateObj->setVar('template_created', Request::getInt('template_created', time()));
-        //
-        if ($xnewsletter->getHandler('template')->insert($templateObj)) {
+
+        if ($helper->getHandler('Template')->insert($templateObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         }
-        //
+
         echo $templateObj->getHtmlErrors();
         $form = $templateObj->getForm();
         $form->display();
         break;
-
     case 'edit_template':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWTEMPLATE, '?op=new_template', 'add');
         $adminObject->addItemButton(_AM_XNEWSLETTER_TEMPLATELIST, '?op=list', 'list');
         $adminObject->displayButton('left');
-        //
-        $templateObj = $xnewsletter->getHandler('template')->get($template_id);
+
+        $templateObj = $helper->getHandler('Template')->get($template_id);
         $form        = $templateObj->getForm();
         $form->display();
         break;
-
     case 'delete_template':
-        $templateObj = $xnewsletter->getHandler('template')->get($template_id);
+        $templateObj = $helper->getHandler('Template')->get($template_id);
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
-            if ($xnewsletter->getHandler('template')->delete($templateObj)) {
+            if ($helper->getHandler('Template')->delete($templateObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $obj->getHtmlErrors();

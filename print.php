@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -47,7 +46,7 @@ if ($letter_id < 1) {
 }
 
 $content   = '';
-$letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+$letterObj = $helper->getHandler('Letter')->get($letter_id);
 if ($letterObj && '' != $letterObj->getVar('letter_template')) {
     $letterTemplate = "{$letterTemplatePath}{$letterObj->getVar('letter_template')}.tpl";
     // subscr data
@@ -67,7 +66,7 @@ if ($letterObj && '' != $letterObj->getVar('letter_template')) {
 
     $letter_array                             = $letterObj->toArray();
     $letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
-    $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
+    $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $helper->getConfig('dateformat'));
     $letter_array['letter_submitter_name']    = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
     $xoopsTpl->assign('letter', $letter_array);
 
@@ -78,7 +77,7 @@ if ($letterObj && '' != $letterObj->getVar('letter_template')) {
     $content .= "<h2>{$letterObj->getVar('letter_title')}</h2>";
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
     preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-    if (isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+    if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
         // get template from database
         $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
     } else {
@@ -114,9 +113,8 @@ function xnewsletter_printPage($content)
 {
     global $xoopsConfig, $xoops_meta_keywords, $xoops_meta_description;
     $myts = \MyTextSanitizer::getInstance(); ?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo _LANGCODE; ?>" lang="<?php echo _LANGCODE; ?>">
+    <!DOCTYPE html>
+    <html xml:lang="<?php echo _LANGCODE; ?>" lang="<?php echo _LANGCODE; ?>">
     <?php
     echo "<head>\n";
     echo "<title>{$xoopsConfig['sitename']}</title>\n";

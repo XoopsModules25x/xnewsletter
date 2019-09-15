@@ -17,7 +17,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -28,24 +27,25 @@
  */
 
 use Xmf\Request;
+use XoopsModules\Xnewsletter;
 
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
 
-$GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_empty.tpl";
+$GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_empty.tpl";
 require_once XOOPS_ROOT_PATH . '/header.php';
-//
+
 $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-$xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+$xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
 $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 // breadcrumb
-$breadcrumb = new xnewsletterBreadcrumb();
-$breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+$breadcrumb = new Xnewsletter\Breadcrumb();
+$breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
 if (!$xoopsUser) {
     //Guest no Access !!!
-    redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
+    redirect_header(XOOPS_URL . '/modules/' . $helper->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
 $op        = Request::getString('op', 'list');
@@ -58,7 +58,7 @@ if ($letter_id < 1) {
 $sendletter_perm = xnewsletter_getUserPermissionsByLetter($letter_id);
 
 if (!$sendletter_perm['send']) {
-    redirect_header(XOOPS_URL . '/modules/' . $xnewsletter->getModule()->dirname() . '/index.php', 3, _NOPERM);
+    redirect_header(XOOPS_URL . '/modules/' . $helper->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
 $start_sending    = false;
@@ -66,7 +66,7 @@ $protocolCriteria = new \CriteriaCompo();
 $protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
 $protocolCriteria->add(new \Criteria('protocol_subscriber_id', 0, '>'));
 $protocolCriteria->setLimit(1);
-$protocolCount = $xnewsletter->getHandler('protocol')->getCount($protocolCriteria);
+$protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
 if ($protocolCount > 0) {
     if (true === Request::getBool('ok', false, 'POST')) {
         $start_sending = true;
@@ -78,13 +78,13 @@ if ($protocolCount > 0) {
 }
 
 if (true === $start_sending) {
-    $xn_send_in_packages = $xnewsletter->getConfig('xn_send_in_packages');
+    $xn_send_in_packages = $helper->getConfig('xn_send_in_packages');
     if ($xn_send_in_packages > 0) {
-        $xn_send_in_packages_time = $xnewsletter->getConfig('xn_send_in_packages_time');
+        $xn_send_in_packages_time = $helper->getConfig('xn_send_in_packages_time');
     } else {
         $xn_send_in_packages_time = 0;
     }
-    include XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
+    require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
     // create tasks
     $result_create = xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time);
     // execute tasks

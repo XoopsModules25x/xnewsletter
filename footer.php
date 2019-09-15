@@ -18,7 +18,7 @@
  * @author          Xoops Development Team
  */
 // Module info/menu
-$moduleInfo = $xnewsletter->getModule()->getInfo();
+$moduleInfo = $helper->getModule()->getInfo();
 //$xoopsTpl->assign('xnewsletterModuleInfo', $moduleInfo); // huge array but useful?
 $xoopsTpl->assign('xnewsletterModuleInfoSub', $moduleInfo['sub']);
 // Module admin
@@ -28,12 +28,12 @@ $xoopsTpl->assign('isAdmin', xnewsletter_userIsAdmin());
 $xoopsTpl->assign('copyright', $moduleCopyrightHtml); // this definition is not removed for backward compatibility issues
 $xoopsTpl->assign('copyright_code', $moduleCopyrightHtml); // include/config.php
 // advertise
-$xoopsTpl->assign('adv', $xnewsletter->getConfig('advertise')); // this definition is not removed for backward compatibility issues
-$xoopsTpl->assign('advertise_code', $xnewsletter->getConfig('advertise'));
+$xoopsTpl->assign('adv', $helper->getConfig('advertise')); // this definition is not removed for backward compatibility issues
+$xoopsTpl->assign('advertise_code', $helper->getConfig('advertise'));
 // social
-if (true === $xnewsletter->getConfig('social_active')) {
+if (true === $helper->getConfig('social_active')) {
     $xoopsTpl->assign('social_active', true);
-    $xoopsTpl->assign('social_code', $xnewsletter->getConfig('social_code'));
+    $xoopsTpl->assign('social_code', $helper->getConfig('social_code'));
 }
 
 require_once XOOPS_ROOT_PATH . '/footer.php';

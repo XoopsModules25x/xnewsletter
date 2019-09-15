@@ -15,7 +15,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
@@ -156,10 +155,8 @@ define('_AM_XNEWSLETTER_ACCOUNTS_BOUNCE_INFO', 'Additional info for Bounced emai
 define('_AM_XNEWSLETTER_ACCOUNTS_USE_BMH', 'Use Bounced emails handling');
 define('_AM_XNEWSLETTER_ACCOUNTS_INBOX', 'Mailbox to check for Bounced emails');
 define('_AM_XNEWSLETTER_ACCOUNTS_HARDBOX', "Use this mailbox as 'hard box'");
-define(
-    '_AM_XNEWSLETTER_ACCOUNTS_HARDBOX_DESC',
-       "The mailbox name must start with 'INBOX.'. You can select a standard folder in your mailbox (e.g. INBOX.Trash) or create your own special folders like 'hard' and 'soft'. If you type in a new folder name, the folder will be created (this function is not available for gmail-accounts)."
-);
+define('_AM_XNEWSLETTER_ACCOUNTS_HARDBOX_DESC',
+       "The mailbox name must start with 'INBOX.'. You can select a standard folder in your mailbox (e.g. INBOX.Trash) or create your own special folders like 'hard' and 'soft'. If you type in a new folder name, the folder will be created (this function is not available for gmail-accounts).");
 define('_AM_XNEWSLETTER_ACCOUNTS_MOVEHARD', "Move Bounced email in 'hard box'");
 define('_AM_XNEWSLETTER_ACCOUNTS_SOFTBOX', "Use this mailbox as 'soft box'");
 define('_AM_XNEWSLETTER_ACCOUNTS_MOVESOFT', "Move Bounced email in 'soft box'");
@@ -379,12 +376,12 @@ define('_AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION', "Error: required function 'xn
 //version 1.3
 //General
 define('_AM_XNEWSLETTER_LETTER_CONTENT_DESC', 'Html format');
-//
+
 define('_AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW', 'Mr.');
 define('_AM_XNEWSLETTER_SUBSCR_FIRSTNAME_PREVIEW', 'John');
 define('_AM_XNEWSLETTER_SUBSCR_LASTNAME_PREVIEW', 'Doe');
 define('_AM_XNEWSLETTER_SUBSCR_EMAIL_PREVIEW', 'username@example.com');
-//
+
 define('_AM_XNEWSLETTER_TEMPLATE_ADD', 'Add a template');
 define('_AM_XNEWSLETTER_TEMPLATE_EDIT', 'Edit a template');
 define('_AM_XNEWSLETTER_TEMPLATE_DELETE', 'Delete a template');
@@ -463,13 +460,13 @@ define('_AM_XNEWSLETTER_LETTER_EMAIL_SIZE', 'Estimated size');
 define('_AM_XNEWSLETTER_LETTER_EMAIL_SIZE_DESC', '');
 define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_SIZE', 'Size');
 define('_AM_XNEWSLETTER_LETTER_ATTACHMENT_TOTALSIZE', 'Attachments size');
-//
+
 define('_AM_XNEWSLETTER_ATTACHMENT_SIZE', 'Size');
 define('_AM_XNEWSLETTER_ATTACHMENT_MODE', 'Attached as');
 define('_AM_XNEWSLETTER_ATTACHMENT_MODE_ASATTACHMENT', 'Attachment');
 define('_AM_XNEWSLETTER_ATTACHMENT_MODE_ASLINK', 'Link');
 define('_AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO', 'Auto');
-//
+
 define('_AM_XNEWSLETTER_ACTIONS_ACTIVATE', 'Activate');
 define('_AM_XNEWSLETTER_ACTIONS_UNACTIVATE', 'Unactivate');
 define('_AM_XNEWSLETTER_ACTIONS_EXEC', 'Exec');

@@ -17,17 +17,16 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *
  * @copyright  Goffy ( wedega.com )
  * @license    GPL 2.0
  * @package    xnewsletter
  * @author     Goffy ( webmaster@wedega.com )
  *
- *  Version :
  * ****************************************************************************
  */
 
 use Xmf\Request;
+use XoopsModules\Xnewsletter;
 
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
@@ -41,22 +40,22 @@ $cat_id    = Request::getInt('cat_id', 0);
 
 switch ($op) {
     case 'list_subscrs':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_list_subscrs.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter_list_subscrs.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST_SUBSCR, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // check right to edit/delete subscription of other persons
         $permissionChangeOthersSubscriptions = false;
         foreach ($groups as $group) {
-            if (in_array($group, $xnewsletter->getConfig('xn_groups_change_other')) || XOOPS_GROUP_ADMIN == $group) {
+            if (in_array($group, $helper->getConfig('xn_groups_change_other')) || XOOPS_GROUP_ADMIN == $group) {
                 $permissionChangeOthersSubscriptions = true;
                 break;
             }
@@ -77,15 +76,15 @@ switch ($op) {
         $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id');
         $catCriteria->setOrder('ASC');
-        $catObjs = $xnewsletter->getHandler('cat')->getAll($catCriteria, null, true, true);
+        $catObjs = $helper->getHandler('Cat')->getAll($catCriteria, null, true, true);
         // cats table
         foreach ($catObjs as $cat_id => $catObj) {
-            $permissionShowCats[$cat_id] = $grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
+            $permissionShowCats[$cat_id] = $grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $helper->getModule()->mid());
             if (true === $permissionShowCats[$cat_id]) {
                 $cat_array         = $catObj->toArray();
                 $catsubscrCriteria = new \CriteriaCompo();
                 $catsubscrCriteria->add(new \Criteria('catsubscr_catid', $cat_id));
-                $cat_array['catsubscrCount'] = $xnewsletter->getHandler('catsubscr')->getCount($catsubscrCriteria);
+                $cat_array['catsubscrCount'] = $helper->getHandler('Catsubscr')->getCount($catsubscrCriteria);
                 $xoopsTpl->append('cats', $cat_array);
             }
         }
@@ -93,7 +92,7 @@ switch ($op) {
         $cat_id = Request::getInt('cat_id', 0);
         $xoopsTpl->assign('cat_id', $cat_id);
         if ($cat_id > 0) {
-            $catObj = $xnewsletter->getHandler('cat')->get($cat_id);
+            $catObj = $helper->getHandler('Cat')->get($cat_id);
             // subscrs table
             if (true === $permissionShowCats[$cat_id]) {
                 $counter = 1;
@@ -110,18 +109,17 @@ switch ($op) {
             }
         }
         break;
-
     case 'show_preview':
     case 'show_letter_preview':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_preview.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter_preview.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_PREVIEW, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -129,7 +127,7 @@ switch ($op) {
         // get letter_id
         $letter_id = Request::getInt('letter_id', 0);
         // get letter object
-        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $helper->getHandler('Letter')->get($letter_id);
         // subscr data
         $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
         $xoopsTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
@@ -146,7 +144,7 @@ switch ($op) {
         $attachmentAslinkCriteria->add(new \Criteria('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASLINK));
         $attachmentAslinkCriteria->setSort('attachment_id');
         $attachmentAslinkCriteria->setOrder('ASC');
-        $attachmentObjs = $xnewsletter->getHandler('attachment')->getObjects($attachmentAslinkCriteria, true);
+        $attachmentObjs = $helper->getHandler('Attachment')->getObjects($attachmentAslinkCriteria, true);
         foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
             $attachment_array                    = $attachmentObj->toArray();
             $attachment_array['attachment_url']  = XNEWSLETTER_URL . "/attachment.php?attachment_id={$attachment_id}";
@@ -161,7 +159,7 @@ switch ($op) {
         $letter_array = $letterObj->toArray();
 
         preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-        if (isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+        if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
             // get template from database
             $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
         } else {
@@ -178,23 +176,22 @@ switch ($op) {
         $letter_array['letter_content_templated']      = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
-        $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
+        $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $helper->getConfig('dateformat'));
         $letter_array['letter_submitter_name']         = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
         $xoopsTpl->assign('letter', $letter_array);
         break;
-
     case 'print_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_print.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter_print.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
 
         //$xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // get letter_id
         $letter_id = Request::getInt('letter_id', 0);
         // get letter object
-        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $helper->getHandler('Letter')->get($letter_id);
         // subscr data
         $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
         $xoopsTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
@@ -213,7 +210,7 @@ switch ($op) {
         $letter_array = $letterObj->toArray();
 
         preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-        if (isset($matches[1]) && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+        if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
             // get template from database
             $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
         } else {
@@ -230,22 +227,21 @@ switch ($op) {
         $letter_array['letter_content_templated']      = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
         $letter_array['letter_content_templated_text'] = $textBody; // new from v1.3
-        $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
+        $letter_array['letter_created_formatted']      = formatTimestamp($letterObj->getVar('letter_created'), $helper->getConfig('dateformat'));
         $letter_array['letter_submitter_name']         = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
         $xoopsTpl->assign('letter', $letter_array);
         break;
-
     case 'list_letters':
     default:
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter_list_letters.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter_list_letters.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
@@ -253,12 +249,12 @@ switch ($op) {
         $letterCriteria = new \CriteriaCompo();
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
-        $letterCount = $xnewsletter->getHandler('letter')->getCount();
+        $letterCount = $helper->getHandler('Letter')->getCount();
         $start       = Request::getInt('start', 0);
-        $limit       = $xnewsletter->getConfig('adminperpage');
+        $limit       = $helper->getConfig('adminperpage');
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
-        $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria, null, true, true);
+        $letterObjs = $helper->getHandler('Letter')->getAll($letterCriteria, null, true, true);
 
         // pagenav
         $pagenav = new \XoopsPageNav($letterCount, $limit, $start, 'start', "op={$op}");
@@ -272,19 +268,19 @@ switch ($op) {
                 if (($userPermissions['read'] && $letterObj->getVar('letter_sent') > 0)
                     || (true === $userPermissions['send'])) {
                     $letter_array                             = $letterObj->toArray();
-                    $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $xnewsletter->getConfig('dateformat'));
+                    $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $helper->getConfig('dateformat'));
                     $letter_array['letter_submitter_name']    = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
-                    $letter_array['letter_sent_formatted']    = 0 != $letterObj->getVar('letter_sent') ? formatTimestamp($letterObj->getVar('letter_sent'), $xnewsletter->getConfig('dateformat')) : '';
+                    $letter_array['letter_sent_formatted']    = 0 != $letterObj->getVar('letter_sent') ? formatTimestamp($letterObj->getVar('letter_sent'), $helper->getConfig('dateformat')) : '';
                     $letter_array['letter_sender_name']       = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_sender'));
-                    //
+
                     preg_match('/db:([0-9]*)/', $letter_array['letter_template'], $matches);
                     if (isset($matches[1])
-                        && ($templateObj = $xnewsletter->getHandler('template')->get((int)$matches[1]))) {
+                        && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
                         $letter_array['letter_template'] = 'db:' . $templateObj->getVar('template_title');
                     } else {
                         $letter_array['letter_template'] = 'file:' . $letter_array['letter_template'];
                     }
-                    //
+
                     $letter_cat_ids = explode('|', $letterObj->getVar('letter_cats'));
                     // skip letter
                     if ((0 != $cat_id) && !in_array($cat_id, $letter_cat_ids)) {
@@ -294,8 +290,8 @@ switch ($op) {
                     $catsAvailableCount = 0;
                     unset($letter_array['letter_cats']); // IN PROGRESS
                     foreach ($letter_cat_ids as $letter_cat_id) {
-                        $catObj = $xnewsletter->getHandler('cat')->get($letter_cat_id);
-                        if ($grouppermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $xnewsletter->getModule()->mid())) {
+                        $catObj = $helper->getHandler('Cat')->get($letter_cat_id);
+                        if ($grouppermHandler->checkRight('newsletter_read_cat', $catObj->getVar('cat_id'), $groups, $helper->getModule()->mid())) {
                             ++$catsAvailableCount;
                             $letter_array['letter_cats'][] = $catObj->toArray();
                         }
@@ -307,7 +303,7 @@ switch ($op) {
                     // count letter attachements
                     $attachmentCriteria = new \CriteriaCompo();
                     $attachmentCriteria->add(new \Criteria('attachment_letter_id', $letterObj->getVar('letter_id')));
-                    $letter_array['attachmentCount'] = $xnewsletter->getHandler('attachment')->getCount($attachmentCriteria);
+                    $letter_array['attachmentCount'] = $helper->getHandler('Attachment')->getCount($attachmentCriteria);
                     // get protocols
                     if ($userPermissions['edit']) {
                         // take last item protocol_subscriber_id=0 from table protocol as actual status
@@ -317,13 +313,13 @@ switch ($op) {
                         $protocolCriteria->setSort('protocol_id');
                         $protocolCriteria->setOrder('DESC');
                         $protocolCriteria->setLimit(1);
-                        $protocolObjs       = $xnewsletter->getHandler('protocol')->getAll($protocolCriteria);
+                        $protocolObjs       = $helper->getHandler('Protocol')->getAll($protocolCriteria);
                         $protocol_status    = '';
                         $protocol_letter_id = 0;
                         foreach ($protocolObjs as $protocolObj) {
                             $letter_array['protocols'][] = [
                                 'protocol_status'    => $protocolObj->getVar('protocol_status'),
-                                'protocol_letter_id' => $protocolObj->getVar('protocol_letter_id')
+                                'protocol_letter_id' => $protocolObj->getVar('protocol_letter_id'),
                             ];
                         }
                     }
@@ -340,56 +336,53 @@ switch ($op) {
         }
         $xoopsTpl->assign('showAdminColumns', $showAdminColumns);
         break;
-
     case 'new_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter.tpl"; // IN PROGRESS
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter.tpl"; // IN PROGRESS
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_CREATE, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-        $letterObj = $xnewsletter->getHandler('letter')->create();
+        $letterObj = $helper->getHandler('Letter')->create();
         $form      = $letterObj->getForm();
         $content   = $form->render();
         $xoopsTpl->assign('content', $content);
         break;
-
     case 'edit_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_EDIT, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $helper->getHandler('Letter')->get($letter_id);
         $form      = $letterObj->getForm();
         $content   = $form->render();
         $xoopsTpl->assign('content', $content);
         break;
-
     case 'delete_attachment':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_EDIT, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
@@ -397,28 +390,27 @@ switch ($op) {
         // update existing_attachments
         $existing_attachments_mode = Request::getArray('existing_attachments_mode', []);
         foreach ($existing_attachments_mode as $attachment_id => $attachment_mode) {
-            $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
+            $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
             $attachmentObj->setVar('attachment_mode', $attachment_mode);
-            $xnewsletter->getHandler('attachment')->insert($attachmentObj);
+            $helper->getHandler('Attachment')->insert($attachmentObj);
         }
-        //
+
         $attachment_id = Request::getInt('deleted_attachment_id', 0, 'POST');
         if (0 == $attachment_id) {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         }
-        $attachmentObj   = $xnewsletter->getHandler('attachment')->get($attachment_id);
+        $attachmentObj   = $helper->getHandler('Attachment')->get($attachment_id);
         $attachment_name = $attachmentObj->getVar('attachment_name');
-        //
-        if ($xnewsletter->getHandler('attachment')->delete($attachmentObj, true)) {
-            //
-            $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+
+        if ($helper->getHandler('Attachment')->delete($attachmentObj, true)) {
+            $letterObj = $helper->getHandler('Letter')->get($letter_id);
             $letterObj->setVar('letter_title', Request::getString('letter_title', ''));
             $letterObj->setVar('letter_content', $_REQUEST['letter_content']);
             $letterObj->setVar('letter_template', $_REQUEST['letter_template']);
             $letterObj->setVar('letter_cats', implode('|', Request::getArray('letter_cats', [])));
             $letterObj->setVar('letter_account', $_REQUEST['letter_account']);
             $letterObj->setVar('letter_email_test', $_REQUEST['letter_email_test']);
-            //
+
             $form    = $letterObj->getForm(false, true);
             $content = $form->render();
             $xoopsTpl->assign('content', $content);
@@ -427,23 +419,22 @@ switch ($op) {
             $xoopsTpl->assign('content', $content);
         }
         break;
-
     case 'save_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_empty.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_empty.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id); // create if doesn't exist
+        $letterObj = $helper->getHandler('Letter')->get($letter_id); // create if doesn't exist
         $letterObj->setVar('letter_title', Request::getString('letter_title', ''));
         $letterObj->setVar('letter_content', $_REQUEST['letter_content']);
         $letterObj->setVar('letter_template', $_REQUEST['letter_template']);
@@ -452,36 +443,38 @@ switch ($op) {
         $letterObj->setVar('letter_email_test', $_REQUEST['letter_email_test']);
         $letterObj->setVar('letter_submitter', Request::getInt('letter_submitter', 0));
         $letterObj->setVar('letter_created', Request::getInt('letter_created', time()));
-        //
-        if ($xnewsletter->getHandler('letter')->insert($letterObj)) {
+
+        if ($helper->getHandler('Letter')->insert($letterObj)) {
             $letter_id = $letterObj->getVar('letter_id');
             // update existing_attachments
             $existing_attachments_mode = Request::getArray('existing_attachments_mode', []);
             foreach ($existing_attachments_mode as $attachment_id => $attachment_mode) {
-                $attachmentObj = $xnewsletter->getHandler('attachment')->get($attachment_id);
+                $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
                 $attachmentObj->setVar('attachment_mode', $attachment_mode);
-                $xnewsletter->getHandler('attachment')->insert($attachmentObj);
+                $helper->getHandler('Attachment')->insert($attachmentObj);
             }
             // upload attachments
             $uploadedFiles = [];
             require_once XOOPS_ROOT_PATH . '/class/uploader.php';
-            $uploaddir = XOOPS_UPLOAD_PATH . $xnewsletter->getConfig('xn_attachment_path') . $letter_id . '/';
+            $uploaddir = XOOPS_UPLOAD_PATH . $helper->getConfig('xn_attachment_path') . $letter_id . '/';
             // check upload_dir
             if (!is_dir($uploaddir)) {
                 $indexFile = XOOPS_UPLOAD_PATH . '/index.html';
-                mkdir($uploaddir, 0777);
+                if (!mkdir($uploaddir, 0777) && !is_dir($uploaddir)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $uploaddir));
+                }
                 chmod($uploaddir, 0777);
                 copy($indexFile, $uploaddir . 'index.html');
             }
             $new_attachments_mode = Request::getArray('new_attachments_mode', []);
-            for ($upl = 0; $upl < $xnewsletter->getConfig('xn_maxattachments'); ++$upl) {
-                $uploader = new \XoopsMediaUploader($uploaddir, $xnewsletter->getConfig('xn_mimetypes'), $xnewsletter->getConfig('xn_maxsize'), null, null);
+            for ($upl = 0; $upl < $helper->getConfig('xn_maxattachments'); ++$upl) {
+                $uploader = new \XoopsMediaUploader($uploaddir, $helper->getConfig('xn_mimetypes'), $helper->getConfig('xn_maxsize'), null, null);
                 if ($uploader->fetchMedia(@$_POST['xoops_upload_file'][$upl])) {
                     //$uploader->setPrefix("xn_") ; keep original name
                     $uploader->fetchMedia($_POST['xoops_upload_file'][$upl]);
                     if (!$uploader->upload()) {
                         $errors = $uploader->getErrors();
-                        redirect_header('javascript:history.go(-1)', 3, $errors);
+                        redirect_header('<script>javascript:history.go(-1)</script>', 3, $errors);
                     } else {
                         preg_match('/ne\w_attachment_index=([0-9]+)/', $_POST['xoops_upload_file'][$upl], $matches);
                         $index           = $matches[1];
@@ -489,14 +482,14 @@ switch ($op) {
                             'name' => $uploader->getSavedFileName(),
                             'type' => $uploader->getMediaType(),
                             'size' => $uploader->getMediaSize(),
-                            'mode' => $new_attachments_mode[$index]
+                            'mode' => $new_attachments_mode[$index],
                         ];
                     }
                 }
             }
             // create items in attachments
             foreach ($uploadedFiles as $file) {
-                $attachmentObj = $xnewsletter->getHandler('attachment')->create();
+                $attachmentObj = $helper->getHandler('Attachment')->create();
                 $attachmentObj->setVar('attachment_letter_id', $letter_id);
                 $attachmentObj->setVar('attachment_name', $file['name']);
                 $attachmentObj->setVar('attachment_type', $file['type']);
@@ -504,11 +497,11 @@ switch ($op) {
                 $attachmentObj->setVar('attachment_created', time());
                 $attachmentObj->setVar('attachment_size', $file['size']);
                 $attachmentObj->setVar('attachment_mode', $file['mode']);
-                //
-                $xnewsletter->getHandler('attachment')->insert($attachmentObj);
+
+                $helper->getHandler('Attachment')->insert($attachmentObj);
             }
             // create item in protocol
-            $protocolObj = $xnewsletter->getHandler('protocol')->create();
+            $protocolObj = $helper->getHandler('Protocol')->create();
             $protocolObj->setVar('protocol_letter_id', $letter_id);
             $protocolObj->setVar('protocol_subscriber_id', 0);
             $protocolObj->setVar('protocol_success', true);
@@ -532,8 +525,8 @@ switch ($op) {
             $protocolObj->setVar('protocol_status_vars', []); // new from v1.3
             $protocolObj->setVar('protocol_submitter', $xoopsUser->uid());
             $protocolObj->setVar('protocol_created', time());
-            //
-            if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
+
+            if ($helper->getHandler('Protocol')->insert($protocolObj)) {
                 // create protocol is ok
                 redirect_header($redirectUrl, 3, _AM_XNEWSLETTER_FORMOK);
             } else {
@@ -543,24 +536,23 @@ switch ($op) {
             echo 'Error create letter: ' . $letterObj->getHtmlErrors();
         }
         break;
-
     case 'copy_letter':
     case 'clone_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_letter.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_letter.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_COPY, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-        $oldLetterObj = $xnewsletter->getHandler('letter')->get($letter_id);
-        $newLetterObj = $xnewsletter->getHandler('letter')->create();
+        $oldLetterObj = $helper->getHandler('Letter')->get($letter_id);
+        $newLetterObj = $helper->getHandler('Letter')->create();
         $newLetterObj->setVar('letter_title', sprintf(_AM_XNEWSLETTER_LETTER_CLONED, $oldLetterObj->getVar('letter_title')));
         $newLetterObj->setVar('letter_content', $oldLetterObj->getVar('letter_content', 'n'));
         $newLetterObj->setVar('letter_template', $oldLetterObj->getVar('letter_template'));
@@ -573,29 +565,28 @@ switch ($op) {
         $content = $form->render();
         $xoopsTpl->assign('content', $content);
         break;
-
     case 'delete_letter':
-        $GLOBALS['xoopsOption']['template_main'] = "{$xnewsletter->getModule()->dirname()}_empty.tpl";
+        $GLOBALS['xoopsOption']['template_main'] = "{$helper->getModule()->dirname()}_empty.tpl";
         require_once XOOPS_ROOT_PATH . '/header.php';
-        //
+
         $xoTheme->addStylesheet(XNEWSLETTER_URL . '/assets/css/module.css');
-        $xoTheme->addMeta('meta', 'keywords', $xnewsletter->getConfig('keywords')); // keywords only for index page
+        $xoTheme->addMeta('meta', 'keywords', $helper->getConfig('keywords')); // keywords only for index page
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
         // breadcrumb
-        $breadcrumb = new xnewsletterBreadcrumb();
-        $breadcrumb->addLink($xnewsletter->getModule()->getVar('name'), XNEWSLETTER_URL);
+        $breadcrumb = new Xnewsletter\Breadcrumb();
+        $breadcrumb->addLink($helper->getModule()->getVar('name'), XNEWSLETTER_URL);
         $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
         $breadcrumb->addLink(_MD_XNEWSLETTER_LETTER_DELETE, '');
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // IN PROGRESS FROM HERE
 
-        $letterObj = $xnewsletter->getHandler('letter')->get($letter_id);
+        $letterObj = $helper->getHandler('Letter')->get($letter_id);
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
-            if ($xnewsletter->getHandler('letter')->delete($letterObj)) {
+            if ($helper->getHandler('Letter')->delete($letterObj)) {
                 //delete protocols
                 $sql = 'DELETE';
                 $sql .= " FROM `{$xoopsDB->prefix('xnewsletter_protocol')}`";
@@ -605,7 +596,7 @@ switch ($op) {
                 }
                 // delete attachments
                 $attachmentCriteria = new \Criteria('attachment_letter_id', $letter_id);
-                $xnewsletter->getHandler('attachment')->deleteAll($attachmentCriteria, true, true);
+                $helper->getHandler('Attachment')->deleteAll($attachmentCriteria, true, true);
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
                 echo $letterObj->getHtmlErrors();

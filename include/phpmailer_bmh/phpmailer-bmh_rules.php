@@ -53,7 +53,7 @@ $rule_categories = [
     'unknown'        => ['remove' => 1, 'bounce_type' => 'hard'],
     'unrecognized'   => ['remove' => 0, 'bounce_type' => false],
     'user_reject'    => ['remove' => 1, 'bounce_type' => 'hard'],
-    'warning'        => ['remove' => 2, 'bounce_type' => 'soft']
+    'warning'        => ['remove' => 2, 'bounce_type' => 'soft'],
 ];
 
 /*
@@ -64,9 +64,9 @@ $bmh_newline = "<br>\n";
 /**
  * Defined bounce parsing rules for non-standard DSN
  *
- * @param string  $body       body of the email
- * @param string  $structure  message structure
- * @param boolean $debug_mode show debug info. or not
+ * @param string $body       body of the email
+ * @param string $structure  message structure
+ * @param bool   $debug_mode show debug info. or not
  *
  * @return array $result an array include the following fields: 'email', 'bounce_type','remove','rule_no','rule_cat'
  *               if we could NOT detect the type of bounce, return rule_no = '0000'
@@ -79,7 +79,7 @@ function bmhBodyRules($body, $structure, $debug_mode = false)
         'bounce_type' => false,
         'remove'      => 0,
         'rule_cat'    => 'unrecognized',
-        'rule_no'     => '0000'
+        'rule_no'     => '0000',
     ];
 
     // ======== rule =========
@@ -442,9 +442,9 @@ function bmhBodyRules($body, $structure, $debug_mode = false)
 /**
  * Defined bounce parsing rules for standard DSN (Delivery Status Notification)
  *
- * @param string  $dsn_msg    human-readable explanation
- * @param string  $dsn_report delivery-status report
- * @param boolean $debug_mode show debug info. or not
+ * @param string $dsn_msg    human-readable explanation
+ * @param string $dsn_report delivery-status report
+ * @param bool   $debug_mode show debug info. or not
  *
  * @return array $result an array include the following fields: 'email', 'bounce_type','remove','rule_no','rule_cat'
  *               if we could NOT detect the type of bounce, return rule_no = '0000'
@@ -457,7 +457,7 @@ function bmhDSNRules($dsn_msg, $dsn_report, $debug_mode = false)
         'bounce_type' => false,
         'remove'      => 0,
         'rule_cat'    => 'unrecognized',
-        'rule_no'     => '0000'
+        'rule_no'     => '0000',
     ];
     $action      = false;
     $status_code = false;
@@ -482,7 +482,7 @@ function bmhDSNRules($dsn_msg, $dsn_report, $debug_mode = false)
     }
 
     if (preg_match('/Action: (.+)/i', $dsn_report, $match)) {
-        $action = strtolower(trim($match[1]));
+        $action = mb_strtolower(trim($match[1]));
     }
 
     if (preg_match("/Status: ([0-9\.]+)/i", $dsn_report, $match)) {
