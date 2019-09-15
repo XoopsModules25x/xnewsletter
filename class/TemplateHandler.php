@@ -46,9 +46,14 @@ class TemplateHandler extends \XoopsPersistableObjectHandler
     /**
      * @param null|\XoopsDatabase $db
      */
-    public function __construct(\XoopsDatabase $db = null)
+    public function __construct(\XoopsDatabase $db = null, Helper $helper = null)
     {
         parent::__construct($db, 'xnewsletter_template', Template::class, 'template_id', 'template_title');
-        $this->helper = Xnewsletter\Helper::getInstance();
+        /** @var Helper $this->helper */
+        if (null === $helper) {
+            $this->helper = Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
     }
 }

@@ -46,9 +46,14 @@ class ProtocolHandler extends \XoopsPersistableObjectHandler
     /**
      * @param null|\XoopsDatabase $db
      */
-    public function __construct(\XoopsDatabase $db = null)
+    public function __construct(\XoopsDatabase $db = null, Helper $helper = null)
     {
         parent::__construct($db, 'xnewsletter_protocol', Protocol::class, 'protocol_id', 'protocol_letter_id');
-        $this->helper = Helper::getInstance();
+        /** @var Helper $this->helper */
+        if (null === $helper) {
+            $this->helper = Helper::getInstance();
+        } else {
+            $this->helper = $helper;
+        }
     }
 }
