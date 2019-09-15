@@ -44,7 +44,7 @@ $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
 $breadcrumb->addLink(_MD_XNEWSLETTER_PROTOCOL, '');
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-$letter_id = Request::getInt('letter_id', 0);
+$letter_id = \Xmf\Request::getInt('letter_id', 0);
 $letterObj = $helper->getHandler('Letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 

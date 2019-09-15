@@ -27,7 +27,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 //It recovered the value of argument op in URL$
-$op = Request::getString('op', 'list');
+$op = \Xmf\Request::getString('op', 'list');
 switch ($op) {
     case 'list':
     default:
@@ -89,7 +89,7 @@ switch ($op) {
         break;
     case 'delete_task':
         $taskObj = $helper->getHandler('Task')->get($_REQUEST['task_id']);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

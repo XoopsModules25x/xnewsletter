@@ -32,7 +32,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = Request::getString('op', 'list');
+$op = \Xmf\Request::getString('op', 'list');
 
 switch ($op) {
     case 'list':
@@ -46,7 +46,7 @@ switch ($op) {
         $catCriteria->setSort('cat_id ASC, cat_name');
         $catCriteria->setOrder('ASC');
         $catCount = $helper->getHandler('Cat')->getCount();
-        $start    = Request::getInt('start', 0);
+        $start    = \Xmf\Request::getInt('start', 0);
         $catCriteria->setStart($start);
         $catCriteria->setLimit($limit);
         $catObjs = $helper->getHandler('Cat')->getAll($catCriteria);
@@ -86,7 +86,7 @@ switch ($op) {
         echo '<br>';
         break;
     case 'list_cat':
-        $cat_id = Request::getInt('cat_id', 0);
+        $cat_id = \Xmf\Request::getInt('cat_id', 0);
 
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_CATLIST, '?op=list', 'list');
@@ -99,7 +99,7 @@ switch ($op) {
         $catsubscrCriteria->setSort('catsubscr_id ASC, catsubscr_catid');
         $catsubscrCriteria->setOrder('ASC');
         $catCount = $helper->getHandler('Catsubscr')->getCount($catsubscrCriteria);
-        $start    = Request::getInt('start', 0);
+        $start    = \Xmf\Request::getInt('start', 0);
         $catsubscrCriteria->setStart($start);
         $catsubscrCriteria->setLimit($limit);
         $catsubscrObjs = $helper->getHandler('Catsubscr')->getAll($catsubscrCriteria);
@@ -179,7 +179,7 @@ switch ($op) {
         $catsubscrObj->setVar('catsubscr_catid', $_REQUEST['catsubscr_catid']);
         $catsubscr_subscrid = $_REQUEST['catsubscr_subscrid'];
         $catsubscrObj->setVar('catsubscr_subscrid', $catsubscr_subscrid);
-        $catsubscr_quit_now = Request::getInt('catsubscr_quit_now', _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE);
+        $catsubscr_quit_now = \Xmf\Request::getInt('catsubscr_quit_now', _XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NONE);
         if (_XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_NOW == $catsubscr_quit_now) {
             $catsubscrObj->setVar('catsubscr_quited', time());
         } elseif (_XNEWSLETTER_CATSUBSCR_QUIT_NO_VAL_REMOVE == $catsubscr_quit_now) {
@@ -203,7 +203,7 @@ switch ($op) {
         $form->display();
         break;
     case 'edit_catsubscr':
-        $cat_id = Request::getInt('cat_id', 0);
+        $cat_id = \Xmf\Request::getInt('cat_id', 0);
 
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_CATSUBSCRLIST, "?op=list_cat&cat_id={$cat_id}", 'list');
@@ -216,7 +216,7 @@ switch ($op) {
         break;
     case 'delete_catsubscr':
         $catsubscrObj = $helper->getHandler('Catsubscr')->get($_REQUEST['catsubscr_id']);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header('catsubscr.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

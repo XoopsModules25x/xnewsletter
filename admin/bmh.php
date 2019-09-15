@@ -32,14 +32,14 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op          = Request::getString('op', 'list');
-$bmh_id      = Request::getInt('bmh_id', 0);
-$bmh_measure = Request::getInt('bmh_measure', 0);
-$filter      = Request::getInt('bmh_measure_filter', _XNEWSLETTER_BMH_MEASURE_VAL_ALL);
+$op          = \Xmf\Request::getString('op', 'list');
+$bmh_id      = \Xmf\Request::getInt('bmh_id', 0);
+$bmh_measure = \Xmf\Request::getInt('bmh_measure', 0);
+$filter      = \Xmf\Request::getInt('bmh_measure_filter', _XNEWSLETTER_BMH_MEASURE_VAL_ALL);
 
 switch ($op) {
     case 'bmh_delsubscr':
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             $count_err = 0;
 
             $bmhObj    = $helper->getHandler('Bmh')->get($bmh_id);
@@ -220,7 +220,7 @@ switch ($op) {
         $bhmCriteria->setSort('bmh_id');
         $bhmCriteria->setOrder('DESC');
         $bhmCount = $helper->getHandler('Bmh')->getCount($bhmCriteria);
-        $start    = Request::getInt('start', 0);
+        $start    = \Xmf\Request::getInt('start', 0);
         $bhmCriteria->setStart($start);
         $bhmCriteria->setLimit($limit);
         $bhmObjs = $helper->getHandler('Bmh')->getAll($bhmCriteria);
@@ -338,18 +338,18 @@ switch ($op) {
         }
 
         $bmhObj = $helper->getHandler('Bmh')->get($bmh_id);
-        $bmhObj->setVar('bmh_rule_no', Request::getString('bmh_rule_no', ''));
-        $bmhObj->setVar('bmh_rule_cat', Request::getString('bmh_rule_cat', ''));
-        $bmhObj->setVar('bmh_bouncetype', Request::getString('bmh_bouncetype', ''));
-        $bmhObj->setVar('bmh_remove', Request::getString('bmh_remove', ''));
-        $bmh_email = Request::getString('bmh_email', '');
+        $bmhObj->setVar('bmh_rule_no', \Xmf\Request::getString('bmh_rule_no', ''));
+        $bmhObj->setVar('bmh_rule_cat', \Xmf\Request::getString('bmh_rule_cat', ''));
+        $bmhObj->setVar('bmh_bouncetype', \Xmf\Request::getString('bmh_bouncetype', ''));
+        $bmhObj->setVar('bmh_remove', \Xmf\Request::getString('bmh_remove', ''));
+        $bmh_email = \Xmf\Request::getString('bmh_email', '');
         $bmh_email = filter_var($bmh_email, FILTER_SANITIZE_EMAIL);
         $bmh_email = xnewsletter_checkEmail($bmh_email);
         $bmhObj->setVar('bmh_email', $bmh_email);
-        $bmhObj->setVar('bmh_subject', Request::getString('bmh_subject', ''));
-        $bmhObj->setVar('bmh_measure', Request::getInt('bmh_measure', 0));
-        $bmhObj->setVar('bmh_submitter', Request::getInt('bmh_submitter', 0));
-        $bmhObj->setVar('bmh_created', Request::getInt('bmh_created', 0));
+        $bmhObj->setVar('bmh_subject', \Xmf\Request::getString('bmh_subject', ''));
+        $bmhObj->setVar('bmh_measure', \Xmf\Request::getInt('bmh_measure', 0));
+        $bmhObj->setVar('bmh_submitter', \Xmf\Request::getInt('bmh_submitter', 0));
+        $bmhObj->setVar('bmh_created', \Xmf\Request::getInt('bmh_created', 0));
 
         if ($helper->getHandler('Bmh')->insert($bmhObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
@@ -369,7 +369,7 @@ switch ($op) {
         break;
     case 'delete_bmh':
         $bmhObj = $helper->getHandler('Bmh')->get($bmh_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

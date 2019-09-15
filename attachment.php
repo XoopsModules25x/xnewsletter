@@ -6,7 +6,7 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
 
 // We recovered the value of the argument op in the URL$
-$attachment_id = Request::getInt('attachment_id', 0);
+$attachment_id = \Xmf\Request::getInt('attachment_id', 0);
 if (!$attachmentObj = $helper->getHandler('Attachment')->get($attachment_id)) {
     redirect_header('index.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
 }

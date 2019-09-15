@@ -32,7 +32,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = Request::getString('op', 'list');
+$op = \Xmf\Request::getString('op', 'list');
 
 $adminObject = \Xmf\Module\Admin::getInstance();
 $letterAdmin = \Xmf\Module\Admin::getInstance();
@@ -47,7 +47,7 @@ switch ($op) {
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letterCount = $helper->getHandler('Letter')->getCount();
-        $start       = Request::getInt('start', 0);
+        $start       = \Xmf\Request::getInt('start', 0);
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
         $letterObjs = $helper->getHandler('Letter')->getAll($letterCriteria);
@@ -171,7 +171,7 @@ switch ($op) {
         $protocolCriteria->setSort('protocol_id');
         $protocolCriteria->setOrder('DESC');
         $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
-        $start         = Request::getInt('start', 0);
+        $start         = \Xmf\Request::getInt('start', 0);
         $protocolCriteria->setStart($start);
         $protocolCriteria->setLimit($limit);
         $protocolObjs = $helper->getHandler('Protocol')->getAll($protocolCriteria);
@@ -273,7 +273,7 @@ switch ($op) {
         break;
     case 'delete_protocol':
         $protocolObj = $helper->getHandler('Protocol')->get($_REQUEST['protocol_id']);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -290,7 +290,7 @@ switch ($op) {
         $letter_id = \Xmf\Request::getInt('letter_id', 0, 'REQUEST');
         if ($letter_id > 0) {
             $letterObj = $helper->getHandler('Letter')->get($_REQUEST['letter_id']);
-            if (true === Request::getBool('ok', false, 'POST')) {
+            if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
                 if (!$GLOBALS['xoopsSecurity']->check()) {
                     redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
                 }

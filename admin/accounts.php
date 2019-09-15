@@ -32,10 +32,10 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op             = Request::getString('op', 'list');
-$save_and_check = Request::getString('save_and_check', 'none');
-$accounts_id    = Request::getInt('accounts_id', 0);
-$post           = Request::getString('post', '');
+$op             = \Xmf\Request::getString('op', 'list');
+$save_and_check = \Xmf\Request::getString('save_and_check', 'none');
+$accounts_id    = \Xmf\Request::getInt('accounts_id', 0);
+$post           = \Xmf\Request::getString('post', '');
 
 if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
     $op = 'edit_account';
@@ -213,7 +213,7 @@ switch ($op) {
         $accountsCriteria->setSort('accounts_id ASC, accounts_type');
         $accountsCriteria->setOrder('ASC');
         $accountsCount = $helper->getHandler('Accounts')->getCount();
-        $start         = Request::getInt('start', 0);
+        $start         = \Xmf\Request::getInt('start', 0);
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
         $accountsObjs = $helper->getHandler('Accounts')->getAll($accountsCriteria);
@@ -341,7 +341,7 @@ switch ($op) {
         break;
     case 'delete_account':
         $accountObj = $helper->getHandler('Accounts')->get($accounts_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

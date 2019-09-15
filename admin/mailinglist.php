@@ -32,7 +32,7 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op = Request::getString('op', 'list');
+$op = \Xmf\Request::getString('op', 'list');
 
 switch ($op) {
     case 'list':
@@ -45,7 +45,7 @@ switch ($op) {
         $mailinglistCriteria->setSort('mailinglist_id ASC, mailinglist_email');
         $mailinglistCriteria->setOrder('ASC');
         $mailinglistCount = $helper->getHandler('Mailinglist')->getCount();
-        $start            = Request::getInt('start', 0);
+        $start            = \Xmf\Request::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
         $mailinglistObjs = $helper->getHandler('Mailinglist')->getAll($mailinglistCriteria);
@@ -141,7 +141,7 @@ switch ($op) {
         break;
     case 'delete_mailinglist':
         $mailinglistObj = $helper->getHandler('Mailinglist')->get($_REQUEST['mailinglist_id']);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

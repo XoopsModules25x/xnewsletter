@@ -39,7 +39,7 @@ $xoopsLogger->activated = false;
 $GLOBALS['xoopsTpl']->assign('xoops_pagetitle', _AM_XNEWSLETTER_LETTER_ACTION_PREVIEW);
 
 // get letter_id
-$letter_id = Request::getString('letter_id', 'list');
+$letter_id = \Xmf\Request::getString('letter_id', 'list');
 // check letter_id
 if ($letter_id < 1) {
     redirect_header('letter.php', 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);

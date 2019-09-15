@@ -29,10 +29,10 @@ use XoopsModules\Xnewsletter;
 
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
-$op            = Request::getString('op', 'search_subscription');
-$activationKey = Request::getString('actkey', '');
-$subscr_id     = Request::getInt('subscr_id', 0);
-$subscr_email  = Request::getString('subscr_email', '');
+$op            = \Xmf\Request::getString('op', 'search_subscription');
+$activationKey = \Xmf\Request::getString('actkey', '');
+$subscr_id     = \Xmf\Request::getInt('subscr_id', 0);
+$subscr_email  = \Xmf\Request::getString('subscr_email', '');
 
 if (\Xmf\Request::hasVar('addnew', 'REQUEST')) {
     $op = 'addnew_subscription';
@@ -41,10 +41,10 @@ if ('' != $activationKey && 'unsub' !== $op) {
     $op = 'save_subscription';
 }
 if ('unsub' === $op) {
-    $subscr_email = Request::getString('email', '');
+    $subscr_email = \Xmf\Request::getString('email', '');
     $op           = 'delete_subscription';
     //$GLOBALS['xoopsOption']['template_main'] = 'xnewsletter_subscription.tpl';
-    $_SESSION['redirect_mail'] = Request::getString('email', '');
+    $_SESSION['redirect_mail'] = \Xmf\Request::getString('email', '');
     $_SESSION['unsub']         = '1';
 } else {
     $_SESSION['redirect_mail'] = '';
@@ -119,7 +119,7 @@ switch ($op) {
             $_SESSION['redirect_mail'] = $subscr_email;
         } else {
             // if anonymous subscriber get subscr_email from search form
-            $subscr_email = Request::getString('subscr_email', '');
+            $subscr_email = \Xmf\Request::getString('subscr_email', '');
             if ('' != $subscr_email) {
                 // check captcha
                 xoops_load('xoopscaptcha');
@@ -224,7 +224,7 @@ switch ($op) {
         $actionProts_error   = [];
 
         // check if subscr exists
-        $subscr_id      = Request::getInt('subscr_id', 0);
+        $subscr_id      = \Xmf\Request::getInt('subscr_id', 0);
         $subscrCriteria = new \Criteria('subscr_id', $subscr_id);
         $subscrCount    = $helper->getHandler('Subscr')->getCount($subscrCriteria);
         if (0 == $subscrCount) {
@@ -310,7 +310,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get edit subscr form
-        $subscr_id = Request::getInt('subscr_id', 0);
+        $subscr_id = \Xmf\Request::getInt('subscr_id', 0);
         if ($subscr_id <= 0) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
@@ -371,9 +371,9 @@ switch ($op) {
                 $subscrObj = $helper->getHandler('Subscr')->create();
                 $saveType  = 'addnew';
             }
-            $subscrObj->setVar('subscr_sex', Request::getString('subscr_sex', ''));
-            $subscrObj->setVar('subscr_firstname', Request::getString('subscr_firstname', ''));
-            $subscrObj->setVar('subscr_lastname', Request::getString('subscr_lastname', ''));
+            $subscrObj->setVar('subscr_sex', \Xmf\Request::getString('subscr_sex', ''));
+            $subscrObj->setVar('subscr_firstname', \Xmf\Request::getString('subscr_firstname', ''));
+            $subscrObj->setVar('subscr_lastname', \Xmf\Request::getString('subscr_lastname', ''));
             // insert subscr
             if (!$helper->getHandler('Subscr')->insert($subscrObj)) {
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . '<br>' . $subscrObj->getHtmlErrors());
@@ -395,8 +395,8 @@ switch ($op) {
                 $selection      = [];
                 $selection[0]   = $cat_id;
                 $selection[1]   = in_array($cat_id, $_REQUEST['cats']) ? '1' : '0'; //isset($_REQUEST["cats_{$cat_id}"]);
-                $selection[2]   = Request::getInt("existing_catsubcr_id_{$cat_id}", 0);
-                $selection[3]   = Request::getInt("existing_catsubscr_quited_{$cat_id}", 0);
+                $selection[2]   = \Xmf\Request::getInt("existing_catsubcr_id_{$cat_id}", 0);
+                $selection[3]   = \Xmf\Request::getInt("existing_catsubscr_quited_{$cat_id}", 0);
                 $code_selection = implode('-', $selection);
                 $selections[]   = $code_selection;
                 unset($selection);
@@ -418,9 +418,9 @@ switch ($op) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
                 }
                 // get subscr fields from form
-                $subscr_firstname = Request::getString('subscr_firstname', '');
-                $subscr_lastname  = Request::getString('subscr_lastname', '');
-                $subscr_sex       = Request::getString('subscr_sex', '');
+                $subscr_firstname = \Xmf\Request::getString('subscr_firstname', '');
+                $subscr_lastname  = \Xmf\Request::getString('subscr_lastname', '');
+                $subscr_sex       = \Xmf\Request::getString('subscr_sex', '');
                 // create $code_selections string
                 $catCriteria = new \CriteriaCompo();
                 $catCriteria->setSort('cat_id');
@@ -431,9 +431,9 @@ switch ($op) {
                     // create selections: $cat_id-$cat_selected-$old_catsubcr_id-$old_catsubscr_quited
                     $selection      = [];
                     $selection[0]   = $cat_id;
-                    $selection[1]   = in_array($cat_id, Request::getArray('cats')) ? '1' : '0'; //isset($_REQUEST["cats_{$cat_id}"]);
-                    $selection[2]   = Request::getInt("existing_catsubcr_id_{$cat_id}", 0);
-                    $selection[3]   = Request::getInt("existing_catsubscr_quited_{$cat_id}", 0);
+                    $selection[1]   = in_array($cat_id, \Xmf\Request::getArray('cats')) ? '1' : '0'; //isset($_REQUEST["cats_{$cat_id}"]);
+                    $selection[2]   = \Xmf\Request::getInt("existing_catsubcr_id_{$cat_id}", 0);
+                    $selection[3]   = \Xmf\Request::getInt("existing_catsubscr_quited_{$cat_id}", 0);
                     $code_selection = implode('-', $selection);
                     $selections[]   = $code_selection;
                     unset($selection);

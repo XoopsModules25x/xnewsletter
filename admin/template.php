@@ -32,8 +32,8 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op          = Request::getString('op', 'list');
-$template_id = Request::getInt('template_id', 0);
+$op          = \Xmf\Request::getString('op', 'list');
+$template_id = \Xmf\Request::getInt('template_id', 0);
 
 switch ($op) {
     case 'list':
@@ -48,7 +48,7 @@ switch ($op) {
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder('DESC');
         $templatesCount = $helper->getHandler('Template')->getCount();
-        $start          = Request::getInt('start', 0);
+        $start          = \Xmf\Request::getInt('start', 0);
         $templateCriteria->setStart($start);
         $templateCriteria->setLimit($limit);
         $templateObjs = $helper->getHandler('Template')->getAll($templateCriteria);
@@ -108,11 +108,11 @@ switch ($op) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         $templateObj = $helper->getHandler('Template')->get($template_id);
-        $templateObj->setVar('template_title', Request::getString('template_title', ''));
+        $templateObj->setVar('template_title', \Xmf\Request::getString('template_title', ''));
         $templateObj->setVar('template_description', $_REQUEST['template_description']);
         $templateObj->setVar('template_content', $_REQUEST['template_content']);
-        $templateObj->setVar('template_submitter', Request::getInt('template_submitter', 0));
-        $templateObj->setVar('template_created', Request::getInt('template_created', time()));
+        $templateObj->setVar('template_submitter', \Xmf\Request::getInt('template_submitter', 0));
+        $templateObj->setVar('template_created', \Xmf\Request::getInt('template_created', time()));
 
         if ($helper->getHandler('Template')->insert($templateObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
@@ -134,7 +134,7 @@ switch ($op) {
         break;
     case 'delete_template':
         $templateObj = $helper->getHandler('Template')->get($template_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

@@ -29,8 +29,8 @@ use Xmf\Request;
 
 require_once __DIR__ . '/admin_header.php';
 
-$op                  = Request::getString('op', 'list');
-$letter_id           = Request::getInt('letter_id', 0);
+$op                  = \Xmf\Request::getString('op', 'list');
+$letter_id           = \Xmf\Request::getInt('letter_id', 0);
 $xn_send_in_packages = $helper->getConfig('xn_send_in_packages');
 if ($xn_send_in_packages > 0 && 'send_test' !== $op) {
     $xn_send_in_packages_time = $helper->getConfig('xn_send_in_packages_time');

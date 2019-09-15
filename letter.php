@@ -34,9 +34,9 @@ require_once __DIR__ . '/header.php';
 $uid    = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
 $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
 
-$op        = Request::getString('op', 'list_letters');
-$letter_id = Request::getInt('letter_id', 0);
-$cat_id    = Request::getInt('cat_id', 0);
+$op        = \Xmf\Request::getString('op', 'list_letters');
+$letter_id = \Xmf\Request::getInt('letter_id', 0);
+$cat_id    = \Xmf\Request::getInt('cat_id', 0);
 
 switch ($op) {
     case 'list_subscrs':
@@ -89,7 +89,7 @@ switch ($op) {
             }
         }
         // get cat_id
-        $cat_id = Request::getInt('cat_id', 0);
+        $cat_id = \Xmf\Request::getInt('cat_id', 0);
         $xoopsTpl->assign('cat_id', $cat_id);
         if ($cat_id > 0) {
             $catObj = $helper->getHandler('Cat')->get($cat_id);
@@ -125,7 +125,7 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // get letter_id
-        $letter_id = Request::getInt('letter_id', 0);
+        $letter_id = \Xmf\Request::getInt('letter_id', 0);
         // get letter object
         $letterObj = $helper->getHandler('Letter')->get($letter_id);
         // subscr data
@@ -189,7 +189,7 @@ switch ($op) {
         $xoTheme->addMeta('meta', 'description', strip_tags(_MA_XNEWSLETTER_DESC)); // description
 
         // get letter_id
-        $letter_id = Request::getInt('letter_id', 0);
+        $letter_id = \Xmf\Request::getInt('letter_id', 0);
         // get letter object
         $letterObj = $helper->getHandler('Letter')->get($letter_id);
         // subscr data
@@ -250,7 +250,7 @@ switch ($op) {
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letterCount = $helper->getHandler('Letter')->getCount();
-        $start       = Request::getInt('start', 0);
+        $start       = \Xmf\Request::getInt('start', 0);
         $limit       = $helper->getConfig('adminperpage');
         $letterCriteria->setStart($start);
         $letterCriteria->setLimit($limit);
@@ -388,14 +388,14 @@ switch ($op) {
         $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
         // update existing_attachments
-        $existing_attachments_mode = Request::getArray('existing_attachments_mode', []);
+        $existing_attachments_mode = \Xmf\Request::getArray('existing_attachments_mode', []);
         foreach ($existing_attachments_mode as $attachment_id => $attachment_mode) {
             $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
             $attachmentObj->setVar('attachment_mode', $attachment_mode);
             $helper->getHandler('Attachment')->insert($attachmentObj);
         }
 
-        $attachment_id = Request::getInt('deleted_attachment_id', 0, 'POST');
+        $attachment_id = \Xmf\Request::getInt('deleted_attachment_id', 0, 'POST');
         if (0 == $attachment_id) {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_LETTER_ERROR_INVALID_ATT_ID);
         }
@@ -404,10 +404,10 @@ switch ($op) {
 
         if ($helper->getHandler('Attachment')->delete($attachmentObj, true)) {
             $letterObj = $helper->getHandler('Letter')->get($letter_id);
-            $letterObj->setVar('letter_title', Request::getString('letter_title', ''));
+            $letterObj->setVar('letter_title', \Xmf\Request::getString('letter_title', ''));
             $letterObj->setVar('letter_content', $_REQUEST['letter_content']);
             $letterObj->setVar('letter_template', $_REQUEST['letter_template']);
-            $letterObj->setVar('letter_cats', implode('|', Request::getArray('letter_cats', [])));
+            $letterObj->setVar('letter_cats', implode('|', \Xmf\Request::getArray('letter_cats', [])));
             $letterObj->setVar('letter_account', $_REQUEST['letter_account']);
             $letterObj->setVar('letter_email_test', $_REQUEST['letter_email_test']);
 
@@ -435,19 +435,19 @@ switch ($op) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         $letterObj = $helper->getHandler('Letter')->get($letter_id); // create if doesn't exist
-        $letterObj->setVar('letter_title', Request::getString('letter_title', ''));
+        $letterObj->setVar('letter_title', \Xmf\Request::getString('letter_title', ''));
         $letterObj->setVar('letter_content', $_REQUEST['letter_content']);
         $letterObj->setVar('letter_template', $_REQUEST['letter_template']);
-        $letterObj->setVar('letter_cats', implode('|', Request::getArray('letter_cats', [])));
+        $letterObj->setVar('letter_cats', implode('|', \Xmf\Request::getArray('letter_cats', [])));
         $letterObj->setVar('letter_account', $_REQUEST['letter_account']);
         $letterObj->setVar('letter_email_test', $_REQUEST['letter_email_test']);
-        $letterObj->setVar('letter_submitter', Request::getInt('letter_submitter', 0));
-        $letterObj->setVar('letter_created', Request::getInt('letter_created', time()));
+        $letterObj->setVar('letter_submitter', \Xmf\Request::getInt('letter_submitter', 0));
+        $letterObj->setVar('letter_created', \Xmf\Request::getInt('letter_created', time()));
 
         if ($helper->getHandler('Letter')->insert($letterObj)) {
             $letter_id = $letterObj->getVar('letter_id');
             // update existing_attachments
-            $existing_attachments_mode = Request::getArray('existing_attachments_mode', []);
+            $existing_attachments_mode = \Xmf\Request::getArray('existing_attachments_mode', []);
             foreach ($existing_attachments_mode as $attachment_id => $attachment_mode) {
                 $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
                 $attachmentObj->setVar('attachment_mode', $attachment_mode);
@@ -466,7 +466,7 @@ switch ($op) {
                 chmod($uploaddir, 0777);
                 copy($indexFile, $uploaddir . 'index.html');
             }
-            $new_attachments_mode = Request::getArray('new_attachments_mode', []);
+            $new_attachments_mode = \Xmf\Request::getArray('new_attachments_mode', []);
             for ($upl = 0; $upl < $helper->getConfig('xn_maxattachments'); ++$upl) {
                 $uploader = new \XoopsMediaUploader($uploaddir, $helper->getConfig('xn_mimetypes'), $helper->getConfig('xn_maxsize'), null, null);
                 if ($uploader->fetchMedia(@$_POST['xoops_upload_file'][$upl])) {
@@ -505,7 +505,7 @@ switch ($op) {
             $protocolObj->setVar('protocol_letter_id', $letter_id);
             $protocolObj->setVar('protocol_subscriber_id', 0);
             $protocolObj->setVar('protocol_success', true);
-            $action = Request::getInt('letter_action', _XNEWSLETTER_LETTER_ACTION_VAL_NO);
+            $action = \Xmf\Request::getInt('letter_action', _XNEWSLETTER_LETTER_ACTION_VAL_NO);
             switch ($action) {
                 case _XNEWSLETTER_LETTER_ACTION_VAL_PREVIEW:
                     $redirectUrl = "?op=show_preview&letter_id={$letter_id}";
@@ -582,7 +582,7 @@ switch ($op) {
         // IN PROGRESS FROM HERE
 
         $letterObj = $helper->getHandler('Letter')->get($letter_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

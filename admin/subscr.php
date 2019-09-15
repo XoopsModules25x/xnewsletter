@@ -33,13 +33,13 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op        = Request::getString('op', 'list');
-$subscr_id = Request::getInt('subscr_id', 0);
+$op        = \Xmf\Request::getString('op', 'list');
+$subscr_id = \Xmf\Request::getInt('subscr_id', 0);
 
-$filter_subscr           = Request::getString('filter_subscr', '=');
-$filter_subscr_firstname = Request::getString('filter_subscr_firstname', '');
-$filter_subscr_lastname  = Request::getString('filter_subscr_lastname', '');
-$filter_subscr_email     = Request::getString('filter_subscr_email', '');
+$filter_subscr           = \Xmf\Request::getString('filter_subscr', '=');
+$filter_subscr_firstname = \Xmf\Request::getString('filter_subscr_firstname', '');
+$filter_subscr_lastname  = \Xmf\Request::getString('filter_subscr_lastname', '');
+$filter_subscr_email     = \Xmf\Request::getString('filter_subscr_email', '');
 
 if ('apply_filter' === $op) {
     if ('LIKE' === $filter_subscr && '' == !$filter_subscr_firstname) {
@@ -60,7 +60,7 @@ $adminObject = \Xmf\Module\Admin::getInstance();
 switch ($op) {
     case 'show_catsubscr':
         $adminObject->displayNavigation($currentFile);
-        $apply_filter = Request::getString('apply_filter', 'list');
+        $apply_filter = \Xmf\Request::getString('apply_filter', 'list');
         $linklist     = "?op=$apply_filter&filter_subscr={$filter_subscr}";
         $linklist     .= "&filter_subscr_firstname={$filter_subscr_firstname}";
         $linklist     .= "&filter_subscr_lastname={$filter_subscr_lastname}";
@@ -127,7 +127,7 @@ switch ($op) {
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('DESC');
         $subscrCount = $helper->getHandler('Subscr')->getCount($subscrCriteria);
-        $start       = Request::getInt('start', 0);
+        $start       = \Xmf\Request::getInt('start', 0);
         $subscrCriteria->setStart($start);
         $subscrCriteria->setLimit($limit);
         $subscrObjs = $helper->getHandler('Subscr')->getAll($subscrCriteria);
@@ -245,10 +245,10 @@ switch ($op) {
                 echo '    </td>';
                 echo '</tr>';
 
-                //                $filter_subscr           = Request::getString('filter_subscr', '=');
-                //                $filter_subscr_firstname = Request::getString('filter_subscr_firstname', '');
-                //                $filter_subscr_lastname  = Request::getString('filter_subscr_lastname', '');
-                //                $filter_subscr_email     = Request::getString('filter_subscr_email', '');
+                //                $filter_subscr           = \Xmf\Request::getString('filter_subscr', '=');
+                //                $filter_subscr_firstname = \Xmf\Request::getString('filter_subscr_firstname', '');
+                //                $filter_subscr_lastname  = \Xmf\Request::getString('filter_subscr_lastname', '');
+                //                $filter_subscr_email     = \Xmf\Request::getString('filter_subscr_email', '');
             }
             echo '<tr>';
             echo "    <td colspan='9'>";
@@ -269,12 +269,12 @@ switch ($op) {
         echo '<br>';
         break;
     case 'apply_actions':
-        $action         = Request::getString('actions_action');
-        $subscr_ids     = Request::getArray('subscr_ids', unserialize(Request::getString('serialize_subscr_ids')));
+        $action         = \Xmf\Request::getString('actions_action');
+        $subscr_ids     = \Xmf\Request::getArray('subscr_ids', unserialize(Request::getString('serialize_subscr_ids')));
         $subscrCriteria = new \Criteria('subscr_id', '(' . implode(',', $subscr_ids) . ')', 'IN');
         switch ($action) {
             case 'delete':
-                if (true === Request::getBool('ok', false, 'POST')) {
+                if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
                     // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
                     if ($helper->getHandler('Subscr')->deleteAll($subscrCriteria, true, true)) {
                         redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
@@ -339,7 +339,7 @@ switch ($op) {
         $subscrObj->setVar('subscr_created', $_REQUEST['subscr_created']);
         $subscrObj->setVar('subscr_ip', $_REQUEST['subscr_ip']);
         $subscrObj->setVar('subscr_actkey', $_REQUEST['subscr_actkey']);
-        $subscrObj->setVar('subscr_activated', Request::getInt('subscr_activated', 0));
+        $subscrObj->setVar('subscr_activated', \Xmf\Request::getInt('subscr_activated', 0));
 
         if ($helper->getHandler('Subscr')->insert($subscrObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
@@ -361,7 +361,7 @@ switch ($op) {
         break;
     case 'delete_subscr':
         $subscrObj = $helper->getHandler('Subscr')->get($subscr_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

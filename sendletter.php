@@ -48,8 +48,8 @@ if (!$xoopsUser) {
     redirect_header(XOOPS_URL . '/modules/' . $helper->getModule()->dirname() . '/index.php', 3, _NOPERM);
 }
 
-$op        = Request::getString('op', 'list');
-$letter_id = Request::getInt('letter_id', 0);
+$op        = \Xmf\Request::getString('op', 'list');
+$letter_id = \Xmf\Request::getInt('letter_id', 0);
 
 if ($letter_id < 1) {
     redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID);
@@ -68,7 +68,7 @@ $protocolCriteria->add(new \Criteria('protocol_subscriber_id', 0, '>'));
 $protocolCriteria->setLimit(1);
 $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
 if ($protocolCount > 0) {
-    if (true === Request::getBool('ok', false, 'POST')) {
+    if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
         $start_sending = true;
     } else {
         xoops_confirm(['ok' => true, 'op' => $op, 'letter_id' => $letter_id], $_SERVER['REQUEST_URI'], _AM_XNEWSLETTER_SEND_SURE_SENT);

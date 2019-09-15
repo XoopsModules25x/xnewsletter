@@ -33,8 +33,8 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op     = Request::getString('op', 'list');
-$cat_id = Request::getInt('cat_id', 0);
+$op     = \Xmf\Request::getString('op', 'list');
+$cat_id = \Xmf\Request::getInt('cat_id', 0);
 
 switch ($op) {
     case 'list':
@@ -43,7 +43,7 @@ switch ($op) {
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWCAT, '?op=new_cat', 'add');
         $adminObject->displayButton('left');
 
-        $start       = Request::getInt('start', 0);
+        $start       = \Xmf\Request::getInt('start', 0);
         $limit       = $helper->getConfig('adminperpage');
         $catsCount   = $helper->getHandler('Cat')->getCount();
         $catCriteria = new \CriteriaCompo();
@@ -156,9 +156,9 @@ switch ($op) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
         $catObj = $helper->getHandler('Cat')->get($cat_id);
-        $catObj->setVar('cat_name', Request::getString('cat_name', ''));
+        $catObj->setVar('cat_name', \Xmf\Request::getString('cat_name', ''));
         $catObj->setVar('cat_info', $_REQUEST['cat_info']);
-        $catObj->setVar('cat_mailinglist', Request::getInt('cat_mailinglist', 0));
+        $catObj->setVar('cat_mailinglist', \Xmf\Request::getInt('cat_mailinglist', 0));
         $catObj->setVar('cat_submitter', $xoopsUser->uid());
         $catObj->setVar('cat_created', time());
         $catObj->setVar('dohtml', isset($_REQUEST['dohtml']));
@@ -173,28 +173,28 @@ switch ($op) {
             // Form cat_gperms_read
             $grouppermHandler->deleteByModule($helper->getModule()->mid(), 'newsletter_read_cat', $cat_id);
             $grouppermHandler->addRight('newsletter_read_cat', $cat_id, XOOPS_GROUP_ADMIN, $helper->getModule()->mid());
-            $cat_gperms_read_groupids = Request::getArray('cat_gperms_read', []);
+            $cat_gperms_read_groupids = \Xmf\Request::getArray('cat_gperms_read', []);
             foreach ($cat_gperms_read_groupids as $groupid) {
                 $grouppermHandler->addRight('newsletter_read_cat', $cat_id, $groupid, $helper->getModule()->mid());
             }
             // Form cat_gperms_admin
             $grouppermHandler->deleteByModule($helper->getModule()->mid(), 'newsletter_admin_cat', $cat_id);
             $grouppermHandler->addRight('newsletter_admin_cat', $cat_id, XOOPS_GROUP_ADMIN, $helper->getModule()->mid());
-            $cat_gperms_admin_groupids = Request::getArray('cat_gperms_admin', []);
+            $cat_gperms_admin_groupids = \Xmf\Request::getArray('cat_gperms_admin', []);
             foreach ($cat_gperms_admin_groupids as $groupid) {
                 $grouppermHandler->addRight('newsletter_admin_cat', $cat_id, $groupid, $helper->getModule()->mid());
             }
             // Form cat_gperms_create
             $grouppermHandler->deleteByModule($helper->getModule()->mid(), 'newsletter_create_cat', $cat_id);
             $grouppermHandler->addRight('newsletter_create_cat', $cat_id, XOOPS_GROUP_ADMIN, $helper->getModule()->mid());
-            $cat_gperms_create_groupids = Request::getArray('cat_gperms_create', []);
+            $cat_gperms_create_groupids = \Xmf\Request::getArray('cat_gperms_create', []);
             foreach ($cat_gperms_create_groupids as $groupid) {
                 $grouppermHandler->addRight('newsletter_create_cat', $cat_id, $groupid, $helper->getModule()->mid());
             }
             // Form cat_gperms_list
             $grouppermHandler->deleteByModule($helper->getModule()->mid(), 'newsletter_list_cat', $cat_id);
             $grouppermHandler->addRight('newsletter_list_cat', $cat_id, XOOPS_GROUP_ADMIN, $helper->getModule()->mid());
-            $cat_gperms_list_groupids = Request::getArray('cat_gperms_list', []);
+            $cat_gperms_list_groupids = \Xmf\Request::getArray('cat_gperms_list', []);
             foreach ($cat_gperms_list_groupids as $groupid) {
                 $grouppermHandler->addRight('newsletter_list_cat', $cat_id, $groupid, $helper->getModule()->mid());
             }
@@ -218,7 +218,7 @@ switch ($op) {
         break;
     case 'delete_cat':
         $catObj = $helper->getHandler('Cat')->get($_REQUEST['cat_id']);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }

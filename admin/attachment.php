@@ -32,8 +32,8 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
 // We recovered the value of the argument op in the URL$
-$op            = Request::getString('op', 'list');
-$attachment_id = Request::getInt('attachment_id', 0);
+$op            = \Xmf\Request::getString('op', 'list');
+$attachment_id = \Xmf\Request::getInt('attachment_id', 0);
 
 switch ($op) {
     case 'list':
@@ -46,7 +46,7 @@ switch ($op) {
         $attachmentCriteria->setSort('attachment_letter_id DESC, attachment_id');
         $attachmentCriteria->setOrder('DESC');
         $attachmentCount = $helper->getHandler('Attachment')->getCount();
-        $start           = Request::getInt('start', 0);
+        $start           = \Xmf\Request::getInt('start', 0);
         $attachmentCriteria->setStart($start);
         $attachmentCriteria->setLimit($limit);
         $attachmentObjs = $helper->getHandler('Attachment')->getObjects($attachmentCriteria, true);
@@ -111,7 +111,7 @@ switch ($op) {
         }
 
         $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
-        $attachmentObj->setVar('attachment_mode', Request::getInt('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
+        $attachmentObj->setVar('attachment_mode', \Xmf\Request::getInt('attachment_mode', _XNEWSLETTER_ATTACHMENTS_MODE_ASATTACHMENT));
 
         if ($helper->getHandler('Attachment')->insert($attachmentObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
@@ -123,7 +123,7 @@ switch ($op) {
         break;
     case 'delete_attachment':
         $attachmentObj = $helper->getHandler('Attachment')->get($attachment_id);
-        if (true === Request::getBool('ok', false, 'POST')) {
+        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
