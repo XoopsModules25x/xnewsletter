@@ -36,7 +36,7 @@ xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 require_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
 require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
 require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
-require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class
 //require_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // XnewsletterXnewsletter class
 //require_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
 //require_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // Breadcrumb class
@@ -46,7 +46,7 @@ xoops_load('XoopsUserUtility');
 $myts = \MyTextSanitizer::getInstance();
 
 $debug  = false;
-$helper = Xnewsletter\Helper::getInstance($debug);
+$helper = \XoopsModules\Xnewsletter\Helper::getInstance($debug);
 
 //This is needed or it will not work in blocks.
 global $xnewsletter_isAdmin;

@@ -466,7 +466,7 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  */
 function xnewsletter_emailSize($letter_id = 0)
 {
-    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
+//    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
     global $XoopsTpl;
     $helper = Xnewsletter\Helper::getInstance();
 

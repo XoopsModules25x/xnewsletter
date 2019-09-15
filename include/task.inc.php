@@ -168,7 +168,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
 function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
 {
     require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/functions.php';
-    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
+//    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
 
     global $XoopsTpl, $xoopsDB, $xoopsUser;
     $helper = Xnewsletter\Helper::getInstance();

@@ -138,7 +138,7 @@ switch ($op) {
         break;
     case 'run_bmh':
         require_once __DIR__ . '/bmh_callback_database.php';
-        require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php';
+//        require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/phpmailer_bmh/class.phpmailer-bmh.php';
 
         $accountCriteria = new \CriteriaCompo();
         $accountCriteria->add(new \Criteria('accounts_use_bmh', '1'));
