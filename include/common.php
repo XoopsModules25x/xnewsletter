@@ -8,16 +8,19 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * xnewsletter module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @package         xnewsletter
  * @since           1.3
  * @author          Xoops Development Team
- * @version         svn:$id$
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
 // This must contain the name of the folder in which reside xnewsletter
@@ -30,35 +33,35 @@ define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
 
 xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
 
-include_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
-include_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
-include_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
-include_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class
-include_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // xnewsletterxnewsletter class
-//include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
-include_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // XnewsletterBreadcrumb class
+require_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
+require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
+require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
+require_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // Session class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // XnewsletterXnewsletter class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
+//require_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // Breadcrumb class
 
 xoops_load('XoopsUserUtility');
-xoops_load('xoopsrequest');
 // MyTextSanitizer object
-$myts = MyTextSanitizer::getInstance();
+$myts = \MyTextSanitizer::getInstance();
 
-$debug = false;
-$xnewsletter = xnewsletterxnewsletter::getInstance($debug);
+$debug  = false;
+$helper = Xnewsletter\Helper::getInstance($debug);
 
 //This is needed or it will not work in blocks.
 global $xnewsletter_isAdmin;
 
 // Load only if module is installed
-if (is_object($xnewsletter->getModule())) {
+if (is_object($helper->getModule())) {
     // Find if the user is admin of the module
     $xnewsletter_isAdmin = xnewsletter_userIsAdmin();
 }
-$xoopsModule = $xnewsletter->getModule();
+$xoopsModule = $helper->getModule();
 
 // Load Xoops handlers
-$module_handler       = xoops_getHandler('module');
-$member_handler       = xoops_getHandler('member');
-$notification_handler = xoops_getHandler('notification');
-$gperm_handler        = xoops_getHandler('groupperm');
-$config_handler       = xoops_getHandler('config');
+$moduleHandler = xoops_getHandler('module');
+$memberHandler = xoops_getHandler('member');
+/** @var \XoopsNotificationHandler $notificationHandler */
+$notificationHandler = xoops_getHandler('notification');
+$grouppermHandler    = xoops_getHandler('groupperm');
+$configHandler       = xoops_getHandler('config');

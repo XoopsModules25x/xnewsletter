@@ -1,0 +1,5 @@
+Read Me First
+=============
+1. Delete old /modules/xNewsletter directory
+2. Copy this module in /modules directory
+3. Update this module

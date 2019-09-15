@@ -11,15 +11,14 @@
 /**
  * xnewsletter module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @package         xnewsletter
  * @since           1.3
  * @author          Xoops Development Team
- * @version         svn:$id$
  */
 // Module info/menu
-$moduleInfo = $xnewsletter->getModule()->getInfo();
+$moduleInfo = $helper->getModule()->getInfo();
 //$xoopsTpl->assign('xnewsletterModuleInfo', $moduleInfo); // huge array but useful?
 $xoopsTpl->assign('xnewsletterModuleInfoSub', $moduleInfo['sub']);
 // Module admin
@@ -29,12 +28,12 @@ $xoopsTpl->assign('isAdmin', xnewsletter_userIsAdmin());
 $xoopsTpl->assign('copyright', $moduleCopyrightHtml); // this definition is not removed for backward compatibility issues
 $xoopsTpl->assign('copyright_code', $moduleCopyrightHtml); // include/config.php
 // advertise
-$xoopsTpl->assign('adv', $xnewsletter->getConfig('advertise')); // this definition is not removed for backward compatibility issues
-$xoopsTpl->assign('advertise_code', $xnewsletter->getConfig('advertise'));
+$xoopsTpl->assign('adv', $helper->getConfig('advertise')); // this definition is not removed for backward compatibility issues
+$xoopsTpl->assign('advertise_code', $helper->getConfig('advertise'));
 // social
-if ($xnewsletter->getConfig('social_active') == true) {
+if (true === $helper->getConfig('social_active')) {
     $xoopsTpl->assign('social_active', true);
-    $xoopsTpl->assign('social_code', $xnewsletter->getConfig('social_code'));
+    $xoopsTpl->assign('social_code', $helper->getConfig('social_code'));
 }
 
-include_once XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

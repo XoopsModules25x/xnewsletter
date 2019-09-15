@@ -17,81 +17,118 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  * ****************************************************************************
  */
 
-include_once dirname(__DIR__) . '/include/common.php';
-$xnewsletter = xnewsletterxnewsletter::getInstance();
-$pathImageAdmin = 'assets/images/icons';
+use XoopsModules\Xnewsletter;
 
-$adminmenu              = [];
-$i                      = 1;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU1;
-$adminmenu[$i]['link']  = 'admin/index.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/home.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU2;
-$adminmenu[$i]['link']  = 'admin/accounts.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_accounts.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU3;
-$adminmenu[$i]['link']  = 'admin/cat.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_category.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU4;
-$adminmenu[$i]['link']  = 'admin/subscr.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_subscribers.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU5;
-$adminmenu[$i]['link']  = 'admin/catsubscr.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_category_subscr.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU6;
-$adminmenu[$i]['link']  = 'admin/letter.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_newsletter.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU_TEMPLATES;
-$adminmenu[$i]['link']  = 'admin/template.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/tpls.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU7;
-$adminmenu[$i]['link']  = 'admin/attachment.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_attachment.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU8;
-$adminmenu[$i]['link']  = 'admin/protocol.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_protocol.png';
-if ($xnewsletter->getConfig('xn_use_mailinglist') == 1) {
-    ++$i;
-    $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU9;
-    $adminmenu[$i]['link']  = 'admin/mailinglist.php';
-    $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_mailinglist.png';
+include dirname(__DIR__) . '/preloads/autoloader.php';
+
+/** @var \XoopsModules\Xnewsletter\Helper $helper */
+$helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+
+$pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
+if (is_object($helper->getModule())) {
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 }
-if ($xnewsletter->getConfig('xn_send_in_packages') > 0) {
-    ++$i;
-    $adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU13;
-    $adminmenu[$i]['link']  = 'admin/task.php';
-    $adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_task.png';
+
+//$pathImageAdmin = 'assets/images/icons';
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU1,
+    'link'  => 'admin/index.php',
+    'icon'  => $pathModIcon32 . '/home.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU3,
+    'link'  => 'admin/cat.php',
+    'icon'  => $pathModIcon32 . '/xn_category.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU4,
+    'link'  => 'admin/subscr.php',
+    'icon'  => $pathModIcon32 . '/xn_subscribers.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU5,
+    'link'  => 'admin/catsubscr.php',
+    'icon'  => $pathModIcon32 . '/xn_category_subscr.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU6,
+    'link'  => 'admin/letter.php',
+    'icon'  => $pathModIcon32 . '/xn_newsletter.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU_TEMPLATES,
+    'link'  => 'admin/template.php',
+    'icon'  => $pathModIcon32 . '/tpls.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU7,
+    'link'  => 'admin/attachment.php',
+    'icon'  => $pathModIcon32 . '/xn_attachment.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU8,
+    'link'  => 'admin/protocol.php',
+    'icon'  => $pathModIcon32 . '/xn_protocol.png',
+];
+
+if (1 == $helper->getConfig('xn_use_mailinglist')) {
+    $adminmenu[] = [
+        'title' => _MI_XNEWSLETTER_ADMENU9,
+        'link'  => 'admin/mailinglist.php',
+        'icon'  => $pathModIcon32 . '/xn_mailinglist.png',
+    ];
 }
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU10;
-$adminmenu[$i]['link']  = 'admin/bmh.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_bmh.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU11;
-$adminmenu[$i]['link']  = 'admin/maintenance.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_maintenance.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU12;
-$adminmenu[$i]['link']  = 'admin/import.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/xn_import.png';
-++$i;
-$adminmenu[$i]['title'] = _MI_XNEWSLETTER_ADMENU99;
-$adminmenu[$i]['link']  = 'admin/about.php';
-$adminmenu[$i]['icon']  = $pathImageAdmin . '/about.png';
-unset($i);
+
+if ($helper->getConfig('xn_send_in_packages') > 0) {
+    $adminmenu[] = [
+        'title' => _MI_XNEWSLETTER_ADMENU13,
+        'link'  => 'admin/task.php',
+        'icon'  => $pathModIcon32 . '/xn_task.png',
+    ];
+}
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU10,
+    'link'  => 'admin/bmh.php',
+    'icon'  => $pathModIcon32 . '/xn_bmh.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU2,
+    'link'  => 'admin/accounts.php',
+    'icon'  => $pathModIcon32 . '/xn_accounts.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU11,
+    'link'  => 'admin/maintenance.php',
+    'icon'  => $pathModIcon32 . '/xn_maintenance.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU12,
+    'link'  => 'admin/import.php',
+    'icon'  => $pathModIcon32 . '/xn_import.png',
+];
+
+$adminmenu[] = [
+    'title' => _MI_XNEWSLETTER_ADMENU99,
+    'link'  => 'admin/about.php',
+    'icon'  => $pathModIcon32 . '/about.png',
+];

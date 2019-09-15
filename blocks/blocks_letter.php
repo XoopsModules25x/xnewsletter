@@ -17,38 +17,43 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
+ *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
-include_once dirname(__DIR__) . '/include/common.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
 /**
  * @param $options
  *
  * @return array
  */
-function b_xnewsletter_letter($options) {
+function b_xnewsletter_letter($options)
+{
     global $xoopsUser;
-    $myts = MyTextSanitizer::getInstance();
-    $gperm_handler = xoops_getHandler('groupperm');
-    $member_handler = xoops_getHandler('member');
-    $xnewsletter = xnewsletterxnewsletter::getInstance();
+    $myts             = \MyTextSanitizer::getInstance();
+    $grouppermHandler = xoops_getHandler('groupperm');
+    $memberHandler    = xoops_getHandler('member');
+    $helper           = Xnewsletter\Helper::getInstance();
 
-    $letter = [];
-    $type_block = $options[0];
-    $nb_letter = $options[1];
+    $letter       = [];
+    $type_block   = $options[0];
+    $nb_letter    = $options[1];
     $length_title = $options[2];
 
     array_shift($options);
     array_shift($options);
     array_shift($options);
 
-    $letterCriteria = new CriteriaCompo();
+    $letterCriteria = new \CriteriaCompo();
     switch ($type_block) {
         // For the block: letter recents
         case 'recent':
@@ -57,8 +62,8 @@ function b_xnewsletter_letter($options) {
             break;
         // For the block: letter of today
         case 'day':
-            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
-            $letterCriteria->add(new Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
+            $letterCriteria->add(new \Criteria('letter_created', strtotime(date('Y/m/d')), '>='));
+            $letterCriteria->add(new \Criteria('letter_created', strtotime(date('Y/m/d')) + 86400, '<='));
             $letterCriteria->setSort('letter_created');
             $letterCriteria->setOrder('ASC');
             break;
@@ -69,32 +74,32 @@ function b_xnewsletter_letter($options) {
     }
 
     $uid = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
-    if ($uid == 0) {
+    if (0 == $uid) {
         $groups = [XOOPS_GROUP_ANONYMOUS];
     } else {
-        $groups = $member_handler->getGroupsByUser($uid) ;
+        $groups = $memberHandler->getGroupsByUser($uid);
     }
 
     $letterCriteria->setLimit($nb_letter);
-    $letterObjs = $xnewsletter->getHandler('letter')->getAll($letterCriteria);
+    $letterObjs = $helper->getHandler('Letter')->getAll($letterCriteria);
     foreach ($letterObjs as $letter_id => $letterObj) {
         $letter_cats = [];
         $letter_cats = explode('|', $letterObj->getVar('letter_cats'));
-        $showCat = false;
+        $showCat     = false;
         foreach ($letter_cats as $cat_id) {
-            $showCat = $gperm_handler->checkRight('newsletter_read_cat', $cat_id, $groups, $xnewsletter->getModule()->mid());
-            if ($showCat == true) {
+            $showCat = $grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $helper->getModule()->mid());
+            if (true === $showCat) {
                 $letter[$letter_id]['letter_id'] = $letterObj->getVar('letter_id');
-                $letter_title = $letterObj->getVar('letter_title');
-                if ($length_title > 0 && strlen($letter_title) > $length_title) {
-                    $letter_title = substr($letter_title, 0, $length_title) . '...';
+                $letter_title                    = $letterObj->getVar('letter_title');
+                if ($length_title > 0 && mb_strlen($letter_title) > $length_title) {
+                    $letter_title = mb_substr($letter_title, 0, $length_title) . '...';
                 }
                 $letter[$letter_id]['letter_title'] = $letter_title;
                 // $letter[$letter_id]["letter_content"] = $letterObj->getVar("letter_content");
                 // $letter[$letter_id]["letter_cats"] = $letterObj->getVar("letter_cats");
                 // $letter[$letter_id]["letter_submitter"] = $letterObj->getVar("letter_submitter");
                 $letter[$letter_id]['letter_created'] = formatTimestamp($letterObj->getVar('letter_created'), 'S');
-                $letter[$letter_id]['href'] = XOOPS_URL . "/modules/{$xnewsletter->getModule()->dirname()}/letter.php?op=show_preview&letter_id={$letterObj->getVar('letter_id')}";
+                $letter[$letter_id]['href']           = XOOPS_URL . "/modules/{$helper->getModule()->dirname()}/letter.php?op=show_preview&letter_id={$letterObj->getVar('letter_id')}";
             }
         }
     }
@@ -107,18 +112,19 @@ function b_xnewsletter_letter($options) {
  *
  * @return string
  */
-function b_xnewsletter_letter_edit($options) {
+function b_xnewsletter_letter_edit($options)
+{
     $form = '' . _MB_XNEWSLETTER_LETTER_DISPLAY . "\n";
-    $form .= "<input type=\"hidden\" name=\"options[0]\" value=\"{$options[0]}\" />";
-    $form .= "<input name=\"options[1]\" size=\"5\" maxlength=\"255\" value=\"{$options[1]}\" type=\"text\" />";
-    $form .= '<br />';
-    $form .= '' . _MB_XNEWSLETTER_LETTER_TITLELENGTH . " : <input name=\"options[2]\" size=\"5\" maxlength=\"255\" value=\"{$options[2]}\" type=\"text\" />";
-    $form .= '<br /><br />';
+    $form .= "<input type=\"hidden\" name=\"options[0]\" value=\"{$options[0]}\">";
+    $form .= "<input name=\"options[1]\" size=\"5\" maxlength=\"255\" value=\"{$options[1]}\" type=\"text\">";
+    $form .= '<br>';
+    $form .= '' . _MB_XNEWSLETTER_LETTER_TITLELENGTH . " : <input name=\"options[2]\" size=\"5\" maxlength=\"255\" value=\"{$options[2]}\" type=\"text\">";
+    $form .= '<br><br>';
     array_shift($options);
     array_shift($options);
     array_shift($options);
     $form .= "<label name='lbl_cattodisplay'>" . _MB_XNEWSLETTER_LETTER_CATTODISPLAY . '</label>';
-    $form .= '<br /><br />';
+    $form .= '<br><br>';
 
     return $form;
 }

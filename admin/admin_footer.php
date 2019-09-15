@@ -17,21 +17,20 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  * ****************************************************************************
  */
-
 echo "
-<br /><br /><div align='center'><a href='https://xoops.org' target='_blank'>
-<img src='" . XNEWSLETTER_ICONS_URL . "/xoopsmicrobutton.gif' alt='XOOPS' title='XOOPS' /></a>
+<br><br><div align='center'><a href='https://xoops.org' target='_blank'>
+<img src='" . XNEWSLETTER_ICONS_URL . "/xoopsmicrobutton.gif' alt='XOOPS' title='XOOPS'></a>
 </div>";
 echo "
 <div class='center small italic pad5'>
-<strong>" . $xnewsletter->getModule()->getVar('name') . '</strong> ' . _AM_XNEWSLETTER_MAINTAINEDBY . "
+<strong>" . $helper->getModule()->getVar('name') . '</strong> ' . _AM_XNEWSLETTER_MAINTAINEDBY . "
 <a href='https://xoops.org' title='Visit' class='tooltip' rel='external'>XOOPS Community</a>
 </div>";
 xoops_cp_footer();
