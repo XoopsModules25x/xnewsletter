@@ -36,7 +36,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 $moduleDirName = basename(dirname(__DIR__));
 
 $pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon32 = \Xmf\Module\Admin::iconUrl('', 32);
 
 //Load languages
 xoops_loadLanguage('admin', $helper->getModule()->dirname());
