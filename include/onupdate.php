@@ -30,6 +30,9 @@
  *
  * @return bool
  */
+
+xoops_loadLanguage('admin', 'xnewsletter');
+
 function xoops_module_update_xnewsletter(\XoopsObject $xoopsModule, $oldversion = null)
 {
     if (100 == $oldversion) {

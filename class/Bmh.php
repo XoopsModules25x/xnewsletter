@@ -31,6 +31,7 @@ namespace XoopsModules\Xnewsletter;
 use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
+xoops_loadLanguage('admin', 'xnewsletter');
 
 /**
  * Class Bmh

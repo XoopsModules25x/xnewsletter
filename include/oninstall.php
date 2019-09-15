@@ -27,7 +27,8 @@
  */
 defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
 require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/common.php';
-@require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $xoopsConfig['language'] . '/admin.php';
+//@require XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $xoopsConfig['language'] . '/admin.php';
+xoops_loadLanguage('admin', 'xnewsletter');
 
 define('INDEX_FILE_PATH', XOOPS_UPLOAD_PATH . '/index.html');
 define('BLANK_FILE_PATH', XOOPS_UPLOAD_PATH . '/blank.gif');
