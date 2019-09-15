@@ -460,9 +460,8 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  *
  * @param int $letter_id
  *
- * @throws \Html2TextException
- * @throws \phpmailerException
  * @return int
+ * @throws \Html2TextException
  */
 function xnewsletter_emailSize($letter_id = 0)
 {
