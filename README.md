@@ -3,7 +3,7 @@
 [![Software License](https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat)](LICENSE) 
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/XoopsModules25x/xnewsletter.svg?style=flat)](https://scrutinizer-ci.com/g/XoopsModules25x/xnewsletter/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/b9c01a21369c444bbd20e9c19d42fe5e)](https://www.codacy.com/app/mambax7/xnewsletter_2/)
-[![Code Climate](https://img.shields.io/codeclimate/github/XoopsModules25x/xnewsletter.svg?style=flat)](https://codeclimate.com/github/XoopsModules25x/xnewsletter)
+[![Maintainability](https://api.codeclimate.com/v1/badges/762a67b35134ecf79848/maintainability)](https://codeclimate.com/github/mambax7/xnewsletter/maintainability)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/73d75c94-cc7d-4cdf-847d-11ce38a31a32/mini.png)](https://insight.sensiolabs.com/projects/73d75c94-cc7d-4cdf-847d-11ce38a31a32)
 [![Latest Pre-Resease](https://img.shields.io/github/tag/XoopsModules25x/xnewsletter.svg?style=flat)](https://github.com/XoopsModules25x/xnewsletter/tags/)
 [![Latest Version](https://img.shields.io/github/release/XoopsModules25x/xnewsletter.svg?style=flat)](https://github.com/XoopsModules25x/xnewsletter/releases/)
