@@ -18,6 +18,9 @@ class ntlm_sasl_client_class
     public $credentials = [];
     public $state       = SASL_NTLM_STATE_START;
 
+    /**
+     * @param stdClass $client
+     */
     public function initialize(&$client)
     {
         if (!function_exists($function = 'mcrypt_encrypt')
@@ -53,6 +56,9 @@ class ntlm_sasl_client_class
         return ("NTLMSSP\0" . "\x01\x00\x00\x00" . "\x07\x32\x00\x00" . pack('v', $domain_length) . pack('v', $domain_length) . pack('V', $domain_offset) . pack('v', $workstation_length) . pack('v', $workstation_length) . pack('V', $workstation_offset) . $workstation . $domain);
     }
 
+    /**
+     * @param string $challenge
+     */
     public function NTLMResponse($challenge, $password)
     {
         $unicode = $this->ASCIIToUnicode($password);
@@ -76,6 +82,9 @@ class ntlm_sasl_client_class
         return $response;
     }
 
+    /**
+     * @param string $ntlm_response
+     */
     public function typeMsg3($ntlm_response, $user, $domain, $workstation)
     {
         $domain_unicode      = $this->ASCIIToUnicode($domain);

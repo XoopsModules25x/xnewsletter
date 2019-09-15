@@ -459,7 +459,7 @@ class Html2Text
      *
      * @param string $link    URL of the link
      * @param string $display Part of the text to associate number with
-     * @param null   $link_override
+     * @param string|null   $link_override
      *
      * @return string
      */

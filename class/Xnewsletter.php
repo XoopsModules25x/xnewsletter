@@ -32,7 +32,7 @@ class Xnewsletter
     protected $debugArray = [];
 
     /**
-     * @param $debug
+     * @param boolean $debug
      */
     protected function __construct($debug)
     {

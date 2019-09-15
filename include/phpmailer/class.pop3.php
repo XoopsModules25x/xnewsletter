@@ -203,7 +203,7 @@ class POP3
      * Connect to a POP3 server.
      * @access public
      * @param string   $host
-     * @param int|bool $port
+     * @param integer $port
      * @param int      $tval
      * @return bool
      */

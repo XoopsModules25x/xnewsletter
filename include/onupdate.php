@@ -268,7 +268,7 @@ function xoops_module_update_xnewsletter_101()
 }
 
 /**
- * @param $tablename
+ * @param string $tablename
  *
  * @return bool
  */
@@ -289,7 +289,7 @@ function xoops_module_update_xnewsletter_rename_table($tablename)
 }
 
 /**
- * @param $tablename
+ * @param string $tablename
  *
  * @return bool
  */

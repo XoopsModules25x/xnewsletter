@@ -675,6 +675,12 @@ function tln_fixurl($attname, &$attvalue, $trans_image_path, $block_external_ima
     }
 }
 
+/**
+ * @param string $body
+ * @param integer $pos
+ * @param string $trans_image_path
+ * @param boolean $block_external_images
+ */
 function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
 {
     // workaround for </style> in between comments
@@ -802,6 +808,9 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
     return [$content, $newpos];
 }
 
+/**
+ * @param string $trans_image_path
+ */
 function tln_body2div($attary, $trans_image_path)
 {
     $divattary   = ['class' => "'bodyclass'"];
@@ -842,8 +851,8 @@ function tln_body2div($attary, $trans_image_path)
 /**
  * @param string $body                 The HTML you wish to filter
  * @param array  $tag_list             see description above
- * @param array  $rm_tags_with_content see description above
- * @param array  $self_closing_tags    see description above
+ * @param string[]  $rm_tags_with_content see description above
+ * @param string[]  $self_closing_tags    see description above
  * @param bool   $force_tag_closing    see description above
  * @param array  $rm_attnames          see description above
  * @param array  $bad_attvals          see description above

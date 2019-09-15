@@ -106,7 +106,7 @@ function xnewsletter_checkEmail($email, $antispam = false)
  * @param $html
  *
  * @throws Html2TextException
- * @return the
+ * @return string
  */
 function xnewsletter_html2text($html)
 {
@@ -117,7 +117,7 @@ function xnewsletter_html2text($html)
 
 /**
  * @param        $global
- * @param        $key
+ * @param        string $key
  * @param string $default
  * @param string $type
  * @param bool   $notset
@@ -415,7 +415,7 @@ function xnewsletter_pluginCheckEmail($email = '')
 }
 
 /**
- * @param $subscr_id
+ * @param boolean $subscr_id
  * @param $cat_id
  *
  * @return bool

@@ -63,7 +63,7 @@ class Letter extends \XoopsObject
      * @param bool $action
      * @param bool $admin_aerea
      *
-     * @return XoopsThemeForm
+     * @return null|\XoopsThemeForm
      */
     public function getForm($action = false, $admin_aerea = false)
     {

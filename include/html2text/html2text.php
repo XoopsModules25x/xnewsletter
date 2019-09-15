@@ -24,7 +24,7 @@
  *
  * @throws Html2TextException
  * @internal param \the $html input HTML
- * @return the HTML converted, as best as possible, to text
+ * @return string HTML converted, as best as possible, to text
  */
 function convert_html_to_text($html)
 {
@@ -54,7 +54,7 @@ function convert_html_to_text($html)
  * @param text text with any number of \r, \r\n and \n combinations
  * @param mixed $text
  *
- * @return the fixed text
+ * @return string fixed text
  */
 function fix_newlines($text)
 {
@@ -113,7 +113,7 @@ function prev_child_name($node)
 }
 
 /**
- * @param $node
+ * @param DOMDocument $node
  *
  * @return string
  */
