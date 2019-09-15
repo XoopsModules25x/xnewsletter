@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 
@@ -43,7 +43,7 @@ class Accounts extends \XoopsObject
 
     public function __construct()
     {
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('accounts_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('accounts_type', XOBJ_DTYPE_INT, _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL, false);

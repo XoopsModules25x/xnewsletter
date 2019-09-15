@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 
@@ -49,6 +49,6 @@ class MailinglistHandler extends \XoopsPersistableObjectHandler
     public function __construct(\XoopsDatabase $db = null)
     {
         parent::__construct($db, 'xnewsletter_mailinglist', Mailinglist::class, 'mailinglist_id', 'mailinglist_email');
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
     }
 }

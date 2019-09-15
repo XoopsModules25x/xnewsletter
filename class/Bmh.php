@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 xoops_loadLanguage('admin', 'xnewsletter');
@@ -44,7 +44,7 @@ class Bmh extends \XoopsObject
 
     public function __construct()
     {
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('bmh_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('bmh_rule_no', XOBJ_DTYPE_TXTBOX, null, false, 10);

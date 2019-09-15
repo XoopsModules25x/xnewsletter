@@ -23,7 +23,7 @@ namespace XoopsModules\Xnewsletter;
  * @author          XOOPS Development Team ( name@site.com ) - ( https://xoops.org )
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 require_once dirname(__DIR__) . '/include/common.php';
@@ -39,7 +39,7 @@ class Task extends \XoopsObject
 
     public function __construct()
     {
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         parent::__construct();
         $this->initVar('task_id', XOBJ_DTYPE_INT, null, false);

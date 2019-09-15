@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 
@@ -49,6 +49,6 @@ class BmhHandler extends \XoopsPersistableObjectHandler
     public function __construct(\XoopsDatabase $db = null)
     {
         parent::__construct($db, 'xnewsletter_bmh', Bmh::class, 'bmh_id', 'bmh_rule_no');
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
     }
 }

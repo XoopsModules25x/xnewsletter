@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 
@@ -43,7 +43,7 @@ class Subscr extends \XoopsObject
 
     public function __construct()
     {
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('subscr_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('subscr_email', XOBJ_DTYPE_TXTBOX, '', false, 100);

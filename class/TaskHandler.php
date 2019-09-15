@@ -23,7 +23,7 @@ namespace XoopsModules\Xnewsletter;
  * @author          XOOPS Development Team ( name@site.com ) - ( https://xoops.org )
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 require_once dirname(__DIR__) . '/include/common.php';
@@ -45,6 +45,6 @@ class TaskHandler extends \XoopsPersistableObjectHandler
     public function __construct(\XoopsDatabase $db = null)
     {
         parent::__construct($db, 'xnewsletter_task', Task::class, 'task_id', 'task_letter_id');
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
     }
 }

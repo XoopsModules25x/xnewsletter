@@ -28,7 +28,7 @@ namespace XoopsModules\Xnewsletter;
  * ****************************************************************************
  */
 
-use XoopsModules\Xnewsletter;
+//use XoopsModules\Xnewsletter;
 
 require_once dirname(__DIR__) . '/include/common.php';
 
@@ -47,7 +47,7 @@ class Cat extends \XoopsObject
 
     public function __construct()
     {
-        $this->helper = Xnewsletter\Helper::getInstance();
+        $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('cat_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('cat_name', XOBJ_DTYPE_TXTBOX, '', false, 100);
