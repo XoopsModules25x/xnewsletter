@@ -88,7 +88,11 @@ switch ($op) {
             $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
             $htmlBody = $letterTpl->fetch($template);
         }
-        $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
+    try {
+        $textBody = xnewsletter_html2text($htmlBody);
+    }
+    catch (Html2TextException $e) {
+    } // new from v1.3
 
         echo "<h2>{$letterObj->getVar('letter_title')}</h2>";
         echo "<div style='clear:both'>";
@@ -201,7 +205,11 @@ switch ($op) {
                     echo _AM_XNEWSLETTER_LETTER_ATTACHMENT_TOTALSIZE . ": <span title='" . $attachmentsSize . " Bytes'>" . xnewsletter_bytesToSize1024($attachmentsSize) . '</span>';
                     echo '<br>';
                 }
-                $emailSize = xnewsletter_emailSize($letter_id);
+                try {
+                    $emailSize = xnewsletter_emailSize($letter_id);
+                }
+                catch (Html2TextException $e) {
+                }
                 echo _AM_XNEWSLETTER_LETTER_EMAIL_SIZE . ": <span title='" . $emailSize . ' Bytes (' . _AM_XNEWSLETTER_LETTER_EMAIL_SIZE_DESC . ")'>" . xnewsletter_bytesToSize1024($emailSize) . '</span>';
                 echo '</td>';
 

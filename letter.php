@@ -171,7 +171,11 @@ switch ($op) {
             $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
             $htmlBody = $xoopsTpl->fetch($template);
         }
-        $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
+    try {
+        $textBody = xnewsletter_html2text($htmlBody);
+    }
+    catch (Html2TextException $e) {
+    } // new from v1.3
 
         $letter_array['letter_content_templated']      = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
@@ -222,7 +226,11 @@ switch ($op) {
             $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
             $htmlBody = $xoopsTpl->fetch($template);
         }
-        $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
+        try {
+            $textBody = xnewsletter_html2text($htmlBody);
+        }
+        catch (Html2TextException $e) {
+        } // new from v1.3
 
         $letter_array['letter_content_templated']      = $htmlBody;
         $letter_array['letter_content_templated_html'] = $htmlBody;
