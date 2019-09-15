@@ -272,7 +272,7 @@ class BounceMailHandler
      * Output additional msg for debug
      *
      * @param bool|string $msg           ,  if not given, output the last error msg
-     * @param integer  $verbose_level ,  the output level of this message
+     * @param int         $verbose_level ,  the output level of this message
      */
     public function output($msg = false, $verbose_level = VERBOSE_SIMPLE)
     {
@@ -649,7 +649,7 @@ class BounceMailHandler
      * @param string $mailbox (the mailbox name, must be in 'INBOX.checkmailbox' format)
      * @param bool   $create  (whether or not to create the checkmailbox if not found, defaults to true)
      *
-     * @return null|boolean
+     * @return null|bool
      */
     public function mailbox_exist($mailbox, $create = true)
     {

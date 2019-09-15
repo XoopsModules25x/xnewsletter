@@ -32,8 +32,8 @@ use XoopsModules\Xnewsletter;
 require_once __DIR__ . '/common.php';
 
 /**
- * @param integer $type
- * @param integer $subscr_id
+ * @param int $type
+ * @param int $subscr_id
  * @param $mailinglist_id
  *
  * @return bool|null

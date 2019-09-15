@@ -36,7 +36,7 @@ require_once __DIR__ . '/common.php';
  * @param $xn_send_in_packages
  * @param $xn_send_in_packages_time
  *
- * @return null|boolean
+ * @return null|bool
  */
 function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send_in_packages_time)
 {

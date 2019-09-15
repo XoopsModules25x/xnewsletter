@@ -415,7 +415,7 @@ function xnewsletter_pluginCheckEmail($email = '')
 }
 
 /**
- * @param boolean $subscr_id
+ * @param bool $subscr_id
  * @param $cat_id
  *
  * @return bool
