@@ -61,13 +61,13 @@ class SubscrHandler extends \XoopsPersistableObjectHandler
     /**
      * Delete subscriber ({@link subscr} object), subscriptions ({@link catsubscr} objects) and mailinglist (subscribingMLHandler function)
      *
-     * @param object $subscrObj
+     * @param \XoopsObject $subscrObj
      * @param bool   $force
      *
      * @internal param object $object
      * @return bool
      */
-    public function delete($subscrObj, $force = false)
+    public function delete(\XoopsObject$subscrObj, $force = false)
     {
         $res       = true;
         $subscr_id = (int)$subscrObj->getVar('subscr_id');
