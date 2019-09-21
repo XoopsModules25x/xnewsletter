@@ -25,6 +25,10 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
+
+use XoopsModules\Xnewsletter;
+use XoopsModules\Xnewsletter\Common;
+
 defined('XOOPS_ROOT_PATH') || die('XOOPS root path not defined');
 require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/common.php';
 //@require XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $xoopsConfig['language'] . '/admin.php';
@@ -51,6 +55,8 @@ function xoops_module_pre_install_xnewsletter(\XoopsModule $module)
  */
 function xoops_module_install_xnewsletter(\XoopsModule $module)
 {
+    require_once dirname(__DIR__) . '/preloads/autoloader.php';
+
     // get module config values
     $hModConfig  = xoops_getHandler('config');
     $configArray = $hModConfig->getConfigsByCat(0, $module->getVar('mid'));

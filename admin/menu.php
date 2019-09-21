@@ -34,7 +34,7 @@ $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
 if (is_object($helper->getModule())) {
-    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+    $pathModIcon32 = $helper->url($helper->getModule()->getInfo('modicons32'));
 }
 
 //$pathImageAdmin = 'assets/images/icons';
