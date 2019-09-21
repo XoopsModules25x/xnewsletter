@@ -4,6 +4,8 @@
 - class autoloading (mamba)
 - reverted in_array() true check (mamba)
 - reversed to while (list()) (mamba)
+- fix Capital letters in getHandler() (ggoffy/mamba)
+- fix namespaces in oninstall (ggoffy/mamba)
 WORK IN PROGRESS
 
 <h5>1.3     NOT RELEASED</h5>
