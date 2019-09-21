@@ -82,7 +82,7 @@ class Bmh extends \XoopsObject
         $accontsCriteria->setSort('accounts_id');
         $accontsCriteria->setOrder('ASC');
         $opt_accounts = new \XoopsFormSelect(_AM_XNEWSLETTER_BMH_ACCOUNTS_ID, 'bmh_accounts_id', $account_default);
-        $opt_accounts->addOptionArray($this->helper->getHandler('accounts')->getList($accontsCriteria));
+        $opt_accounts->addOptionArray($this->helper->getHandler('Accounts')->getList($accontsCriteria));
         $form->addElement($opt_accounts, false);
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_NO, 'bmh_rule_no', 50, 255, $this->getVar('bmh_rule_no')), true);
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_BMH_RULE_CAT, 'bmh_rule_cat', 50, 255, $this->getVar('bmh_rule_cat')), true);

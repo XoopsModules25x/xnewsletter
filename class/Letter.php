@@ -121,9 +121,9 @@ class Letter extends \XoopsObject
         $templateCriteria = new \CriteriaCompo();
         $templateCriteria->setSort('template_title DESC, template_id');
         $templateCriteria->setOrder('DESC');
-        $templateCount = $this->helper->getHandler('template')->getCount();
+        $templateCount = $this->helper->getHandler('Template')->getCount();
         if ($templateCount > 0) {
-            $templateObjs = $this->helper->getHandler('template')->getAll($templateCriteria);
+            $templateObjs = $this->helper->getHandler('Template')->getAll($templateCriteria);
             foreach ($templateObjs as $templateObj) {
                 $template_select->addOption('db:' . $templateObj->getVar('template_id'), 'db:' . $templateObj->getVar('template_title'));
             }
@@ -139,7 +139,7 @@ class Letter extends \XoopsObject
         $catCriteria->setOrder('ASC');
         $letter_cats = explode('|', $this->getVar('letter_cats'));
         $cat_select  = new \XoopsFormCheckBox(_AM_XNEWSLETTER_LETTER_CATS, 'letter_cats', $letter_cats);
-        $catObjs     = $this->helper->getHandler('cat')->getAll($catCriteria);
+        $catObjs     = $this->helper->getHandler('Cat')->getAll($catCriteria);
         foreach ($catObjs as $cat_id => $catObj) {
             $cat_name = $catObj->getVar('cat_name');
             $show     = $grouppermHandler->checkRight('newsletter_create_cat', $cat_id, $groups, $this->helper->getModule()->mid());
@@ -160,7 +160,7 @@ class Letter extends \XoopsObject
             $attachmentCriteria->add(new \Criteria('attachment_letter_id', $this->getVar('letter_id')));
             $attachmentCriteria->setSort('attachment_id');
             $attachmentCriteria->setOrder('ASC');
-            $attachmentObjs = $this->helper->getHandler('attachment')->getAll($attachmentCriteria);
+            $attachmentObjs = $this->helper->getHandler('Attachment')->getAll($attachmentCriteria);
         }
         $i                      = 1;
         $remove_attachment_tray = [];
@@ -216,10 +216,10 @@ class Letter extends \XoopsObject
         $accountsCriteria = new \CriteriaCompo();
         $accountsCriteria->setSort('accounts_id');
         $accountsCriteria->setOrder('ASC');
-        $accountsCount   = $this->helper->getHandler('accounts')->getCount($accountsCriteria);
+        $accountsCount   = $this->helper->getHandler('Accounts')->getCount($accountsCriteria);
         $account_default = 0;
         if ($this->isNew()) {
-            $accountsObjs = $this->helper->getHandler('accounts')->getAll($accountsCriteria);
+            $accountsObjs = $this->helper->getHandler('Accounts')->getAll($accountsCriteria);
             foreach ($accountsObjs as $accountsObj) {
                 if (1 == $accountsObj->getVar('accounts_default')) {
                     $account_default = $accountsObj->getVar('accounts_id');
@@ -231,7 +231,7 @@ class Letter extends \XoopsObject
         if (1 == $accountsCount) {
             $form->addElement(new \XoopsFormHidden('letter_account', $account_default));
         } else {
-            $accounts_list = $this->helper->getHandler('accounts')->getList($accountsCriteria);
+            $accounts_list = $this->helper->getHandler('Accounts')->getList($accountsCriteria);
 
             if (true === $admin_aerea) {
                 $opt_accounts = new \XoopsFormRadio(_AM_XNEWSLETTER_LETTER_ACCOUNTS_AVAIL, 'letter_account', $account_default);

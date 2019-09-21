@@ -340,7 +340,7 @@ switch ($op) {
             echo XNEWSLETTER_IMG_OK . $resulttext;
             echo '</div>';
 
-            $numrows_pend = $helper->getHandler('Xnewsletter_import')->getCount();
+            $numrows_pend = $helper->getHandler('Import')->getCount();
             if ($numrows_pend > 0) {
                 $form_continue = "<form id='form_continue' enctype='multipart/form-data' method='post' action='{$currentFile}' name='form_continue'>";
                 $form_continue .= "<input id='submit' class='formButton' type='submit' title='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' value='" . _AM_XNEWSLETTER_IMPORT_CONTINUE . "' name='submit'>";

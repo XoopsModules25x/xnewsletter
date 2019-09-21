@@ -48,7 +48,7 @@ WORK IN PROGRESS
  - added the possibility to clone a newsletter (luciorota)
  - updated help file concerning import tool (goffy)
  - changed query to queryF to solve problems while running imports (goffy)
- - Fix error $xnewsletter->getHandler('protocol') (alfred)
+ - Fix error $xnewsletter->getHandler('Protocol') (alfred)
  - added the possibility to search for subscriptions concerning an email, if the current user have the right to see/edit subscriptions of other persons (goffy)
  - resize images to xoops standard 16x16 (mamba/goffy)
  - fixed bug in showing tasklist, if email is deleted between creation of task and execution (goffy)

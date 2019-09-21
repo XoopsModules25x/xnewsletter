@@ -72,12 +72,12 @@ class SubscrHandler extends \XoopsPersistableObjectHandler
         $res       = true;
         $subscr_id = (int)$subscrObj->getVar('subscr_id');
         // delete subscriptions ({@link catsubscr} objects)
-        if ($this->helper->getHandler('catsubscr')->getCount(new \Criteria('catsubscr_subscrid', $subscr_id)) > 0) {
-            $catsubscrObjs = $this->helper->getHandler('catsubscr')->getAll(new \Criteria('catsubscr_subscrid', $subscr_id));
+        if ($this->helper->getHandler('Catsubscr')->getCount(new \Criteria('catsubscr_subscrid', $subscr_id)) > 0) {
+            $catsubscrObjs = $this->helper->getHandler('Catsubscr')->getAll(new \Criteria('catsubscr_subscrid', $subscr_id));
             foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
-                $catObj          = $this->helper->getHandler('cat')->get($catsubscrObj->getVar('catsubscr_catid'));
+                $catObj          = $this->helper->getHandler('Cat')->get($catsubscrObj->getVar('catsubscr_catid'));
                 $cat_mailinglist = $catObj->getVar('cat_mailinglist');
-                if ($this->helper->getHandler('catsubscr')->delete($catsubscrObj, $force)) {
+                if ($this->helper->getHandler('Catsubscr')->delete($catsubscrObj, $force)) {
                     // handle mailinglists
                     if (0 != $cat_mailinglist) {
                         require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';

@@ -163,7 +163,7 @@ class Subscr extends \XoopsObject
         $catCriteria = new \CriteriaCompo();
         $catCriteria->setSort('cat_id');
         $catCriteria->setOrder('ASC');
-        $catObjs      = $this->helper->getHandler('cat')->getAll($catCriteria);
+        $catObjs      = $this->helper->getHandler('Cat')->getAll($catCriteria);
         $cat_checkbox = new \XoopsFormCheckBox(_MA_XNEWSLETTER_SUBSCRIPTION_SELECT_CATS, 'cats', null, '<br>');
         $cat_checkbox->setDescription(_MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL_DESC);
         $values = [];
@@ -176,7 +176,7 @@ class Subscr extends \XoopsObject
                 $catsubscrCriteria->add(new \Criteria('catsubscr_catid', $cat_id));
                 $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_id));
                 $catsubscrCriteria->setLimit(1);
-                $catsubscrObjs = $this->helper->getHandler('catsubscr')->getObjects($catsubscrCriteria);
+                $catsubscrObjs = $this->helper->getHandler('Catsubscr')->getObjects($catsubscrCriteria);
                 if (isset($catsubscrObjs[0])) {
                     $values[]         = $cat_id;
                     $catsubscr_quited = $catsubscrObjs[0]->getVar('catsubscr_quited');

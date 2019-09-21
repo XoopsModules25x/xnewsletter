@@ -74,14 +74,14 @@ class Task extends \XoopsObject
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letter_select = new \XoopsFormSelect(_AM_XNEWSLETTER_TASK_LETTER_ID, 'task_letter_id', $this->getVar('task_letter_id'));
-        $letter_select->addOptionArray($this->helper->getHandler('letter')->getList($letterCriteria));
+        $letter_select->addOptionArray($this->helper->getHandler('Letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
         $subscrCriteria = new \CriteriaCompo();
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
         $subscr_select = new \XoopsFormSelect(_AM_XNEWSLETTER_TASK_SUBSCR_ID, 'task_subscr_id', $this->getVar('task_subscr_id'));
-        $subscr_select->addOptionArray($this->helper->getHandler('subscr')->getList($subscrCriteria));
+        $subscr_select->addOptionArray($this->helper->getHandler('Subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
         $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, 'task_starttime', '', $this->getVar('task_starttime')));

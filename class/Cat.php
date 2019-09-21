@@ -203,11 +203,11 @@ class Cat extends \XoopsObject
         $mailinglistCriteria = new \CriteriaCompo();
         $mailinglistCriteria->setSort('mailinglist_id');
         $mailinglistCriteria->setOrder('ASC');
-        $numrows_mailinglist = $this->helper->getHandler('mailinglist')->getCount();
+        $numrows_mailinglist = $this->helper->getHandler('Mailinglist')->getCount();
         if ($numrows_mailinglist > 0) {
             $opt_mailinglist = new \XoopsFormRadio(_AM_XNEWSLETTER_LETTER_MAILINGLIST, 'cat_mailinglist', $cat_mailinglist);
             $opt_mailinglist->addOption('0', _AM_XNEWSLETTER_LETTER_MAILINGLIST_NO);
-            $mailinglistObjs = $this->helper->getHandler('mailinglist')->getAll($mailinglistCriteria);
+            $mailinglistObjs = $this->helper->getHandler('Mailinglist')->getAll($mailinglistCriteria);
             foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
                 $opt_mailinglist->addOption($mailinglist_id, $mailinglistObj->getVar('mailinglist_name'));
             }

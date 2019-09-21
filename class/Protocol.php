@@ -87,14 +87,14 @@ class Protocol extends \XoopsObject
         $letterCriteria->setSort('letter_id');
         $letterCriteria->setOrder('DESC');
         $letter_select = new \XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_LETTER_ID, 'protocol_letter_id', $this->getVar('protocol_letter_id'));
-        $letter_select->addOptionArray($this->helper->getHandler('letter')->getList($letterCriteria));
+        $letter_select->addOptionArray($this->helper->getHandler('Letter')->getList($letterCriteria));
         $form->addElement($letter_select, true);
 
         $subscrCriteria = new \CriteriaCompo();
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
         $subscr_select = new \XoopsFormSelect(_AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID, 'protocol_subscriber_id', $this->getVar('protocol_subscriber_id'));
-        $subscr_select->addOptionArray($this->helper->getHandler('subscr')->getList($subscrCriteria));
+        $subscr_select->addOptionArray($this->helper->getHandler('Subscr')->getList($subscrCriteria));
         $form->addElement($subscr_select, true);
 
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_STATUS, 'protocol_status', 50, 200, $this->getVar('protocol_status')), false);
