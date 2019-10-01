@@ -452,7 +452,9 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
     // human readable format -- powers of 1024
     $unit = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB'];
 
-    return @round($bytes / (pow(1024, $i = floor(log($bytes, 1024)))), $precision) . '' . $unit[(int)$i];
+    $i = floor(log($bytes, 1024));
+
+    return @round($bytes / (pow(1024, $i )), $precision) . '' . $unit[(int)$i];
 }
 
 /**

@@ -27,3 +27,8 @@
  */
 // Common
 define('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS', 'Warning: insufficient permissions!');
+
+$moduleDirName = basename(dirname(dirname(__DIR__)));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
+$pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
+define($moduleDirNameUpper . '_AUTHOR_LOGOIMG', $pathIcon32 . '/xoopsmicrobutton.gif');

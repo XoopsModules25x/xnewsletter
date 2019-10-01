@@ -34,7 +34,7 @@ $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
 if (is_object($helper->getModule())) {
-    $pathModIcon32 = $helper->url($helper->getModule()->getInfo('modicons32'));
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 }
 
 //$pathImageAdmin = 'assets/images/icons';
@@ -42,93 +42,93 @@ if (is_object($helper->getModule())) {
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU1,
     'link'  => 'admin/index.php',
-    'icon'  => $pathModIcon32 . '/home.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/home.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU3,
     'link'  => 'admin/cat.php',
-    'icon'  => $pathModIcon32 . '/xn_category.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_category.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU4,
     'link'  => 'admin/subscr.php',
-    'icon'  => $pathModIcon32 . '/xn_subscribers.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_subscribers.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU5,
     'link'  => 'admin/catsubscr.php',
-    'icon'  => $pathModIcon32 . '/xn_category_subscr.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_category_subscr.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU6,
     'link'  => 'admin/letter.php',
-    'icon'  => $pathModIcon32 . '/xn_newsletter.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_newsletter.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU_TEMPLATES,
     'link'  => 'admin/template.php',
-    'icon'  => $pathModIcon32 . '/tpls.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/tpls.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU7,
     'link'  => 'admin/attachment.php',
-    'icon'  => $pathModIcon32 . '/xn_attachment.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_attachment.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU8,
     'link'  => 'admin/protocol.php',
-    'icon'  => $pathModIcon32 . '/xn_protocol.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_protocol.png' : ''),
 ];
 
-if (1 == $helper->getConfig('xn_use_mailinglist')) {
+if (is_object($helper->getModule()) && 1 == $helper->getConfig('xn_use_mailinglist')) {
     $adminmenu[] = [
         'title' => _MI_XNEWSLETTER_ADMENU9,
         'link'  => 'admin/mailinglist.php',
-        'icon'  => $pathModIcon32 . '/xn_mailinglist.png',
+        'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_mailinglist.png' : ''),
     ];
 }
 
-if ($helper->getConfig('xn_send_in_packages') > 0) {
+if (is_object($helper->getModule()) && $helper->getConfig('xn_send_in_packages') > 0) {
     $adminmenu[] = [
         'title' => _MI_XNEWSLETTER_ADMENU13,
         'link'  => 'admin/task.php',
-        'icon'  => $pathModIcon32 . '/xn_task.png',
+        'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_task.png' : ''),
     ];
 }
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU10,
     'link'  => 'admin/bmh.php',
-    'icon'  => $pathModIcon32 . '/xn_bmh.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_bmh.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU2,
     'link'  => 'admin/accounts.php',
-    'icon'  => $pathModIcon32 . '/xn_accounts.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_accounts.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU11,
     'link'  => 'admin/maintenance.php',
-    'icon'  => $pathModIcon32 . '/xn_maintenance.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_maintenance.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU12,
     'link'  => 'admin/import.php',
-    'icon'  => $pathModIcon32 . '/xn_import.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_import.png' : ''),
 ];
 
 $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU99,
     'link'  => 'admin/about.php',
-    'icon'  => $pathModIcon32 . '/about.png',
+    'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/about.png' : ''),
 ];

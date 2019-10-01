@@ -2,12 +2,12 @@
 
 namespace XoopsModules\Xnewsletter;
 
-require_once XNEWSLETTER_ROOT_PATH . '/include/phpmailer/PHPMailerAutoload.php';
+require_once dirname(__DIR__) . '/include/phpmailer/PHPMailerAutoload.php';
 
 /**
  * Class XnewsletterMailer
  */
-class XnewsletterMailer extends PHPMailer
+class XnewsletterMailer extends \PHPMailer
 {
     /**
      * @throws Exception

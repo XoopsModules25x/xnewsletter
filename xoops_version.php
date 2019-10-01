@@ -39,11 +39,11 @@ xoops_load('XoopsLists');
 
 $modversion['version']             = 1.4;
 $modversion['module_status']       = 'Beta 1';
-$modversion['release_date']        = '2019/09/21';
+$modversion['release_date']        = '2019/10/01';
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
-$modversion['author']              = 'Goffy, Alfred';
-$modversion['credits']             = '';
+$modversion['author']              = 'Goffy, Alfred, Mamba';
+$modversion['credits']             = 'XOOPS Development Team';
 $modversion['license']             = 'GPL 2.0';
 $modversion['help']                = 'page=help';
 $modversion['image']               = 'assets/images/logoModule.png';
@@ -70,10 +70,6 @@ $modversion['min_php']     = '5.5';
 $modversion['min_xoops']   = '2.5.10';
 $modversion['min_admin']   = '1.1';
 $modversion['min_db']      = ['mysql' => '5.5'];
-
-//$modversion['dirmoduleadmin'] = 'Frameworks/moduleclasses';
-//$modversion['icons16']        = 'Frameworks/moduleclasses/icons/16';
-//$modversion['icons32']        = 'Frameworks/moduleclasses/icons/32';
 $modversion['modicons16'] = 'assets/images/icons/16';
 $modversion['modicons32'] = 'assets/images/icons/32';
 
