@@ -186,6 +186,10 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         return str_replace('%p', $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH);
     }
 
+    $uid         = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
+    $count_total = 0;
+    $count_err   = 0;
+        
     //get letters ready to send groups by letter_id
     $sql = "SELECT `task_letter_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
     if ($letter_id > 0) {
@@ -312,10 +316,6 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         foreach ($attachmentObjs as $attachment_id => $attachmentObj) {
             $attachmentsPath[] = XOOPS_UPLOAD_PATH . $helper->getConfig('xn_attachment_path') . $letter_id . '/' . $attachmentObj->getVar('attachment_name');
         }
-
-        $uid         = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
-        $count_total = 0;
-        $count_err   = 0;
 
         try {
             if (_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL == $account_type) {
@@ -486,7 +486,8 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
     $protocolObj->setVar('protocol_letter_id', $letter_id);
     $protocolObj->setVar('protocol_subscriber_id', 0);
     $protocolObj->setVar('protocol_status', $protocol_status);
-    // IN PROGRESS
+    $protocolObj->setVar('protocol_status_str_id', ''); // new from v1.3
+    $protocolObj->setVar('protocol_status_vars', []); // new from v1.3
     $protocolObj->setVar('protocol_success', $protocol_success);
     $protocolObj->setVar('protocol_submitter', $uid);
     $protocolObj->setVar('protocol_created', time());

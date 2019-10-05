@@ -166,11 +166,11 @@ switch ($op) {
                 echo '<td>' . \XoopsUser::getUnameFromId($letterObj->getVar('letter_submitter'), 's') . '<br>' . formatTimestamp($letterObj->getVar('letter_created'), 's') . '</td>';
 
                 echo '<td>';
-                if (0 != $letterObj->getVar('letter_sender')) {
+                if (0 < $letterObj->getVar('letter_sender')) {
                     echo \XoopsUser::getUnameFromId($letterObj->getVar('letter_sender'), 's');
                 }
                 echo '<br>';
-                if (false !== $letterObj->getVar('letter_sent')) {
+                if (0 < $letterObj->getVar('letter_sent')) {
                     echo formatTimestamp($letterObj->getVar('letter_sent'), 's');
                 }
                 echo '</td>';

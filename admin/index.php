@@ -68,6 +68,13 @@ if ($helper->getConfig('xn_send_in_packages') > 0) {
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_BMH, $bmhCount), '', (0 == $bmhCount) ? _RED : _GREEN);
 
 // Config box
+$config = include dirname(__DIR__) . '/config/config.php';
+$folder = $config->uploadFolders;
+foreach (array_keys($folder) as $i) {
+    $adminObject->addConfigBoxLine($folder[$i], 'folder');
+    $adminObject->addConfigBoxLine([$folder[$i], '777'], 'chmod');
+}
+
 if ($accountsCount < 1) {
     $adminObject->addConfigBoxLine(_AM_XNEWSLETTER_THEREARE_NOT_ACCOUNTS);
 }
