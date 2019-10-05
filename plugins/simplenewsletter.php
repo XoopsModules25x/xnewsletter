@@ -98,7 +98,7 @@ function xnewsletter_plugin_getdata_simplenewsletter($cat_id, $action_after_read
             ++$j;
         }
         ++$i;
-        if ($j == 100000) break; //maximum number of processing to avoid cache overflow
+        if (100000 == $j) break; //maximum number of processing to avoid cache overflow
         if ($limitcheck > 0 && $j == $limitcheck) $import_status = 0;
     }
 
