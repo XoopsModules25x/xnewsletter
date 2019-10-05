@@ -17,36 +17,77 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *  ---------------------------------------------------------------------------
- *  @copyright  Goffy ( wedega.com )
- *  @license    GPL 2.0
- *  @package    xnewsletter
- *  @author     Goffy ( webmaster@wedega.com )
+ * @copyright  Goffy ( wedega.com )
+ * @license    GPL 2.0
+ * @package    xnewsletter
+ * @author     Goffy ( webmaster@wedega.com )
  *
  * ****************************************************************************
  */
 
 $currentFile = basename(__FILE__);
-include_once 'header.php';
+require_once __DIR__ . '/header.php';
 
-echo '<br/>start cron job<br/>';
+// protocol_level
+// 0 = no protocol items will be created
+// 1 = protocol will be created when newsletter sent or an error occurs (recommended)
+// 2 = protocol will be created for all events (only for testing)
+$protocol_level = 1; 
+
+echo '<br>start cron.php';
 
 require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
-$result_exec = xnewsletter_executeTasks($xnewsletter->getConfig('xn_send_in_packages'), 0);
+// execute all pending tasks
+$result_exec = xnewsletter_executeTasks($helper->getConfig('xn_send_in_packages'), 0);
 
-if ($result_exec != '') {
-    //you can enable the block for creating protocol for cron
-    $protocolObj = $xnewsletter->getHandler('protocol')->create();
-    $protocolObj->setVar('protocol_letter_id', '0');
-    $protocolObj->setVar('protocol_subscriber_id', '0');
-    $protocolObj->setVar('protocol_status', 'Cron: ' . $result_exec);
-    $protocolObj->setVar('protocol_success', '1');
-    $protocolObj->setVar('protocol_submitter', '0');
-    $protocolObj->setVar('protocol_created', time());
+if ($protocol_level > 0) {
+    echo '<br>protocol_level:' . $protocol_level;
+    echo '<br>is_object(helper):'.is_object($helper);
+    echo '<br>xn_send_in_packages:'.$helper->getConfig('xn_send_in_packages');
+    if ('' === $result_exec) {
+        $status = 'cron no task';
+        if (2 == $protocol_level) {
+            echo '<br>no letters for sending available';
+            $protocolObj = $helper->getHandler('Protocol')->create();
+            echo '<br>is_object(protocolObj):'.is_object($protocolObj);
+            $protocolObj->setVar('protocol_letter_id', 0);
+            $protocolObj->setVar('protocol_subscriber_id', 0);
+            $protocolObj->setVar('protocol_status', 'Cron job: No Task');
+            $protocolObj->setVar('protocol_status_str_id', $status);
+            $protocolObj->setVar('protocol_status_vars', []);
+            $protocolObj->setVar('protocol_success', true);
+            $protocolObj->setVar('protocol_submitter', 0);
+            $protocolObj->setVar('protocol_created', time());
 
-    if ($xnewsletter->getHandler('protocol')->insert($protocolObj)) {
-        //create protocol is ok
+            if ($helper->getHandler('Protocol')->insert($protocolObj)) {
+                echo '<br>protocol successfully created';
+            } else {
+                echo $protocolObj->getHtmlErrors();
+                echo '<br>errors when creating protocol';
+            }
+        }
     } else {
-        echo $protocolObj->getHtmlErrors();
+        $status = 'cron task available';
+        echo "<br>result cron: {$result_exec}";
+        //you can enable the block for creating protocol for cron
+        $protocolObj = $helper->getHandler('Protocol')->create();
+        echo '<br>is_object(protocolObj):'.is_object($protocolObj);
+        $protocolObj->setVar('protocol_letter_id', 0);
+        $protocolObj->setVar('protocol_subscriber_id', 0);
+        $protocolObj->setVar('protocol_status', 'Cron job: ' . $result_exec);
+        $protocolObj->setVar('protocol_status_str_id', $status);
+        $protocolObj->setVar('protocol_status_vars', []);
+        $protocolObj->setVar('protocol_success', true);
+        $protocolObj->setVar('protocol_submitter', 0);
+        $protocolObj->setVar('protocol_created', time());
+
+        if ($helper->getHandler('Protocol')->insert($protocolObj)) {
+            echo '<br>protocol about exec task successfully created';
+        } else {
+            echo $protocolObj->getHtmlErrors();
+            echo '<br>errors when creating protocol';
+        }
     }
+    echo '<br>status: ' . $status;
 }
-echo "<br/>result cron: {$result_exec}";
+echo '<br>finished cron.php';

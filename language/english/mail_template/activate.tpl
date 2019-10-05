@@ -10,6 +10,6 @@ the following link:
 
 If you have not registered, please ignore this email.
 -----------------------
-{X_SITENAME} 
-({X_SITEURL}) 
+{X_SITENAME}
+({X_SITEURL})
 Webmaster {X_ADMINMAIL}

@@ -21,9 +21,10 @@
  *  @package    xnewsletter
  *  @author     goffy, luciorota (  )
  *
+ *  Version : svn:$Id$
  * ****************************************************************************
  */
- 
+
 .box-header {
     margin: 2px;
     padding: 5px;
@@ -146,7 +147,7 @@ h4 {
 }
 
 .xnewsletter_head_catindexheader {
-    /*	text-align:	center;  do not uncomment (will stop index alignment option working)  */
+    /*  text-align: center;  do not uncomment (will stop index alignment option working)  */
 }
 
 .xnewsletter_head_catletters {
@@ -246,7 +247,7 @@ h4 {
 
 /* ---------- download.html ---------- */
 .xnewsletter_down_title {
-    padding-top: 2.0em
+    padding-top: 2.0em;
 }
 
 .xnewsletter_down_top_r {
@@ -331,7 +332,7 @@ h4 {
 
 /* ---------- singlefile.html ---------- */
 .xnewsletter_single_title {
-    padding-top: 2.0em
+    padding-top: 2.0em;
 }
 
 .xnewsletter_single_title a {
@@ -401,7 +402,9 @@ h4 {
     background-color: silver;
     width: 100%;
     position: relative;
-    float: bottom;
+    /*float: bottom;*/
+    /*change it to: clear:both; or clear:left;*/
+    clear: both;
 }
 
 .xnewsletter_single_userrev {
@@ -520,7 +523,7 @@ tr.xnewsletter_mirrors_end {
     text-align: left;
     width: 80%;
     background-color: #BEC8D1;
-    /*	border-right: 1px solid #000000; */
+    /*  border-right: 1px solid #000000; */
     border-bottom: 2px solid #000000;
 }
 

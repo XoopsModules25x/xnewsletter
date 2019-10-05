@@ -17,7 +17,7 @@
             <td class="center">
             <{foreach item='letter_cat' from=$letter.letter_cats}>
                 <{$letter_cat.cat_name}>
-                <br />
+                <br>
             <{/foreach}>
             </td>
             <td class="center"><{$letter.letter_created_timestamp}></td>

@@ -2,7 +2,7 @@ Dear {SEX} {FIRSTNAME} {LASTNAME}
 
 You asked to unsubscribe your Newsletter
 with the email address:
-{EMAIL} 
+{EMAIL}
 
 (Send from the IP: {IP})
 
@@ -13,6 +13,6 @@ on the following link:
 If you don't want this, simply ignore the email.
 
 -----------------------
-{X_SITENAME} 
-({X_SITEURL}) 
+{X_SITENAME}
+({X_SITEURL})
 Webmaster {X_ADMINMAIL}

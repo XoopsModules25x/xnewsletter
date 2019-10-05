@@ -8,57 +8,103 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * xnewsletter module
  *
- * @copyright       The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @package         xnewsletter
  * @since           1.3
  * @author          Xoops Development Team
- * @version         svn:$id$
  */
+
+use XoopsModules\Xnewsletter;
+
 // defined("XOOPS_ROOT_PATH") || die("XOOPS root path not defined");
 
+include dirname(__DIR__) . '/preloads/autoloader.php';
+
+$moduleDirName      = basename(dirname(__DIR__));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName); //$capsDirName
+
+/** @var \XoopsDatabase $db */
+/** @var \XoopsModules\Xnewsletter\Helper $helper */
+/** @var \XoopsModules\Xnewsletter\Utility $utility */
+$db      = \XoopsDatabaseFactory::getDatabaseConnection();
+$debug   = false;
+$helper  = \XoopsModules\Xnewsletter\Helper::getInstance($debug);
+$utility = new \XoopsModules\Xnewsletter\Utility();
+
+$helper->loadLanguage('common');
+
+$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon32 = \Xmf\Module\Admin::iconUrl('', 32);
+if (is_object($helper->getModule())) {
+    $pathModIcon16 = $helper->getModule()->getInfo('modicons16');
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+}
+
 // This must contain the name of the folder in which reside xnewsletter
-define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
-define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
-define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
-define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
-define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
-define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
+if (!defined($moduleDirNameUpper . '_CONSTANTS_DEFINED')) {
+    define('XNEWSLETTER_DIRNAME', basename(dirname(__DIR__)));
+    define('XNEWSLETTER_URL', XOOPS_URL . '/modules/' . XNEWSLETTER_DIRNAME);
+    define('XNEWSLETTER_ROOT_PATH', XOOPS_ROOT_PATH . '/modules/' . XNEWSLETTER_DIRNAME);
+    define('XNEWSLETTER_IMAGES_URL', XNEWSLETTER_URL . '/assets/images');
+    define('XNEWSLETTER_ADMIN_URL', XNEWSLETTER_URL . '/admin');
+    define('XNEWSLETTER_ICONS_URL', XNEWSLETTER_URL . '/assets/images/icons');
+    define($moduleDirNameUpper . '_CONSTANTS_DEFINED', 1);
+}
 
-xoops_loadLanguage('common', XNEWSLETTER_DIRNAME);
-
-include_once XNEWSLETTER_ROOT_PATH . '/include/config.php'; // IN PROGRESS
-include_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
-include_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
-include_once XNEWSLETTER_ROOT_PATH . '/class/session.php'; // xnewsletterSession class
-include_once XNEWSLETTER_ROOT_PATH . '/class/xnewsletter.php'; // xnewsletterxnewsletter class
-//include_once XNEWSLETTER_ROOT_PATH . '/class/request.php'; // xnewsletterRequest class
-include_once XNEWSLETTER_ROOT_PATH . '/class/breadcrumb.php'; // XnewsletterBreadcrumb class
+require_once XNEWSLETTER_ROOT_PATH . '/config/config.php'; // IN PROGRESS
+require_once XNEWSLETTER_ROOT_PATH . '/include/functions.php';
+require_once XNEWSLETTER_ROOT_PATH . '/include/constants.php';
+require_once XNEWSLETTER_ROOT_PATH . '/config/icons.php';
 
 xoops_load('XoopsUserUtility');
-xoops_load('xoopsrequest');
 // MyTextSanitizer object
-$myts = MyTextSanitizer::getInstance();
+$myts = \MyTextSanitizer::getInstance();
 
-$debug = false;
-$xnewsletter = xnewsletterxnewsletter::getInstance($debug);
+$moduleImageUrl      = XNEWSLETTER_URL . '/assets/images/xnewsletter.png';
+$moduleCopyrightHtml = ''; //"<br><br><a href='' title='' target='_blank'><img src='{$moduleImageUrl}' alt=''></a>";
+
+$debug  = false;
+$helper = \XoopsModules\Xnewsletter\Helper::getInstance($debug);
 
 //This is needed or it will not work in blocks.
 global $xnewsletter_isAdmin;
 
 // Load only if module is installed
-if (is_object($xnewsletter->getModule())) {
+if (is_object($helper->getModule())) {
     // Find if the user is admin of the module
     $xnewsletter_isAdmin = xnewsletter_userIsAdmin();
 }
-$xoopsModule = $xnewsletter->getModule();
+$xoopsModule = $helper->getModule();
 
 // Load Xoops handlers
-$module_handler       = xoops_getHandler('module');
-$member_handler       = xoops_getHandler('member');
-$notification_handler = xoops_getHandler('notification');
-$gperm_handler        = xoops_getHandler('groupperm');
-$config_handler       = xoops_getHandler('config');
+$moduleHandler = xoops_getHandler('module');
+$memberHandler = xoops_getHandler('member');
+/** @var \XoopsNotificationHandler $notificationHandler */
+$notificationHandler = xoops_getHandler('notification');
+$grouppermHandler    = xoops_getHandler('groupperm');
+$configHandler       = xoops_getHandler('config');
+
+$debug = false;
+
+// MyTextSanitizer object
+$myts = \MyTextSanitizer::getInstance();
+
+if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof \XoopsTpl)) {
+    require_once $GLOBALS['xoops']->path('class/template.php');
+    $GLOBALS['xoopsTpl'] = new \XoopsTpl();
+}
+
+$GLOBALS['xoopsTpl']->assign('mod_url', XOOPS_URL . '/modules/' . $moduleDirName);
+// Local icons path
+if (is_object($helper->getModule())) {
+    $pathModIcon16 = $helper->getModule()->getInfo('modicons16');
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+
+    $GLOBALS['xoopsTpl']->assign('pathModIcon16', XOOPS_URL . '/modules/' . $moduleDirName . '/' . $pathModIcon16);
+    $GLOBALS['xoopsTpl']->assign('pathModIcon32', $pathModIcon32);
+}

@@ -7,7 +7,7 @@ Version 1.1
 admin.php
 ----------
 define("_AM_XNEWSLETTER_IMPORT_INFO","Add all users of a group to a newsletter");
-define("_AM_XNEWSLETTER_IMPORT_CSV","One column ( email ) or four columns ( email | sex | firstname | lastname)<br />see sample1col.csv and sample4col.csv in /plugins");
+define("_AM_XNEWSLETTER_IMPORT_CSV","One column ( email ) or four columns ( email | sex | firstname | lastname)<br>see sample1col.csv and sample4col.csv in /plugins");
 
 Version 1.2
 ----------------
