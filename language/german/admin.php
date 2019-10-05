@@ -495,4 +495,4 @@ define('_AM_XNEWSLETTER_ERROR_TAG_REMOVAL', 'Konnte Tags vom Tag-Modul nicht ent
 //1.4
 define('_AM_XNEWSLETTER_BMH_ADD', 'Einen Bounced-Email-Handler hinzufügen');
 define('_AM_XNEWSLETTER_BMH_ACCOUNTS_ID', 'Account-ID von Bounced-Email-Handler');
-define('_AM_XNEWSLETTER_UPGRADEFAILED', "Update fehlgeschlagen - konnte Tabelle nicht löschen");
+define('_AM_XNEWSLETTER_UPGRADEFAILED', 'Update fehlgeschlagen - konnte Tabelle nicht löschen');

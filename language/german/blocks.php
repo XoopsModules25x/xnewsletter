@@ -23,8 +23,8 @@
  *  Version : 1 Mon 2012/11/05 14:31:32 :  Exp $
  * ****************************************************************************
  */
-define('_MB_XNEWSLETTER_CATSUBSCR_ALLCAT', "Alle Newsletterkategorien"); 
-define('_MB_XNEWSLETTER_LETTER_DISPLAY', "Anzahl der Einträge");
-define('_MB_XNEWSLETTER_LETTER_TITLELENGTH', "Länge des Newsletternamens (0 bedeutet kein Limit)");
-define('_MB_XNEWSLETTER_LETTER_CATTODISPLAY', "Welche Newsletterkategorien angezeigt werden, wird über die Rechtevergabe bei den Kategorien geregelt");
+define('_MB_XNEWSLETTER_CATSUBSCR_ALLCAT', 'Alle Newsletterkategorien');
+define('_MB_XNEWSLETTER_LETTER_DISPLAY', 'Anzahl der Einträge');
+define('_MB_XNEWSLETTER_LETTER_TITLELENGTH', 'Länge des Newsletternamens (0 bedeutet kein Limit)');
+define('_MB_XNEWSLETTER_LETTER_CATTODISPLAY', 'Welche Newsletterkategorien angezeigt werden, wird über die Rechtevergabe bei den Kategorien geregelt');
 ?>
