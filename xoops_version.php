@@ -39,7 +39,7 @@ xoops_load('XoopsLists');
 
 $modversion['version']             = 1.4;
 $modversion['module_status']       = 'Beta 1';
-$modversion['release_date']        = '2019/10/01';
+$modversion['release_date']        = '2019/10/05';
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
 $modversion['author']              = 'Goffy, Alfred, Mamba';
