@@ -38,7 +38,6 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Cat extends \XoopsObject
 {
     /**
-     * @var WfdownloadsWfdownloads
      * @access public
      */
     public $helper = null;

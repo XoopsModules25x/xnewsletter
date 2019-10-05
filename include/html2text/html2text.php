@@ -20,7 +20,7 @@
  *   <li>Information in the &lt;head&gt; is lost
  * </ul>
  *
- * @param the $html
+ * @param string $html
  *
  * @throws Html2TextException
  * @internal param \the $html input HTML
