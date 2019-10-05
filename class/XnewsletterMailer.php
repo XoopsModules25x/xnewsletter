@@ -10,9 +10,8 @@ require_once dirname(__DIR__) . '/include/phpmailer/PHPMailerAutoload.php';
 class XnewsletterMailer extends \PHPMailer
 {
     /**
-     * @throws Exception
-     * @throws phpmailerException
      * @return string
+     * @throws \phpmailerException
      */
     public function getMIMEHeader()
     {
@@ -22,9 +21,8 @@ class XnewsletterMailer extends \PHPMailer
     }
 
     /**
-     * @throws Exception
-     * @throws phpmailerException
      * @return string
+     * @throws \phpmailerException
      */
     public function getMIMEBody()
     {
@@ -34,9 +32,8 @@ class XnewsletterMailer extends \PHPMailer
     }
 
     /**
-     * @throws Exception
-     * @throws phpmailerException
      * @return int
+     * @throws \phpmailerException
      */
     public function getSize()
     {
