@@ -1,9 +1,17 @@
 <h5>1.4 Beta 1   [WORK IN PROGRESS - NOT RELEASED]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>
-- fix getConfig() (ggoffy/mamba)
-- fix call to PHPMailer (ggoffy/mamba)
+- fix getConfig() (goffy/mamba)
+- fix call to PHPMailer (goffy/mamba)
 - add check for getModule() in menu (mamba)
-- add chceck for $pathModIcon32 in menu (mamba)
+- add check for $pathModIcon32 in menu (mamba)
+- fixed bugs in templates (goffy)
+- fixed bugs in cron (goffy)
+- fixed bugs in task.inc (goffy)
+- added protocol level to cron for testing pruposes (goffy)
+- add check for upload paths in admin/index (goffy)
+- fixed bugs in calc letter size (goffy)
+- various cosmetics in admin area (goffy)
+- rebuilt list protocol items (goffy)
 
 <h5>1.4 Alpha 1   [WORK IN PROGRESS - NOT RELEASED]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.9
 <hr>
@@ -11,10 +19,8 @@
 - class autoloading (mamba)
 - reverted in_array() true check (mamba)
 - reversed to while (list()) (mamba)
-- fix Capital letters in getHandler() (ggoffy/mamba)
-- fix namespaces in oninstall (ggoffy/mamba)
-WORK IN PROGRESS
-
+- fix Capital letters in getHandler() (goffy/mamba)
+- fix namespaces in oninstall (goffy/mamba)
 
 <h5>1.3     NOT RELEASED</h5>
 <hr>

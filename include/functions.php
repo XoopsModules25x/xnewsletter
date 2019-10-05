@@ -454,7 +454,7 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
 
     $i = floor(log($bytes, 1024));
 
-    return @round($bytes / (pow(1024, $i )), $precision) . '' . $unit[(int)$i];
+    return @round($bytes / (pow(1024, $i )), $precision) . ' ' . $unit[(int)$i];
 }
 
 /**
@@ -485,7 +485,7 @@ function xnewsletter_emailSize($letter_id = 0)
     }
 
     $letterObj = $helper->getHandler('Letter')->get($letter_id);
-    if (!is_array($letterObj) || 0 == count($letterObj)) {
+    if (!is_object($letterObj)) {
         return false;
     }
 
@@ -502,6 +502,9 @@ function xnewsletter_emailSize($letter_id = 0)
         return false;
     }
     $accountObj             = $helper->getHandler('Accounts')->get($letter_account);
+    if (!is_object($accountObj)) {
+        return false;
+    }
     $account_type           = $accountObj->getVar('accounts_type');
     $account_yourname       = $accountObj->getVar('accounts_yourname');
     $account_yourmail       = $accountObj->getVar('accounts_yourmail');

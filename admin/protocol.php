@@ -41,24 +41,17 @@ switch ($op) {
     case 'list':
     case 'list_protocols':
         echo $letterAdmin->displayNavigation($currentFile);
-
-        $limit          = $helper->getConfig('adminperpage');
-        $letterCriteria = new \CriteriaCompo();
-        $letterCriteria->setSort('letter_id');
-        $letterCriteria->setOrder('DESC');
-        $letterCount = $helper->getHandler('Letter')->getCount();
-        $start       = \Xmf\Request::getInt('start', 0);
-        $letterCriteria->setStart($start);
-        $letterCriteria->setLimit($limit);
-        $letterObjs = $helper->getHandler('Letter')->getAll($letterCriteria);
-        if ($letterCount > $limit) {
-            require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-            $pagenav = new \XoopsPageNav($letterCount, $limit, $start, 'start', 'op=list');
-            $pagenav = $pagenav->renderNav(4);
-        } else {
-            $pagenav = '';
-        }
-
+        
+        $limit = $helper->getConfig('adminperpage');
+        $start = \Xmf\Request::getInt('start', 0);
+        
+        $sql = 'SELECT protocol_letter_id FROM ' . $xoopsDB->prefix('xnewsletter_protocol') . ' GROUP BY protocol_letter_id';
+        $prot_letters = $xoopsDB->query($sql);
+        $protocol_letters_total = $prot_letters->num_rows;
+        
+        $sql = 'SELECT protocol_letter_id FROM ' . $xoopsDB->prefix('xnewsletter_protocol') . ' GROUP BY protocol_letter_id LIMIT ' . $start.', ' . $limit;
+        $prot_letters = $xoopsDB->query($sql);
+        
         // View Table
         echo "
             <table class='outer width100' cellspacing='1'>
@@ -69,88 +62,102 @@ switch ($op) {
                     <th>' . _AM_XNEWSLETTER_PROTOCOL_CREATED . '</th>
                     <th>' . _AM_XNEWSLETTER_FORMACTION . '</th>
                 </tr>';
-        if ($letterCount > 0) {
-            $class = 'odd';
-            //first show misc protocol items
-            echo "<tr class='{$class}'>";
-            $class = ('even' === $class) ? 'odd' : 'even';
-            echo '<td> - </td>';
-            echo '<td>' . _AM_XNEWSLETTER_PROTOCOL_MISC . '</td>';
+                                $class = 'odd';
+        //first show misc protocol items
+        echo "<tr class='{$class}'>";
+        $class = ('even' === $class) ? 'odd' : 'even';
+        echo '<td> - </td>';
+        echo '<td>' . _AM_XNEWSLETTER_PROTOCOL_MISC . '</td>';
 
-            $protocolCriteria = new \CriteriaCompo();
-            $protocolCriteria->add(new \Criteria('protocol_letter_id', '0'));
-            $protocolCriteria->setSort('protocol_id');
-            $protocolCriteria->setOrder('DESC');
-            $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
-            $protocolCriteria->setLimit(2);
-            $protocolObjs               = $helper->getHandler('Protocol')->getAll($protocolCriteria);
-            $protocol_status            = '';
-            $protocol_created           = '';
-            $protocol_created_formatted = '';
-            $p                          = 0;
-            foreach ($protocolObjs as $protocol_id => $protocolObj) {
-                ++$p;
-                if (count($protocolObjs) > 1) {
-                    $protocol_status .= "($p) ";
-                }
-                $protocol_status            .= $protocolObj->getVar('protocol_status') . '<br>';
-                $protocol_created_formatted .= formatTimestamp($protocolObj->getVar('protocol_created'), 'M') . '<br>';
+        $protocolCriteria = new \CriteriaCompo();
+        $protocolCriteria->add(new \Criteria('protocol_letter_id', '0'));
+        $protocolCriteria->setSort('protocol_id');
+        $protocolCriteria->setOrder('DESC');
+        $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
+        $protocolCriteria->setLimit(2);
+        $protocolObjs               = $helper->getHandler('Protocol')->getAll($protocolCriteria);
+        $protocol_status            = '';
+        $protocol_created           = '';
+        $protocol_created_formatted = '';
+        $p                          = 0;
+        foreach ($protocolObjs as $protocol_id => $protocolObj) {
+            ++$p;
+            if (count($protocolObjs) > 1) {
+                $protocol_status .= "($p) ";
             }
-            if ($protocolCount > 2) {
-                $protocol_status .= '...';
-            }
-            echo "
-                    <td>
-                        <a href='?op=list_letter&letter_id=0'>" . $protocol_status . "</a>
-                    </td>
-                    <td>{$protocol_created_formatted}</td>
-                    <td class='center'>
-                        <a href='?op=list_letter&letter_id=0'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a>
-                    </td>
-                </tr>";
+            $protocol_status            .= $protocolObj->getVar('protocol_status') . '<br>';
+            $protocol_created_formatted .= formatTimestamp($protocolObj->getVar('protocol_created'), 'M') . '<br>';
+        }
+        if ($protocolCount > 2) {
+            $protocol_status .= '...';
+        }
+        echo "
+                <td class='center'>
+                    <a href='?op=list_letter&letter_id=0'>" . $protocol_status . "</a>
+                </td>
+                <td class='center'>{$protocol_created_formatted}</td>
+                <td class='center'>
+                    <a href='?op=list_letter&letter_id=0'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a>
+                </td>
+            </tr>";
+        while (false !== ($prot_letter = $xoopsDB->fetchArray($prot_letters))) {
+            $protocol_letter_id = $prot_letter['protocol_letter_id'];
+            $letterCriteria = new \CriteriaCompo();
+            $letterCriteria->add(new \Criteria('letter_id', $protocol_letter_id));
+            $letterCount = $helper->getHandler('Letter')->getCount();
+            $letterObjs = $helper->getHandler('Letter')->getAll($letterCriteria);
 
-            foreach (array_keys($letterObjs) as $i) {
-                $protocolCriteria = new \CriteriaCompo();
-                $protocolCriteria->add(new \Criteria('protocol_letter_id', $letterObjs[$i]->getVar('letter_id')));
-                $protocolCriteria->setSort('protocol_id');
-                $protocolCriteria->setOrder('DESC');
-                $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
-                if ($protocolCount > 0) {
-                    $protocolCriteria->setLimit(2);
-                    $protocolObjs     = $helper->getHandler('Protocol')->getAll($protocolCriteria);
-                    $protocol_status  = '';
-                    $protocol_created = '';
+            if ($letterCount > 0) {
+                foreach (array_keys($letterObjs) as $i) {
+                    $protocolCriteria = new \CriteriaCompo();
+                    $protocolCriteria->add(new \Criteria('protocol_letter_id', $letterObjs[$i]->getVar('letter_id')));
+                    $protocolCriteria->setSort('protocol_id');
+                    $protocolCriteria->setOrder('DESC');
+                    $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
+                    if ($protocolCount > 0) {
+                        $protocolCriteria->setLimit(2);
+                        $protocolObjs     = $helper->getHandler('Protocol')->getAll($protocolCriteria);
+                        $protocol_status  = '';
+                        $protocol_created = '';
 
-                    echo "<tr class='{$class}'>";
-                    $class = ('even' === $class) ? 'odd' : 'even';
-                    echo '<td>' . $i . '</td>';
-                    echo '<td>' . $letterObjs[$i]->getVar('letter_title') . '</td>';
+                        echo "<tr class='{$class}'>";
+                        $class = ('even' === $class) ? 'odd' : 'even';
+                        echo '<td>' . $i . '</td>';
+                        echo '<td>' . $letterObjs[$i]->getVar('letter_title') . '</td>';
 
-                    $p = 0;
-                    foreach ($protocolObjs as $protocol) {
-                        ++$p;
-                        if (count($protocolObjs) > 1) {
-                            $protocol_status .= "($p) ";
+                        $p = 0;
+                        foreach ($protocolObjs as $protocol) {
+                            ++$p;
+                            if (count($protocolObjs) > 1) {
+                                $protocol_status .= "($p) ";
+                            }
+                            $protocol_status  .= $protocol->getVar('protocol_status') . '<br>';
+                            $protocol_created .= formatTimestamp($protocol->getVar('protocol_created'), 'M') . '<br>';
                         }
-                        $protocol_status  .= $protocol->getVar('protocol_status') . '<br>';
-                        $protocol_created .= formatTimestamp($protocol->getVar('protocol_created'), 'M') . '<br>';
+                        if ($protocolCount > 2) {
+                            $protocol_status .= '...';
+                        }
+                        echo "
+                                <td class='center'>
+                                    <a href='?op=list_letter&letter_id=" . $i . "'>" . $protocol_status . "</a>
+                                </td>
+                                <td class='center'>" . $protocol_created . "</td>
+                                <td class='center'>
+                                    <a href='?op=list_letter&letter_id=" . $i . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a>
+                                </td>
+                            </tr>";
                     }
-                    if ($protocolCount > 2) {
-                        $protocol_status .= '...';
-                    }
-                    echo "
-                            <td class='center'>
-                                <a href='?op=list_letter&letter_id=" . $i . "'>" . $protocol_status . "</a>
-                            </td>
-                            <td class='center'>" . $protocol_created . "</td>
-                            <td class='center'>
-                                <a href='?op=list_letter&letter_id=" . $i . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_details.png alt='" . _AM_XNEWSLETTER_DETAILS . "' title='" . _AM_XNEWSLETTER_DETAILS . "'></a>
-                            </td>
-                        </tr>";
                 }
             }
         }
         echo '</table>';
+        if ($protocol_letters_total > $limit) {
+            require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
+            $pagenav = new \XoopsPageNav($protocol_letters_total, $limit, $start, 'start', 'op=list');
+            $pagenav = $pagenav->renderNav(4);
+        } else {
+            $pagenav = '';
+        }
         echo '<br>';
         echo '<div>' . $pagenav . '</div>';
         echo '<br>';
@@ -202,21 +209,21 @@ switch ($op) {
             foreach ($protocolObjs as $protocol_id => $protocolObj) {
                 echo "<tr class='{$class}'>";
                 $class = ('even' === $class) ? 'odd' : 'even';
-                echo '<td>' . $protocol_id . '</td>';
+                echo "<td class='center'>" . $protocol_id . '</td>';
                 $subscrObj  = $helper->getHandler('Subscr')->get($protocolObj->getVar('protocol_subscriber_id'));
                 $subscriber = $subscrObj ? $subscrObj->getVar('subscr_email') : _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
                 if ('' == $subscriber) {
                     $subscriber = '-';
                 }
-                $success = (true === $protocolObj->getVar('protocol_success')) ? XNEWSLETTER_IMG_OK : XNEWSLETTER_IMG_FAILED;
+                $success = (true === (bool)$protocolObj->getVar('protocol_success')) ? XNEWSLETTER_IMG_OK : XNEWSLETTER_IMG_FAILED;
                 echo '<td>' . $subscriber . '</td>';
                 echo '<td>' . $protocolObj->getVar('protocol_status') . '</td>';
-                echo '<td>' . $success . '</td>';
-                echo '<td>' . \XoopsUser::getUnameFromId($protocolObj->getVar('protocol_submitter'), 'S') . '</td>';
-                echo '<td>' . formatTimestamp($protocolObj->getVar('protocol_created'), 'L') . '</td>';
+                echo "<td class='center'>" . $success . '</td>';
+                echo "<td class='center'>" . \XoopsUser::getUnameFromId($protocolObj->getVar('protocol_submitter'), 'S') . '</td>';
+                echo "<td class='center'>" . formatTimestamp($protocolObj->getVar('protocol_created'), 'L') . '</td>';
 
                 echo "
-                    <td>
+                    <td  class='center'>
                         <a href='?op=delete_protocol&protocol_id=" . $protocol_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
                     </td>";
                 echo '</tr>';
