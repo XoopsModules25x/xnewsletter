@@ -50,7 +50,7 @@ define('_MA_XNEWSLETTER_REGISTRATION_ADD', "Wenn Sie wollen, können Sie eine od
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ADD', "Newsletteranmeldungen hinzufügen");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EDIT', "Newsletteranmeldungen bearbeiten");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_DELETE', "Newsletteranmeldungen löschen");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE', "Sind Sie sicher, dass Sie Ihre Registrierung mit allen Newsletteranmeldungen löschen wollen?<br /><br />Wenn Sie nur einzelne Newsletteran-/abmeldungen durchführen wollen, klicken Sie bitte auf Bearbeiten!<br/><br />");
+define('_MA_XNEWSLETTER_SUBSCRIPTION_DELETE_SURE', "Sind Sie sicher, dass Sie Ihre Registrierung mit allen Newsletteranmeldungen löschen wollen?<br><br>Wenn Sie nur einzelne Newsletteran-/abmeldungen durchführen wollen, klicken Sie bitte auf Bearbeiten!<br/><br>");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_INFO_PERS', "Ihre persönlichen Informationen");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_SELECT_CATS', "Wählen Sie Ihre Newsletter");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL', "Verfügbare Newsletter");
@@ -84,7 +84,7 @@ define('_MA_XNEWSLETTER_DELETESUBJECT', "Bestätigung der Abmeldung des Newslett
 define('_MA_XNEWSLETTER_SUBSCRIPTION_REG_UPDATE_CLOSED', "Die Registrierungsdaten wurden erfolgreich gespeichert.");
 define('_MA_XNEWSLETTER_SENDMAIL_UNREG_OK', "Eine Email zur Bestätigung Ihrer Abmeldung wurde an die angegebene E-Mail-Adresse gesendet");
 define('_MA_XNEWSLETTER_SUBSCRIPTION_UNFINISHED', "<span style='color:red'>Achtung: Die Registrierung wurde noch nicht bestätigt. Bitte klicken Sie auf den Aktivierungslink in der von uns zugesandten E-Mail. Sollten Sie die E-Mail nicht erhalten haben, klicken Sie bitte <a href='%link'>hier</a>, dann senden wir Ihnen diese Mail erneut.</span>");
-define('_MA_XNEWSLETTER_PLEASE_LOGIN', "Die Mailadresse %s gehört zu einem registrierten User.<br />Um die Daten zu ändern, loggen Sie sich bitte ein.");
+define('_MA_XNEWSLETTER_PLEASE_LOGIN', "Die Mailadresse %s gehört zu einem registrierten User.<br>Um die Daten zu ändern, loggen Sie sich bitte ein.");
 define('_MA_XNEWSLETTER_LETTER_NONEAVAIL', "Derzeit sind keine Newsletter verfügbar");
 //1.2.2
 define('_MA_XNEWSLETTER_ACCOUNTS_NONEAVAIL', "Keine E-Mail-Konten im Moment verfügbar");

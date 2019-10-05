@@ -95,7 +95,7 @@ define('_MI_XNEWSLETTER_WELCOME_MESSAGE_DESC','Html Format');
 define('_MI_XNEWSLETTER_WELCOME',
         '<h2>Willkommen bei unserem Newslettersystem</h2>Wir hoffen, das wir Sie damit immer auf dem aktuellen Stand halten. Seien Sie so frei und melden sich für den einen oder mehrere von unseren Newslettern an. Wenn Sie einen Newsletter nicht mehr erhalten wollen, können Sie sich hier auch auf einfachem Wege wieder abmelden. Sie können sich aber auch über einen Link, der bei jedem Newsletter angegeben ist, abmelden.');
 define('_MI_XNEWSLETTER_DATEFORMAT', 'Zeitstempel');
-define('_MI_XNEWSLETTER_DATEFORMATDSC', "Standardzeitstempel für das Modul-Frontend. <br /> Weitere Infos hier: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
+define('_MI_XNEWSLETTER_DATEFORMATDSC', "Standardzeitstempel für das Modul-Frontend. <br> Weitere Infos hier: <a href='http://www.php.net/manual/en/function.date.php'>http://www.php.net/manual/en/function.date.php</a>");
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME', 'Zeitspanne Bestätigungsmail');
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_DESC', 'Registierung mit Bestätigungsmail ist innerhalb folgenden Zeitraumes möglich...');
 define('_MI_XNEWSLETTER_CONFIRMATION_TIME_0', 'Kein Limit');
