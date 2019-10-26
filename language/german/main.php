@@ -101,5 +101,10 @@ define('_MD_XNEWSLETTER_LETTER_COPY', 'Kopiere Newsletter');
 define('_MD_XNEWSLETTER_LETTER_PREVIEW', 'Vorschau');
 define('_MD_XNEWSLETTER_SUBSCRIPTION_EDIT', 'Abonnements bearbeiten');
 define('_MD_XNEWSLETTER_SUBSCRIPTION_DELETE', 'Abonnements löschen');
-
-?>
+define('_MA_XNEWSLETTER_SUBSCRIPTION_CATS_AVAIL_DESC', 'Bitte wählen Sie die Newsletter, die Sie an- bzw. abmelden möchten');
+define('_MD_XNEWSLETTER_PROTOCOL', 'Protokoll');
+define('_MD_XNEWSLETTER_OK', 'Ok');
+define('_MD_XNEWSLETTER_WARNING', 'Warnung');
+define('_MD_XNEWSLETTER_ERROR', 'Fehler');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED', 'Fehler: der Aktivierungsschlüssel ist abgelaufen. Bitte Registrierung erneut durchführen');
+define('_MA_XNEWSLETTER_RESENDMAIL_REG_OK', "Eine E-Mail mit Bestätigungscode wurde erneut an die E-Mail-Adresse '%subscr_email' gesendet.");

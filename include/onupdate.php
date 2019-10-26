@@ -143,6 +143,15 @@ function xoops_module_update_xnewsletter_130()
     if (!$result) {
         echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_attachment' ADD";
     }
+    
+    // update fields 'xnewsletter_attachment' table
+    global $xoopsDB;
+    $sql    = 'UPDATE `' . $xoopsDB->prefix('xnewsletter_letter') . '`';
+    $sql    .= " SET `letter_sent` = '1';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_attachment' ADD";
+    }
 
     // delete old html template files
     $templateDirectory = XOOPS_ROOT_PATH . '/modules/' . $dirname . '/templates/';
