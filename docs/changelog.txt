@@ -1,5 +1,9 @@
 <h5>1.4 Beta 1   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>
+- fix problem of none showing privous newsletters in newsletter list (goffy)
+
+<h5>1.4 Beta 1   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
+<hr>
 - fix getConfig() (goffy/mamba)
 - fix call to PHPMailer (goffy/mamba)
 - add check for getModule() in menu (mamba)

@@ -184,7 +184,7 @@ define('_AM_XNEWSLETTER_CAT_INFO', 'Zusätzliche Infos');
 define('_AM_XNEWSLETTER_CAT_GPERMS_CREATE', 'Berechtigung zum Erstellen');
 define('_AM_XNEWSLETTER_CAT_GPERMS_CREATE_DESC', "<br/><span style='font-weight:normal'>- Erstellen neuer Newsletter<br/>- Bearbeiten, Löschen und Senden der eigenen Newsletter</span>");
 define('_AM_XNEWSLETTER_CAT_GPERMS_ADMIN', 'Berechtigung zum Verwalten');
-define('_AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC', "<br/><span style='font-weight:normal'>Bearbeiten, Löschen und Senden aller Newslettter dieser Kategorie</span>");
+define('_AM_XNEWSLETTER_CAT_GPERMS_ADMIN_DESC', "<br/><span style='font-weight:normal'>Bearbeiten, Löschen und Senden aller Newsletter dieser Kategorie</span>");
 define('_AM_XNEWSLETTER_CAT_GPERMS_READ', 'Berechtigung zum Lesen/Abonnieren');
 define('_AM_XNEWSLETTER_CAT_GPERMS_LIST', 'Berechtigung zum Anzeigen der Liste der Abonnenten');
 define('_AM_XNEWSLETTER_CAT_SUBMITTER', 'Einsender');

@@ -2,7 +2,6 @@
 
 <table class='outer width100' cellspacing='1'>
     <tr>
-        <th><{$smarty.const._AM_XNEWSLETTER_LETTER_ID}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_LETTER_TITLE}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_LETTER_CATS}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_LETTER_SENT}></th>
@@ -16,7 +15,6 @@
     </tr>
     <{foreach item='letter' from=$letters}>
         <tr class="<{cycle values = 'even,odd'}>">
-            <td><{$letter.letter_id}></td>
             <td><{$letter.letter_title}></td>
             <td>
                 <{foreach item='letter_cat' from=$letter.letter_cats}>
@@ -27,7 +25,7 @@
             <td><{$letter.letter_sent_formatted}></td>
             <{if ($showAdminColumns)}>
                 <td><{$letter.letter_template}></td>
-                <td><{$letter.attachmentCount}></td>
+                <td class="center"><{$letter.attachmentCount}></td>
                 <td><{$letter.letter_email_test}></td>
                 <td>
                     <{foreach item='protocol' from=$letter.protocols}>
