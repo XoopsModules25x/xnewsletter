@@ -294,9 +294,11 @@ function xnewsletter_setPost($contentObj, $sets)
 function xnewsletter_getUserPermissionsByLetter($letter_id = 0)
 {
     global $xoopsUser;
+    /** @var \XoopsGroupPermHandler $grouppermHandler */
     $grouppermHandler = xoops_getHandler('groupperm');
-    $memberHandler    = xoops_getHandler('member');
-    $helper           = Xnewsletter\Helper::getInstance();
+    /** @var \XoopsMemberHandler $memberHandler */
+    $memberHandler = xoops_getHandler('member');
+    $helper        = Xnewsletter\Helper::getInstance();
 
     $uid    = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
     $groups = is_object($xoopsUser) ? $xoopsUser->getGroups() : [0 => XOOPS_GROUP_ANONYMOUS];
@@ -462,7 +464,7 @@ function xnewsletter_bytesToSize1024($bytes, $precision = 2)
  *
  * @param int $letter_id
  *
- * @return int
+ * @return int|string|bool
  * @throws \Html2TextException
  * @throws \phpmailerException
  */
@@ -551,20 +553,42 @@ function xnewsletter_emailSize($letter_id = 0)
     $letterTpl->assign('unsubscribe_link', 'Test');
     $letterTpl->assign('unsubscribe_url', 'Test'); // new from v1.3
 
-    preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-    if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
-        // get template from database
-        $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
-    } else {
-        // get template from filesystem
-        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
-        if (!is_dir($template_path)) {
-            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+    $templateObj = $helper->getHandler('Template')->get($letterObj->getVar('letter_templateid'));
+    $letter['template_err'] = false;
+    if (is_object($templateObj)) {
+        if ( $templateObj->getVar('template_type') === _XNEWSLETTER_MAILINGLIST_TPL_CUSTOM_VAL) {
+            // get template from database
+            $htmlBody = $letterTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
+        } else {
+            // get template from filesystem
+            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+            if (!is_dir($template_path)) {
+                $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+            }
+            $template = $template_path . $templateObj->getVar('template_title') . '.tpl';
+            if (file_exists($template)) {
+                $htmlBody = $letterTpl->fetch($template);
+            } else {
+                $htmlBody = '';
+                $letter['template_err'] = true;
+                $letter['template_err_text'] = _AM_XNEWSLETTER_TEMPLATE_ERR_FILE;
+            }
         }
-        $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
-        $htmlBody = $letterTpl->fetch($template);
+    } else {
+        $letter['template_err'] = true;
+        $letter['template_err_text'] = _AM_XNEWSLETTER_TEMPLATE_ERR_TABLE;
     }
-    $textBody = xnewsletter_html2text($htmlBody); // new from v1.3
+    $textBody = '';
+    if ('' !== $htmlBody) {
+        try {
+            $textBody = xnewsletter_html2text($htmlBody);
+        }
+        catch (Html2TextException $e) {
+            $helper->addLog($e);
+        }
+    }
+
+    // new from v1.3
     //$textBody = mb_convert_encoding($textBody, 'ISO-8859-1', _CHARSET); // "text/plain; charset=us-ascii" [http://www.w3.org/Protocols/rfc1341/7_1_Text.html]
 
     // get letter attachments as attachment
@@ -611,7 +635,7 @@ function xnewsletter_emailSize($letter_id = 0)
     }
 
     return $mail->getSize();
-    unset($mail);
+//    unset($mail);
 }
 
 /**
@@ -678,7 +702,8 @@ function xnewsletter_largeDownload($filePath, $fileMimetype)
         $fileExtrension      = $fileInfo['extension'];
         $default_contentType = 'application/octet-stream';
         // to find and use specific content type, check out this IANA page : http://www.iana.org/assignments/media-types/media-types.xhtml
-        if ($fileMimetype = !'') {
+        $fileMimetype = !'';
+        if ($fileMimetype) {
             $contentType = $fileMimetype;
         } else {
             $contentType = $default_contentType;

@@ -52,7 +52,7 @@ function xnewsletter_plugin_getinfo_xoopsuser()
 /**
  * @param $cat_id
  * @param $action_after_read
- * @param $limitcheck
+ * @param $limitCheck
  * @param $skipCatsubscrExist
  * @param $arr_groups
  *
@@ -61,7 +61,7 @@ function xnewsletter_plugin_getinfo_xoopsuser()
 function xnewsletter_plugin_getdata_xoopsuser(
     $cat_id,
     $action_after_read,
-    $limitcheck,
+    $limitCheck,
     $skipCatsubscrExist,
     $arr_groups)
 {
@@ -81,7 +81,7 @@ function xnewsletter_plugin_getdata_xoopsuser(
     if (!$result_users = $xoopsDB->query($sql)) {
         die('MySQL-Error: ' . $GLOBALS['xoopsDB']->error());
     }
-    while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
+    while (false !== ($lineArray = $xoopsDB->fetchBoth($result_users))) {
         ++$i;
         $email     = $lineArray[0];
         $sex       = '';

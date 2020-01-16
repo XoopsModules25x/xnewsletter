@@ -41,6 +41,7 @@ class Cat extends \XoopsObject
      * @access public
      */
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -70,6 +71,7 @@ class Cat extends \XoopsObject
     {
         global $xoopsDB;
 
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
         $grouppermHandler = xoops_getHandler('groupperm');
 
         if (false === $action) {
@@ -111,6 +113,7 @@ class Cat extends \XoopsObject
         $form->addElement($options_tray);
 
         // cat_gperms...
+        /** @var \XoopsMemberHandler $memberHandler */
         $memberHandler = xoops_getHandler('member');
         $userGroups    = $memberHandler->getGroupList();
         // create admin checkbox
@@ -214,12 +217,41 @@ class Cat extends \XoopsObject
         }
 
         $time = $this->isNew() ? time() : $this->getVar('cat_created');
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_cat'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+    
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesCat($keys = null, $format = null, $maxDepth = null)
+    {
+        $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+        $ret = $this->getValues($keys, $format, $maxDepth);
+        $ret['id']               = $this->getVar('cat_id');
+        $ret['name']             = $this->getVar('cat_name');
+        $ret['info']             = $this->getVar('cat_info');
+        $ret['mailinglist']      = $this->getVar('cat_mailinglist');
+        $ret['mailinglist_text'] = '';
+        if ((int)$this->getVar('cat_mailinglist') > 0) {
+            $ret['mailinglist_text'] = $helper->getHandler('Mailinglist')->get($this->getVar('cat_mailinglist'))->getVar('mailinglist_name');
+        }
+        $ret['dohtml']    = $this->getVar('dohtml');
+        $ret['dosmiley']  = $this->getVar('dosmiley');
+        $ret['doxcode']   = $this->getVar('doxcode');
+        $ret['doimage']   = $this->getVar('doimage');
+        $ret['dobr']      = $this->getVar('dobr');
+        $ret['created']   = formatTimestamp($this->getVar('cat_created'), 's');
+        $ret['submitter'] = \XoopsUser::getUnameFromId($this->getVar('cat_submitter'));
+        return $ret;
     }
 }

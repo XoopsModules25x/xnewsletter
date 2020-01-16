@@ -46,7 +46,7 @@ define('_AM_XNEWSLETTER_SUBSCRIPTION_SEARCH_ADD', 'Search / Add subscriptions');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EXIST', 'Existing subscriptions');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EXIST_NONE', 'No subscriptions existing');
 define('_MA_XNEWSLETTER_REGISTRATION_EXIST', 'Existing registrations of this email');
-define('_MA_XNEWSLETTER_REGISTRATION_NONE', "Your email isn't registered till now. For subscriptions we need further information. Please fill in registration form.<br>We want to inform you, that your ip-address will be saved for the purpose of transparency.");
+define('_MA_XNEWSLETTER_REGISTRATION_NONE', "The email %s isn't registered till now. For subscriptions we need further information. Please fill in registration form.<br>We want to inform you, that your ip-address will be saved for the purpose of transparency.");
 define('_MA_XNEWSLETTER_REGISTRATION_ADD', 'If you want, you can add more than one person to one email, and later on you can make different subscriptions'); // NOT USED
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ADD', 'Add a new subscription');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EDIT', 'Edit subscriptions');
@@ -108,3 +108,5 @@ define('_MD_XNEWSLETTER_WARNING', 'Warning');
 define('_MD_XNEWSLETTER_ERROR', 'Error');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED', 'Error: expired key, please repeat subscription');
 define('_MA_XNEWSLETTER_RESENDMAIL_REG_OK', "An email with confirmation code has been resent to the email address '%subscr_email'.");
+//1.4
+define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', "There are no email templates available!");

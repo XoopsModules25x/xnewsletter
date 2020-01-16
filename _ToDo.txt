@@ -1,0 +1,5 @@
+List Letters:
+- zeigt alle Newsletter an, nicht nur die für die Leseberechtigung besteht
+- alle Aktionen werden angezeigt
+
+Skiclub: Zugriff auf xnewsletter für Mitglieder und Gäste wieder gewähren

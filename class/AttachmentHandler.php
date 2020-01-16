@@ -73,9 +73,13 @@ class AttachmentHandler extends \XoopsPersistableObjectHandler
         $attachment_letter_id = (int)$attachmentObj->getVar('attachment_letter_id');
         $attachment_name      = (string)$attachmentObj->getVar('attachment_name');
 
-        if ($res = parent::delete($attachmentObj, $force)) {
+        $res = parent::delete($attachmentObj, $force);
+        if ($res) {
             // delete file from filesystem
-            @unlink(XOOPS_UPLOAD_PATH . $this->helper->getConfig('xn_attachment_path') . $attachment_letter_id . '/' . $attachment_name);
+            if (!@unlink(XOOPS_UPLOAD_PATH . $this->helper->getConfig('xn_attachment_path') . $attachment_letter_id . '/' . $attachment_name)) {
+                $e = error_get_last();
+                trigger_error($e['message']);
+            }
         }
 
         return $res;

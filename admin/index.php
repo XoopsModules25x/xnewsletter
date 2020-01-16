@@ -28,6 +28,9 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
+// Template Index
+$templateMain = 'xnewsletter_admin_index.tpl';
+
 // count "total"
 $catCount        = $helper->getHandler('Cat')->getCount();
 $accountsCount   = $helper->getHandler('Accounts')->getCount();
@@ -43,12 +46,10 @@ $bmhCount = $helper->getHandler('Bmh')->getCount();
 if ($helper->getConfig('xn_send_in_packages') > 0) {
     $taskCount = $helper->getHandler('Task')->getCount();
 }
+$templatesCount = $helper->getHandler('Template')->getCount();
 
 define('_RED', '#FF0000'); // red color
 define('_GREEN', '#00AA00'); // green color
-
-// Navigation
-$adminObject->displayNavigation($currentFile);
 
 // Info box
 $adminObject->addInfoBox(_AM_XNEWSLETTER_LETTER);
@@ -66,6 +67,7 @@ if ($helper->getConfig('xn_send_in_packages') > 0) {
     $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_TASK, $taskCount), '', (0 == $taskCount) ? _RED : _GREEN);
 }
 $adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_BMH, $bmhCount), '', (0 == $bmhCount) ? _RED : _GREEN);
+$adminObject->addInfoBoxLine(sprintf(_AM_XNEWSLETTER_THEREARE_TEMPLATE, $templatesCount), '', (0 == $templatesCount) ? _RED : _GREEN);
 
 // Config box
 $config = include dirname(__DIR__) . '/config/config.php';
@@ -80,6 +82,10 @@ if ($accountsCount < 1) {
 }
 
 // Render
-$adminObject->displayIndex();
+// display Navigation
+$xoopsTpl->assign('navigation', $adminObject->displayNavigation('index.php'));
+// display Index();
+$xoopsTpl->assign('index', $adminObject->renderIndex($currentFile));
 
 require_once __DIR__ . '/admin_footer.php';
+

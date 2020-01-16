@@ -38,6 +38,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Attachment extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -87,12 +88,32 @@ class Attachment extends \XoopsObject
         //$mode_select->addOption(_XNEWSLETTER_ATTACHMENTS_MODE_AUTO, _AM_XNEWSLETTER_ATTACHMENT_MODE_AUTO);  // for future features
         $form->addElement($mode_select);
 
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ATTACHMENT_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_attachment'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesAttachment($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret['id']        = $this->getVar('attachment_id');
+        $ret['letter_id'] = $this->getVar('attachment_letter_id');
+        $ret['name']      = $this->getVar('attachment_name');
+        $ret['type']      = $this->getVar('attachment_type');
+        $ret['size']      = $this->getVar('attachment_size');
+        $ret['mode']      = $this->getVar('attachment_mode');
+        $ret['created']   = formatTimestamp($this->getVar('attachment_created'), 's');
+        $ret['submitter'] = \XoopsUser::getUnameFromId($this->getVar('attachment_submitter'));
+        return $ret;
     }
 }

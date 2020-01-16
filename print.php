@@ -47,8 +47,7 @@ if ($letter_id < 1) {
 
 $content   = '';
 $letterObj = $helper->getHandler('Letter')->get($letter_id);
-if ($letterObj && '' != $letterObj->getVar('letter_template')) {
-    $letterTemplate = "{$letterTemplatePath}{$letterObj->getVar('letter_template')}.tpl";
+if ($letterObj && $letterObj->getVar('letter_templateid') > 0) {
     // subscr data
     $xoopsTpl->assign('sex', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW);
     $xoopsTpl->assign('salutation', _AM_XNEWSLETTER_SUBSCR_SEX_PREVIEW); // new from v1.3
@@ -65,30 +64,37 @@ if ($letterObj && '' != $letterObj->getVar('letter_template')) {
     $xoopsTpl->assign('catsubscr_id', '0'); // ???
 
     $letter_array                             = $letterObj->toArray();
-    $letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
     $letter_array['letter_created_formatted'] = formatTimestamp($letterObj->getVar('letter_created'), $helper->getConfig('dateformat'));
     $letter_array['letter_submitter_name']    = \XoopsUserUtility::getUnameFromId($letterObj->getVar('letter_submitter'));
-    $xoopsTpl->assign('letter', $letter_array);
 
-    // IN PROGRESS
-    // IN PROGRESS
-    // IN PROGRESS
 
     $content .= "<h2>{$letterObj->getVar('letter_title')}</h2>";
     $content .= "<div style='clear:both;'><div style='padding:10px;border:1px solid black;'>";
-    preg_match('/db:([0-9]*)/', $letterObj->getVar('letter_template'), $matches);
-    if (isset($matches[1]) && ($templateObj = $helper->getHandler('Template')->get((int)$matches[1]))) {
-        // get template from database
-        $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
-    } else {
-        // get template from filesystem
-        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
-        if (!is_dir($template_path)) {
-            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+
+    $templateObj = $helper->getHandler('Template')->get($letterObj->getVar('letter_templateid'));
+    if (is_object($templateObj)) {
+        if ( (int)$templateObj->getVar('template_type') === _XNEWSLETTER_MAILINGLIST_TPL_CUSTOM_VAL) {
+            // get template from database
+            $htmlBody = $xoopsTpl->fetchFromData($templateObj->getVar('template_content', 'n'));
+        } else {
+            // get template from filesystem
+            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
+            if (!is_dir($template_path)) {
+                $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
+            }
+            $template = $template_path . $templateObj->getVar('template_title') . '.tpl';
+            $htmlBody = $xoopsTpl->fetch($template);
         }
-        $template = $template_path . $letterObj->getVar('letter_template') . '.tpl';
-        $htmlBody = $xoopsTpl->fetch($template);
+        try {
+            $textBody = xnewsletter_html2text($htmlBody);
+        }
+        catch (Html2TextException $e) {
+            $helper->addLog($e);
+        }
+    } else {
+        $htmlBody = _AM_XNEWSLETTER_TEMPLATE_ERR;
     }
+
     $content .= $htmlBody;
     $content .= "</div></div>\n";
 }
@@ -96,7 +102,8 @@ if ($letterObj && '' != $letterObj->getVar('letter_template')) {
 if ('' == $content) {
     redirect_header('letter.php', 3, _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERCONTENT);
 }
-
+$letter_array['letter_content_templated'] = $xoopsTpl->fetch($letterTemplate);
+$xoopsTpl->assign('letter', $letter_array);
 $xoopsTpl->assign('xoopsConfig', $xoopsConfig);
 $xoopsTpl->assign('xoops_meta_keywords', $xoops_meta_keywords);
 $xoopsTpl->assign('xoops_meta_description', $xoops_meta_description);

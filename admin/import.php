@@ -31,24 +31,27 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
+// set template
+$templateMain = 'xnewsletter_admin_import.tpl';
+
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED', 100);
 define('XNEWSLETTER_BASIC_LIMIT_IMPORT_AT_ONCE', 10);
 
-$op                 = \Xmf\Request::getString('op', 'default');
-$plugin             = \Xmf\Request::getString('plugin', 'csv');
-$cat_id             = \Xmf\Request::getInt('cat_id', 0, 'int');
-$action_after_read  = \Xmf\Request::getInt('action_after_read', 1);
-$start              = \Xmf\Request::getInt('start', 0);
-$limitcheck         = \Xmf\Request::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
-$skipcatsubscrexist = \Xmf\Request::getInt('skipcatsubscrexist', 1);
-$check_import       = \Xmf\Request::getInt('check_import', 0);
+$op                 = Request::getString('op', 'default');
+$plugin             = Request::getString('plugin', 'csv');
+$cat_id             = Request::getInt('cat_id', 0, 'int');
+$action_after_read  = Request::getInt('action_after_read', 1);
+$start              = Request::getInt('start', 0);
+$limitcheck         = Request::getInt('limitcheck', XNEWSLETTER_BASIC_LIMIT_IMPORT_CHECKED);
+$skipcatsubscrexist = Request::getInt('skipcatsubscrexist', 1);
+$check_import       = Request::getInt('check_import', 0);
 
 $adminObject->displayNavigation($currentFile);
 
 switch ($op) {
     case 'show_formcheck':
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $importCriteria = new \CriteriaCompo();
         $importCriteria->setSort('import_id');
@@ -63,7 +66,7 @@ switch ($op) {
             require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
             $action    = $_SERVER['REQUEST_URI'];
-            $unique_id = uniqid(mt_rand());
+            $unique_id = uniqid(mt_rand(), true);
             $form      = '<br>';
             $form      .= "<form name=\"form_import_{$unique_id}\" id=\"form_import_{$unique_id}\" action=\"{$currentFile}\" method=\"post\" enctype=\"multipart/form-data\">";
 
@@ -197,19 +200,19 @@ switch ($op) {
             $form  .= '</td></tr>';
 
             $form .= '</table></form>';
-            echo $form;
+            $GLOBALS['xoopsTpl']->assign('form', $form);
         }
         break;
     case 'apply_import_form':
         //update xnewsletter with settings form_import
-        $counter = \Xmf\Request::getInt('counter', 0);
+        $counter = Request::getInt('counter', 0);
 
         for ($i = 1; $i < ($counter + 1); ++$i) {
-            $import_id        = \Xmf\Request::getString("import_id_{$i}", 'default');
-            $subscr_firstname = \Xmf\Request::getString("firstname_{$i}", '');
-            $subscr_lastname  = \Xmf\Request::getString("lastname_{$i}", '');
-            $subscr_sex       = \Xmf\Request::getString("sex_{$i}", '');
-            $cat_id           = \Xmf\Request::getInt("cat_id_{$i}", 0);
+            $import_id        = Request::getString("import_id_{$i}", 'default');
+            $subscr_firstname = Request::getString("firstname_{$i}", '');
+            $subscr_lastname  = Request::getString("lastname_{$i}", '');
+            $subscr_sex       = Request::getString("sex_{$i}", '');
+            $cat_id           = Request::getInt("cat_id_{$i}", 0);
 
             if ($cat_id > 0) {
                 if (0 == $subscr_id) {
@@ -233,7 +236,7 @@ switch ($op) {
         //execute final import of all data from xnewsletter_import, where import_status = true
         //delete data from xnewsletter_import, when imported (successful or not)
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $ip        = xoops_getenv('REMOTE_ADDR');
         $submitter = $xoopsUser->uid();
@@ -251,7 +254,7 @@ switch ($op) {
             if (!$users_import = $xoopsDB->queryF($sql)) {
                 die('MySQL-Error: ' . $GLOBALS['xoopsDB']->error());
             }
-            while ($user_import = mysqli_fetch_assoc($users_import)) {
+            while (null !== ($user_import = mysqli_fetch_assoc($users_import))) {
                 $import_id        = $user_import['import_id'];
                 $subscr_email     = $user_import['import_email'];
                 $subscr_firstname = $user_import['import_firstname'];
@@ -271,7 +274,8 @@ switch ($op) {
                         $sql        = 'SELECT `uid`';
                         $sql        .= " FROM {$xoopsDB->prefix('users')}";
                         $sql        .= " WHERE (`email`='{$subscr_email}') LIMIT 1";
-                        if ($user = $xoopsDB->queryF($sql)) {
+                        $user       = $xoopsDB->queryF($sql);
+                        if ($user) {
                             $row_user   = $xoopsDB->fetchBoth($user);
                             $subscr_uid = $row_user[0];
                         }
@@ -309,7 +313,8 @@ switch ($op) {
                                 $sql             = 'SELECT `cat_mailinglist`';
                                 $sql             .= " FROM {$xoopsDB->prefix('xnewsletter_cat')}";
                                 $sql             .= " WHERE (`cat_id`={$cat_id}) LIMIT 1";
-                                if ($cat_mls = $xoopsDB->queryF($sql)) {
+                                $cat_mls         = $xoopsDB->queryF($sql);
+                                if ($cat_mls) {
                                     $cat_ml          = $xoopsDB->fetchBoth($cat_mls);
                                     $cat_mailinglist = $cat_ml[0];
                                 }
@@ -318,7 +323,7 @@ switch ($op) {
 
                                 if ($cat_mailinglist > 0) {
                                     require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
-                                    subscribingMLHandler(1, $subscr_id, $cat_mailinglist);
+                                    subscribingMLHandler(_XNEWSLETTER_MAILINGLIST_SUBSCRIBE, $subscr_id, $cat_mailinglist);
                                 }
                             } else {
                                 createProtocol(str_replace('%e', $subscr_email, _AM_XNEWSLETTER_IMPORT_RESULT_FAILED), false, $submitter);
@@ -334,11 +339,9 @@ switch ($op) {
                 $result  = $xoopsDB->queryF($sql_del);
             }
 
-            echo "<div style='margin-top:20px;margin-bottom:20px;color:#ff0000;font-weight:bold;font-size:14px'>";
             $resulttext = str_replace('%p', $numrows_act, _AM_XNEWSLETTER_IMPORT_FINISHED);
             $resulttext = str_replace('%t', $numrows_total, $resulttext);
-            echo XNEWSLETTER_IMG_OK . $resulttext;
-            echo '</div>';
+            $GLOBALS['xoopsTpl']->assign('resulttext', XNEWSLETTER_IMG_OK . $resulttext);
 
             $numrows_pend = $helper->getHandler('Import')->getCount();
             if ($numrows_pend > 0) {
@@ -360,10 +363,10 @@ switch ($op) {
                 $form_continue .= '<input id="plugin" type="hidden" value="' . $plugin . '" name="plugin">';
                 $form_continue .= '<input id="check_import" type="hidden" value="' . $check_import . '" name="check_import">';
                 $form_continue .= '</form>';
-                echo $form_continue;
+                $GLOBALS['xoopsTpl']->assign('form', $form_continue);
             }
         } else {
-            echo _AM_XNEWSLETTER_IMPORT_NODATA;
+            $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_IMPORT_NODATA);
         }
         break;
     case 'searchdata':
@@ -373,15 +376,16 @@ switch ($op) {
 
         $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/{$plugin}.php";
         if (!file_exists($pluginFile)) {
-            echo str_replace('%p', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
+            $GLOBALS['xoopsTpl']->assign('error', str_replace('%p', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN));
             break;
         }
         require_once $pluginFile;
 
         $function = 'xnewsletter_plugin_getdata_' . $plugin;
         if (!function_exists($function)) {
-            echo "Error: require_once function 'xnewsletter_plugin_getdata_{$plugin}' doesn't exist";
-            echo str_replace('%f', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION);
+            $error = "Error: require_once function 'xnewsletter_plugin_getdata_{$plugin}' doesn't exist<br>";
+            $error .= str_replace('%f', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION);
+            $GLOBALS['xoopsTpl']->assign('error', $error);
             break;
         }
 
@@ -392,8 +396,8 @@ switch ($op) {
         //import data into xnewsletter_import with plugin
         if ('csv' === $plugin) {
             $csv_file      = $_FILES['csv_file']['tmp_name'];
-            $csv_header    = \Xmf\Request::getInt('csv_header', 0);
-            $csv_delimiter = \Xmf\Request::getString('csv_delimiter', ',');
+            $csv_header    = Request::getInt('csv_header', 0);
+            $csv_delimiter = Request::getString('csv_delimiter', ',');
             //$numData = $function($cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
             $numData = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist, $csv_file, $csv_delimiter, $csv_header);
         } else {
@@ -422,30 +426,30 @@ switch ($op) {
     case 'form_additional':
         //show form for additional settings
         $adminObject->addItemButton(_AM_XNEWSLETTER_IMPORT_PLUGINS_AVAIL, $currentFile, 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $pluginFile = XNEWSLETTER_ROOT_PATH . "/plugins/{$plugin}.php";
         if (!file_exists($pluginFile)) {
-            echo str_replace('%p', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN);
+            $GLOBALS['xoopsTpl']->assign('error', str_replace('%p', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_PLUGIN));
             break;
         }
         require_once $pluginFile;
 
         $function = "xnewsletter_plugin_getform_{$plugin}";
         if (!function_exists($function)) {
-            echo str_replace('%f', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION);
+            $GLOBALS['xoopsTpl']->assign('error', str_replace('%f', $plugin, _AM_XNEWSLETTER_IMPORT_ERROR_NO_FUNCTION));
             break;
         }
         //$form = $function( $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist );
         $form = call_user_func($function, $cat_id, $action_after_read, $limitcheck, $skipcatsubscrexist);
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'default':
     default:
         //show basic search form
         $importObj = $helper->getHandler('Import')->create();
         $form      = $importObj->getSearchForm($plugin, $action_after_read, $limitcheck);
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
 }
 require_once __DIR__ . '/admin_footer.php';

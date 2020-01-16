@@ -2,44 +2,25 @@
 
 <{if (($actionProts_ok|@count gt 0) || ($actionProts_warning|@count gt 0) || ($actionProts_error|@count gt 0))}>
     <{foreach item='actionProt_ok' from=$actionProts_ok}>
-        <div>
-        <span class="left" style="display: inline-block; height: 100%; vertical-align: middle;">
-            <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/on.png' alt='<{$smarty.const._OK}>'
-                 title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
-        </span>
-            <span style="display: inline-block; vertical-align: middle; line-height: normal;">
+        <div style="vertical-align: middle; line-height: normal;">
+            <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/on.png' alt='<{$smarty.const._OK}>' title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
             <{$actionProt_ok}>
-        </span>
-            <div style="clear:both;"></div>
         </div>
     <{/foreach}>
     <{foreach item='actionProt_warning' from=$actionProts_warning}>
-        <div>
-        <span class="left" style="display: inline-block; height: 100%; vertical-align: middle;">
-            <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/alert.png' alt='<{$smarty.const._WARNING}>'
-                 title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
-        </span>
-            <span style="display: inline-block; vertical-align: middle; line-height: normal;">
+        <div style="vertical-align: middle; line-height: normal;">
+             <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/alert.png' alt='<{$smarty.const._WARNING}>' title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
             <{$actionProt_warning}>
-        </span>
-            <div style="clear:both;"></div>
         </div>
     <{/foreach}>
     <{foreach item='actionProt_error' from=$actionProts_error}>
-        <div>
-        <span class="left" style="display: inline-block; height: 100%; vertical-align: middle;">
-            <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/off.png' alt='<{$smarty.const._ERROR}>'
-                 title='<{$smarty.const._ERROR}>"'>
-        </span>
-            <span style="display: inline-block; vertical-align: middle; line-height: normal;">
+        <div style="vertical-align: middle; line-height: normal;">
+            <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/off.png' alt='<{$smarty.const._ERROR}>' title='<{$smarty.const._ERROR}>"'>
             <{$actionProt_error}>
-        </span>
-            <div style="clear:both;"></div>
         </div>
     <{/foreach}>
     <br>
 <{/if}>
-
 
 <div>
     <{if ($showSubscrSearchForm)}>
@@ -50,19 +31,17 @@
     <{/if}>
 </div>
 
-
 <br>
 
-
 <{if ($subscrCount > 0)}>
-    <table>
+    <table class="xnewsletter-table">
         <tr>
             <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_EMAIL}></th>
             <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_SEX}></th>
             <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_FIRSTNAME}></th>
             <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_LASTNAME}></th>
             <th><{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_EXIST}></th>
-            <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_CREATED}></th>
+            <th><{$smarty.const._AM_XNEWSLETTER_CREATED}></th>
             <th><{$smarty.const._AM_XNEWSLETTER_FORMACTION}></th>
         </tr>
         <{foreach item='subscr' from=$subscrs}>

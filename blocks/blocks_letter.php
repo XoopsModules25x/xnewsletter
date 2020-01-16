@@ -40,9 +40,11 @@ function b_xnewsletter_letter($options)
 {
     global $xoopsUser;
     $myts             = \MyTextSanitizer::getInstance();
+    /** @var \XoopsGroupPermHandler $grouppermHandler */
     $grouppermHandler = xoops_getHandler('groupperm');
-    $memberHandler    = xoops_getHandler('member');
-    $helper           = Xnewsletter\Helper::getInstance();
+    /** @var \XoopsMemberHandler $memberHandler */
+    $memberHandler = xoops_getHandler('member');
+    $helper        = Xnewsletter\Helper::getInstance();
 
     $letter       = [];
     $type_block   = $options[0];

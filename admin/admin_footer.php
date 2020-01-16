@@ -24,13 +24,10 @@
  *
  * ****************************************************************************
  */
-echo "
-<br><br><div align='center'><a href='https://xoops.org' target='_blank'>
-<img src='" . XNEWSLETTER_ICONS_URL . "/xoopsmicrobutton.gif' alt='XOOPS' title='XOOPS'></a>
-</div>";
-echo "
-<div class='center small italic pad5'>
-<strong>" . $helper->getModule()->getVar('name') . '</strong> ' . _AM_XNEWSLETTER_MAINTAINEDBY . "
-<a href='https://xoops.org' title='Visit' class='tooltip' rel='external'>XOOPS Community</a>
-</div>";
+
+if (isset($templateMain)) {
+    $GLOBALS['xoopsTpl']->assign('maintainedby', $helper->getConfig('maintainedby'));
+    $GLOBALS['xoopsTpl']->display("db:{$templateMain}");
+}
+
 xoops_cp_footer();

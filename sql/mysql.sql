@@ -91,7 +91,7 @@ CREATE TABLE `xnewsletter_letter` (
   `letter_id`         INT(8)       NOT NULL  AUTO_INCREMENT,
   `letter_title`      VARCHAR(100) NOT NULL  DEFAULT '',
   `letter_content`    TEXT         NOT NULL,
-  `letter_template`   VARCHAR(100) NOT NULL  DEFAULT '',
+  `letter_templateid` INT(8)       NOT NULL  DEFAULT '0',
   `letter_cats`       VARCHAR(100) NULL      DEFAULT '',
   `letter_account`    INT(8)       NOT NULL  DEFAULT '0',
   `letter_email_test` VARCHAR(100) NULL      DEFAULT '',
@@ -114,8 +114,8 @@ CREATE TABLE `xnewsletter_protocol` (
   `protocol_submitter`     INT(8)       NOT NULL  DEFAULT '0',
   `protocol_created`       INT(10)      NOT NULL  DEFAULT '0',
   `protocol_success`       INT(8)       NOT NULL,
-  `protocol_status_str_id` TEXT         NOT NULL,
-  `protocol_status_vars`   TEXT,
+  `protocol_status_str_id` TEXT         NULL      DEFAULT '',
+  `protocol_status_vars`   TEXT         NULL      DEFAULT '',
   PRIMARY KEY (`protocol_id`),
   KEY `idx_protocol_letter_id` (`protocol_letter_id`)
 )
@@ -143,13 +143,17 @@ CREATE TABLE `xnewsletter_attachment` (
 #
 CREATE TABLE `xnewsletter_mailinglist` (
   `mailinglist_id`          INT(8)       NOT NULL  AUTO_INCREMENT,
+  `mailinglist_system`      VARCHAR(100) NOT NULL  DEFAULT '',
   `mailinglist_name`        VARCHAR(100) NOT NULL  DEFAULT '',
   `mailinglist_email`       VARCHAR(100) NOT NULL  DEFAULT '',
   `mailinglist_listname`    VARCHAR(100) NOT NULL  DEFAULT '',
   `mailinglist_subscribe`   VARCHAR(100) NOT NULL  DEFAULT '',
   `mailinglist_unsubscribe` VARCHAR(100) NOT NULL  DEFAULT '',
-  `mailinglist_submitter`   INT(8)       NOT NULL  DEFAULT '0',
+  `mailinglist_target`      VARCHAR(200) NOT NULL  DEFAULT '',
+  `mailinglist_pwd`         VARCHAR(100) NOT NULL  DEFAULT '',
+  `mailinglist_notifyowner` tinyint(1)   NOT NULL default '0',
   `mailinglist_created`     INT(10)      NOT NULL  DEFAULT '0',
+  `mailinglist_submitter`   INT(8)       NOT NULL  DEFAULT '0',
   PRIMARY KEY (`mailinglist_id`)
 )
   ENGINE = MyISAM;
@@ -217,6 +221,7 @@ CREATE TABLE `xnewsletter_template` (
   `template_content`     TEXT         NOT NULL,
   `template_submitter`   INT(8)       NOT NULL  DEFAULT '0',
   `template_created`     INT(10)      NOT NULL  DEFAULT '0',
-  PRIMARY KEY (`template_id`)
+  PRIMARY KEY (`template_id`),
+  UNIQUE KEY `template_title` (`template_title`)
 )
   ENGINE = MyISAM;

@@ -26,9 +26,28 @@
  * ****************************************************************************
  */
 // Common
-define('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS', 'Achtung: keine ausreichenden Berechtigungen!');
-
+if (!defined('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS')) {
+    define('_CO_XNEWSLETTER_WARNING_NOPERMISSIONS', 'Achtung: keine ausreichenden Berechtigungen!');
+}
 $moduleDirName = basename(dirname(dirname(__DIR__)));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
-define($moduleDirNameUpper . '_AUTHOR_LOGOIMG', $pathIcon32 . '/xoopsmicrobutton.gif');
+if (!defined($moduleDirNameUpper . '_AUTHOR_LOGOIMG')) {
+    define($moduleDirNameUpper . '_AUTHOR_LOGOIMG', $pathIcon32 . '/xoopsmicrobutton.gif');
+}
+//Latest Version Check
+if (!defined('CO_' . $moduleDirNameUpper . '_' . 'NEW_VERSION')) {
+    define('CO_' . $moduleDirNameUpper . '_' . 'NEW_VERSION', 'Neue Version: ');
+}
+if (!defined('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_FEEDBACK')) {
+    //Menu
+    define('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_FEEDBACK', 'Feedback');
+}
+
+
+
+
+
+
+
+

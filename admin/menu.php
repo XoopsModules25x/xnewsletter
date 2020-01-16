@@ -29,8 +29,12 @@ use XoopsModules\Xnewsletter;
 
 include dirname(__DIR__) . '/preloads/autoloader.php';
 
+$moduleDirName = basename(dirname(__DIR__));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
+
 /** @var \XoopsModules\Xnewsletter\Helper $helper */
 $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+$helper->loadLanguage('common');
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
 if (is_object($helper->getModule())) {
@@ -125,6 +129,13 @@ $adminmenu[] = [
     'title' => _MI_XNEWSLETTER_ADMENU12,
     'link'  => 'admin/import.php',
     'icon'  => (isset($pathModIcon32) ? $pathModIcon32 . '/xn_import.png' : ''),
+];
+
+//Feedback
+$adminmenu[] = [
+    'title' => constant('CO_' . $moduleDirNameUpper . '_' . 'ADMENU_FEEDBACK'),
+    'link'  => 'admin/feedback.php',
+    'icon'  => $pathIcon32 . '/mail_foward.png',
 ];
 
 $adminmenu[] = [

@@ -3,7 +3,7 @@
 <{$searchSubscriberForm}>
 <br>
 <!-- cats table -->
-<table class='outer width100' cellspacing='1'>
+<table class='xnewsletter-table'>
     <tr>
         <th><{$smarty.const._AM_XNEWSLETTER_CAT_ID}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_CAT_NAME}></th>
@@ -31,7 +31,7 @@
 </table>
 <br>
 <{if ($cat_id > 0)}>
-    <h2><{$smarty.const._AM_XNEWSLETTER_CATSUBSCR_SUBSCRID}>: <{$cats[$cat_id].cat_name}></h2>
+    <h2><{$smarty.const._AM_XNEWSLETTER_CATSUBSCR_SUBSCRID}>: <{$cat_name}></h2>
     <table class='outer width100' cellspacing='1'>
         <tr>
             <th>&nbsp;</th>

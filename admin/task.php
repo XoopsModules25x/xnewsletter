@@ -26,18 +26,26 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
+// set template
+$templateMain = 'xnewsletter_admin_tasks.tpl';
+
+$GLOBALS['xoopsTpl']->assign('xnewsletter_url', XNEWSLETTER_URL);
+$GLOBALS['xoopsTpl']->assign('xnewsletter_icons_url', XNEWSLETTER_ICONS_URL);
+
 //It recovered the value of argument op in URL$
 $op = \Xmf\Request::getString('op', 'list');
+
 switch ($op) {
     case 'list':
     default:
         $adminObject->displayNavigation($currentFile);
 
         $taskCriteria = new \CriteriaCompo();
+//        $taskCriteria->add(new \Criteria('task_pid', 0));
         $taskCriteria->setSort('task_id');
         $taskCriteria->setOrder('ASC');
         $taskCounts = $helper->getHandler('Task')->getCount();
-        $taskObjs   = $helper->getHandler('Task')->getAll($taskCriteria);
+        $tasksAll   = $helper->getHandler('Task')->getAll($taskCriteria);
 
         //Affichage du tableau
         echo "
@@ -46,44 +54,52 @@ switch ($op) {
                 <th>" . _AM_XNEWSLETTER_TASK_LETTER_ID . '</th>
                 <th>' . _AM_XNEWSLETTER_TASK_SUBSCR_ID . '</th>
                 <th>' . _AM_XNEWSLETTER_TASK_STARTTIME . '</th>
-                <th>' . _AM_XNEWSLETTER_TASK_SUBMITTER . '</th>
-                <th>' . _AM_XNEWSLETTER_TASK_CREATED . '</th>
+                <th>' . _AM_XNEWSLETTER_SUBMITTER . '</th>
+                <th>' . _AM_XNEWSLETTER_CREATED . '</th>
                 <th>' . _AM_XNEWSLETTER_FORMACTION . '</th>
             </tr>';
         if ($taskCounts > 0) {
-            $class = 'odd';
-            foreach ($taskObjs as $task_id => $taskObj) {
-                if (0 == $taskObj->getVar('task_pid')) {
-                    echo "<tr class='{$class}'>";
-                    $class = ('even' === $class) ? 'odd' : 'even';
+            $GLOBALS['xoopsTpl']->assign('taskCounts', $taskCounts);
 
-                    $letterObj    = $helper->getHandler('Letter')->get($taskObj->getVar('task_letter_id'));
-                    $title_letter = $letterObj->getVar('letter_title');
-                    echo '<td>' . $title_letter . '</td>';
-                    if (0 == $taskObj->getVar('task_subscr_id')) {
-                        //send_test
-                        $title_subscr = $letterObj->getVar('letter_email_test') . '<br>(send_test)';
+
+
+            $class = 'odd';
+            foreach ($tasksAll as $task_id => $taskObj) {
+                $task = $taskObj->getValuesTask();
+                $GLOBALS['xoopsTpl']->append('tasks_list', $task);
+                unset($task);
+
+
+
+                echo "<tr class='{$class}'>";
+                $class = ('even' === $class) ? 'odd' : 'even';
+
+                $letterObj    = $helper->getHandler('Letter')->get($taskObj->getVar('task_letter_id'));
+                $title_letter = $letterObj->getVar('letter_title');
+                echo '<td>' . $title_letter . '</td>';
+                if (0 == $taskObj->getVar('task_subscr_id')) {
+                    //send_test
+                    $title_subscr = $letterObj->getVar('letter_email_test') . '<br>(send_test)';
+                } else {
+                    $subscr = $helper->getHandler('Subscr')->get($taskObj->getVar('task_subscr_id'));
+                    if (is_object($subscr)) {
+                        $title_subscr = $subscr->getVar('subscr_email');
                     } else {
-                        $subscr = $helper->getHandler('Subscr')->get($taskObj->getVar('task_subscr_id'));
-                        if (is_object($subscr)) {
-                            $title_subscr = $subscr->getVar('subscr_email');
-                        } else {
-                            $title_subscr = _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
-                        }
+                        $title_subscr = _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
                     }
-                    echo '<td>' . $title_subscr . '</td>';
-                    echo '<td>' . formatTimestamp($taskObj->getVar('task_starttime'), 'mysql') . '</td>';
-                    echo '<td>' . \XoopsUser::getUnameFromId($taskObj->getVar('task_submitter'), 'S') . '</td>';
-                    echo '<td>' . formatTimestamp($taskObj->getVar('task_created'), 'mysql') . '</td>';
-                    echo '<td>';
-                    echo "
-                    <a href='?op=delete_task&task_id=" . $taskObj->getVar('task_id') . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
-                    </td>";
-                    echo '</tr>';
                 }
+                echo '<td>' . $title_subscr . '</td>';
+                echo '<td>' . formatTimestamp($taskObj->getVar('task_starttime'), 'mysql') . '</td>';
+                echo '<td>' . \XoopsUser::getUnameFromId($taskObj->getVar('task_submitter'), 'S') . '</td>';
+                echo '<td>' . formatTimestamp($taskObj->getVar('task_created'), 'mysql') . '</td>';
+                echo '<td>';
+                echo "
+                <a href='?op=delete_task&task_id=" . $taskObj->getVar('task_id') . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
+                </td>";
+                echo '</tr>';
             }
         } else {
-            echo "<tr><td colspan='7'>" . _AM_XNEWSLETTER_TASK_NO_DATA . '</td></tr>';
+            $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_TASK_NO_DATA);
         }
         echo '</table><br><br>';
         break;

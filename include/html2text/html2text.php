@@ -112,7 +112,7 @@ function prev_child_name($node)
 }
 
 /**
- * @param DOMDocument $node
+ * @param DOMNode $node
  *
  * @return string
  */

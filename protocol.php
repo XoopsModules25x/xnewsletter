@@ -44,15 +44,27 @@ $breadcrumb->addLink(_MD_XNEWSLETTER_LIST, 'javascript:history.go(-1)');
 $breadcrumb->addLink(_MD_XNEWSLETTER_PROTOCOL, '');
 $xoopsTpl->assign('xnewsletter_breadcrumb', $breadcrumb->render());
 
-$letter_id = \Xmf\Request::getInt('letter_id', 0);
+$op        = Request::getString('op', 'list_protocols');
+$letter_id = Request::getInt('letter_id', 0);
+
 $letterObj = $helper->getHandler('Letter')->get($letter_id);
 $xoopsTpl->assign('letter', $letterObj->toArray());
 
 $protocolCriteria = new \CriteriaCompo();
 $protocolCriteria->add(new \Criteria('protocol_letter_id', $letter_id));
+$start       = Request::getInt('start', 0);
+$limit       = $helper->getConfig('adminperpage');
 $protocolCriteria->setSort('protocol_id');
 $protocolCriteria->setOrder('DESC');
 $protocolCount = $helper->getHandler('Protocol')->getCount($protocolCriteria);
+$protocolCriteria->setStart($start);
+$protocolCriteria->setLimit($limit);
+
+// pagenav
+if ($protocolCount > $limit) {
+    $pagenav = new \XoopsPageNav($protocolCount, $limit, $start, 'start', "op={$op}&letter_id={$letter_id}");
+    $xoopsTpl->assign('pagenav', $pagenav->renderNav());
+}
 
 // protocol table
 if ($protocolCount > 0) {
@@ -63,7 +75,7 @@ if ($protocolCount > 0) {
         if (is_object($subscrObj)) {
             $subscr_array                                = $subscrObj->toArray();
             $protocol_array['subscr']                    = $subscr_array;
-            $protocol_array['subscr']['subscriber_name'] = 0 != $subscrObj->getVar('subscr_uid') ? \XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
+            $protocol_array['subscr']['subscriber_name'] = (0 < $subscrObj->getVar('subscr_uid')) ? \XoopsUserUtility::getUnameFromId($subscrObj->getVar('subscr_uid')) : '';
         } else {
             $protocol_array['subscr'] = false;
         }

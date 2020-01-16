@@ -38,6 +38,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Accounts extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -200,12 +201,12 @@ class Accounts extends \XoopsObject
         $form->addElement(new \XoopsFormHidden('accounts_submitter', $GLOBALS['xoopsUser']->uid()));
         $form->addElement(new \XoopsFormHidden('accounts_created', $time));
 
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_ACCOUNTS_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
         $buttonTray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
         $buttonTray->addElement(new \XoopsFormHidden('op', 'save_accounts'));
-        $buttonTray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $buttonTray->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
         if (false === $dis_accounts_button_check) {
             $button_check = new \XoopsFormButton('', 'save_and_check', _AM_XNEWSLETTER_SAVE_AND_CHECK, 'submit');
             $buttonTray->addElement($button_check);
@@ -213,5 +214,49 @@ class Accounts extends \XoopsObject
         $form->addElement($buttonTray, false);
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesAccount($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret = $this->getValues($keys, $format, $maxDepth);
+        $ret['id'] = $this->getVar('accounts_id');
+        $accounts_types = [
+            _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL     => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
+            _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL,
+            _XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3         => _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3,
+            _XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP         => _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP,
+            _XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL        => _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL,
+        ];
+        $ret['type']           = $this->getVar('accounts_type');
+        $ret['type_text']      = $accounts_types[$this->getVar('accounts_type')];
+        $ret['name']           = $this->getVar('accounts_name');
+        $ret['yourname']       = $this->getVar('accounts_yourname');
+        $ret['yourmail']       = $this->getVar('accounts_yourmail');
+        $ret['username']       = $this->getVar('accounts_username');
+        $ret['password']       = $this->getVar('accounts_password');
+        $ret['server_in']      = $this->getVar('accounts_server_in');
+        $ret['port_in']        = $this->getVar('accounts_port_in');
+        $ret['securetype_in']  = $this->getVar('accounts_securetype_in');
+        $ret['server_out']     = $this->getVar('accounts_server_out');
+        $ret['port_out']       = $this->getVar('accounts_port_out');
+        $ret['securetype_out'] = $this->getVar('accounts_securetype_out');
+        $ret['use_bmh']        = $this->getVar('accounts_use_bmh');
+        $ret['inbox']          = $this->getVar('accounts_inbox');
+        $ret['hardbox']        = $this->getVar('accounts_hardbox');
+        $ret['movehard']       = $this->getVar('accounts_movehard');
+        $ret['softbox']        = $this->getVar('accounts_softbox');
+        $ret['movesoft']       = $this->getVar('accounts_movesoft');
+        $ret['default']        = $this->getVar('accounts_default');
+        $ret['default_text']   = $this->getVar('accounts_default') == 1 ? _YES : _NO;
+        $ret['created']        = formatTimestamp($this->getVar('accounts_created'), 's');
+        $ret['submitter']      = \XoopsUser::getUnameFromId($this->getVar('accounts_submitter'));
+        return $ret;
     }
 }

@@ -39,6 +39,7 @@ xoops_loadLanguage('admin', 'xnewsletter');
 class Bmh extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -101,15 +102,45 @@ class Bmh extends \XoopsObject
         $form->addElement(new \XoopsFormHidden('bmh_submitter', $GLOBALS['xoopsUser']->uid()));
         $form->addElement(new \XoopsFormHidden('bmh_created', $time));
 
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_BMH_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_BMH_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
-        //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_BMH_SUBMITTER, "bmh_submitter", false, $this->getVar("bmh_submitter"), 1, false), true);
-        //$form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_BMH_CREATED, "bmh_created", "", $this->getVar("bmh_created")));
+        //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBMITTER, "bmh_submitter", false, $this->getVar("bmh_submitter"), 1, false), true);
+        //$form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_CREATED, "bmh_created", "", $this->getVar("bmh_created")));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_bmh'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesBmh($keys = null, $format = null, $maxDepth = null)
+    {
+        $arr_measure_type = [
+            _XNEWSLETTER_BMH_MEASURE_VAL_ALL     => _AM_XNEWSLETTER_BMH_MEASURE_ALL,
+            _XNEWSLETTER_BMH_MEASURE_VAL_PENDING => _AM_XNEWSLETTER_BMH_MEASURE_PENDING,
+            _XNEWSLETTER_BMH_MEASURE_VAL_NOTHING => _AM_XNEWSLETTER_BMH_MEASURE_NOTHING,
+            _XNEWSLETTER_BMH_MEASURE_VAL_QUIT    => _AM_XNEWSLETTER_BMH_MEASURE_QUITED,
+            _XNEWSLETTER_BMH_MEASURE_VAL_DELETE  => _AM_XNEWSLETTER_BMH_MEASURE_DELETED,
+        ];
+        $ret['id']           = $this->getVar('bmh_id');
+        $ret['rule_no']      = $this->getVar('bmh_rule_no');
+        $ret['rule_cat']     = $this->getVar('bmh_rule_cat');
+        $ret['bouncetype']   = $this->getVar('bmh_bouncetype');
+        $ret['remove']       = $this->getVar('bmh_remove') == '0' ? '' : $this->getVar('bmh_remove');
+        $ret['email']        = $this->getVar('bmh_email');
+        $ret['subject']      = $this->getVar('bmh_subject');
+        $ret['measure']      = $this->getVar('bmh_measure');
+        $ret['measure_text'] = $arr_measure_type[$this->getVar('bmh_measure')];
+        $ret['created']      = formatTimestamp($this->getVar('bmh_created'), 'L');
+        $ret['submitter']    = \XoopsUser::getUnameFromId($this->getVar('bmh_submitter'));
+        return $ret;
     }
 }

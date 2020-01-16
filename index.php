@@ -31,7 +31,7 @@ use XoopsModules\Xnewsletter;
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
 
-$op = \Xmf\Request::getString('op', 'welcome');
+$op = Request::getString('op', 'welcome');
 
 switch ($op) {
     case 'welcome':

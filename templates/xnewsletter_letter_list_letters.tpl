@@ -1,6 +1,6 @@
 <{include file="db:xnewsletter_header.tpl"}>
 
-<table class='outer width100' cellspacing='1'>
+<table class='xnewsletter-table'>
     <tr>
         <th><{$smarty.const._AM_XNEWSLETTER_LETTER_TITLE}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_LETTER_CATS}></th>
@@ -24,7 +24,7 @@
             </td>
             <td><{$letter.letter_sent_formatted}></td>
             <{if ($showAdminColumns)}>
-                <td><{$letter.letter_template}></td>
+                <td><{$letter.template_title}></td>
                 <td class="center"><{$letter.attachmentCount}></td>
                 <td><{$letter.letter_email_test}></td>
                 <td>

@@ -31,131 +31,148 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
+// set template
+$templateMain = 'xnewsletter_admin_mailinglists.tpl';
+
+require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
+
 // We recovered the value of the argument op in the URL$
-$op = \Xmf\Request::getString('op', 'list');
+$op                 = Request::getString('op', 'list');
+$mailinglistId      = Request::getInt('mailinglist_id', 0);
+$mailinglist_system = Request::getInt('mailinglist_system', _XNEWSLETTER_MAILINGLIST_TYPE_DEFAULT_VAL);
+
+$GLOBALS['xoopsTpl']->assign('val_mailman',           _XNEWSLETTER_MAILINGLIST_TYPE_MAILMAN_VAL);
+$GLOBALS['xoopsTpl']->assign('val_majordomo',         _XNEWSLETTER_MAILINGLIST_TYPE_MAJORDOMO_VAL);
+$GLOBALS['xoopsTpl']->assign('xnewsletter_url',       XNEWSLETTER_URL);
+$GLOBALS['xoopsTpl']->assign('xnewsletter_icons_url', XNEWSLETTER_ICONS_URL);
 
 switch ($op) {
     case 'list':
     default:
         $adminObject->displayNavigation($currentFile);
-        $adminObject->addItemButton(_AM_XNEWSLETTER_NEWMAILINGLIST, '?op=new_mailinglist', 'add');
-        $adminObject->displayButton('left');
+        $adminObject->addItemButton(_AM_XNEWSLETTER_NEWMAILINGLIST . ': '. _AM_XNEWSLETTER_MAILINGLIST_SYSTEM_MAILMAN, '?op=new_mailinglist&amp;mailinglist_system=' . _XNEWSLETTER_MAILINGLIST_TYPE_MAILMAN_VAL, 'add');
+        $adminObject->addItemButton(_AM_XNEWSLETTER_NEWMAILINGLIST . ': ' . _AM_XNEWSLETTER_MAILINGLIST_SYSTEM_MAJORDOMO, '?op=new_mailinglist&amp;mailinglist_system=' . _XNEWSLETTER_MAILINGLIST_TYPE_MAJORDOMO_VAL, 'add');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
         $limit               = $helper->getConfig('adminperpage');
         $mailinglistCriteria = new \CriteriaCompo();
         $mailinglistCriteria->setSort('mailinglist_id ASC, mailinglist_email');
         $mailinglistCriteria->setOrder('ASC');
         $mailinglistCount = $helper->getHandler('Mailinglist')->getCount();
-        $start            = \Xmf\Request::getInt('start', 0);
+        $start            = Request::getInt('start', 0);
         $mailinglistCriteria->setStart($start);
         $mailinglistCriteria->setLimit($limit);
-        $mailinglistObjs = $helper->getHandler('Mailinglist')->getAll($mailinglistCriteria);
+        $mailinglistsAll = $helper->getHandler('Mailinglist')->getAll($mailinglistCriteria);
         if ($mailinglistCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new \XoopsPageNav($mailinglistCount, $limit, $start, 'start', 'op=list');
-            $pagenav = $pagenav->renderNav(4);
-        } else {
-            $pagenav = '';
+            $GLOBALS['xoopsTpl']->assign('pagenav', $pagenav->renderNav(4));
         }
 
-        // View Table
-        echo "
-        <table class='outer width100' cellspacing='1'>
-            <tr>
-                <th>" . _AM_XNEWSLETTER_MAILINGLIST_ID . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_NAME . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_EMAIL . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_LISTNAME . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_SUBSCRIBE . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE . '</th>
-                <th>' . _AM_XNEWSLETTER_MAILINGLIST_CREATED . '</th>
-                <th>' . _AM_XNEWSLETTER_FORMACTION . '</th>
-            </tr>
-            ';
         if ($mailinglistCount > 0) {
-            $class = 'odd';
-            foreach ($mailinglistObjs as $mailinglist_id => $mailinglistObj) {
-                echo "<tr class='{$class}'>";
-                $class = ('even' === $class) ? 'odd' : 'even';
-                echo '<td>' . $mailinglist_id . '</td>';
-                echo '<td>' . $mailinglistObj->getVar('mailinglist_name') . '</td>';
-                echo '<td>' . $mailinglistObj->getVar('mailinglist_email') . '</td>';
-                echo '<td>' . $mailinglistObj->getVar('mailinglist_listname') . '</td>';
-                echo '<td>' . $mailinglistObj->getVar('mailinglist_subscribe') . '</td>';
-                echo '<td>' . $mailinglistObj->getVar('mailinglist_unsubscribe') . '</td>';
-                echo '<td>' . formatTimestamp($mailinglistObj->getVar('mailinglist_created'), 'S') . '</td>';
-                echo '<td>';
-                echo "    <a href='?op=edit_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "'></a>";
-                echo "    <a href='?op=delete_mailinglist&mailinglist_id=" . $mailinglist_id . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>";
-                echo '</td>';
-                echo '</tr>';
+            $GLOBALS['xoopsTpl']->assign('mailinglistCount', $mailinglistCount);
+
+            foreach ($mailinglistsAll as $ml_id => $mailinglistObj) {
+                $mailinglist = $mailinglistObj->getValuesMailinglist();
+                if (_XNEWSLETTER_MAILINGLIST_TYPE_MAILMAN_VAL === (int)$mailinglistObj->getVar('mailinglist_system')) {
+                    $mailinglist['check_list']=true;
+                }
+                $GLOBALS['xoopsTpl']->append('mailinglists_list', $mailinglist);
+                unset($mailinglist);
             }
+        } else {
+            $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_THEREARENT_MAILINGLIST);
         }
-        echo '</table>';
-        echo '<br>';
-        echo "<div>{$pagenav}</div>";
-        echo '<br>';
         break;
     case 'new_mailinglist':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_MAILINGLISTLIST, '?op=list', 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $mailinglistObj = $helper->getHandler('Mailinglist')->create();
-        $form           = $mailinglistObj->getForm();
-        $form->display();
+        $mailinglistObj->setVar('mailinglist_system', 0);
+        $form           = $mailinglistObj->getForm(false, $mailinglist_system);
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'save_mailinglist':
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        if (\Xmf\Request::hasVar('mailinglist_id', 'REQUEST')) {
-            $mailinglistObj = $helper->getHandler('Mailinglist')->get($_REQUEST['mailinglist_id']);
+        if (Request::hasVar('mailinglist_id', 'REQUEST')) {
+            $mailinglistObj = $helper->getHandler('Mailinglist')->get($mailinglistId);
         } else {
             $mailinglistObj = $helper->getHandler('Mailinglist')->create();
         }
-        $mailinglistObj->setVar('mailinglist_name', $_REQUEST['mailinglist_name']);
-        $mailinglistObj->setVar('mailinglist_email', $_REQUEST['mailinglist_email']);
-        $mailinglistObj->setVar('mailinglist_listname', $_REQUEST['mailinglist_listname']);
-        $mailinglistObj->setVar('mailinglist_subscribe', $_REQUEST['mailinglist_subscribe']);
-        $mailinglistObj->setVar('mailinglist_unsubscribe', $_REQUEST['mailinglist_unsubscribe']);
-        $mailinglistObj->setVar('mailinglist_submitter', $_REQUEST['mailinglist_submitter']);
-        $mailinglistObj->setVar('mailinglist_created', $_REQUEST['mailinglist_created']);
+        $mailinglistObj->setVar('mailinglist_system',      Request::getString('mailinglist_system'));
+        $mailinglistObj->setVar('mailinglist_name',        Request::getString('mailinglist_name'));
+        $mailinglistObj->setVar('mailinglist_email',       Request::getString('mailinglist_email'));
+        $mailinglistObj->setVar('mailinglist_listname',    Request::getString('mailinglist_listname'));
+        $mailinglistObj->setVar('mailinglist_subscribe',   Request::getString('mailinglist_subscribe'));
+        $mailinglistObj->setVar('mailinglist_unsubscribe', Request::getString('mailinglist_unsubscribe'));
+        $mailinglistObj->setVar('mailinglist_target',      Request::getString('mailinglist_target'));
+        $mailinglistObj->setVar('mailinglist_pwd',         Request::getString('mailinglist_pwd'));
+        $mailinglistObj->setVar('mailinglist_notifyowner', Request::getInt('mailinglist_notifyowner'));
+        $mailinglistObj->setVar('mailinglist_submitter',   Request::getString('mailinglist_submitter'));
+        $mailinglistObj->setVar('mailinglist_created',     Request::getInt('mailinglist_created'));
 
         if ($helper->getHandler('Mailinglist')->insert($mailinglistObj)) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         }
 
-        echo $mailinglistObj->getHtmlErrors();
+        $GLOBALS['xoopsTpl']->assign('error', $mailinglistObj->getHtmlErrors());
         $form = $mailinglistObj->getForm();
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'edit_mailinglist':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWMAILINGLIST, '?op=new_mailinglist', 'add');
         $adminObject->addItemButton(_AM_XNEWSLETTER_MAILINGLISTLIST, '?op=list', 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
-        $mailinglistObj = $helper->getHandler('Mailinglist')->get($_REQUEST['mailinglist_id']);
-        $form           = $mailinglistObj->getForm();
-        $form->display();
+        $mailinglistObj = $helper->getHandler('Mailinglist')->get($mailinglistId);
+        $form           = $mailinglistObj->getForm(false, (int)$mailinglistObj->getVar('mailinglist_system'));
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
+        break;
+    case 'check_list':
+        $mailinglistObj = $helper->getHandler('Mailinglist')->get($mailinglistId);
+        if (_XNEWSLETTER_MAILINGLIST_TYPE_MAILMAN_VAL === (int)$mailinglistObj->getVar('mailinglist_system')) {
+            $actioncode = getActioncode($mailinglistObj->getVar('mailinglist_id'));
+            $c = curl_init($actioncode);
+            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+            $html = curl_exec($c);
+            if (curl_error($c)) {
+                $GLOBALS['xoopsTpl']->assign('error', curl_error($c));
+            }
+            $status = (int)curl_getinfo($c, CURLINFO_HTTP_CODE);
+            curl_close($c);
+
+            if ($status === 200) {
+                $GLOBALS['xoopsTpl']->assign('success', _AM_XNEWSLETTER_MAILINGLIST_CSUCCESS);
+            } else {
+                $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_MAILINGLIST_CFAILED . $status);
+            }
+            $mailinglistObj = $helper->getHandler('Mailinglist')->get($mailinglistId);
+            $form           = $mailinglistObj->getForm(false, (int)$mailinglistObj->getVar('mailinglist_system'));
+            $GLOBALS['xoopsTpl']->assign('form', $form->render());
+        }
+
         break;
     case 'delete_mailinglist':
-        $mailinglistObj = $helper->getHandler('Mailinglist')->get($_REQUEST['mailinglist_id']);
-        if (true === \Xmf\Request::getBool('ok', false, 'POST')) {
+        $mailinglistObj = $helper->getHandler('Mailinglist')->get($mailinglistId);
+        if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
             if ($helper->getHandler('Mailinglist')->delete($mailinglistObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
-                echo $mailinglistObj->getHtmlErrors();
+                $GLOBALS['xoopsTpl']->assign('error', $mailinglistObj->getHtmlErrors());
             }
         } else {
             xoops_confirm([
                               'ok'             => true,
-                              'mailinglist_id' => $_REQUEST['mailinglist_id'],
+                              'mailinglist_id' => $mailinglistId,
                               'op'             => 'delete_mailinglist',
-                          ], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar('mailinglist_email')));
+                          ], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $mailinglistObj->getVar('mailinglist_name')));
         }
         break;
 }

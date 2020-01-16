@@ -31,11 +31,17 @@ $currentFile = basename(__FILE__);
 require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
+// set template
+$templateMain = 'xnewsletter_admin_accounts.tpl';
+
+$GLOBALS['xoopsTpl']->assign('xnewsletter_url', XNEWSLETTER_URL);
+$GLOBALS['xoopsTpl']->assign('xnewsletter_icons_url', XNEWSLETTER_ICONS_URL);
+
 // We recovered the value of the argument op in the URL$
-$op             = \Xmf\Request::getString('op', 'list');
-$save_and_check = \Xmf\Request::getString('save_and_check', 'none');
-$accounts_id    = \Xmf\Request::getInt('accounts_id', 0);
-$post           = \Xmf\Request::getString('post', '');
+$op             = Request::getString('op', 'list');
+$save_and_check = Request::getString('save_and_check', 'none');
+$accounts_id    = Request::getInt('accounts_id', 0);
+$post           = Request::getString('post', '');
 
 if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
     $op = 'edit_account';
@@ -45,7 +51,9 @@ switch ($op) {
     case 'check_account':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
+
+        $GLOBALS['xoopsTpl']->assign('account_check', true);
 
         if (0 == $accounts_id) {
             redirect_header($currentFile, 3, _AM_XNEWSLETTER_ERROR_NO_VALID_ID);
@@ -86,202 +94,117 @@ switch ($op) {
             $command .= '/' . $service_option;
         }
 
-        echo "<table class='outer width100' cellspacing='1'>";
-        echo '<tr>';
-        echo '    <th></th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_INFO . '</th>';
-        echo '</tr>';
+        $checks = [];
 
-        $mbox = @imap_open('{' . $command . '}', $accounts_username, $accounts_password); // || die ("can't connect: " . imap_last_error());
+        $mbox = @imap_open('{' . $command . '}', $accounts_username, $accounts_password);
         if (false === $mbox) {
-            echo '<tr>';
-            echo '<td>' . XNEWSLETTER_IMG_FAILED . '</td>';
-            echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX . _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . '</td>';
-            echo '<td>' . imap_last_error() . '</td>';
-            echo '</tr>';
+            $checks['openmailbox']['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX;
+            $checks['openmailbox']['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED;
+            $checks['openmailbox']['result_img'] = XNEWSLETTER_IMG_FAILED;
+            $checks['openmailbox']['info'] = imap_last_error();
+
         } else {
-            echo '<tr>';
-            echo '<td>' . XNEWSLETTER_IMG_OK . '</td>';
-            echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . '</td>';
-            echo '<td></td>';
-            echo '</tr>';
+            $checks['openmailbox']['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_MAILBOX;
+            $checks['openmailbox']['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK;
+            $checks['openmailbox']['result_img'] = XNEWSLETTER_IMG_OK;
 
             $folders = imap_list($mbox, '{' . $command . '}', '*');
             if (false === $folders) {
-                echo '<tr>';
-                echo '<td>' . XNEWSLETTER_IMG_FAILED . '</td>';
-                echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS . _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . '</td>';
-                echo '<td>' . imap_last_error() . '</td>';
-                echo '</tr>';
+                $checks['listfolder']['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_LIST_FOLDERS;
+                $checks['listfolder']['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED;
+                $checks['listfolder']['result_img'] = XNEWSLETTER_IMG_FAILED;
+                $checks['listfolder']['info'] = imap_last_error();
             } else {
-                echo '<tr>';
-                echo '<td>' . XNEWSLETTER_IMG_OK . '</td>';
-                echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS . _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . '</td>';
-                echo '<td>';
-                if (is_array($folders)) {
-                    //                    reset($folders);
-                    sort($folders);
-                    $foldercreated = 0;
-                    //                    while (list($key, $val) = each($folders)) {
-                    foreach ($folders as $key => $val) {
-                        echo "($key) ";
-                        echo imap_utf7_decode(str_replace('{' . $command . '}', '', $val)) . "<br>\n";
-                        if ('{' . $command . '}' . $accounts_inbox == $val) {
-                            $accounts_inbox_ok = true;
-                        }
-                        if ('{' . $command . '}' . $accounts_hardbox == $val) {
-                            $accounts_hardbox_ok = true;
-                        } else {
-                            @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_hardbox));
-                            $foldercreated = 1;
-                        }
-                        if ('{' . $command . '}' . $accounts_softbox == $val) {
-                            $accounts_softbox_ok = true;
-                        } else {
-                            @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $accounts_softbox));
-                            $foldercreated = 1;
-                        }
-                    }
-                    if (1 == $foldercreated) {
-                        $folders_recheck = imap_list($mbox, '{' . $command . '}', '*');
-                        //                        while (list($key, $val) = each($folders_recheck)) {
-                        foreach ($folders_recheck as $key => $val) {
-                            if ('{' . $command . '}' . $accounts_hardbox == $val) {
-                                $accounts_hardbox_ok = true;
-                            }
-                            if ('{' . $command . '}' . $accounts_softbox == $val) {
-                                $accounts_softbox_ok = true;
-                            }
-                        }
-                    }
-                }
+                $checks['listfolder']['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_LIST_FOLDERS;
+                $checks['listfolder']['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK;
+                $checks['listfolder']['result_img'] = XNEWSLETTER_IMG_OK;
 
-                echo '</td>';
-                echo '</tr>';
-                echo '<tr>';
-                if ('1' == $accountObj->getVar('accounts_use_bmh')) {
-                    if (true === $accounts_inbox_ok && true === $accounts_hardbox_ok && true === $accounts_softbox_ok) {
-                        echo '<td>' . XNEWSLETTER_IMG_OK . '</td>';
-                    } else {
-                        echo '<td>' . XNEWSLETTER_IMG_FAILED . '</td>';
+                //check whether mailboxes from yor settings are really in folders array
+                $arrCheckMB[]= $accounts_inbox;
+                $arrCheckMB[]= $accounts_hardbox;
+                $arrCheckMB[]= $accounts_softbox;
+                foreach ($arrCheckMB as $key => $mailbox) {
+                    $found_result = 0;
+                    $foldercreated = 1;
+                    if (is_array($folders)) {
+                        foreach ($folders as $key => $val) {
+                            if ('{' . $command . '}' . $mailbox == $val) {
+                                $found_result = true;
+                            }
+                        }
                     }
-                    echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH . '</td>';
-                    echo '<td>';
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_INBOX . ' ';
-                    if (true === $accounts_inbox_ok) {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
-                    } else {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
+                    if ($found_result == 0) {
+                        if (false === @imap_createmailbox($mbox, imap_utf7_encode('{' . $command . '}' . $mailbox))) {
+//                                throw new \RuntimeException('The hard-mailbox '.$mbox.' could not be created.');
+                            $checks[$mailbox]['created'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_MAILBOX_CREATE_FAILED . $mailbox;
+                        } else {
+                            $foldercreated = 1;
+                            $checks[$mailbox]['created'] = true;
+                            $found_result = true;
+                            $checks[$mailbox]['created'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_MAILBOX_CREATE_SUCCESS . $mailbox;
+                        }
                     }
-                    echo '<br>';
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_HARDBOX . ' ';
-                    if (true === $accounts_hardbox_ok) {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
+                    if ($found_result) {
+                        $checks[$mailbox]['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS . $mailbox;
+                        $checks[$mailbox]['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK;
+                        $checks[$mailbox]['result_img'] = XNEWSLETTER_IMG_OK;
                     } else {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
+                        $checks[$mailbox]['check'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_OPEN_FOLDERS . $mailbox;
+                        $checks[$mailbox]['result'] = _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED;
+                        $checks[$mailbox]['result_img'] = XNEWSLETTER_IMG_FAILED;
+
                     }
-                    echo '<br>';
-                    echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH_SOFTBOX . ' ';
-                    if (true === $accounts_softbox_ok) {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_OK . XNEWSLETTER_IMG_OK;
-                    } else {
-                        echo _AM_XNEWSLETTER_ACCOUNTS_CHECK_FAILED . XNEWSLETTER_IMG_FAILED;
-                    }
-                    echo '<br>';
-                    echo '</td>';
-                } else {
-                    echo '<td>' . XNEWSLETTER_IMG_OK . '</td>';
-                    echo '<td>' . _AM_XNEWSLETTER_ACCOUNTS_CHECK_BMH . _AM_XNEWSLETTER_ACCOUNTS_CHECK_SKIPPED . '</td>';
-                    echo '<td></td>';
                 }
-                echo '</tr>';
             }
             imap_close($mbox);
         }
-        echo '</table>';
+        $GLOBALS['xoopsTpl']->assign('checks', $checks);
         break;
     case 'list':
     case 'list_accounts':
     default:
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, '?op=new_account', 'add');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $limit            = $helper->getConfig('adminperpage');
         $accountsCriteria = new \CriteriaCompo();
         $accountsCriteria->setSort('accounts_id ASC, accounts_type');
         $accountsCriteria->setOrder('ASC');
         $accountsCount = $helper->getHandler('Accounts')->getCount();
-        $start         = \Xmf\Request::getInt('start', 0);
+        $start         = Request::getInt('start', 0);
         $accountsCriteria->setStart($start);
         $accountsCriteria->setLimit($limit);
-        $accountsObjs = $helper->getHandler('Accounts')->getAll($accountsCriteria);
+        $accountsAll = $helper->getHandler('Accounts')->getAll($accountsCriteria);
         if ($accountsCount > $limit) {
             require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
             $pagenav = new \XoopsPageNav($accountsCount, $limit, $start, 'start', 'op=list');
-            $pagenav = $pagenav->renderNav(4);
-        } else {
-            $pagenav = '';
+            $GLOBALS['xoopsTpl']->assign('pagenav', $pagenav->renderNav(4));
         }
-
-        // View Table
-        echo "<table class='outer width100' cellspacing='1'>";
-        echo '<tr>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_ID . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_TYPE . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_NAME . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_YOURNAME . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_YOURMAIL . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_ACCOUNTS_DEFAULT . '</th>';
-        echo '    <th>' . _AM_XNEWSLETTER_FORMACTION . '</th>';
-        echo '</tr>';
 
         if ($accountsCount > 0) {
-            $class = 'odd';
-            foreach ($accountsObjs as $accounts_id => $accountsObj) {
-                echo "<tr class='" . $class . "'>";
-                $class = ('even' === $class) ? 'odd' : 'even';
-                echo "<td class='center'>{$accounts_id}</td>";
-                $accounts_types = [
-                    _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL     => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPMAIL,
-                    _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL => _AM_XNEWSLETTER_ACCOUNTS_TYPE_PHPSENDMAIL,
-                    _XNEWSLETTER_ACCOUNTS_TYPE_VAL_POP3         => _AM_XNEWSLETTER_ACCOUNTS_TYPE_POP3,
-                    _XNEWSLETTER_ACCOUNTS_TYPE_VAL_SMTP         => _AM_XNEWSLETTER_ACCOUNTS_TYPE_SMTP,
-                    _XNEWSLETTER_ACCOUNTS_TYPE_VAL_GMAIL        => _AM_XNEWSLETTER_ACCOUNTS_TYPE_GMAIL,
-                ];
-                echo "<td>{$accounts_types[$accountsObj->getVar('accounts_type')]}</td>";
-                echo "<td>{$accountsObj->getVar('accounts_name')}</td>";
-                echo "<td>{$accountsObj->getVar('accounts_yourname')}</td>";
-                echo "<td>{$accountsObj->getVar('accounts_yourmail')}</td>";
-                $verif_accounts_default = (1 == $accountsObj->getVar('accounts_default')) ? _YES : _NO;
-                echo "<td class='center'>{$verif_accounts_default}</td>";
+            $GLOBALS['xoopsTpl']->assign('accountsCount', $accountsCount);
 
-                echo "<td class='center'>";
-                echo "    <a href='?op=edit_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_edit.png alt='" . _EDIT . "' title='" . _EDIT . "'></a>";
-                echo "    <a href='?op=delete_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>";
-                if (_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL != $accountsObj->getVar('accounts_type')
-                    && _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL != $accountsObj->getVar('accounts_type')) {
-                    echo "    <a href='?op=check_account&accounts_id={$accounts_id}'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_check.png alt='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "' title='" . _AM_XNEWSLETTER_ACCOUNTS_TYPE_CHECK . "'></a>";
+            foreach ($accountsAll as $acc_id => $accountsObj) {
+                $account = $accountsObj->getValuesAccount();
+                if (_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_MAIL != $account['accounts_type']
+                    && _XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL != $account['accounts_type']) {
+                    $account['show_check'] = true;
                 }
-                echo '</td>';
-                echo '</tr>';
+                $GLOBALS['xoopsTpl']->append('accounts_list', $account);
+                unset($account);
             }
         }
-        echo '</table>';
-        echo '<br>';
-        echo "<div>{$pagenav}</div>";
-        echo '<br>';
         break;
     case 'new_account':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $accountObj = $helper->getHandler('Accounts')->create();
         $accountObj = xnewsletter_setPost($accountObj, $_POST);
         $form       = $accountObj->getForm();
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'save_accounts':
         if (!$GLOBALS['xoopsSecurity']->check()) {
@@ -322,22 +245,22 @@ switch ($op) {
             $accountObj->setErrors(_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
         }
 
-        echo $accountObj->getHtmlErrors();
+        $GLOBALS['xoopsTpl']->assign('error', $accountObj->getHtmlErrors());
         $form = $accountObj->getForm();
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'edit_account':
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWACCOUNTS, '?op=new_account', 'add');
         $adminObject->addItemButton(_AM_XNEWSLETTER_ACCOUNTSLIST, '?op=list', 'list');
-        $adminObject->displayButton('left');
+        $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $accountObj = $helper->getHandler('Accounts')->get($accounts_id);
         if (!empty($_POST)) {
             xnewsletter_setPost($accountObj, $_POST);
         }
         $form = $accountObj->getForm();
-        $form->display();
+        $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'delete_account':
         $accountObj = $helper->getHandler('Accounts')->get($accounts_id);
@@ -348,7 +271,7 @@ switch ($op) {
             if ($helper->getHandler('Accounts')->delete($accountObj)) {
                 redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELOK);
             } else {
-                echo $accountObj->getHtmlErrors();
+                $GLOBALS['xoopsTpl']->assign('error', $accountObj->getHtmlErrors());
             }
         } else {
             xoops_confirm(['ok' => true, 'accounts_id' => $accounts_id, 'op' => 'delete_account'], $currentFile, sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $accountObj->getVar('accounts_name')));

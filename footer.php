@@ -20,11 +20,21 @@
 
 require __DIR__ . '/include/common.php';
 
-
 // Module info/menu
 $moduleInfo = $helper->getModule()->getInfo();
 //$xoopsTpl->assign('xnewsletterModuleInfo', $moduleInfo); // huge array but useful?
-$xoopsTpl->assign('xnewsletterModuleInfoSub', $moduleInfo['sub']);
+$footerItems = $moduleInfo['sub'];
+// remove link for subscription when current file is subscription.php
+if(basename($_SERVER['PHP_SELF']) === 'subscription.php') {
+    foreach ($footerItems as $key1 => $item) {
+        foreach ($item as $key2 => $value) {
+            if ($value === 'subscription.php') {
+                unset($footerItems[$key1]);
+            }
+        }
+    }
+}
+$xoopsTpl->assign('xnewsletterModuleInfoSub', $footerItems);
 // Module admin
 $xoopsTpl->assign('isAdmin', xnewsletter_userIsAdmin());
 // Extra info

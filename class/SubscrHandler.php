@@ -67,7 +67,7 @@ class SubscrHandler extends \XoopsPersistableObjectHandler
      * @internal param object $object
      * @return bool
      */
-    public function delete(\XoopsObject$subscrObj, $force = false)
+    public function delete(\XoopsObject $subscrObj, $force = false)
     {
         $res       = true;
         $subscr_id = (int)$subscrObj->getVar('subscr_id');
@@ -81,7 +81,7 @@ class SubscrHandler extends \XoopsPersistableObjectHandler
                     // handle mailinglists
                     if (0 != $cat_mailinglist) {
                         require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
-                        subscribingMLHandler(0, $subscr_id, $cat_mailinglist);
+                        subscribingMLHandler(_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE, $subscr_id, $cat_mailinglist);
                     }
                 } else {
                     $res = false;

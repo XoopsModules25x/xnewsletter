@@ -28,7 +28,10 @@ require_once __DIR__ . '/admin_header.php';
 xoops_cp_header();
 //global $indexAdmin;
 
-$adminObject->displayNavigation(basename(__FILE__));
-$adminObject->displayAbout('9P3B3FXKF868J', false);
+// set template
+$templateMain = 'xnewsletter_admin_about.tpl';
+
+$GLOBALS['xoopsTpl']->assign('navigation', $adminObject->displayNavigation('about.php'));
+$GLOBALS['xoopsTpl']->assign('about', $adminObject->renderAbout('', false));
 
 require_once __DIR__ . '/admin_footer.php';

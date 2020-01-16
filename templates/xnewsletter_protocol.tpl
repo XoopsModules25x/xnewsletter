@@ -5,16 +5,14 @@
         <th><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_ID}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_EMAIL}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_STATUS}></th>
-        <th><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_CREATED}></th>
+        <th><{$smarty.const._AM_XNEWSLETTER_CREATED}></th>
     </tr>
     <{foreach item='protocol' from=$protocols}>
         <tr class="<{cycle values = 'even,odd'}>">
             <td><{$protocol.protocol_id}></td>
             <td>
-                <{if ($protocol.protocol_subscr_id)}>
+                <{if ($protocol.subscr.subscr_id > 0)}>
                     <{$protocol.subscr.subscr_email}>
-                <{else}>
-                    <{$smarty.const._AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL}>
                 <{/if}>
 
             </td>
@@ -38,5 +36,5 @@
         </tr>
     <{/foreach}>
 </table>
-
+<div><{$pagenav}></div>
 <{include file="db:xnewsletter_footer.tpl"}>

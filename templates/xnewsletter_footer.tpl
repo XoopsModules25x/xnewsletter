@@ -15,7 +15,7 @@
 <!-- footer menu -->
 <div class="xnewsletter_adminlinks">
     <{foreach item='footerMenuItem' from=$xnewsletterModuleInfoSub}>
-        <a href='<{$smarty.const.XNEWSLETTER_URL}>/<{$footerMenuItem.url}>'><{$footerMenuItem.name}></a>
+        <a class='btn btn-primary wg-color1' href='<{$smarty.const.XNEWSLETTER_URL}>/<{$footerMenuItem.url}>'><{$footerMenuItem.name}></a>
     <{/foreach}>
     <{if $isAdmin == true}>
         <br>
