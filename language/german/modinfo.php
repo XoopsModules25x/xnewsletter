@@ -125,3 +125,10 @@ define('_MI_XNEWSLETTER_DISCLAIMER', 'Disclaimer');
 define('_MI_XNEWSLETTER_LICENSE', 'License');
 define('_MI_XNEWSLETTER_SUPPORT', 'Support');
 define('_MI_XNEWSLETTER_INSTALL', 'Installation');
+
+//1.41
+define('_MI_XNEWSLETTER_CRON_PROTOCOL', 'Level der Protokollierung für Cron-Jobs');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_DESC', 'Wird nur angewendet wenn ein entsprechender Cron-Job existiert');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_0', 'Keine Protokolleinträge erstellen');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_1', 'Protokolleinträge erstellen wenn ein Fehler aufgetreten ist (empfohlen)');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_2', 'Protokolleinträge für alle Ereignisse erstellen (für Testzwecke)');

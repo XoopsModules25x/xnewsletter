@@ -38,6 +38,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Protocol extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     public $protocol_status_strs = [
         _XNEWSLETTER_PROTOCOL_STATUS_SAVED             => _AM_XNEWSLETTER_PROTOCOL_STATUS_SAVED,
@@ -101,13 +102,35 @@ class Protocol extends \XoopsObject
 
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_PROTOCOL_SUCCESS, 'protocol_success', 50, 255, $this->getVar('protocol_success')), false);
 
-        $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_PROTOCOL_SUBMITTER, 'protocol_submitter', false, $this->getVar('protocol_submitter'), 1, false), true);
+        $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBMITTER, 'protocol_submitter', false, $this->getVar('protocol_submitter'), 1, false), true);
 
-        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_PROTOCOL_CREATED, 'protocol_created', '', $this->getVar('protocol_created')));
+        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_CREATED, 'protocol_created', '', $this->getVar('protocol_created')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_protocol'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesProtocol($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret['id']               = $this->getVar('protocol_id');
+        $ret['letter_id']        = $this->getVar('protocol_letter_id');
+        $ret['subscriber_id']    = $this->getVar('protocol_subscriber_id');
+        $ret['status']           = $this->getVar('protocol_status');
+        $ret['success']          = $this->getVar('protocol_success');
+        $ret['status_str_id']    = $this->getVar('protocol_status_str_id');
+        $ret['status_vars']      = $this->getVar('protocol_status_vars');
+        $ret['status_vars_text'] = implode('<br>', $this->getVar('protocol_status_vars'));
+        $ret['created']          = formatTimestamp($this->getVar('protocol_created'), 'L');
+        $ret['submitter']        = \XoopsUser::getUnameFromId($this->getVar('protocol_submitter'));
+        return $ret;
     }
 }

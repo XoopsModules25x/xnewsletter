@@ -37,9 +37,9 @@ $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
 $mydirname = basename(__DIR__);
 xoops_load('XoopsLists');
 
-$modversion['version']             = 1.4;
-$modversion['module_status']       = 'Beta 2';
-$modversion['release_date']        = '2019/10/05';
+$modversion['version']             = 1.41;
+$modversion['module_status']       = 'Beta 1';
+$modversion['release_date']        = '2019/12/22';
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
 $modversion['author']              = 'Goffy, Alfred, Mamba';
@@ -66,7 +66,7 @@ $modversion['release_file']        = XOOPS_URL . '/modules/' . $mydirname . '/do
 
 $modversion['manual']      = 'xnewsletter.txt';
 $modversion['manual_file'] = XOOPS_URL . "/modules/{$mydirname}/docs/";
-$modversion['min_php']     = '5.5';
+$modversion['min_php']     = '7.0';
 $modversion['min_xoops']   = '2.5.10';
 $modversion['min_admin']   = '1.1';
 $modversion['min_db']      = ['mysql' => '5.5'];
@@ -163,6 +163,9 @@ if (true === $showRead) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_SUBSCRIBE;
     $modversion['sub'][$subcount]['url']  = 'subscription.php';
     ++$subcount;
+    $modversion['sub'][$subcount]['name'] = _AM_XNEWSLETTER_SUBSCRIPTION_SEARCH_ADD;
+    $modversion['sub'][$subcount]['url']  = 'subscription.php?op=search_subscription';
+    ++$subcount;
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_LIST;
     $modversion['sub'][$subcount]['url']  = 'letter.php?op=list_letters';
     ++$subcount;
@@ -181,65 +184,42 @@ if (true === $showList) {
 }
 
 // Templates
-
 $modversion['templates'] = [
-    [
-        'file'        => $mydirname . '_header.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_footer.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_empty.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_index.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_subscription.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_subscription_result.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_subscription_list_subscriptions.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_letter.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_letter_print.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_letter_preview.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_letter_list_letters.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_letter_list_subscrs.tpl',
-        'description' => '',
-    ],
-    [
-        'file'        => $mydirname . '_protocol.tpl',
-        'description' => '',
-    ],
+    // Admin
+    ['file' => 'xnewsletter_admin_about.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_attachments.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_accounts.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_bmh.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_categories.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_catsubscribers.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_feedback.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_footer.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_header.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_import.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_index.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_letters.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_mailinglists.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_maintenance.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_protocols.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_subscribers.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_tasks.tpl', 'description' => '', 'type' => 'admin'],
+    ['file' => 'xnewsletter_admin_templates.tpl', 'description' => '', 'type' => 'admin'],
+    //User
+    ['file' => $mydirname . '_header.tpl', 'description' => ''],
+    ['file' => $mydirname . '_footer.tpl', 'description' => ''],
+    ['file' => $mydirname . '_empty.tpl', 'description' => ''],
+    ['file' => $mydirname . '_index.tpl', 'description' => ''],
+    ['file' => $mydirname . '_subscription.tpl', 'description' => ''],
+    ['file' => $mydirname . '_subscription_result.tpl', 'description' => ''],
+    ['file' => $mydirname . '_subscription_list_subscriptions.tpl', 'description' => ''],
+    ['file' => $mydirname . '_letter.tpl', 'description' => ''],
+    ['file' => $mydirname . '_letter_print.tpl', 'description' => ''],
+    ['file' => $mydirname . '_letter_preview.tpl', 'description' => ''],
+    ['file' => $mydirname . '_letter_list_letters.tpl', 'description' => ''],
+    ['file' => $mydirname . '_letter_list_subscrs.tpl', 'description' => ''],
+    ['file' => $mydirname . '_protocol.tpl', 'description' => ''],
     // Common templates
-    [
-        'file'        => $mydirname . '_common_breadcrumb.tpl',
-        'description' => '',
-    ],
+    ['file' => $mydirname . '_common_breadcrumb.tpl', 'description' => ''],
 ];
 
 unset($i);
@@ -430,6 +410,18 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_TIM
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '60';
+++$i;
+$modversion['config'][$i]['name']        = 'xn_cron_protocol';
+$modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_CRON_PROTOCOL';
+$modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_CRON_PROTOCOL_DESC';
+$modversion['config'][$i]['formtype']    = 'select';
+$modversion['config'][$i]['valuetype']   = 'int';
+$modversion['config'][$i]['default']     = 0;
+$modversion['config'][$i]['options']     = [
+    _MI_XNEWSLETTER_CRON_PROTOCOL_0  => 0,
+    _MI_XNEWSLETTER_CRON_PROTOCOL_1  => 1,
+    _MI_XNEWSLETTER_CRON_PROTOCOL_2  => 2
+];
 
 unset($i);
 

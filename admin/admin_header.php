@@ -59,6 +59,7 @@ $adminObject = \Xmf\Module\Admin::getInstance();
 $myts = \MyTextSanitizer::getInstance();
 
 if ($xoopsUser) {
+    /** @var \XoopsGroupPermHandler $grouppermHandler */
     $grouppermHandler = xoops_getHandler('groupperm');
     if (!$grouppermHandler->checkRight('module_admin', $helper->getModule()->mid(), $xoopsUser->getGroups())) {
         redirect_header(XOOPS_URL, 1, _NOPERM);

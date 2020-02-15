@@ -21,7 +21,7 @@ namespace XoopsModules\Xnewsletter\Common;
  * @since       1.05
  */
 
-// require_once dirname(dirname(__DIR__)) . '/include/common.php';
+
 
 /**
  * Class Configurator
@@ -46,9 +46,6 @@ class Configurator
      */
     public function __construct()
     {
-
-//        require dirname(dirname(__DIR__)) . '/config/config.php';
-//        $config = getConfig();
 
         $config = include dirname(dirname(__DIR__)) . '/config/config.php';
         $this->name            = $config->name;

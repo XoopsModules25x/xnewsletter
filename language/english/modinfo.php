@@ -125,3 +125,10 @@ define('_MI_XNEWSLETTER_DISCLAIMER', 'Disclaimer');
 define('_MI_XNEWSLETTER_LICENSE', 'License');
 define('_MI_XNEWSLETTER_SUPPORT', 'Support');
 define('_MI_XNEWSLETTER_INSTALL', 'Installation');
+
+//1.41
+define('_MI_XNEWSLETTER_CRON_PROTOCOL', 'Level of protocol for cron jobs');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_DESC', 'Only applied if used cron job exist');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_0', 'No protocol items will be created');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_1', 'Protocol will be created when an error occurs (recommended)');
+define('_MI_XNEWSLETTER_CRON_PROTOCOL_2', 'Protocol will be created for all events (only for testing)');

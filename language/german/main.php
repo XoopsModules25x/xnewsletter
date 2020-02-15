@@ -47,7 +47,7 @@ define('_MA_XNEWSLETTER_SUBSCRIPTION_EXIST', 'Bestehende Newsletteranmeldungen')
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EXIST_NONE', 'Es existieren derzeit keine Newsletteranmeldungen');
 define('_MA_XNEWSLETTER_REGISTRATION_EXIST', 'Bestehende Registrierungen von dieser E-Mail-Adresse');
 define('_MA_XNEWSLETTER_REGISTRATION_NONE',
-       'Ihre E-Mail-Adresse ist bis jetzt noch nicht registriert. Für Newsletteranmeldungen benötigen wir zusätzliche Informationen. Bitte ergänzen Sie das Registrierungsformular.<br/>Wir möchten Sie außerdem darauf hinweisen, dass zu Zwecken der Nachvollziehbarkeit Ihre IP-Adresse mitgespeichert wird.');
+       "Die E-Mail-Adresse '%s' ist bis jetzt noch nicht registriert. Für Newsletteranmeldungen benötigen wir zusätzliche Informationen. Bitte ergänzen Sie das Registrierungsformular.<br/>Wir möchten Sie außerdem darauf hinweisen, dass zu Zwecken der Nachvollziehbarkeit Ihre IP-Adresse mitgespeichert wird.");
 define('_MA_XNEWSLETTER_REGISTRATION_ADD', 'Wenn Sie wollen, können Sie eine oder mehrere Personen mit einer E-Mail-Adresse erfassen, und später können Sie auch unterschiedliche Newsletteranmeldungen durchführen.');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ADD', 'Newsletteranmeldungen hinzufügen');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_EDIT', 'Newsletteranmeldungen bearbeiten');
@@ -108,3 +108,8 @@ define('_MD_XNEWSLETTER_WARNING', 'Warnung');
 define('_MD_XNEWSLETTER_ERROR', 'Fehler');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED', 'Fehler: der Aktivierungsschlüssel ist abgelaufen. Bitte Registrierung erneut durchführen');
 define('_MA_XNEWSLETTER_RESENDMAIL_REG_OK', "Eine E-Mail mit Bestätigungscode wurde erneut an die E-Mail-Adresse '%subscr_email' gesendet.");
+//1.4
+define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', "Derzeit sind keine E-Mail-Vorlagen verfügbar!");
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO', "Registrierungsinformation Newsletter");
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK', "Die Registrierungsinformation wurden an die angegeben E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihre E-Mails");
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR', "Fehler beim Sender der Registrierungsinformation an die angegeben E-Mail-Adresse!");

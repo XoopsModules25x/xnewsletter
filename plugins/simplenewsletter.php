@@ -65,7 +65,7 @@ function xnewsletter_plugin_getdata_simplenewsletter($cat_id, $action_after_read
     $sql .= " FROM {$xoopsDB->prefix('simplenewsletter_members')}";
     $sql .= " WHERE (`member_email` IS NOT NULL AND NOT(`member_email`=''))";
     if (!$result_users = $xoopsDB->query($sql)) die ('MySQL-Error: ' . $xoopsDB->error());
-    while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
+    while (false !== ($lineArray = $xoopsDB->fetchBoth($result_users))) {
         ++$i;
         $email     = substr($lineArray[0], 0, 100); // only allow 1st 100 chars
         $email     = checkEmail($email);  // make sure truncated string is valid email addr

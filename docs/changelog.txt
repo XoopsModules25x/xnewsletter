@@ -1,30 +1,47 @@
-<h5>1.4 Beta 1   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
+<h5>1.41 Beta 1   [NOT RELEASED]</h5>  Dev: XOOPS 2.5.11, PHP 7.4.1
 <hr>
-- fix problem of none showing privous newsletters in newsletter list (goffy)
+ - __NAMESPACE__ in helper.php (mamba)
+ - added Feedback (mamba)
+ - added language translations (mamba)
+ - fixed bug in adding subcriber (goffy)
+ - implemented syncronisation with phyton-mailman (goffy)
+ - implemented template files for admin area (goffy)
+ - letter templates can be selected as on - or offline (goffy)
+ - updated bmh (goffy)
+ - various bug fixes (goffy)
+ - usage of activation key for each subscriber (goffy)
+ - added preference for level of protocol/debugging in cron (goffy)
+ - added possibility to request subscriptions (goffy)
+ - check whether there are existing sbuscription to this cat before deleting (goffy)
+ - new maintenance: delete data in table catsubscr, if cat is no more existing in table cat (goffy)
+
+<h5>1.4 Beta 2   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
+<hr>
+ - fix problem of none showing privous newsletters in newsletter list (goffy)
 
 <h5>1.4 Beta 1   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>
-- fix getConfig() (goffy/mamba)
-- fix call to PHPMailer (goffy/mamba)
-- add check for getModule() in menu (mamba)
-- add check for $pathModIcon32 in menu (mamba)
-- fixed bugs in templates (goffy)
-- fixed bugs in cron (goffy)
-- fixed bugs in task.inc (goffy)
-- added protocol level to cron for testing pruposes (goffy)
-- add check for upload paths in admin/index (goffy)
-- fixed bugs in calc letter size (goffy)
-- various cosmetics in admin area (goffy)
-- rebuilt list protocol items (goffy)
+ - fix getConfig() (goffy/mamba)
+ - fix call to PHPMailer (goffy/mamba)
+ - add check for getModule() in menu (mamba)
+ - add check for $pathModIcon32 in menu (mamba)
+ - fixed bugs in templates (goffy)
+ - fixed bugs in cron (goffy)
+ - fixed bugs in task.inc (goffy)
+ - added protocol level to cron for testing pruposes (goffy)
+ - add check for upload paths in admin/index (goffy)
+ - fixed bugs in calc letter size (goffy)
+ - various cosmetics in admin area (goffy)
+ - rebuilt list protocol items (goffy)
 
 <h5>1.4 Alpha 1   [WORK IN PROGRESS - NOT RELEASED]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.9
 <hr>
-- namespaces (mamba)
-- class autoloading (mamba)
-- reverted in_array() true check (mamba)
-- reversed to while (list()) (mamba)
-- fix Capital letters in getHandler() (goffy/mamba)
-- fix namespaces in oninstall (goffy/mamba)
+ - namespaces (mamba)
+ - class autoloading (mamba)
+ - reverted in_array() true check (mamba)
+ - reversed to while (list()) (mamba)
+ - fix Capital letters in getHandler() (goffy/mamba)
+ - fix namespaces in oninstall (goffy/mamba)
 
 <h5>1.3     NOT RELEASED</h5>
 <hr>

@@ -62,8 +62,7 @@ function callbackAction(
         $bmhObj->setVar('bmh_created', time());
 
         if (!$helper->getHandler('Bmh')->insert($bmhObj)) {
-            echo $bmhObj->getHtmlErrors();
-
+            $GLOBALS['xoopsTpl']->assign('error', $bmhObj->getHtmlErrors());
             return false;
         }
         //echo $msgnum . ': '  . $rule_no . ' | '  . $rule_cat . ' | '  . $bounce_type . ' | '  . $remove . ' | ' . $email . ' | '  . $subject . ' | '  . $xheader . "<br>\n";

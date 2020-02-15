@@ -38,6 +38,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Letter extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -45,18 +46,18 @@ class Letter extends \XoopsObject
     {
         $this->helper = Helper::getInstance();
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
-        $this->initVar('letter_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_title', XOBJ_DTYPE_TXTBOX, null, true, 100);
-        $this->initVar('letter_content', XOBJ_DTYPE_TXTAREA, null, true);
-        $this->initVar('letter_template', XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar('letter_cats', XOBJ_DTYPE_TXTBOX, null, false, 100); // IN PROGRESS: AN ARRAY SHOULD BE BETTER
-        $this->initVar('letter_attachment', XOBJ_DTYPE_TXTBOX, null, false, 200);
-        $this->initVar('letter_account', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_email_test', XOBJ_DTYPE_TXTBOX, null, false, 100);
-        $this->initVar('letter_submitter', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_created', XOBJ_DTYPE_INT, time(), false); // timestamp
-        $this->initVar('letter_sender', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('letter_sent', XOBJ_DTYPE_INT, false, false); // timestamp or false
+        $this->initVar('letter_id',        XOBJ_DTYPE_INT,    null, false);
+        $this->initVar('letter_title',     XOBJ_DTYPE_TXTBOX, null, true, 100);
+        $this->initVar('letter_content',   XOBJ_DTYPE_TXTAREA,null, true);
+        $this->initVar('letter_templateid',XOBJ_DTYPE_INT,    null, false);
+        $this->initVar('letter_cats',      XOBJ_DTYPE_TXTBOX, null, false, 100); // IN PROGRESS: AN ARRAY SHOULD BE BETTER
+        $this->initVar('letter_attachment',XOBJ_DTYPE_TXTBOX, null, false, 200);
+        $this->initVar('letter_account',   XOBJ_DTYPE_INT,    null, false);
+        $this->initVar('letter_email_test',XOBJ_DTYPE_TXTBOX, null, false, 100);
+        $this->initVar('letter_submitter', XOBJ_DTYPE_INT,    null, false);
+        $this->initVar('letter_created',   XOBJ_DTYPE_INT,     time(), false); // timestamp
+        $this->initVar('letter_sender',    XOBJ_DTYPE_INT,    null, false);
+        $this->initVar('letter_sent',      XOBJ_DTYPE_INT,    false, false); // timestamp or false
     }
 
     /**
@@ -96,42 +97,25 @@ class Letter extends \XoopsObject
         $form->addElement($letter_content_editor, true);
 
         // letter_template
-        $letter_template = '' == $this->getVar('letter_template') ? 'basic' : $this->getVar('letter_template');
-        $template_select = new \XoopsFormSelect(_AM_XNEWSLETTER_LETTER_TEMPLATE, 'letter_template', $letter_template);
-        // get template files in /modules/xnewsletter/language/{language}/templates/ directory
-        $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/' . $GLOBALS['xoopsConfig']['language'] . '/templates/';
-        if (!is_dir($template_path)) {
-            $template_path = XOOPS_ROOT_PATH . '/modules/xnewsletter/language/english/templates/';
-        }
-        $templateFiles = [];
-        if (!$dirHandler = @opendir($template_path)) {
-            die(str_replace('%p', $template_path, _AM_XNEWSLETTER_SEND_ERROR_INALID_TEMPLATE_PATH));
-        }
-        while ($filename = readdir($dirHandler)) {
-            if (('.' !== $filename) and ('..' !== $filename) and ('index.html' !== $filename)) {
-                $info            = pathinfo($filename);
-                $templateFiles[] = basename($filename, '.' . $info['extension']);
-            }
-        }
-        closedir($dirHandler);
-        foreach ($templateFiles as $templateFile) {
-            $template_select->addOption($templateFile, 'file:' . $templateFile);
-        }
+        $letterTemplateid = $this->isNew() ? 1 : $this->getVar('letter_templateid');
+        $template_select = new \XoopsFormSelect(_AM_XNEWSLETTER_LETTER_TEMPLATE, 'letter_templateid', $letterTemplateid);
         // get template objects from database
         $templateCriteria = new \CriteriaCompo();
-        $templateCriteria->setSort('template_title DESC, template_id');
+        $templateCriteria->add(new \Criteria('template_online', 1));
+        $templateCriteria->setSort('template_title ASC, template_id');
         $templateCriteria->setOrder('DESC');
-        $templateCount = $this->helper->getHandler('Template')->getCount();
+        $templateCount = $this->helper->getHandler('Template')->getCount($templateCriteria);
         if ($templateCount > 0) {
-            $templateObjs = $this->helper->getHandler('Template')->getAll($templateCriteria);
-            foreach ($templateObjs as $templateObj) {
-                $template_select->addOption('db:' . $templateObj->getVar('template_id'), 'db:' . $templateObj->getVar('template_title'));
-            }
+            $template_select->addOptionArray($this->helper->getHandler('Template')->getList($templateCriteria));
+        } else {
+            redirect_header('letter.php?op=list', 3, _MA_XNEWSLETTER_NOTEMPLATE_ONLINE);
         }
         $form->addElement($template_select, false);
 
         // letter_cats
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
         $grouppermHandler = xoops_getHandler('groupperm');
+        /** @var \XoopsMemberHandler $memberHandler */
         $memberHandler    = xoops_getHandler('member');
         $groups           = $memberHandler->getGroupsByUser($xoopsUser->uid());
         $catCriteria      = new \CriteriaCompo();
@@ -257,12 +241,42 @@ class Letter extends \XoopsObject
         $form->addElement(new \XoopsFormHidden('letter_submitter', $submitter_uid));
         $form->addElement(new \XoopsFormHidden('letter_created', $time));
 
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_LETTER_SUBMITTER, $submitter_name));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_LETTER_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $submitter_name));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_letter'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SAVE, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
     }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesLetter($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret = $this->getValues($keys, $format, $maxDepth);
+        $ret['id']             = $this->getVar('letter_id');
+        $ret['title']          = $this->getVar('letter_title');
+        $ret['content']        = $this->getVar('letter_content');
+        $ret['templateid']     = $this->getVar('letter_templateid');
+        $templateObj           = $this->helper->getHandler('Template')->get($this->getVar('letter_templateid'));
+        if (is_object($templateObj)) {
+            $ret['template_title'] = $templateObj->getVar('template_title');
+        }
+        $ret['cats']           = $this->getVar('letter_cats');
+        $ret['attachment']     = $this->getVar('letter_attachment');
+        $ret['account']        = $this->getVar('letter_account');
+        $ret['email_test']     = $this->getVar('letter_email_test');
+        $ret['sender']         = $this->getVar('letter_sender') > 0 ? \XoopsUser::getUnameFromId($this->getVar('letter_sender')) : '-';
+        $ret['sent']           = $this->getVar('letter_sent') > 1 ? formatTimestamp($this->getVar('letter_sent'), 's') : '-';
+        $ret['created']        = formatTimestamp($this->getVar('letter_created'), 's');
+        $ret['submitter']      = \XoopsUser::getUnameFromId($this->getVar('letter_submitter'));
+        return $ret;
+    }
+
 }

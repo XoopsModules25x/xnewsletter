@@ -76,7 +76,7 @@ function xnewsletter_plugin_getdata_subscribers($cat_id, $action_after_read, $li
     if (!$result_users = $xoopsDB->query($sql)) {
         die('MySQL-Error: ' . $GLOBALS['xoopsDB']->error());
     }
-    while ($lineArray = $xoopsDB->fetchBoth($result_users)) {
+    while (false !== ($lineArray = $xoopsDB->fetchBoth($result_users))) {
         ++$i;
         $email     = $lineArray[0];
         $sex       = '';

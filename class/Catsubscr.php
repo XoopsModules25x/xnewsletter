@@ -38,6 +38,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Catsubscr extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -102,15 +103,34 @@ class Catsubscr extends \XoopsObject
         $form->addElement(new \XoopsFormHidden('catsubscr_submitter', $GLOBALS['xoopsUser']->uid()));
         $form->addElement(new \XoopsFormHidden('catsubscr_created', $time));
 
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
-        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CATSUBSCR_CREATED, formatTimestamp($time, 's')));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
+        $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's')));
 
-        //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_CATSUBSCR_SUBMITTER, 'catsubscr_submitter', false, $this->getVar('catsubscr_submitter'), 1, false), true);
-        //$form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_CATSUBSCR_CREATED, 'catsubscr_created', '', $this->getVar('catsubscr_created')));
+        //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBMITTER, 'catsubscr_submitter', false, $this->getVar('catsubscr_submitter'), 1, false), true);
+        //$form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_CREATED, 'catsubscr_created', '', $this->getVar('catsubscr_created')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_catsubscr'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesCatsubscr($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret = $this->getValues($keys, $format, $maxDepth);
+        $ret['id']        = $this->getVar('catsubscr_id');
+        $ret['catid']     = $this->getVar('catsubscr_catid');
+        $ret['subscrid']  = $this->getVar('catsubscr_subscrid');
+        $ret['quited']    = $this->getVar('catsubscr_quited');
+        $ret['created']   = formatTimestamp($this->getVar('catsubscr_created'), 's');
+        $ret['submitter'] = \XoopsUser::getUnameFromId($this->getVar('catsubscr_submitter'));
+        return $ret;
     }
 }

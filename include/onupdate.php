@@ -52,6 +52,99 @@ function xoops_module_update_xnewsletter(\XoopsObject $xoopsModule, $oldversion 
     if ($oldversion < 130) {
         xoops_module_update_xnewsletter_130();
     }
+    if ($oldversion < 141) {
+        xoops_module_update_xnewsletter_141();
+    }
+
+    xoops_module_update_xnewsletter_subscr_actkey();
+
+    return true;
+}
+
+/**
+ * @return bool
+ */
+function xoops_module_update_xnewsletter_subscr_actkey()
+{
+    global $xoopsDB;
+
+    $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+    $subscrAll = $helper->getHandler('Subscr')->getAll();
+    foreach ($subscrAll as $subscr_id => $subscrObj) {
+        if ($subscrObj->getVar('subscr_actkey') == '') {
+            $subscrObj->setVar('subscr_actkey', xoops_makepass());
+            $helper->getHandler('Subscr')->insert($subscrObj, true);
+        }
+        unset($subscrObj);
+    }
+
+    return true;
+}
+/**
+ * @return bool
+ */
+function xoops_module_update_xnewsletter_141()
+{
+    global $xoopsDB;
+
+    $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+    $subscrAll = $helper->getHandler('Subscr')->getAll();
+    foreach ($subscrAll as $subscr_id => $subscrObj) {
+        if ($subscrObj->getVar('subscr_actkey') == '') {
+            $subscrObj->setVar('subscr_actkey', xoops_makepass());
+            $helper->getHandler('Subscr')->insert($subscrObj, true);
+        }
+        unset($subscrObj);
+    }
+    
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_letter') . '`';
+    $sql    .= " ADD COLUMN `letter_templateid` int(8) NOT NULL default '1' AFTER `letter_content`;";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_letter' ADD 'letter_templateid'";
+    }
+
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_template') . '`';
+    $sql    .= " ADD UNIQUE `template_title` (`template_title`);";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_template' ADD 'template_type'";
+    }
+
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_template') . '`';
+    $sql    .= " ADD COLUMN `template_type` tinyint(1) NOT NULL default '1';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_template' ADD 'template_type'";
+    }
+    
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_template') . '`';
+    $sql    .= " ADD COLUMN `template_online` tinyint(1) NOT NULL default '1';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_template' ADD 'template_online'";
+    }
+    
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_protocol') . "` CHANGE `protocol_status_str_id` `protocol_status_str_id` TEXT NULL DEFAULT '';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_protocol' CHANGE `protocol_status_str_id`";
+    }
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_protocol') . "` CHANGE `protocol_status_vars` `protocol_status_vars` TEXT NULL DEFAULT '';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_protocol' CHANGE `protocol_status_str_vars`";
+    }
+
+    $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_mailinglist') . '`';
+    $sql    .= " ADD COLUMN `mailinglist_system` VARCHAR(100) NOT NULL  DEFAULT '',";
+    $sql    .= " ADD COLUMN `mailinglist_target` VARCHAR(200) NOT NULL  DEFAULT '',";
+    $sql    .= " ADD COLUMN `mailinglist_pwd` VARCHAR(100) NOT NULL  DEFAULT '',";
+    $sql    .= " ADD COLUMN `mailinglist_notifyowner` tinyint(1) NOT NULL default '0';";
+    $result = $xoopsDB->queryF($sql);
+    if (!$result) {
+        echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_mailinglist' ADD";
+    }
 
     return true;
 }
@@ -159,7 +252,10 @@ function xoops_module_update_xnewsletter_130()
     foreach ($template_list as $k => $v) {
         $fileinfo = new \SplFileInfo($templateDirectory . $v);
         if ('html' === $fileinfo->getExtension() && 'index.html' !== $fileinfo->getFilename()) {
-            @unlink($templateDirectory . $v);
+            if (!@unlink($templateDirectory . $v)) {
+                $e = error_get_last();
+                trigger_error($e['message']);
+            }
         }
     }
     // Load class XoopsFile
@@ -167,13 +263,15 @@ function xoops_module_update_xnewsletter_130()
 
     //delete /images directory
     $imagesDirectory = XOOPS_ROOT_PATH . '/modules/' . $dirname . '/images/';
-    $folderHandler   = XoopsFile::getHandler('folder', $imagesDirectory);
+    /** @var \XoopsFolderHandler $folderHandler */
+    $folderHandler = XoopsFile::getHandler('folder', $imagesDirectory);
     $folderHandler->delete($imagesDirectory);
 
     //delete /templates/style.css file
     $cssFile       = XOOPS_ROOT_PATH . '/modules/' . $dirname . '/templates/style.css';
-    $folderHandler = XoopsFile::getHandler('file', $cssFile);
-    $folderHandler->delete($cssFile);
+    /** @var \XoopsFileHandler $fileHandler */
+    $fileHandler = XoopsFile::getHandler('file', $cssFile);
+    $fileHandler->delete($cssFile);
 
     //delete .html entries from the tpl table
     $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE LOWER(`tpl_module`) = '" . mb_strtolower($dirname) . "' AND `tpl_file` LIKE '%.html%'";
@@ -210,7 +308,10 @@ function xoops_module_update_xnewsletter_104()
         echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": CREATE TABLE 'mod_xnewsletter_task'";
     }
 
-    unlink(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/sendletter.php');
+    if (!@unlink(XOOPS_ROOT_PATH . '/modules/xnewsletter/include/sendletter.php')) {
+        $e = error_get_last();
+        trigger_error($e['message']);
+    }
 
     return true;
 }

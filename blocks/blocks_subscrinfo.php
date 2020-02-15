@@ -36,7 +36,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 function b_xnewsletter_subscrinfo($options)
 {
     xoops_loadLanguage('modinfo', 'xnewsletter');
-    $unique_id                = uniqid(mt_rand());
+    $unique_id                = uniqid(mt_rand(), true);
     $subscrinfo               = [];
     $subscrinfo['formname']   = "formsubscrinfo_{$unique_id}";
     $subscrinfo['formaction'] = XOOPS_URL . '/modules/xnewsletter/subscription.php';

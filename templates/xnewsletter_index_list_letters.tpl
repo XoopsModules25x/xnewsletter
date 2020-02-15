@@ -1,12 +1,13 @@
 <{include file="db:xnewsletter_header.tpl"}>
+
 <div class="outer">
-    <table cellpadding="0" cellspacing="0" class="item" width="100%">
+    <table class='xnewsletter-table'>
         <tr class="itemHead">
             <th class="center"></th>
             <th class="center"><{$smarty.const._AM_XNEWSLETTER_LETTER_TITLE}></th>
             <th class="center"><{$smarty.const._AM_XNEWSLETTER_LETTER_CONTENT}></th>
             <th class="center"><{$smarty.const._MA_XNEWSLETTER_LETTER_CATS}></th>
-            <th class="center"><{$smarty.const._AM_XNEWSLETTER_LETTER_CREATED}></th>
+            <th class="center"><{$smarty.const._AM_XNEWSLETTER_CREATED}></th>
             <th class="center">&nbsp;</th>
         </tr>
     <{foreach item='letter' from=$letters}>

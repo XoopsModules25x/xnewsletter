@@ -34,6 +34,7 @@ require_once dirname(__DIR__) . '/include/common.php';
 class Task extends \XoopsObject
 {
     public $helper = null;
+    public $db;
 
     //Constructor
 
@@ -86,13 +87,34 @@ class Task extends \XoopsObject
 
         $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_STARTTIME, 'task_starttime', '', $this->getVar('task_starttime')));
 
-        $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_TASK_SUBMITTER, 'task_submitter', false, $this->getVar('task_submitter'), 1, false), true);
+        $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBMITTER, 'task_submitter', false, $this->getVar('task_submitter'), 1, false), true);
 
-        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_TASK_CREATED, 'task_created', '', $this->getVar('task_created')));
+        $form->addElement(new \XoopsFormTextDateSelect(_AM_XNEWSLETTER_CREATED, 'task_created', '', $this->getVar('task_created')));
 
         $form->addElement(new \XoopsFormHidden('op', 'save_task'));
-        $form->addElement(new \XoopsFormButton('', 'submit', _SUBMIT, 'submit'));
+        $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 
         return $form;
+    }
+
+    /**
+     * Get Values
+     * @param null $keys
+     * @param string|null $format
+     * @param int|null $maxDepth
+     * @return array
+     */
+    public function getValuesTask($keys = null, $format = null, $maxDepth = null)
+    {
+        $ret               = $this->getValues($keys, $format, $maxDepth);
+        $ret['id']         = $this->getVar('task_id');
+        $ret['letter_id']  = $this->getVar('task_letter_id');
+        $ret['letter_title'] = $this->helper->getHandler('Letter')->get($this->getVar('task_letter_id'))->getVar('letter_title');
+        $ret['subscr_id']  = $this->getVar('task_subscr_id');
+        $ret['subscr_email'] = $this->helper->getHandler('Subscr')->get($this->getVar('task_subscr_id'))->getVar('subscr_email');
+        $ret['starttime']  = formatTimestamp($this->getVar('task_starttime'), 'L');
+        $ret['created']    = formatTimestamp($this->getVar('task_created'), 'L');
+        $ret['submitter']  = \XoopsUser::getUnameFromId($this->getVar('task_submitter'));
+        return $ret;
     }
 }
