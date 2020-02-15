@@ -5,10 +5,15 @@
  - added language translations (mamba)
  - fixed bug in adding subcriber (goffy)
  - implemented syncronisation with phyton-mailman (goffy)
- - implemented admin tpls (goffy)
+ - implemented template files for admin area (goffy)
  - letter templates can be selected as on - or offline (goffy)
  - updated bmh (goffy)
  - various bug fixes (goffy)
+ - usage of activation key for each subscriber (goffy)
+ - added preference for level of protocol/debugging in cron (goffy)
+ - added possibility to request subscriptions (goffy)
+ - check whether there are existing sbuscription to this cat before deleting (goffy)
+ - new maintenance: delete data in table catsubscr, if cat is no more existing in table cat (goffy)
 
 <h5>1.4 Beta 2   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>

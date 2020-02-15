@@ -11,7 +11,7 @@
             <th><{$smarty.const._AM_XNEWSLETTER_LETTER_EMAIL_TEST}></th>
             <th><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_LAST_STATUS}></th>
         <{/if}>
-        <th><{$smarty.const._AM_XNEWSLETTER_FORMACTION}></th>
+        <th class='width10'><{$smarty.const._AM_XNEWSLETTER_FORMACTION}></th>
     </tr>
     <{foreach item='letter' from=$letters}>
         <tr class="<{cycle values = 'even,odd'}>">

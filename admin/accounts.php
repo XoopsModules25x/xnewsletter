@@ -41,11 +41,11 @@ $GLOBALS['xoopsTpl']->assign('xnewsletter_icons_url', XNEWSLETTER_ICONS_URL);
 $op             = Request::getString('op', 'list');
 $save_and_check = Request::getString('save_and_check', 'none');
 $accounts_id    = Request::getInt('accounts_id', 0);
-$post           = Request::getString('post', '');
+// $post           = Request::getString('post', '');
 
-if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
-    $op = 'edit_account';
-}
+// if ('' == $post && 'save_accounts' === $op && 'none' === $save_and_check) {
+    // $op = 'edit_account';
+// }
 
 switch ($op) {
     case 'check_account':

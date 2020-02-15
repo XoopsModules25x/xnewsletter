@@ -165,13 +165,24 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
  *
  * @return mixed|string
  */
-function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
+function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0, $cron = 0)
 {
     require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/functions.php';
 //    require_once XNEWSLETTER_ROOT_PATH . '/class/class.xnewslettermailer.php';
 
     global $XoopsTpl, $xoopsDB, $xoopsUser;
     $helper = Xnewsletter\Helper::getInstance();
+
+    //get letters ready to send groups by letter_id
+    $sql = "SELECT `task_letter_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
+    if ($letter_id > 0) {
+        $sql .= " WHERE (`task_letter_id`={$letter_id})";
+    }
+    $sql .= ' GROUP BY `task_letter_id`';
+    $task_letters = $xoopsDB->query($sql);
+    if ($xoopsDB->getRowsNum($task_letters) == 0) {
+        return _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID;
+    }
 
     if (!isset($xoopsTpl) || !is_object($xoopsTpl)) {
         require_once XOOPS_ROOT_PATH . '/class/template.php';
@@ -190,24 +201,14 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
     $uid         = (is_object($xoopsUser) && isset($xoopsUser)) ? $xoopsUser->uid() : 0;
     $count_total = 0;
     $count_err   = 0;
-        
-    //get letters ready to send groups by letter_id
-    $sql = "SELECT `task_letter_id` FROM {$xoopsDB->prefix('xnewsletter_task')}";
-    if ($letter_id > 0) {
-        $sql .= " WHERE (`task_letter_id`={$letter_id})";
-    }
-    $sql .= ' GROUP BY `task_letter_id`';
-    if (!$task_letters = $xoopsDB->query($sql)) {
-        return _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID;
-    }
 
     while (false !== ($task_letter = $xoopsDB->fetchArray($task_letters))) {
         $letter_id = $task_letter['task_letter_id'];
         $letterObj = $helper->getHandler('Letter')->get($letter_id);
-        if (0 == count($letterObj)) {
+        if (!is_object($letterObj)) {
             return _AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID;
         }
-
+        $letter_title = $letterObj->getVar('letter_title');
         // read categories
         $letter_cats = $letterObj->getVar('letter_cats');
         if ('' == $letter_cats) {
@@ -418,10 +419,14 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
                         $protocol_status_vars   = []; // new from v1.3
                     }
                     $protocol_success = true;
+                    //delete item in table task
+                    $sql_delete = "DELETE FROM {$xoopsDB->prefix('xnewsletter_task')}";
+                    $sql_delete .= " WHERE `task_id`= {$recipient['task_id']}";
+                    $result = $xoopsDB->queryF($sql_delete);
                 } else {
                     $protocol_status        = _AM_XNEWSLETTER_FAILED . '-> ' . $mail->ErrorInfo; // old style
                     $protocol_status_str_id = _XNEWSLETTER_PROTOCOL_STATUS_ERROR_SEND; // new from v1.3
-                    $protocol_status_vars   = ['error' => $mail->ErrorInfo]; // new from v1.3
+                    $protocol_status_vars   = ['error' => $mail->ErrorInfo, 'letter_id' => $letter_id, 'letter_title' => $letter_title]; // new from v1.3
 
                     $protocol_success = 0; //must be 0, because 'false' cause error when inserting protokol item
                     ++$count_err;
@@ -431,13 +436,6 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
                 $protocol_status = str_replace($text_clean, '', $protocol_status);
 
                 $mail->clearAddresses();
-
-                //delete item in table task, if not from cron
-                if (0 < $uid) {
-                    $sql_delete = "DELETE FROM {$xoopsDB->prefix('xnewsletter_task')}";
-                    $sql_delete .= " WHERE `task_id`= {$recipient['task_id']}";
-                    $result = $xoopsDB->queryF($sql_delete);
-                }
 
                 $protocolObj = $helper->getHandler('Protocol')->create();
                 $protocolObj->setVar('protocol_letter_id', $letter_id);
@@ -476,6 +474,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
     if ($count_err > 0) {
         // IN PROGRESS
         $protocol_status  = xnewsletter_sprintf(_AM_XNEWSLETTER_SEND_ERROR_NUMBER, ['%e' => $count_err, '%t' => $count_total]);
+        $protocol_status_id = 0;
         $protocol_success = 0; //must be 0, because 'false' cause error when inserting protokol item
     } else {
         $protocol_success = true;
@@ -486,12 +485,13 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
             // IN PROGRESS
             $protocol_status = '';
         }
+        $protocol_status_id = 1;
     }
     $protocolObj = $helper->getHandler('Protocol')->create();
     $protocolObj->setVar('protocol_letter_id', $letter_id);
     $protocolObj->setVar('protocol_subscriber_id', 0);
     $protocolObj->setVar('protocol_status', $protocol_status);
-    $protocolObj->setVar('protocol_status_str_id', 0); // new from v1.3
+    $protocolObj->setVar('protocol_status_str_id', $protocol_status_id); // new from v1.3
     $protocolObj->setVar('protocol_status_vars', []); // new from v1.3
     $protocolObj->setVar('protocol_success', $protocol_success);
     $protocolObj->setVar('protocol_submitter', $uid);
@@ -502,6 +502,26 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0)
         echo $protocolObj->getHtmlErrors();die;
     }
     unset($protocolObj);
+
+    if ($cron == 1) {
+        //you can enable the block for creating protocol for cron
+        $protocolObj = $helper->getHandler('Protocol')->create();
+        $protocolObj->setVar('protocol_letter_id', 0);
+        $protocolObj->setVar('protocol_subscriber_id', 0);
+        $protocolObj->setVar('protocol_status', 'Cron job: ' . $protocol_status);
+        $protocolObj->setVar('protocol_status_str_id', $protocol_status_id);
+        $protocolObj->setVar('protocol_status_vars', []);
+        $protocolObj->setVar('protocol_success', $protocol_success);
+        $protocolObj->setVar('protocol_submitter', 0);
+        $protocolObj->setVar('protocol_created', time());
+
+        if ($helper->getHandler('Protocol')->insert($protocolObj)) {
+            echo '<br>protocol about exec task successfully created';
+        } else {
+            echo $protocolObj->getHtmlErrors();
+            echo '<br>errors when creating protocol';
+        }
+    }
 
     return $protocol_status;
 }

@@ -56,15 +56,46 @@ function xoops_module_update_xnewsletter(\XoopsObject $xoopsModule, $oldversion 
         xoops_module_update_xnewsletter_141();
     }
 
+    xoops_module_update_xnewsletter_subscr_actkey();
+
     return true;
 }
 
 /**
  * @return bool
  */
+function xoops_module_update_xnewsletter_subscr_actkey()
+{
+    global $xoopsDB;
+
+    $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+    $subscrAll = $helper->getHandler('Subscr')->getAll();
+    foreach ($subscrAll as $subscr_id => $subscrObj) {
+        if ($subscrObj->getVar('subscr_actkey') == '') {
+            $subscrObj->setVar('subscr_actkey', xoops_makepass());
+            $helper->getHandler('Subscr')->insert($subscrObj, true);
+        }
+        unset($subscrObj);
+    }
+
+    return true;
+}
+/**
+ * @return bool
+ */
 function xoops_module_update_xnewsletter_141()
 {
     global $xoopsDB;
+
+    $helper = \XoopsModules\Xnewsletter\Helper::getInstance();
+    $subscrAll = $helper->getHandler('Subscr')->getAll();
+    foreach ($subscrAll as $subscr_id => $subscrObj) {
+        if ($subscrObj->getVar('subscr_actkey') == '') {
+            $subscrObj->setVar('subscr_actkey', xoops_makepass());
+            $helper->getHandler('Subscr')->insert($subscrObj, true);
+        }
+        unset($subscrObj);
+    }
     
     $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_letter') . '`';
     $sql    .= " ADD COLUMN `letter_templateid` int(8) NOT NULL default '1' AFTER `letter_content`;";

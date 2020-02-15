@@ -121,15 +121,16 @@ class Protocol extends \XoopsObject
      */
     public function getValuesProtocol($keys = null, $format = null, $maxDepth = null)
     {
-        $ret['id']            = $this->getVar('protocol_id');
-        $ret['letter_id']     = $this->getVar('protocol_letter_id');
-        $ret['subscriber_id'] = $this->getVar('protocol_subscriber_id');
-        $ret['status']        = $this->getVar('protocol_status');
-        $ret['success']       = $this->getVar('protocol_success');
-        $ret['status_str_id'] = $this->getVar('protocol_status_str_id');
-        $ret['status_vars']   = $this->getVar('protocol_status_vars');
-        $ret['created']       = formatTimestamp($this->getVar('protocol_created'), 'L');
-        $ret['submitter']     = \XoopsUser::getUnameFromId($this->getVar('protocol_submitter'));
+        $ret['id']               = $this->getVar('protocol_id');
+        $ret['letter_id']        = $this->getVar('protocol_letter_id');
+        $ret['subscriber_id']    = $this->getVar('protocol_subscriber_id');
+        $ret['status']           = $this->getVar('protocol_status');
+        $ret['success']          = $this->getVar('protocol_success');
+        $ret['status_str_id']    = $this->getVar('protocol_status_str_id');
+        $ret['status_vars']      = $this->getVar('protocol_status_vars');
+        $ret['status_vars_text'] = implode('<br>', $this->getVar('protocol_status_vars'));
+        $ret['created']          = formatTimestamp($this->getVar('protocol_created'), 'L');
+        $ret['submitter']        = \XoopsUser::getUnameFromId($this->getVar('protocol_submitter'));
         return $ret;
     }
 }

@@ -15,6 +15,7 @@
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_ID}></th>
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_SUBSCRIBER_ID}></th>
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_STATUS}></th>
+                <th class='center'><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_STATUS_VARS}></th>
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_SUCCESS}></th>
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_SUBMITTER}></th>
                 <th class='center'><{$smarty.const._AM_XNEWSLETTER_CREATED}></th>
@@ -28,6 +29,7 @@
                         <td class='center'><{$protocol.id}></td>
                         <td class='left'><{$protocol.subscriber}></td>
                         <td class='center'><{$protocol.status}></td>
+                        <td class='center'><{$protocol.status_vars_text}></td>
                         <td class='center'><{$protocol.success_text}></td>
                         <td class='center'><{$protocol.submitter}></td>
                         <td class='center'><{$protocol.created}></td>

@@ -65,12 +65,8 @@ switch ($op) {
         $xoopsTpl->assign('permissionChangeOthersSubscriptions', $permissionChangeOthersSubscriptions);
         // get search subscriber form
         if ($permissionChangeOthersSubscriptions) {
-            require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-            $form = new \XoopsThemeForm(_AM_XNEWSLETTER_FORMSEARCH_SUBSCR_EXIST, 'form_search', 'subscription.php', 'post', true);
-            $form->setExtra('enctype="multipart/form-data"');
-            $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_EMAIL, 'subscr_email', 60, 255, '', true));
-            $form->addElement(new \XoopsFormButton('', 'submit', _AM_XNEWSLETTER_SEARCH, 'submit'));
-            $xoopsTpl->assign('searchSubscriberForm', $form->render());
+            $subscrObj = $helper->getHandler('Subscr')->create();
+            $xoopsTpl->assign('searchSubscriberForm', $subscrObj->getSearchForm('subscription.php')->render());
         } else {
             $xoopsTpl->assign('searchSubscriberForm', '');
         }

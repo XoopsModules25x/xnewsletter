@@ -116,6 +116,7 @@ switch ($op) {
                         $template['template_err'] = true;
                         $template['template_err_text'] = str_replace('%s', $template_path, _AM_XNEWSLETTER_TEMPLATE_ERR_FILE);
                     }
+                    $template['type_text'] = $template['type_text'] . ' *';
                 }
                 $GLOBALS['xoopsTpl']->append('templates_list', $template);
                 unset($template);
@@ -123,6 +124,7 @@ switch ($op) {
         } else {
             $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_THEREARENT_TEMPLATE);
         }
+        $GLOBALS['xoopsTpl']->assign('template_file_info', str_replace('%s', $template_path, _AM_XNEWSLETTER_TEMPLATE_TYPE_FILE_INFO));
         break;
     case 'new_template':
         $adminObject->displayNavigation($currentFile);
@@ -186,6 +188,27 @@ switch ($op) {
             redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
         }
         $GLOBALS['xoopsTpl']->assign('error', $templateObj->getHtmlErrors());
+        break;
+    case 'set_template':
+        $templateId = Request::getInt('template_id', 0);
+        if ($templateId > 0) {
+            $letterCount = $helper->getHandler('Letter')->getCount();
+            if ($letterCount > 0) {
+                $letterAll = $helper->getHandler('Letter')->getAll();
+                foreach ($letterAll as $id => $letterObj) {
+                    $letterObj->setVar('letter_templateid', $templateId);
+                     if ($helper->getHandler('Letter')->insert($letterObj)) {
+                        
+                    } else {
+                        $GLOBALS['xoopsTpl']->assign('error', $letterObj->getHtmlErrors());
+                    }
+                }
+            }
+            redirect_header('letter.php?op=list_letters', 3, _AM_XNEWSLETTER_FORMOK);
+        } else {
+            // should not be
+            $GLOBALS['xoopsTpl']->assign('error', 'Invalid parameter template id');
+        }
         break;
 }
 require_once __DIR__ . '/admin_footer.php';

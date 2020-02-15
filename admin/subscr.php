@@ -92,7 +92,11 @@ switch ($op) {
             foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
                 $cat_id = $catsubscrObj->getVar('catsubscr_catid');
                 $catObj = $helper->getHandler('Cat')->get($cat_id);
-                $cats .= $catObj->getVar('cat_name') . '<br>';
+                if (is_object($catObj)) {
+                    $cats .= $catObj->getVar('cat_name') . '<br>';
+                } else {
+                    $cats .= "INVALID CATEGORY - ID: $cat_id<br>";
+                }
             }
         } else {
             $cats .= _AM_XNEWSLETTER_SUBSCR_NO_CATSUBSCR;
@@ -104,6 +108,11 @@ switch ($op) {
     case 'list':
     case 'apply_filter':
     default:
+        $start = Request::getInt('start', 0);
+        $limit = $helper->getConfig('adminperpage');
+        $GLOBALS['xoopsTpl']->assign('start', $start);
+        $GLOBALS['xoopsTpl']->assign('limit', $limit);
+        
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
         if ('apply_filter' === $op) {
@@ -111,9 +120,7 @@ switch ($op) {
         }
         $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
-        $limit          = $helper->getConfig('adminperpage');
         $subscrCriteria = new \CriteriaCompo();
-
         if ('apply_filter' === $op) {
             if ('' != $filter_subscr_firstname) {
                 $subscrCriteria->add(new \Criteria('subscr_firstname', $filter_subscr_firstname, $filter_subscr));
@@ -128,7 +135,7 @@ switch ($op) {
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('DESC');
         $subscrCount = $helper->getHandler('Subscr')->getCount($subscrCriteria);
-        $start       = Request::getInt('start', 0);
+        
         $subscrCriteria->setStart($start);
         $subscrCriteria->setLimit($limit);
         $subscrAll = $helper->getHandler('Subscr')->getAll($subscrCriteria);
@@ -252,7 +259,8 @@ switch ($op) {
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-
+        $start = Request::getInt('start', 0);
+        
         $subscrObj = $helper->getHandler('Subscr')->get($subscrId);
         $subscrObj->setVar('subscr_email',     Request::getString('subscr_email', ''));
         $subscrObj->setVar('subscr_firstname', Request::getString('subscr_firstname', ''));
@@ -262,27 +270,37 @@ switch ($op) {
         $subscrObj->setVar('subscr_submitter', Request::getInt('subscr_submitter', 0));
         $subscrObj->setVar('subscr_created',   Request::getInt('subscr_created', 0));
         $subscrObj->setVar('subscr_ip',        Request::getString('subscr_ip', ''));
+        $subscrActkey = Request::getString('subscr_actkey', '');
+        if ('' === $subscrActkey) {
+            $subscrActkey = xoops_makepass();
+        }
         $subscrObj->setVar('subscr_actkey',    Request::getString('subscr_actkey', ''));
         $subscrObj->setVar('subscr_activated', Request::getInt('subscr_activated', 0));
 
         if ($helper->getHandler('Subscr')->insert($subscrObj)) {
-            redirect_header('?op=list', 3, _AM_XNEWSLETTER_FORMOK);
+            redirect_header('?op=list&amp;start=' . $start, 3, _AM_XNEWSLETTER_FORMOK);
         }
         $GLOBALS['xoopsTpl']->assign('error', $subscrObj->getHtmlErrors());
         $form = $subscrObj->getFormAdmin();
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'edit_subscr':
+        $start = Request::getInt('start', 0);
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_NEWSUBSCR, '?op=new_subscr', 'add');
         $adminObject->addItemButton(_AM_XNEWSLETTER_SUBSCRLIST, '?op=list', 'list');
         $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
 
         $subscrObj = $helper->getHandler('Subscr')->get($subscrId);
-        $form      = $subscrObj->getFormAdmin();
+        $subscrObj->setVar('start', $start);
+        $form      = $subscrObj->getFormAdmin(false, true);
         $GLOBALS['xoopsTpl']->assign('form', $form->render());
         break;
     case 'delete_subscr':
+        $start = Request::getInt('start', 0);
+        $GLOBALS['xoopsTpl']->assign('start', $start);
+        $GLOBALS['xoopsTpl']->assign('limit', $limit);
+        
         $subscrObj = $helper->getHandler('Subscr')->get($subscrId);
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
@@ -295,7 +313,7 @@ switch ($op) {
                 $GLOBALS['xoopsTpl']->assign('error', $subscrObj->getHtmlErrors());
             }
         } else {
-            xoops_confirm(['ok' => true, 'subscr_id' => $subscrId, 'op' => 'delete_subscr'], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar('subscr_email')));
+            xoops_confirm(['ok' => true, 'subscr_id' => $subscrId, 'op' => 'delete_subscr', 'start' => $start], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL, $subscrObj->getVar('subscr_email')));
         }
         break;
 }

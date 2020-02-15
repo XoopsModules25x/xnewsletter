@@ -48,7 +48,7 @@ class Subscr extends \XoopsObject
         $this->db     = \XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('subscr_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('subscr_email', XOBJ_DTYPE_TXTBOX, '', false, 100);
-        $this->initVar('subscr_firstname', XOBJ_DTYPE_TXTBOX, '', true, 100);
+        $this->initVar('subscr_firstname', XOBJ_DTYPE_TXTBOX, '', false, 100);
         $this->initVar('subscr_lastname', XOBJ_DTYPE_TXTBOX, '', false, 100);
         $this->initVar('subscr_uid', XOBJ_DTYPE_INT, null, false);
         $this->initVar('subscr_sex', XOBJ_DTYPE_TXTBOX, '', false, 100);
@@ -58,6 +58,7 @@ class Subscr extends \XoopsObject
         $this->initVar('subscr_ip', XOBJ_DTYPE_TXTBOX, xoops_getenv('REMOTE_ADDR'), false, 32);
         $this->initVar('subscr_activated', XOBJ_DTYPE_INT, 0, false);  // IN PROGRESS: should be false or timestamp
         $this->initVar('subscr_actoptions', XOBJ_DTYPE_ARRAY, [], false);
+        $this->initVar('start', XOBJ_DTYPE_INT, 0, false);
     }
 
     /**
@@ -138,7 +139,7 @@ class Subscr extends \XoopsObject
         }
 
         // subscr_firstname
-        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_FIRSTNAME, 'subscr_firstname', 50, 255, $this->getVar('subscr_firstname')), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_FIRSTNAME, 'subscr_firstname', 50, 255, $this->getVar('subscr_firstname')), false);
 
         // subscr_lastname
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_LASTNAME, 'subscr_lastname', 50, 255, $this->getVar('subscr_lastname')), false);
@@ -246,7 +247,7 @@ class Subscr extends \XoopsObject
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_COMP, _AM_XNEWSLETTER_SUBSCR_SEX_COMP);
         $select_subscr_sex->addOption(_AM_XNEWSLETTER_SUBSCR_SEX_FAMILY, _AM_XNEWSLETTER_SUBSCR_SEX_FAMILY);
         $form->addElement($select_subscr_sex);
-        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_FIRSTNAME, 'subscr_firstname', 50, 255, $this->getVar('subscr_firstname')), true);
+        $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_FIRSTNAME, 'subscr_firstname', 50, 255, $this->getVar('subscr_firstname')), false);
         $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_LASTNAME, 'subscr_lastname', 50, 255, $this->getVar('subscr_lastname')), false);
 
         $form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBSCR_UID, 'subscr_uid', true, $this->getVar('subscr_uid'), 1, false), false);
@@ -255,19 +256,25 @@ class Subscr extends \XoopsObject
         $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_SUBMITTER, $GLOBALS['xoopsUser']->uname()));
         //$form->addElement(new \XoopsFormSelectUser(_AM_XNEWSLETTER_SUBMITTER, 'subscr_submitter', false, $this->getVar('subscr_submitter'), 1, false), true);
 
+        $form->addElement(new \XoopsFormRadioYN(_AM_XNEWSLETTER_SUBSCR_ACTIVATED, 'subscr_activated', $this->getVar('subscr_activated')));
+        $subscrActkey = $this->isNew() ? xoops_makepass() :  $this->getVar('subscr_actkey');
         if ($this->getVar('subscr_id') > 0) {
             $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($this->getVar('subscr_created'), $this->helper->getConfig('dateformat')) . ' [' . $this->getVar('subscr_ip') . ']'));
             $form->addElement(new \XoopsFormHidden('subscr_created', $this->getVar('subscr_created')));
-            $form->addElement(new \XoopsFormHidden('subscr_ip', $this->getVar('subscr_ip')));
+            $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_IP, 'subscr_ip', 50, 255, $this->getVar('subscr_ip')));
+            $form->addElement(new \XoopsFormText(_AM_XNEWSLETTER_SUBSCR_ACTKEY, 'subscr_actkey', 50, 255, $subscrActkey));
+            $form->addElement(new \XoopsFormTextArea(_AM_XNEWSLETTER_SUBSCR_ACTOPTIONS, 'subscr_actoptions', serialize($this->getVar('subscr_actoptions', 'e')), 5, 50));
         } else {
             $time = time();
             $ip   = xoops_getenv('REMOTE_ADDR');
             $form->addElement(new \XoopsFormLabel(_AM_XNEWSLETTER_CREATED, formatTimestamp($time, 's') . " [{$ip}]"));
             $form->addElement(new \XoopsFormHidden('subscr_created', $time));
             $form->addElement(new \XoopsFormHidden('subscr_ip', $ip));
+            $form->addElement(new \XoopsFormHidden('subscr_actkey', $subscrActkey));
+            $form->addElement(new \XoopsFormHidden('subscr_actoptions', $this->getVar('subscr_actoptions')));
         }
-        $form->addElement(new \XoopsFormRadioYN(_AM_XNEWSLETTER_SUBSCR_ACTIVATED, 'subscr_activated', $this->getVar('subscr_activated')));
-        $form->addElement(new \XoopsFormHidden('subscr_actkey', ''));
+        
+        $form->addElement(new \XoopsFormHidden('start', $this->getVar('start')));
         $form->addElement(new \XoopsFormHidden('op', 'save_subscr'));
         $form->addElement(new \XoopsFormButtonTray('', _SUBMIT, 'submit', '', false));
 

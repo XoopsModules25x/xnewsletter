@@ -195,6 +195,11 @@ switch ($op) {
         break;
     case 'delete_cat':
         $catObj = $helper->getHandler('Cat')->get($_REQUEST['cat_id']);
+        // check whether there are existing sbuscription to this cat
+        if ($helper->getHandler('Catsubscr')->getCount(new \Criteria('catsubscr_catid', $cat_id)) > 0) {
+            redirect_header($currentFile, 5, _AM_XNEWSLETTER_CAT_DELETE_ERROR);
+        }
+        
         if (true === Request::getBool('ok', false, 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header($currentFile, 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));

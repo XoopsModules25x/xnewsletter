@@ -28,7 +28,7 @@
                             <td class='center'><{$template.id}></td>
                             <td class='center'>
                                 <{if $template.template_err}>
-                                    <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/alert.png' alt='<{$letter.template_err_text}>' title='<{$letter.template_err_text}>'>
+                                    <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/alert.png' alt='<{$template.template_err_text}>' title='<{$template.template_err_text}>'>
                                 <{/if}>
                                 <{$template.title}>
                             </td>
@@ -50,6 +50,8 @@
                                     <img src='<{$xnewsletter_icons_url}>/xn_edit.png' alt='<{$smarty.const._EDIT}>'></a>
                                 <a href='<{$xnewsletter_url}>/admin/template.php?op=delete_template&amp;template_id=<{$template.id}>' title='<{$smarty.const._DELETE}>'>
                                     <img src='<{$xnewsletter_icons_url}>/xn_delete.png' alt='<{$smarty.const._DELETE}>'></a>
+                                <a href='<{$xnewsletter_url}>/admin/template.php?op=set_template&amp;template_id=<{$template.id}>' title='<{$smarty.const._AM_XNEWSLETTER_TEMPLATE_SET}>'>
+                                    <img src='<{$xnewsletter_icons_url}>/tpls_small.png' alt='<{$smarty.const._AM_XNEWSLETTER_TEMPLATE_SET}>'></a>
                             </td>
                         </tr>
                     <{/foreach}>
@@ -57,6 +59,8 @@
             <{/if}>
         </table>
 	<div class='clear'>&nbsp;</div>
+    <div style='font-size:75%;margin:20px 0;'><{$template_file_info}></div>
+    <div class='clear'>&nbsp;</div>
 	<{if $pagenav}>
 		<div class='xo-pagenav floatright'><{$pagenav}></div>
 		<div class='clear spacer'></div>

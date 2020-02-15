@@ -30,7 +30,7 @@ use Xmf\Request;
 
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
-$op            = Request::getString('op', 'search_subscription');
+$op            = Request::getString('op', 'list_subscriptions');
 $activationKey = Request::getString('actkey', '');
 $subscr_id     = Request::getInt('subscr_id', 0);
 $subscr_email  = Request::getString('subscr_email', '');
@@ -38,7 +38,12 @@ $subscr_email  = Request::getString('subscr_email', '');
 if (Request::hasVar('addnew', 'REQUEST')) {
     $op = 'addnew_subscription';
 }
-if ('' != $activationKey && 'unsub' !== $op) {
+
+$show_anon = false;
+if ('' != $activationKey && 'anonlistsubscr' === $op) {
+    $op = 'list_subscriptions';
+    $show_anon = true;
+} else if ('' != $activationKey && 'unsub' !== $op && 'search_subscriptions' !== $op) {
     $op = 'save_subscription';
 }
 if ('unsub' === $op) {
@@ -52,6 +57,8 @@ if ('unsub' === $op) {
     $_SESSION['unsub']         = '0';
 }
 
+$uid = is_object($xoopsUser) ? (int)$xoopsUser->getVar('uid') : 0;
+
 //to avoid errors in debug when xn_groups_change_other
 $subscr_sex       = '';
 $subscr_firstname = '';
@@ -61,7 +68,7 @@ switch ($op) {
     case 'search_subscription':
     default:
         // if not anonymous subscriber / subscriber is a Xoops user
-        if (is_object($xoopsUser) && isset($xoopsUser)) {
+        if ($uid > 0) {
             header("Location:{$currentFile}?op=list_subscriptions&subscr_email=" . $subscr_email);
             exit();
         }
@@ -90,9 +97,10 @@ switch ($op) {
         $xoopsTpl->assign('showSubscrSearchForm', $showSubscrSearchForm);
         // show form search
         $subscrObj = $helper->getHandler('Subscr')->create();
-        $xoopsTpl->assign('subscrSearchForm', $subscrObj->getSearchForm()->render());
+        $xoopsTpl->assign('subscrSearchForm', $subscrObj->getSearchForm('subscription.php')->render());
 
         break;
+        
     case 'list_subscriptions':
         $GLOBALS['xoopsOption']['template_main'] = 'xnewsletter_subscription_list_subscriptions.tpl';
         require_once XOOPS_ROOT_PATH . '/header.php';
@@ -112,14 +120,49 @@ switch ($op) {
         $showSubscrSearchForm = false;
         $showSubscrForm       = true;
 
-        if (is_object($xoopsUser) && isset($xoopsUser)) {
-            // if not anonymous subscriber / subscriber is a Xoops user get subscr_email from Xoops user
-            $redirect_mail = ('' === $subscr_email) ? $xoopsUser->email() : $subscr_email;
-            $_SESSION['redirect_mail'] = $subscr_email;
+        // get newsletters available for current user
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
+        $grouppermHandler = xoops_getHandler('groupperm');
+        $groups           = [0 => XOOPS_GROUP_ANONYMOUS];
+        if ($uid > 0) {
+            $groups = $xoopsUser->getGroups();
+        }
+
+        $catCriteria = new \CriteriaCompo();
+        $catCriteria->setSort('cat_id');
+        $catCriteria->setOrder('ASC');
+        $catObjs = $helper->getHandler('Cat')->getAll($catCriteria);
+        $cats_readable = [];
+        $cats_showlist = [];
+        foreach ($catObjs as $cat_id => $catObj) {
+            if ($grouppermHandler->checkRight('newsletter_read_cat', $cat_id, $groups, $helper->getModule()->mid())) {
+                $cats_readable[$cat_id]['cat_id'] = $cat_id;
+                $cats_readable[$cat_id]['cat_name'] = $catObj->getVar('cat_name');
+            }
+            if ($grouppermHandler->checkRight('newsletter_list_cat', $cat_id, $groups, $helper->getModule()->mid())) {
+                $cats_showlist[$cat_id]['cat_id'] = $cat_id;
+                $cats_showlist[$cat_id]['cat_name'] = $catObj->getVar('cat_name');
+            }
+        }
+        $perm_read_cat = (count($cats_readable) > 0);
+        $perm_list_cat = (count($cats_showlist) > 0);
+
+        if ($show_anon) {
+            // anonymous user with activation key
+            $search_mail = $subscr_email;
+        } else if ($uid > 0) {
+            // not anonymous subscriber
+            // check whether current user has the right to see list subscribers, then take email from form
+            if ($perm_list_cat) {
+                $search_mail = $subscr_email;
+            } else {
+                // if user has no right to see list subscribers, then take email from Xoops user
+                $search_mail = $xoopsUser->email();
+            }
         } else {
             // if anonymous subscriber get subscr_email from search form
-            $subscr_email = Request::getString('subscr_email', '');
             if ('' != $subscr_email) {
+                $search_mail = $subscr_email;
                 // check captcha
                 xoops_load('xoopscaptcha');
                 $xoopsCaptcha = XoopsCaptcha::getinstance();
@@ -130,46 +173,23 @@ switch ($op) {
                 // check subscr_email
                 if (!xnewsletter_checkEmail($subscr_email)) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
-                }
-                // check if a Xoops user has $subscr_email
-                if (0 != count($memberHandler->getUsers(new \Criteria('email', $subscr_email)))) {
-                    $actionProts_warning[] = sprintf(_MA_XNEWSLETTER_PLEASE_LOGIN, $subscr_email);
-
-                    $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
-                    $xoopsTpl->assign('actionProts_warning', $actionProts_warning);
-                    $xoopsTpl->assign('actionProts_error', $actionProts_error);
-                    break;
-                }
+                }                
             } else {
-                redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
+                //redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
             }
         }
-
-        // ???
-        /*
-        if (Request::hasVar('redirect_mail', 'SESSION')) {
-            if (!isset($_SESSION['unsub'])) {
-                $subscr_email = $_SESSION['redirect_mail'];
-            } else {
-                unset($_SESSION['unsub']);
-            }
-            unset($_SESSION['redirect_mail']);
-        }
-        */
 
         // look for existing subscriptions
-        if ('' === $subscr_email) {
-            $subscr_email = $redirect_mail;
-        }
         $subscrCriteria = new \CriteriaCompo();
-        $subscrCriteria->add(new \Criteria('subscr_email', $subscr_email));
+        $subscrCriteria->add(new \Criteria('subscr_email', $search_mail));
         $subscrCriteria->setSort('subscr_id');
         $subscrCriteria->setOrder('ASC');
         $subscrCount = $helper->getHandler('Subscr')->getCount($subscrCriteria);
-        $xoopsTpl->assign('subscrCount', $subscrCount);
-        if ($subscrCount > 0) {
+
+        if ('' !== $subscr_email && $subscrCount > 0) {
             // there are subscriptions with this email
-            $actionProts_warning[] = _MA_XNEWSLETTER_REGISTRATION_EXIST;
+            $subscr_list = '';
+            $actionProts_ok[] = _MA_XNEWSLETTER_REGISTRATION_EXIST;
             $subscrObjs            = $helper->getHandler('Subscr')->getAll($subscrCriteria);
             foreach ($subscrObjs as $subscrObj) {
                 $subscr_array                             = $subscrObj->toArray();
@@ -187,17 +207,68 @@ switch ($op) {
                 foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
                     $catsubscr_array              = $catsubscrObj->toArray();
                     $catObj                       = $helper->getHandler('Cat')->get($catsubscrObj->getVar('catsubscr_catid'));
-                    $cat_array                    = $catObj->toArray();
-                    $catsubscr_array['cat']       = $cat_array;
-                    $subscr_array['catsubscrs'][] = $catsubscr_array;
+                    if (is_object($catObj)) {
+                        $cat_array                    = $catObj->toArray();
+                        $catsubscr_array['cat']       = $cat_array;
+                    }
+                    if ($uid > 0 && $perm_list_cat) {
+                        $subscr_array['catsubscrs'][] = $catsubscr_array;
+                    } else {
+                        $subscr_list .= ' - ' . $cat_array['cat_name'] . " \n";
+                    }
                     unset($catsubscr_array);
                     unset($cat_array);
                 }
+            }
+            
+            // check activation key
+            $perm_showresult = ($activationKey === $subscr_array['subscr_actkey']);
+            
+            if (($uid > 0 && $perm_list_cat) || $perm_showresult) {
+                //if user is logged in and have right to see list of registration then show corresponding result
                 $xoopsTpl->append('subscrs', $subscr_array);
+                $xoopsTpl->assign('subscrCount', $subscrCount);
+                $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
+                $xoopsTpl->assign('actionProts_warning', $actionProts_warning);
+                $xoopsTpl->assign('actionProts_error', $actionProts_error);
+            } else {
+                // anonymous, send email with the confirmation code to given email address
+                $activationKey = $subscr_array['subscr_actkey'];
+                $xoopsMailer = xoops_getMailer();
+                $xoopsMailer->reset();
+                $xoopsMailer->setTemplateDir();
+                $xoopsMailer->useMail();
+                $xoopsMailer->setTemplate('subscriptions.tpl');
+                $xoopsMailer->setToEmails($subscr_email);
+                if (isset($xoopsConfig['adminmail'])) {
+                    $xoopsMailer->setFromEmail($xoopsConfig['adminmail']);
+                }
+                if (isset($xoopsConfig['sitename'])) {
+                    $xoopsMailer->setFromName($xoopsConfig['sitename']);
+                }
+                $xoopsMailer->assign('EMAIL', $subscr_email);
+                $xoopsMailer->assign('SEX', '' != $subscrObj->getVar('subscr_sex') ? $subscrObj->getVar('subscr_sex') : $subscr_sex);
+                $xoopsMailer->assign('FIRSTNAME', '' != $subscrObj->getVar('subscr_firstname') ? $subscrObj->getVar('subscr_firstname') : $subscr_firstname);
+                $xoopsMailer->assign('LASTNAME', '' != $subscrObj->getVar('subscr_lastname') ? $subscrObj->getVar('subscr_lastname') : $subscr_lastname);
+                $xoopsMailer->assign('IP', xoops_getenv('REMOTE_ADDR'));
+                $xoopsMailer->assign('RESULT', $subscr_list);
+                $xoopsMailer->assign('CHANGELINK', XOOPS_URL . "/modules/xnewsletter/{$currentFile}?op=anonlistsubscr&subscr_email={$subscr_email}&actkey={$activationKey}");
+                $xoopsMailer->setSubject(_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO . $GLOBALS['xoopsConfig']['sitename']);
+                if (!$xoopsMailer->send()) {
+                    $actionProts_error[] = _MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR . '<br>' . $xoopsMailer->getErrors();
+                    redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR . '<br>' . $xoopsMailer->getErrors());
+                } else {
+                    $actionProts_ok = [];
+                    $actionProts_ok[] = str_replace('%subscr_email', $subscr_email, _MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK);
+                    $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
+                }
             }
         } else {
-            // show subscr form
-            $actionProts_warning[] = str_replace('%s', $subscr_email, _MA_XNEWSLETTER_REGISTRATION_NONE);
+            // email not in database, show subscr form
+            if ('' !== $subscr_email) {
+                $actionProts_warning[] = str_replace('%s', $subscr_email, _MA_XNEWSLETTER_REGISTRATION_NONE);
+            }
+            $xoopsTpl->assign('actionProts_warning', $actionProts_warning);
             $xoopsTpl->assign('showSubscrForm', true);
             $subscrObj = $helper->getHandler('Subscr')->create();
             $subscrObj->setVar('subscr_email', $subscr_email);
@@ -205,9 +276,15 @@ switch ($op) {
             $xoopsTpl->assign('subscrForm', $form->render());
         }
 
-        $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
-        $xoopsTpl->assign('actionProts_warning', $actionProts_warning);
-        $xoopsTpl->assign('actionProts_error', $actionProts_error);
+        if (count($cats_showlist) > 0) {
+            // show search subscr form
+            $xoopsTpl->assign('showSubscrSearchForm', true);
+            // render form search
+            $subscrObj = $helper->getHandler('Subscr')->create();
+            $xoopsTpl->assign('subscrSearchForm', $subscrObj->getSearchForm()->render());
+        } else {
+            $xoopsTpl->assign('showSubscrSearchForm', false);
+        }
         break;
     case 'resend_subscription':
         $GLOBALS['xoopsOption']['template_main'] = 'xnewsletter_subscription_result.tpl';
@@ -286,7 +363,7 @@ switch ($op) {
             if (!xnewsletter_checkEmail($subscr_email)) {
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOEMAIL);
             }
-        } elseif (is_object($xoopsUser) && isset($xoopsUser)) {
+        } elseif ($uid > 0) {
             // take actual xoops user
             $subscr_email = $xoopsUser->email();
         } else {
@@ -340,8 +417,7 @@ switch ($op) {
         $activationKeyIsValid = false;
         // check right to subscribe directly
         $allowedWithoutActivationKey = false;
-        $uid                         = is_object($xoopsUser) ? (int)$xoopsUser->getVar('uid') : 0;
-        if (is_object($xoopsUser) && isset($xoopsUser)) {
+        if ($uid > 0) {
             // if not anonymous subscriber / subscriber is a Xoops user
             $submitter_email = $xoopsUser->email();
             foreach ($xoopsUser->getGroups() as $group) {
@@ -766,8 +842,7 @@ switch ($op) {
             $activationKeyIsValid = false;
             // check right to unsubscribe directly
             $allowedWithoutActivationKey = false;
-            $uid                         = is_object($xoopsUser) ? (int)$xoopsUser->getVar('uid') : 0;
-            if (is_object($xoopsUser) && isset($xoopsUser)) {
+            if ($uid > 0) {
                 // if not anonymous subscriber / subscriber is a Xoops user
                 $submitter_email = $xoopsUser->email();
                 foreach ($xoopsUser->getGroups() as $group) {

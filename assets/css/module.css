@@ -579,6 +579,8 @@ tr.xnewsletter_mirrors_end {
 .xnewsletter-table {
     width:100%;
     padding:5px;
+    margin-top:10px;
+    margin-bottom:30px;
 }
 .xnewsletter-table th, .xnewsletter-table td {
     padding:5px;

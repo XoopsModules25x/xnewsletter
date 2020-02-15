@@ -1,20 +1,37 @@
 <{include file="db:xnewsletter_header.tpl"}>
+<style>
+    .action_prot {
+        vertical-align: middle; 
+        line-height: 1.5;
+        margin:50px 0 30px 0;
+        padding:10px;
+    }
+    .action_prot_ok {
+        border:1px solid #4cae4c;
+    }
+    .action_prot_warning {
+        border:1px solid #eea236;
+    }
+    .action_prot_error {
+        border:2px solid #d43f3a;
+    }
+</style>
 
 <{if (($actionProts_ok|@count gt 0) || ($actionProts_warning|@count gt 0) || ($actionProts_error|@count gt 0))}>
     <{foreach item='actionProt_ok' from=$actionProts_ok}>
-        <div style="vertical-align: middle; line-height: normal;">
+        <div class='action_prot action_prot_ok'>
             <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/on.png' alt='<{$smarty.const._OK}>' title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
             <{$actionProt_ok}>
         </div>
     <{/foreach}>
     <{foreach item='actionProt_warning' from=$actionProts_warning}>
-        <div style="vertical-align: middle; line-height: normal;">
+        <div class='action_prot action_prot_warning'>
              <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/alert.png' alt='<{$smarty.const._WARNING}>' title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_OK}>'>
             <{$actionProt_warning}>
         </div>
     <{/foreach}>
     <{foreach item='actionProt_error' from=$actionProts_error}>
-        <div style="vertical-align: middle; line-height: normal;">
+        <div class='action_prot action_prot_error'>
             <img src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/off.png' alt='<{$smarty.const._ERROR}>' title='<{$smarty.const._ERROR}>"'>
             <{$actionProt_error}>
         </div>

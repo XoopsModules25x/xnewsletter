@@ -28,23 +28,23 @@
 $currentFile = basename(__FILE__);
 require_once __DIR__ . '/header.php';
 
+echo '<br>start cron.php';
+
+require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
 // protocol_level
 // 0 = no protocol items will be created
 // 1 = protocol will be created when newsletter sent or an error occurs (recommended)
 // 2 = protocol will be created for all events (only for testing)
-$protocol_level = 1; 
+$protocol_level = $helper->getConfig('xn_cron_protocol');
 
-echo '<br>start cron.php';
-
-require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/task.inc.php';
 // execute all pending tasks
-$result_exec = xnewsletter_executeTasks($helper->getConfig('xn_send_in_packages'), 0);
+$result_exec = xnewsletter_executeTasks($helper->getConfig('xn_send_in_packages'), 0, 1);
 
 if ($protocol_level > 0) {
     echo '<br>protocol_level:' . $protocol_level;
     echo '<br>is_object(helper):'.is_object($helper);
     echo '<br>xn_send_in_packages:'.$helper->getConfig('xn_send_in_packages');
-    if ('' === $result_exec) {
+    if (_AM_XNEWSLETTER_SEND_ERROR_NO_LETTERID === $result_exec) {
         $status = 'cron no task';
         if (2 == $protocol_level) {
             echo '<br>no letters for sending available';
@@ -52,8 +52,8 @@ if ($protocol_level > 0) {
             echo '<br>is_object(protocolObj):'.is_object($protocolObj);
             $protocolObj->setVar('protocol_letter_id', 0);
             $protocolObj->setVar('protocol_subscriber_id', 0);
-            $protocolObj->setVar('protocol_status', 'Cron job: No Task');
-            $protocolObj->setVar('protocol_status_str_id', $status);
+            $protocolObj->setVar('protocol_status', 'Cron job: ' . _AM_XNEWSLETTER_TASK_NO_DATA);
+            $protocolObj->setVar('protocol_status_str_id', 1);
             $protocolObj->setVar('protocol_status_vars', []);
             $protocolObj->setVar('protocol_success', true);
             $protocolObj->setVar('protocol_submitter', 0);
@@ -69,24 +69,6 @@ if ($protocol_level > 0) {
     } else {
         $status = 'cron task available';
         echo "<br>result cron: {$result_exec}";
-        //you can enable the block for creating protocol for cron
-        $protocolObj = $helper->getHandler('Protocol')->create();
-        echo '<br>is_object(protocolObj):'.is_object($protocolObj);
-        $protocolObj->setVar('protocol_letter_id', 0);
-        $protocolObj->setVar('protocol_subscriber_id', 0);
-        $protocolObj->setVar('protocol_status', 'Cron job: ' . $result_exec);
-        $protocolObj->setVar('protocol_status_str_id', $status);
-        $protocolObj->setVar('protocol_status_vars', []);
-        $protocolObj->setVar('protocol_success', true);
-        $protocolObj->setVar('protocol_submitter', 0);
-        $protocolObj->setVar('protocol_created', time());
-
-        if ($helper->getHandler('Protocol')->insert($protocolObj)) {
-            echo '<br>protocol about exec task successfully created';
-        } else {
-            echo $protocolObj->getHtmlErrors();
-            echo '<br>errors when creating protocol';
-        }
     }
     echo '<br>status: ' . $status;
 }

@@ -99,6 +99,22 @@ switch ($op) {
         $maintenance .= '            </td>';
         $maintenance .= '        </form>';
         $maintenance .= '    </tr>';
+        
+        // delete invalid catsubscr
+        $maintenance .= "   <tr class='{$class}'>";
+        $class = ('even' === $class) ? 'odd' : 'even';
+        $maintenance .= "        <form action='{$currentFile}' method='post'>";
+        $maintenance .= '            <td>catsubscr</td>';
+        $maintenance .= '            <td>' . _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_CATDEL . '</td>';
+        $maintenance .= '            <td>&nbsp;</td>';
+        $maintenance .= "            <td class='center'>";
+        $cal_tray = new \XoopsFormElementTray(' ', '&nbsp;&nbsp;');
+        $cal_tray->addElement(new \XoopsFormHidden('op', 'del_invalid_subscr_catdel'));
+        $cal_tray->addElement(new \XoopsFormButton('', 'post', _SUBMIT, 'submit'));
+        $maintenance .= $cal_tray->render();
+        $maintenance .= '            </td>';
+        $maintenance .= '        </form>';
+        $maintenance .= '    </tr>';
 
         // check module preference xn_use_mailinglist with values in cat_mailinglist and check cat_mailinglist versus table mailinglist
 
@@ -324,6 +340,64 @@ switch ($op) {
             }
         } else {
             xoops_confirm(['ok' => true, 'op' => 'del_invalid_catsubscr'], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR);
+        }
+        break;
+    case 'del_invalid_subscr_catdel':
+        //delete data in table catsubscr, if cat is no more existing in table cat
+        if (true === Request::getBool('ok', false, 'POST')) {
+            $number_ids = 0;
+            $deleted    = 0;
+            $errors     = [];
+            $sql        = 'SELECT Count(`catsubscr_id`) AS `nb_ids`';
+            $sql        .= " FROM `{$xoopsDB->prefix('xnewsletter_catsubscr')}` LEFT JOIN `{$xoopsDB->prefix('xnewsletter_cat')}` ON `catsubscr_catid` = `cat_id`";
+            $sql        .= ' WHERE (`cat_id` Is Null)';
+            $result     = $xoopsDB->query($sql);
+            if ($result) {
+                $row_result = $xoopsDB->fetchRow($result);
+                $number_ids = $row_result[0];
+            }
+            if ($number_ids > 0) {
+                $sql    = "DELETE `{$xoopsDB->prefix('xnewsletter_catsubscr')}`";
+                $sql    .= " FROM `{$xoopsDB->prefix('xnewsletter_catsubscr')}` LEFT JOIN `{$xoopsDB->prefix('xnewsletter_cat')}` ON `catsubscr_catid` = `cat_id`";
+                $sql    .= ' WHERE (`cat_id` Is Null)';
+                $result = $xoopsDB->query($sql);
+                if ($result) {
+                    ++$deleted;
+                } else {
+                    $errors[] = 'Error delete catsubscr: ' . $result->getHtmlErrors();
+                }
+            }
+
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $protocolObj = $helper->getHandler('Protocol')->create();
+                    $protocolObj->setVar('protocol_letter_id', 0);
+                    $protocolObj->setVar('protocol_subscriber_id', 0);
+                    $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' catsubscr] ' . $error);
+                    $protocolObj->setVar('protocol_success', false);
+                    $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                    $protocolObj->setVar('protocol_created', time());
+                    if (!$helper->getHandler('Protocol')->insert($protocolObj)) {
+                        $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_MAINTENANCE_ERROR);
+                    }
+                }
+            } else {
+                $protocolObj = $helper->getHandler('Protocol')->create();
+                $protocolObj->setVar('protocol_letter_id', 0);
+                $protocolObj->setVar('protocol_subscriber_id', 0);
+                $status = 0 == $number_ids ? _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_NODATA : sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids);
+                $protocolObj->setVar('protocol_status', '[' . _MI_XNEWSLETTER_ADMENU11 . ' catsubscr] ' . $status);
+                $protocolObj->setVar('protocol_success', true);
+                $protocolObj->setVar('protocol_submitter', $GLOBALS['xoopsUser']->uid());
+                $protocolObj->setVar('protocol_created', time());
+
+                if (!$helper->getHandler('Protocol')->insert($protocolObj)) {
+                    $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_MAINTENANCE_ERROR);
+                }
+                redirect_header($currentFile, 3, sprintf(_AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_OK, $number_ids));
+            }
+        } else {
+            xoops_confirm(['ok' => true, 'op' => 'del_invalid_subscr_catdel'], $currentFile, _AM_XNEWSLETTER_MAINTENANCE_DELETE_INVALID_SUBCR_CATDEL);
         }
         break;
     case 'del_invalid_ml':

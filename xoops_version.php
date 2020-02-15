@@ -163,6 +163,9 @@ if (true === $showRead) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_SUBSCRIBE;
     $modversion['sub'][$subcount]['url']  = 'subscription.php';
     ++$subcount;
+    $modversion['sub'][$subcount]['name'] = _AM_XNEWSLETTER_SUBSCRIPTION_SEARCH_ADD;
+    $modversion['sub'][$subcount]['url']  = 'subscription.php?op=search_subscription';
+    ++$subcount;
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_LIST;
     $modversion['sub'][$subcount]['url']  = 'letter.php?op=list_letters';
     ++$subcount;
@@ -407,6 +410,18 @@ $modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_SEND_IN_PACKAGES_TIM
 $modversion['config'][$i]['formtype']    = 'textbox';
 $modversion['config'][$i]['valuetype']   = 'int';
 $modversion['config'][$i]['default']     = '60';
+++$i;
+$modversion['config'][$i]['name']        = 'xn_cron_protocol';
+$modversion['config'][$i]['title']       = '_MI_XNEWSLETTER_CRON_PROTOCOL';
+$modversion['config'][$i]['description'] = '_MI_XNEWSLETTER_CRON_PROTOCOL_DESC';
+$modversion['config'][$i]['formtype']    = 'select';
+$modversion['config'][$i]['valuetype']   = 'int';
+$modversion['config'][$i]['default']     = 0;
+$modversion['config'][$i]['options']     = [
+    _MI_XNEWSLETTER_CRON_PROTOCOL_0  => 0,
+    _MI_XNEWSLETTER_CRON_PROTOCOL_1  => 1,
+    _MI_XNEWSLETTER_CRON_PROTOCOL_2  => 2
+];
 
 unset($i);
 

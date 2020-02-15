@@ -47,61 +47,30 @@ switch ($op) {
         $taskCounts = $helper->getHandler('Task')->getCount();
         $tasksAll   = $helper->getHandler('Task')->getAll($taskCriteria);
 
-        //Affichage du tableau
-        echo "
-        <table width='100%' cellspacing='1' class='outer'>
-            <tr>
-                <th>" . _AM_XNEWSLETTER_TASK_LETTER_ID . '</th>
-                <th>' . _AM_XNEWSLETTER_TASK_SUBSCR_ID . '</th>
-                <th>' . _AM_XNEWSLETTER_TASK_STARTTIME . '</th>
-                <th>' . _AM_XNEWSLETTER_SUBMITTER . '</th>
-                <th>' . _AM_XNEWSLETTER_CREATED . '</th>
-                <th>' . _AM_XNEWSLETTER_FORMACTION . '</th>
-            </tr>';
         if ($taskCounts > 0) {
             $GLOBALS['xoopsTpl']->assign('taskCounts', $taskCounts);
-
-
-
-            $class = 'odd';
             foreach ($tasksAll as $task_id => $taskObj) {
                 $task = $taskObj->getValuesTask();
-                $GLOBALS['xoopsTpl']->append('tasks_list', $task);
-                unset($task);
+                $task = $taskObj->getValuesTask();
 
-
-
-                echo "<tr class='{$class}'>";
-                $class = ('even' === $class) ? 'odd' : 'even';
-
-                $letterObj    = $helper->getHandler('Letter')->get($taskObj->getVar('task_letter_id'));
-                $title_letter = $letterObj->getVar('letter_title');
-                echo '<td>' . $title_letter . '</td>';
                 if (0 == $taskObj->getVar('task_subscr_id')) {
                     //send_test
-                    $title_subscr = $letterObj->getVar('letter_email_test') . '<br>(send_test)';
+                    $letterObj    = $helper->getHandler('Letter')->get($taskObj->getVar('task_letter_id'));
+                    $task['subscr_email'] = $letterObj->getVar('letter_email_test') . '<br>(send_test)';
                 } else {
                     $subscr = $helper->getHandler('Subscr')->get($taskObj->getVar('task_subscr_id'));
                     if (is_object($subscr)) {
-                        $title_subscr = $subscr->getVar('subscr_email');
+                        $task['subscr_email'] = $subscr->getVar('subscr_email');
                     } else {
-                        $title_subscr = _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
+                        $task['subscr_email'] = _AM_XNEWSLETTER_PROTOCOL_NO_SUBSCREMAIL;
                     }
                 }
-                echo '<td>' . $title_subscr . '</td>';
-                echo '<td>' . formatTimestamp($taskObj->getVar('task_starttime'), 'mysql') . '</td>';
-                echo '<td>' . \XoopsUser::getUnameFromId($taskObj->getVar('task_submitter'), 'S') . '</td>';
-                echo '<td>' . formatTimestamp($taskObj->getVar('task_created'), 'mysql') . '</td>';
-                echo '<td>';
-                echo "
-                <a href='?op=delete_task&task_id=" . $taskObj->getVar('task_id') . "'><img src=" . XNEWSLETTER_ICONS_URL . "/xn_delete.png alt='" . _DELETE . "' title='" . _DELETE . "'></a>
-                </td>";
-                echo '</tr>';
+                $GLOBALS['xoopsTpl']->append('tasks_list', $task);
+                unset($task);
             }
         } else {
             $GLOBALS['xoopsTpl']->assign('error', _AM_XNEWSLETTER_TASK_NO_DATA);
         }
-        echo '</table><br><br>';
         break;
     case 'delete_task':
         $taskObj = $helper->getHandler('Task')->get($_REQUEST['task_id']);

@@ -1,6 +1,6 @@
 <{include file="db:xnewsletter_header.tpl"}>
 
-<table class='outer width100' cellspacing='1'>
+<table class='xnewsletter-table' cellspacing='1'>
     <tr class="itemHead">
         <th><{$smarty.const._AM_XNEWSLETTER_PROTOCOL_ID}></th>
         <th><{$smarty.const._AM_XNEWSLETTER_SUBSCR_EMAIL}></th>

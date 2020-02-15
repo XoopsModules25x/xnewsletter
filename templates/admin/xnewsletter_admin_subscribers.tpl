@@ -36,9 +36,9 @@
                                 <td class='center'><{$subscriber.username}></td>
                                 <td class='center'><{$subscriber.activated_img}><{$subscriber.created_ip}></td>
                                 <td class='center  width10'>
-                                    <a href='<{$xnewsletter_url}>/admin/subscr.php?op=edit_subscr&amp;subscr_id=<{$subscriber.id}>' title='<{$smarty.const._EDIT}>'>
+                                    <a href='<{$xnewsletter_url}>/admin/subscr.php?op=edit_subscr&amp;subscr_id=<{$subscriber.id}>&amp;start=<{$start}>&amp;limit=<{$limit}>' title='<{$smarty.const._EDIT}>'>
                                         <img src='<{xoModuleIcons16 edit.png}>' alt='subscribers'></a>
-                                    <a href='<{$xnewsletter_url}>/admin/subscr.php?op=delete_subscr&amp;subscr_id=<{$subscriber.id}>' title='<{$smarty.const._DELETE}>'>
+                                    <a href='<{$xnewsletter_url}>/admin/subscr.php?op=delete_subscr&amp;subscr_id=<{$subscriber.id}>&amp;start=<{$start}>&amp;limit=<{$limit}>' title='<{$smarty.const._DELETE}>'>
                                         <img src='<{$xnewsletter_icons_url}>/xn_delete.png' alt='subscribers'></a>
                                     <a href='?op=show_catsubscr&subscr_id=<{$subscriber.id}>&filter_subscr=<{$filter_subscr}>&filter_subscr_firstname=<{$filter_subscr_firstname}>&filter_subscr_lastname=<{$filter_subscr_lastname}>&filter_subscr_email=<{$filter_subscr_email}>&apply_filter=<{$op}>' >
                                         <img src='<{$xnewsletter_icons_url}>/xn_details.png' alt='<{$smarty.const._AM_XNEWSLETTER_DETAILS}>' title='<{$smarty.const._AM_XNEWSLETTER_DETAILS}>'>
