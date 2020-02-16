@@ -137,7 +137,7 @@ define('_AM_XNEWSLETTER_CATSUBSCRWAIT', 'Pending Categories-Subscribers');
 define('_AM_XNEWSLETTER_NEWLETTER', 'Add New Newsletter');
 define('_AM_XNEWSLETTER_LETTERLIST', 'List Newsletters');
 define('_AM_XNEWSLETTER_LETTERWAIT', 'Pending Newsletters');
-define('_AM_XNEWSLETTER_LETTER_DELETE_ALL', 'Delete protocol of this newsletter');
+define('_AM_XNEWSLETTER_LETTER_DELETE_ALL', 'Delete protocol of this newsletter/topic');
 define('_AM_XNEWSLETTER_NEWPROTOCOL', 'Add New Protocol');
 define('_AM_XNEWSLETTER_PROTOCOLLIST', 'List Protocol');
 define('_AM_XNEWSLETTER_PROTOCOLWAIT', 'Pending Protocol');
