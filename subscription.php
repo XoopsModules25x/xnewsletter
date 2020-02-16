@@ -929,14 +929,37 @@ switch ($op) {
                 if (0 == $subscrCount) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
                 }
+                // delete subscriptions (catsubscrs)
+                $catsubscrCriteria = new \CriteriaCompo();
+                $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_id));
+                $catsubscrCriteria->setSort('catsubscr_id');
+                $catsubscrCriteria->setOrder('ASC');
+                $catsubscrObjs  = $helper->getHandler('Catsubscr')->getAll($catsubscrCriteria);
+                foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
+                    if ($helper->getHandler('Catsubscr')->delete($catsubscrObj, true)) {
+                        // handle mailinglists
+                        $catObj              = $helper->getHandler('Cat')->get($catsubscrObj->getVar('catsubscr_catid'));
+                        $cat_mailinglist     = $catObj->getVar('cat_mailinglist');
+                        if ($cat_mailinglist > 0) {
+                            require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
+                            subscribingMLHandler(_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE, $subscr_id, $cat_mailinglist);
+                        }
+                    } else {
+                        $actionProts_error[] = $catsubscrObj->getHtmlErrors();
+                        redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . $subscrObj->getHtmlErrors());
+                    }
+                }
+                // delete subscriber (subscr)
                 $subscrObj = $helper->getHandler('Subscr')->get($subscr_id);
-                // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
                 if (!$helper->getHandler('Subscr')->delete($subscrObj, true)) {
                     $actionProts_error[] = $subscrObj->getHtmlErrors();
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . $subscrObj->getHtmlErrors());
                 }
+
                 if (0 == $count_err) {
                     $actionProts_ok[] = _AM_XNEWSLETTER_FORMDELOK;
+                } else {
+                    $xoopsTpl->assign('actionProts_error', $actionProts_error);
                 }
             } else {
                 // 2nd case: unsubscribe WITH confirmation & activation key DOESN'T EXIST

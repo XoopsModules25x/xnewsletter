@@ -163,7 +163,7 @@ if (true === $showRead) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_SUBSCRIBE;
     $modversion['sub'][$subcount]['url']  = 'subscription.php';
     ++$subcount;
-    $modversion['sub'][$subcount]['name'] = _AM_XNEWSLETTER_SUBSCRIPTION_SEARCH_ADD;
+    $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_SUBSCRIPTION_SEARCH;
     $modversion['sub'][$subcount]['url']  = 'subscription.php?op=search_subscription';
     ++$subcount;
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_LIST;

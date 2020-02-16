@@ -132,3 +132,4 @@ define('_MI_XNEWSLETTER_CRON_PROTOCOL_DESC', 'Only applied if used cron job exis
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_0', 'No protocol items will be created');
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_1', 'Protocol will be created when an error occurs (recommended)');
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_2', 'Protocol will be created for all events (only for testing)');
+define('_MI_XNEWSLETTER_SUBSCRIPTION_SEARCH', 'Search subscriptions');

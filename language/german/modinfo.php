@@ -132,3 +132,4 @@ define('_MI_XNEWSLETTER_CRON_PROTOCOL_DESC', 'Wird nur angewendet wenn ein entsp
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_0', 'Keine Protokolleinträge erstellen');
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_1', 'Protokolleinträge erstellen wenn ein Fehler aufgetreten ist (empfohlen)');
 define('_MI_XNEWSLETTER_CRON_PROTOCOL_2', 'Protokolleinträge für alle Ereignisse erstellen (für Testzwecke)');
+define('_MI_XNEWSLETTER_SUBSCRIPTION_SEARCH', 'Suche Newsletteranmeldungen');

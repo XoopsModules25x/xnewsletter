@@ -15,6 +15,7 @@
  - check whether there are existing sbuscription to this cat before deleting (goffy)
  - new maintenance: delete data in table catsubscr, if cat is no more existing in table cat (goffy)
  - changed content of activation key (goffy)
+ - delete catsubscr when deleting subscriber (goffy)
 
 <h5>1.4 Beta 2   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>
