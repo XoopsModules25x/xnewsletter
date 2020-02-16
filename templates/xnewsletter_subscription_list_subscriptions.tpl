@@ -85,13 +85,13 @@
                 </td>
                 <td><{$subscr.subscr_created_formatted}></td>
                 <td>
-                    <a href='?op=edit_subscription&subscr_id=<{$subscr.subscr_id}>'>
+                    <a href='?op=edit_subscription&subscr_id=<{$subscr.subscr_id}>&actkey=<{$activationKey}>'>
                         <img
                                 src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/xn_edit.png'
                                 alt='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_EDIT}>'
                                 title='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_EDIT}>'>
                     </a>
-                    <a href='?op=delete_subscription&subscr_id=<{$subscr.subscr_id}>&subscr_email=<{$subscr.subscr_email}>'>
+                    <a href='?op=delete_subscription&subscr_id=<{$subscr.subscr_id}>&subscr_email=<{$subscr.subscr_email}>&actkey=<{$activationKey}>'>
                         <img
                                 src='<{$smarty.const.XNEWSLETTER_ICONS_URL}>/xn_delete.png'
                                 alt='<{$smarty.const._MA_XNEWSLETTER_SUBSCRIPTION_DELETE}>'

@@ -136,7 +136,7 @@ define('_AM_XNEWSLETTER_CATSUBSCRWAIT', 'Offene Abonnenten zu Newsletterkategori
 define('_AM_XNEWSLETTER_NEWLETTER', 'Newsletter hinzufügen');
 define('_AM_XNEWSLETTER_LETTERLIST', 'Newsletter auflisten');
 define('_AM_XNEWSLETTER_LETTERWAIT', 'Offene Newsletter');
-define('_AM_XNEWSLETTER_LETTER_DELETE_ALL', 'Protokoll von diesem Newsletter löschen');
+define('_AM_XNEWSLETTER_LETTER_DELETE_ALL', 'Protokoll von diesem Newsletter/Bereich löschen');
 define('_AM_XNEWSLETTER_NEWPROTOCOL', 'Protokolleintrag hinzufügen');
 define('_AM_XNEWSLETTER_PROTOCOLLIST', 'Protokolleinträge auflisten');
 define('_AM_XNEWSLETTER_PROTOCOLWAIT', 'Offene Protokolleinträge');

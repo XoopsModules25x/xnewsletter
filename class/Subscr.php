@@ -208,6 +208,7 @@ class Subscr extends \XoopsObject
         }
         $form->addElement($opt_tray);
 
+        $form->addElement(new \XoopsFormHidden('subscr_actkey', $this->getVar('subscr_actkey')));
         // op
         $form->addElement(new \XoopsFormHidden('op', 'save_subscription'));
         // button

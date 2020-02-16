@@ -43,6 +43,7 @@ $show_anon = false;
 if ('' != $activationKey && 'anonlistsubscr' === $op) {
     $op = 'list_subscriptions';
     $show_anon = true;
+} else if ('' != $activationKey && ('edit_subscription' === $op || 'delete_subscription' === $op)) {
 } else if ('' != $activationKey && 'unsub' !== $op && 'search_subscriptions' !== $op) {
     $op = 'save_subscription';
 }
@@ -211,18 +212,20 @@ switch ($op) {
                         $cat_array                    = $catObj->toArray();
                         $catsubscr_array['cat']       = $cat_array;
                     }
-                    if ($uid > 0 && $perm_list_cat) {
-                        $subscr_array['catsubscrs'][] = $catsubscr_array;
-                    } else {
-                        $subscr_list .= ' - ' . $cat_array['cat_name'] . " \n";
-                    }
+                    $subscr_array['catsubscrs'][] = $catsubscr_array;
+                    $subscr_list .= ' - ' . $cat_array['cat_name'] . " \n";
+
                     unset($catsubscr_array);
                     unset($cat_array);
                 }
             }
             
             // check activation key
-            $perm_showresult = ($activationKey === $subscr_array['subscr_actkey']);
+            $perm_showresult = false;
+            $activationKey_array  = explode('||', base64_decode($activationKey, true));
+            if (XOOPS_URL === trim($activationKey_array[0]) && $subscr_email === trim($activationKey_array[4]) && $subscr_array['subscr_actkey'] === trim($activationKey_array[3])) {
+                $perm_showresult = true;
+            }
             
             if (($uid > 0 && $perm_list_cat) || $perm_showresult) {
                 //if user is logged in and have right to see list of registration then show corresponding result
@@ -231,9 +234,11 @@ switch ($op) {
                 $xoopsTpl->assign('actionProts_ok', $actionProts_ok);
                 $xoopsTpl->assign('actionProts_warning', $actionProts_warning);
                 $xoopsTpl->assign('actionProts_error', $actionProts_error);
+                $activationKey = base64_encode(XOOPS_URL . "||update||{$subscrObj->getVar('subscr_id')}||{$subscrObj->getVar('subscr_actkey')}||{$subscr_email}");
+                $xoopsTpl->assign('activationKey', $activationKey);
             } else {
                 // anonymous, send email with the confirmation code to given email address
-                $activationKey = $subscr_array['subscr_actkey'];
+                $activationKey = base64_encode(XOOPS_URL . "||list||{$subscrObj->getVar('subscr_id')}||{$subscrObj->getVar('subscr_actkey')}||{$subscr_email}");
                 $xoopsMailer = xoops_getMailer();
                 $xoopsMailer->reset();
                 $xoopsMailer->setTemplateDir();
@@ -394,6 +399,19 @@ switch ($op) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
         $subscrObj  = $helper->getHandler('Subscr')->get($subscr_id);
+
+
+        $activationKey_array  = explode('||', base64_decode($activationKey, true));
+        $activationKeyIsValid = false;
+        if ((XOOPS_URL === trim($activationKey_array[0]))
+            && ($subscr_id === (int)$activationKey_array[2])
+            && ($subscrObj->getVar('subscr_actkey') === trim($activationKey_array[3]))
+            && ($subscrObj->getVar('subscr_email') === trim($activationKey_array[4]))) {
+            $activationKeyIsValid = true;
+        } else {
+            redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_INVALIDKEY);
+        }
+
         $subscrForm = $subscrObj->getForm();
         $xoopsTpl->assign('xnewsletter_content', $subscrForm->render());
         break;
@@ -453,6 +471,7 @@ switch ($op) {
             $subscrObj->setVar('subscr_firstname', Request::getString('subscr_firstname', ''));
             $subscrObj->setVar('subscr_lastname', Request::getString('subscr_lastname', ''));
             $subscrObj->setVar('subscr_email', Request::getString('subscr_email', ''));
+            $subscrObj->setVar('subscr_actkey', Request::getString('subscr_actkey', ''));
             // insert subscr
             if (!$helper->getHandler('Subscr')->insert($subscrObj)) {
                 redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR . '<br>' . $subscrObj->getHtmlErrors());
@@ -633,7 +652,7 @@ switch ($op) {
                 $subscrObj         = $helper->getHandler('Subscr')->get($subscr_id);
                 $activationOptions = $subscrObj->getVar('subscr_actoptions'); // XOBJ_DTYPE_ARRAY
                 // check time: confirmation not later than ... hours
-                if ((0 != $helper->getConfig('confirmation_time'))
+                if (('update' !== $saveType) && (0 != $helper->getConfig('confirmation_time'))
                     && ((int)$activationOptions['subscr_created'] < time() - (3600 + (int)$helper->getConfig('confirmation_time')))) {
                     // time expired
                     $subscrObj->setVar('subscr_actkey', '');
@@ -642,10 +661,36 @@ switch ($op) {
                     // IN PROGRESS
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED);
                 }
-                // get subscr fields from subscr_actoptions
-                $subscr_sex       = $activationOptions['subscr_sex'];
-                $subscr_firstname = $activationOptions['subscr_firstname'];
-                $subscr_lastname  = $activationOptions['subscr_lastname'];
+                if ('update' === $saveType) {
+                    // get subscr fields from form
+                    $subscr_firstname = Request::getString('subscr_firstname', '');
+                    $subscr_lastname  = Request::getString('subscr_lastname', '');
+                    $subscr_sex       = Request::getString('subscr_sex', '');
+                    // create $code_selections string
+                    $catCriteria = new \CriteriaCompo();
+                    $catCriteria->setSort('cat_id');
+                    $catCriteria->setOrder('ASC');
+                    $catObjs    = $helper->getHandler('Cat')->getAll($catCriteria);
+                    $selections = [];
+                    foreach ($catObjs as $cat_id => $catObj) {
+                        // create selections: $cat_id-$cat_selected-$old_catsubcr_id-$old_catsubscr_quited
+                        $selection      = [];
+                        $selection[0]   = $cat_id;
+                        $selection[1]   = in_array($cat_id, Request::getArray('cats')) ? '1' : '0'; //isset($_REQUEST["cats_{$cat_id}"]);
+                        $selection[2]   = Request::getInt("existing_catsubcr_id_{$cat_id}", 0);
+                        $selection[3]   = Request::getInt("existing_catsubscr_quited_{$cat_id}", 0);
+                        $code_selection = implode('-', $selection);
+                        $selections[]   = $code_selection;
+                        unset($selection);
+                    }
+                    $code_selections = implode('|', $selections); // string
+                } else {
+                    // get subscr fields from subscr_actoptions
+                    $subscr_sex       = $activationOptions['subscr_sex'];
+                    $subscr_firstname = $activationOptions['subscr_firstname'];
+                    $subscr_lastname  = $activationOptions['subscr_lastname'];
+                    $code_selections = $activationOptions['code_selections']; // string
+                }
                 // insert subscr
                 $subscrObj->setVar('subscr_sex', $subscr_sex);
                 $subscrObj->setVar('subscr_firstname', $subscr_firstname);
@@ -653,7 +698,7 @@ switch ($op) {
                 if (!$helper->getHandler('Subscr')->insert($subscrObj)) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_SAVESUBSCR);
                 }
-                $code_selections = $activationOptions['code_selections']; // string
+
             }
         }
         //
@@ -668,7 +713,6 @@ switch ($op) {
                 $subscrObj->setVar('subscr_activated', 1);
             }
             // reset act fields
-            $subscrObj->setVar('subscr_actkey', '');
             $subscrObj->setVar('subscr_actoptions', []);
             // insert subscr
             if (!$helper->getHandler('Subscr')->insert($subscrObj)) {
@@ -806,6 +850,7 @@ switch ($op) {
         if ((!$activationKey && $subscr_id <= 0) && ('1' != $_SESSION['unsub'])) {
             redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_NOID);
         }
+
         // IN PROGRESS
         if ('1' == $_SESSION['unsub']) {
             $subscrCriteria = new \CriteriaCompo();
@@ -868,11 +913,11 @@ switch ($op) {
                     // check activation key
                     $activationKey_array  = explode('||', base64_decode($activationKey, true));
                     $activationKeyIsValid = false;
-                    $subscr_id            = (int)$activationKey_array[1];
-                    $subscr_actkey        = trim($activationKey_array[2]);
-                    $subscr_email         = trim($activationKey_array[3]);
-                    if ((XOOPS_URL == $activationKey_array[0]) && ((int)$activationKey_array[1] > 0)
-                        && ('' != trim($activationKey_array[2]))) {
+                    $subscr_id            = (int)$activationKey_array[2];
+                    $subscr_actkey        = trim($activationKey_array[3]);
+                    $subscr_email         = trim($activationKey_array[4]);
+                    if ((XOOPS_URL == $activationKey_array[0]) && ((int)$activationKey_array[2] > 0)
+                        && ('' != trim($activationKey_array[3]))) {
                         $activationKeyIsValid = true;
                     } else {
                         redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR_INVALIDKEY);
@@ -884,14 +929,37 @@ switch ($op) {
                 if (0 == $subscrCount) {
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR);
                 }
+                // delete subscriptions (catsubscrs)
+                $catsubscrCriteria = new \CriteriaCompo();
+                $catsubscrCriteria->add(new \Criteria('catsubscr_subscrid', $subscr_id));
+                $catsubscrCriteria->setSort('catsubscr_id');
+                $catsubscrCriteria->setOrder('ASC');
+                $catsubscrObjs  = $helper->getHandler('Catsubscr')->getAll($catsubscrCriteria);
+                foreach ($catsubscrObjs as $catsubscr_id => $catsubscrObj) {
+                    if ($helper->getHandler('Catsubscr')->delete($catsubscrObj, true)) {
+                        // handle mailinglists
+                        $catObj              = $helper->getHandler('Cat')->get($catsubscrObj->getVar('catsubscr_catid'));
+                        $cat_mailinglist     = $catObj->getVar('cat_mailinglist');
+                        if ($cat_mailinglist > 0) {
+                            require_once XOOPS_ROOT_PATH . '/modules/xnewsletter/include/mailinglist.php';
+                            subscribingMLHandler(_XNEWSLETTER_MAILINGLIST_UNSUBSCRIBE, $subscr_id, $cat_mailinglist);
+                        }
+                    } else {
+                        $actionProts_error[] = $catsubscrObj->getHtmlErrors();
+                        redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . $subscrObj->getHtmlErrors());
+                    }
+                }
+                // delete subscriber (subscr)
                 $subscrObj = $helper->getHandler('Subscr')->get($subscr_id);
-                // delete subscriber (subscr), subscriptions (catsubscrs) and mailinglist
                 if (!$helper->getHandler('Subscr')->delete($subscrObj, true)) {
                     $actionProts_error[] = $subscrObj->getHtmlErrors();
                     redirect_header($currentFile, 3, _MA_XNEWSLETTER_SUBSCRIPTION_ERROR . $subscrObj->getHtmlErrors());
                 }
+
                 if (0 == $count_err) {
                     $actionProts_ok[] = _AM_XNEWSLETTER_FORMDELOK;
+                } else {
+                    $xoopsTpl->assign('actionProts_error', $actionProts_error);
                 }
             } else {
                 // 2nd case: unsubscribe WITH confirmation & activation key DOESN'T EXIST
@@ -926,6 +994,7 @@ switch ($op) {
                 $xoopsMailer->assign('IP', xoops_getenv('REMOTE_ADDR'));
                 $act           = [
                     XOOPS_URL,
+                   'delete',
                     $subscrObj->getVar('subscr_id'),
                     $subscrObj->getVar('subscr_actkey'),
                     $subscrObj->getVar('subscr_email'),

@@ -141,9 +141,8 @@ switch ($op) {
         $adminObject->displayNavigation($currentFile);
         $adminObject->addItemButton(_AM_XNEWSLETTER_PROTOCOLLIST, '?op=list', 'list');
 
-        if ($letter_id > '0') {
-            $adminObject->addItemButton(_AM_XNEWSLETTER_LETTER_DELETE_ALL, '?op=delete_protocol_list&letter_id=' . $letter_id, 'delete');
-        }
+        $adminObject->addItemButton(_AM_XNEWSLETTER_LETTER_DELETE_ALL, '?op=delete_protocol_list&letter_id=' . $letter_id, 'delete');
+        
         $GLOBALS['xoopsTpl']->assign('buttons', $adminObject->renderButton('left'));
         $limit = $helper->getConfig('adminperpage');
 
@@ -244,8 +243,8 @@ switch ($op) {
         }
         break;
     case 'delete_protocol_list':
-        $letter_id = Request::getInt('letter_id', 0, 'REQUEST');
-        if ($letter_id > 0) {
+        $letter_id = Request::getInt('letter_id', -1, 'REQUEST');
+        if ($letter_id >= 0) {
             $letterObj = $helper->getHandler('Letter')->get($letter_id);
             if (true === Request::getBool('ok', false, 'POST')) {
                 if (!$GLOBALS['xoopsSecurity']->check()) {
@@ -259,7 +258,12 @@ switch ($op) {
                     redirect_header($currentFile, 3, _AM_XNEWSLETTER_FORMDELNOTOK);
                 }
             } else {
-                xoops_confirm(['ok' => true, 'letter_id' => $letter_id, 'op' => 'delete_protocol_list'], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar('letter_title')));
+                if ($letter_id > 0) {
+                    xoops_confirm(['ok' => true, 'letter_id' => $letter_id, 'op' => 'delete_protocol_list'], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, $letterObj->getVar('letter_title')));
+                } else {
+                    xoops_confirm(['ok' => true, 'letter_id' => $letter_id, 'op' => 'delete_protocol_list'], $_SERVER['REQUEST_URI'], sprintf(_AM_XNEWSLETTER_FORMSUREDEL_LIST, _AM_XNEWSLETTER_PROTOCOL_MISC));
+                }
+
             }
         }
         break;
