@@ -370,6 +370,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0, $cron = 
                 // extra data
                 $act           = [
                     XOOPS_URL,
+                    'unsub',
                     $subscr_id,
                     $recipient['subscriber_actkey'],
                     $recipient['address'],
@@ -377,6 +378,16 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0, $cron = 
                 $activationKey = base64_encode(implode('||', $act));
                 $letterTpl->assign('unsubscribe_link', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=unsub&email={$recipient['address']}&actkey={$activationKey}");
                 $letterTpl->assign('unsubscribe_url', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=unsub&email={$recipient['address']}&actkey={$activationKey}"); // new from v1.3
+                //create different activationKey for listing subscriptions
+                $act           = [
+                    XOOPS_URL,
+                    'list',
+                    $subscr_id,
+                    $recipient['subscriber_actkey'],
+                    $recipient['address'],
+                ];
+                $activationKey = base64_encode(implode('||', $act));
+                $letterTpl->assign('listsubscription_link', XOOPS_URL . "/modules/xnewsletter/subscription.php?op=anonlistsubscr&subscr_email={$recipient['address']}&actkey={$activationKey}");
 
                 $templateObj = $helper->getHandler('Template')->get($letterObj->getVar('letter_templateid'));
                 if (is_object($templateObj)) {

@@ -1,3 +1,7 @@
+<h5>1.41 RC 1   [NOT RELEASED]</h5>  Dev: XOOPS 2.5.11, PHP 7.4.1
+<hr>
+ - cosmetics (goffy)
+ 
 <h5>1.41 Beta 1   [NOT RELEASED]</h5>  Dev: XOOPS 2.5.11, PHP 7.4.1
 <hr>
  - __NAMESPACE__ in helper.php (mamba)
@@ -17,6 +21,7 @@
  - changed content of activation key (goffy)
  - delete catsubscr when deleting subscriber (goffy)
  - possibility to delete general protocol (goffy)
+ - secured listing of existing subscription (goffy)
 
 <h5>1.4 Beta 2   [2019-10-05]</h5>  Dev: XOOPS 2.5.10, PHP 7.3.10
 <hr>

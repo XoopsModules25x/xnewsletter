@@ -38,7 +38,7 @@ $mydirname = basename(__DIR__);
 xoops_load('XoopsLists');
 
 $modversion['version']             = 1.41;
-$modversion['module_status']       = 'Beta 1';
+$modversion['module_status']       = 'RC 1';
 $modversion['release_date']        = '2019/12/22';
 $modversion['name']                = _MI_XNEWSLETTER_NAME;
 $modversion['description']         = _MI_XNEWSLETTER_DESC;
@@ -63,15 +63,14 @@ $modversion['module_website_url']  = 'wedega.com';
 $modversion['module_website_name'] = 'Webdesign Gabor';
 $modversion['release_info']        = '';
 $modversion['release_file']        = XOOPS_URL . '/modules/' . $mydirname . '/docs/changelog.txt';
-
-$modversion['manual']      = 'xnewsletter.txt';
-$modversion['manual_file'] = XOOPS_URL . "/modules/{$mydirname}/docs/";
-$modversion['min_php']     = '7.0';
-$modversion['min_xoops']   = '2.5.10';
-$modversion['min_admin']   = '1.1';
-$modversion['min_db']      = ['mysql' => '5.5'];
-$modversion['modicons16'] = 'assets/images/icons/16';
-$modversion['modicons32'] = 'assets/images/icons/32';
+$modversion['manual']              = 'xnewsletter.txt';
+$modversion['manual_file']         = XOOPS_URL . "/modules/{$mydirname}/docs/";
+$modversion['min_php']             = '7.0';
+$modversion['min_xoops']           = '2.5.10';
+$modversion['min_admin']           = '1.1';
+$modversion['min_db']              = ['mysql' => '5.5'];
+$modversion['modicons16']          = 'assets/images/icons/16';
+$modversion['modicons32']          = 'assets/images/icons/32';
 
 // ------------------- Help files ------------------- //
 $modversion['helpsection'] = [
@@ -170,8 +169,7 @@ if (true === $showRead) {
     $modversion['sub'][$subcount]['url']  = 'letter.php?op=list_letters';
     ++$subcount;
 }
-if (true === $showEdit) {
-}
+//if (true === $showEdit) {}
 if (true === $showCreate) {
     $modversion['sub'][$subcount]['name'] = _MI_XNEWSLETTER_CREATE;
     $modversion['sub'][$subcount]['url']  = 'letter.php?op=new_letter';
@@ -426,10 +424,7 @@ $modversion['config'][$i]['options']     = [
 unset($i);
 
 // Blocks
-$b = 0;
-
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_subscrinfo.php',
     'name'        => _MI_XNEWSLETTER_SUBSCRINFO_BLOCK,
     'description' => '',
@@ -440,8 +435,7 @@ $modversion['blocks'][$b] = [
     'options'     => '',
 ];
 
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_catsubscr.php',
     'name'        => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_RECENT,
     'description' => '',
@@ -452,8 +446,7 @@ $modversion['blocks'][$b] = [
     'options'     => 'recent|5|0|0',
 ];
 
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_catsubscr.php',
     'name'        => _MI_XNEWSLETTER_CATSUBSCR_BLOCK_DAY,
     'description' => '',
@@ -464,8 +457,7 @@ $modversion['blocks'][$b] = [
     'options'     => 'day|5|0|0',
 ];
 
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_letter.php',
     'name'        => _MI_XNEWSLETTER_LETTER_BLOCK_RECENT,
     'description' => '',
@@ -476,8 +468,7 @@ $modversion['blocks'][$b] = [
     'options'     => 'recent|5|0|0',
 ];
 
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_letter.php',
     'name'        => _MI_XNEWSLETTER_LETTER_BLOCK_DAY,
     'description' => '',
@@ -488,8 +479,7 @@ $modversion['blocks'][$b] = [
     'options'     => 'day|5|0|0',
 ];
 
-$b++;
-$modversion['blocks'][$b] = [
+$modversion['blocks'][] = [
     'file'        => 'blocks_letter.php',
     'name'        => _MI_XNEWSLETTER_LETTER_BLOCK_RANDOM,
     'description' => '',
