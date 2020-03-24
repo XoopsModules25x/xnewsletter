@@ -15,8 +15,8 @@
     <div class="letter_footer"
          style="width: 100%; font-family: Arial,Helvetica,sans-serif; font-size: 11px; padding-top: 50px;">
         <div style="border-top:1px solid #37449a;">&nbsp;</div>
-        <p style="margin-top:10px;margin-bottom:20px;">If you want to unsubscribe please click <a
-                    href="<{$unsubscribe_link}>" target="_blank">here</a></p>
+		<p style="margin-top:10px;margin-bottom:20px;">If you want to list and check your newsletter subscriptions then please click <a href="<{$listsubscription_link}>" target="_blank">here</a></p>
+        <p style="margin-top:10px;margin-bottom:20px;">If you want to unsubscribe please click <a href="<{$unsubscribe_link}>" target="_blank">here</a></p>
     </div>
 </div>
 <div>
