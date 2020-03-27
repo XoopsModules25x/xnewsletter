@@ -166,7 +166,7 @@ switch ($op) {
                 $search_mail = $subscr_email;
                 // check captcha
                 xoops_load('xoopscaptcha');
-                $xoopsCaptcha = XoopsCaptcha::getinstance();
+                $xoopsCaptcha = XoopsCaptcha::getInstance();
                 if (!$xoopsCaptcha->verify()) {
                     $_SESSION['redirect_mail'] = $subscr_email;
                     redirect_header('?op=search_subscription', 3, $xoopsCaptcha->getMessage());

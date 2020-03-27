@@ -24,7 +24,7 @@
  * ****************************************************************************
  */
 
-include "common.php";
+include 'common.php';
 
 //General
 define('_AM_XNEWSLETTER_FORMOK', 'Daten erfolgreich gespeichert');
@@ -109,17 +109,17 @@ define('_AM_XNEWSLETTER_THEREARE_MAILINGLIST', "Es sind <span class='bold'>%s</s
 define('_AM_XNEWSLETTER_THEREARE_BMH', "Es sind <span class='bold'>%s</span> Bounced-Mail-Handler-Einträge vorhanden");
 define('_AM_XNEWSLETTER_THEREARE_TASK', "Es sind <span class='bold'>%s</span> Aufgaben vorhanden");
 define('_AM_XNEWSLETTER_THEREARE_TEMPLATE', "Es sind <span class='bold'>%s</span> Vorlagen vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_ACCOUNTS', "Es sind keine Sender-Konten vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_CAT', "Es sind keine Newsletterkategorien vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_SUBSCR', "Es sind keine Abonnenten vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_CATSUBSCR', "Es sind keine Abonnenten zu Newsletterkategorien vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_LETTER', "Es sind keine Newsletter vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_PROTOCOL', "Es sind keine Protokolleinträge vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_ATTACHMENT', "Es sind keine Anhänge vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_MAILINGLIST', "Es sind keine Mailinglisten vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_BMH', "Es sind keine Bounced-Mail-Handler-Einträge vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_TASK', "Es sind keine Aufgaben vorhanden");
-define('_AM_XNEWSLETTER_THEREARENT_TEMPLATE', "Es sind keine Templates vorhanden");
+define('_AM_XNEWSLETTER_THEREARENT_ACCOUNTS', 'Es sind keine Sender-Konten vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_CAT', 'Es sind keine Newsletterkategorien vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_SUBSCR', 'Es sind keine Abonnenten vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_CATSUBSCR', 'Es sind keine Abonnenten zu Newsletterkategorien vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_LETTER', 'Es sind keine Newsletter vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_PROTOCOL', 'Es sind keine Protokolleinträge vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_ATTACHMENT', 'Es sind keine Anhänge vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_MAILINGLIST', 'Es sind keine Mailinglisten vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_BMH', 'Es sind keine Bounced-Mail-Handler-Einträge vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_TASK', 'Es sind keine Aufgaben vorhanden');
+define('_AM_XNEWSLETTER_THEREARENT_TEMPLATE', 'Es sind keine Templates vorhanden');
 //Buttons
 define('_AM_XNEWSLETTER_NEWACCOUNTS', 'Sender-Konto hinzufügen');
 define('_AM_XNEWSLETTER_ACCOUNTSLIST', 'Sender-Konten auflisten');

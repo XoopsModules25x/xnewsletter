@@ -109,7 +109,7 @@ define('_MD_XNEWSLETTER_ERROR', 'Fehler');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED', 'Fehler: der Aktivierungsschlüssel ist abgelaufen. Bitte Registrierung erneut durchführen');
 define('_MA_XNEWSLETTER_RESENDMAIL_REG_OK', "Eine E-Mail mit Bestätigungscode wurde erneut an die E-Mail-Adresse '%subscr_email' gesendet.");
 //1.4
-define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', "Derzeit sind keine E-Mail-Vorlagen verfügbar!");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO', "Registrierungsinformation Newsletter");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK', "Die Registrierungsinformation wurden an die angegeben E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihre E-Mails");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR', "Fehler beim Sender der Registrierungsinformation an die angegeben E-Mail-Adresse!");
+define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', 'Derzeit sind keine E-Mail-Vorlagen verfügbar!');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO', 'Registrierungsinformation Newsletter');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK', 'Die Registrierungsinformation wurden an die angegeben E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihre E-Mails');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR', 'Fehler beim Sender der Registrierungsinformation an die angegeben E-Mail-Adresse!');

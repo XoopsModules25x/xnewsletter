@@ -109,7 +109,7 @@ define('_MD_XNEWSLETTER_ERROR', 'Error');
 define('_MA_XNEWSLETTER_SUBSCRIPTION_ERROR_KEYEXPIRED', 'Error: expired key, please repeat subscription');
 define('_MA_XNEWSLETTER_RESENDMAIL_REG_OK', "An email with confirmation code has been resent to the email address '%subscr_email'.");
 //1.4
-define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', "There are no email templates available!");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO', "Subscription information");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK', "Subscription information have been sent to requested email. Please check your emails");
-define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR', "Error when sending subscription information to requested email!");
+define('_MA_XNEWSLETTER_NOTEMPLATE_ONLINE', 'There are no email templates available!');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO', 'Subscription information');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_OK', 'Subscription information have been sent to requested email. Please check your emails');
+define('_MA_XNEWSLETTER_SUBSCRIPTION_SENDINFO_ERROR', 'Error when sending subscription information to requested email!');

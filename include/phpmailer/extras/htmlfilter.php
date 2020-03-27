@@ -677,9 +677,9 @@ function tln_fixurl($attname, &$attvalue, $trans_image_path, $block_external_ima
 
 /**
  * @param string $body
- * @param integer $pos
+ * @param int    $pos
  * @param string $trans_image_path
- * @param boolean $block_external_images
+ * @param bool   $block_external_images
  */
 function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
 {
