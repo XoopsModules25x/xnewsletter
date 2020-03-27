@@ -163,6 +163,7 @@ function xnewsletter_createTasks($op, $letter_id, $xn_send_in_packages, $xn_send
  * @param     $xn_send_in_packages
  * @param int $letter_id
  *
+ * @param int $cron
  * @return mixed|string
  */
 function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0, $cron = 0)
@@ -322,7 +323,7 @@ function xnewsletter_executeTasks($xn_send_in_packages, $letter_id = 0, $cron = 
         try {
             if (_XNEWSLETTER_ACCOUNTS_TYPE_VAL_PHP_SENDMAIL == $account_type) {
                 $pop = new POP3();
-                $pop->Authorise($account_server_out, $account_port_out, 30, $account_username, $account_password, 1);
+                $pop->authorise($account_server_out, $account_port_out, 30, $account_username, $account_password, 1);
             }
 
             //$mail = new PHPMailer();

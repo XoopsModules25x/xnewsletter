@@ -202,6 +202,10 @@ function subscribingMLHandler($type, $subscr_id, $mailinglist_id)
     return null;
 }
 
+/**
+ * @param int $mailinglist_id
+ * @return string|null
+ */
 function getActioncode ($mailinglist_id = 0) {
     $helper = XoopsModules\Xnewsletter\Helper::getInstance();
 

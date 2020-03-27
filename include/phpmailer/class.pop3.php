@@ -202,9 +202,9 @@ class POP3
     /**
      * Connect to a POP3 server.
      * @access public
-     * @param string   $host
-     * @param integer $port
-     * @param int      $tval
+     * @param string $host
+     * @param int    $port
+     * @param int    $tval
      * @return bool
      */
     public function connect($host, $port = false, $tval = 30)

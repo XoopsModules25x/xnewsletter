@@ -21,7 +21,7 @@ class ntlm_sasl_client_class
     /**
      * @param stdClass $client
      */
-    public function initialize(&$client)
+    public function initialize($client)
     {
         if (!function_exists($function = 'mcrypt_encrypt')
             || !function_exists($function = 'mhash')) {
@@ -134,7 +134,7 @@ class ntlm_sasl_client_class
                 . $ntlm);
     }
 
-    public function start(&$client, &$message, &$interactions)
+    public function start($client, $message, &$interactions)
     {
         if (SASL_NTLM_STATE_START != $this->state) {
             $client->error = 'NTLM authentication state is not at the start';
@@ -157,7 +157,7 @@ class ntlm_sasl_client_class
         return ($status);
     }
 
-    public function step(&$client, $response, &$message, &$interactions)
+    public function step($client, $response, &$message, &$interactions)
     {
         switch ($this->state) {
             case SASL_NTLM_STATE_IDENTIFY_DOMAIN:

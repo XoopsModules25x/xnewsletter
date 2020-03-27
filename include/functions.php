@@ -124,7 +124,7 @@ function xnewsletter_html2text($html)
  *
  * @return bool|int|mixed|string
  */
-function xnewsletter_CleanVars(&$global, $key, $default = '', $type = 'int', $notset = false)
+function xnewsletter_CleanVars($global, $key, $default = '', $type = 'int', $notset = false)
 {
     require_once XOOPS_ROOT_PATH . '/include/functions.php';
     switch ($type) {

@@ -24,7 +24,7 @@
  * ****************************************************************************
  */
 
-include "common.php";
+include 'common.php';
 
 //General
 define('_AM_XNEWSLETTER_FORMOK', 'Registered successfully');
@@ -110,17 +110,17 @@ define('_AM_XNEWSLETTER_THEREARE_MAILINGLIST', "There are <span class='bold'>%s<
 define('_AM_XNEWSLETTER_THEREARE_BMH', "There are <span class='bold'>%s</span> Bounce Mails in the Database");
 define('_AM_XNEWSLETTER_THEREARE_TASK', "There are <span class='bold'>%s</span> Task in the Database");
 define('_AM_XNEWSLETTER_THEREARE_TEMPLATE', "There are <span class='bold'>%s</span> Templates in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_ACCOUNTS', "There are no Email accounts in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_CAT', "There are no Categories in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_SUBSCR', "There are no Subscribers in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_CATSUBSCR', "There are no Categories-Subscribers in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_LETTER', "There are no Newsletter in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_PROTOCOL', "There are no Protocol in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_ATTACHMENT', "There are no Attachment in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_MAILINGLIST', "There are no Mailinglist in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_BMH', "There are no Bounce Mails in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_TASK', "There are no Task in the Database");
-define('_AM_XNEWSLETTER_THEREARENT_TEMPLATE', "There are no Template in the Database");
+define('_AM_XNEWSLETTER_THEREARENT_ACCOUNTS', 'There are no Email accounts in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_CAT', 'There are no Categories in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_SUBSCR', 'There are no Subscribers in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_CATSUBSCR', 'There are no Categories-Subscribers in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_LETTER', 'There are no Newsletter in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_PROTOCOL', 'There are no Protocol in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_ATTACHMENT', 'There are no Attachment in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_MAILINGLIST', 'There are no Mailinglist in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_BMH', 'There are no Bounce Mails in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_TASK', 'There are no Task in the Database');
+define('_AM_XNEWSLETTER_THEREARENT_TEMPLATE', 'There are no Template in the Database');
 //Buttons
 define('_AM_XNEWSLETTER_NEWACCOUNTS', 'Add New Email account');
 define('_AM_XNEWSLETTER_ACCOUNTSLIST', 'List Email accounts');
