@@ -63,6 +63,7 @@ class Mailinglist extends \XoopsObject
     /**
      * @param bool $action
      *
+     * @param int  $system
      * @return \XoopsThemeForm
      */
     public function getForm($action = false, $system = 0)
