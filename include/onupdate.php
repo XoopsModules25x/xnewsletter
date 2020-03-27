@@ -105,7 +105,7 @@ function xoops_module_update_xnewsletter_141()
     }
 
     $sql    = 'ALTER TABLE `' . $xoopsDB->prefix('xnewsletter_template') . '`';
-    $sql    .= " ADD UNIQUE `template_title` (`template_title`);";
+    $sql    .= ' ADD UNIQUE `template_title` (`template_title`);';
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
         echo '<br>' . _MI_XNEWSLETTER_UPGRADEFAILED . ": ALTER TABLE 'xnewsletter_template' ADD 'template_type'";
