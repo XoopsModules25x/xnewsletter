@@ -219,8 +219,11 @@ CREATE TABLE `xnewsletter_template` (
     `template_title`       VARCHAR(100) NOT NULL DEFAULT '',
     `template_description` TEXT         NOT NULL,
     `template_content`     TEXT         NOT NULL,
+    `template_online`      INT(1)       NOT NULL DEFAULT '0',
+    `template_type`        INT(1)       NOT NULL DEFAULT '0',
     `template_submitter`   INT(8)       NOT NULL DEFAULT '0',
     `template_created`     INT(10)      NOT NULL DEFAULT '0',
+    
     PRIMARY KEY (`template_id`),
     UNIQUE KEY `template_title` (`template_title`)
 )
